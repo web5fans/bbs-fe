@@ -49,7 +49,7 @@ const useUserInfoStore = createSelectors(
       writesPDSOperation({
         record: {
           $type: "app.actor.profile",
-          display_name: handleToNickName(userInfo.handle),
+          displayName: handleToNickName(userInfo.handle),
         },
         did: userInfo.did,
         rkey: "self"

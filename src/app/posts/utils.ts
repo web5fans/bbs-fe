@@ -49,7 +49,7 @@ type PostRecordType = {
   text: string;
 } | {
   $type: 'app.actor.profile'
-  display_name: string;
+  displayName: string;
 }
 
 type CreatePostResponse = {
