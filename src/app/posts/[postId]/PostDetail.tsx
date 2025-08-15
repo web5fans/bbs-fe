@@ -57,7 +57,7 @@ const PostDetail = (props: PostDetailProps) => {
     <div className={S.wrap}>
       <PostItem isOriginPoster postInfo={originPosterInfo} floor={1} />
 
-      {replyList?.posts.map((p, idx) => {
+      {replyList?.replies.map((p, idx) => {
         return <PostItem postInfo={p} floor={idx+2} />
       })}
 
