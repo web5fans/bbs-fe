@@ -5,6 +5,7 @@ import { NoticeCardItem } from "@/app/posts/_components/NoticeBoard";
 import { useRequest } from "ahooks";
 import server from "@/server";
 import { PostFeedItemType } from "@/app/posts/utils";
+import { useRouter } from "next/navigation";
 
 const Recommend = ({ sectionId }: { sectionId: string }) => {
   const { data: list } = useRequest(async () => {
@@ -17,11 +18,17 @@ const Recommend = ({ sectionId }: { sectionId: string }) => {
     refreshDeps: [sectionId]
   })
 
+  const router = useRouter()
+
   return <div className={S.recommend}>
     <p className={S.recommendTitle}>推荐讨论</p>
     <div className={S.recommendContent}>
       {list?.map(p => {
-        return <NoticeCardItem noticeInfo={p} />
+        return <NoticeCardItem
+          noticeInfo={p}
+          key={p.uri}
+          onClick={() => router.push(`/section/${sectionId}/` + encodeURIComponent(p.uri))}
+        />
       })}
     </div>
   </div>

@@ -8,6 +8,7 @@ import { PostFeedItemType } from "@/app/posts/utils";
 import dayjs from "dayjs";
 import { useRequest } from "ahooks";
 import server from "@/server";
+import { useRouter } from "next/navigation";
 
 const NoticeBoard = () => {
   const { data: list } = useRequest(async () => {
@@ -16,6 +17,8 @@ const NoticeBoard = () => {
     })
     return result.posts || []
   })
+
+  const router = useRouter()
 
   return <CardWindow
     wrapClassName={S.wrap}
@@ -34,7 +37,11 @@ const NoticeBoard = () => {
 
       <div className={S.cardContent}>
         {list?.map(item => {
-          return <NoticeCardItem noticeInfo={item} key={item.uri}/>
+          return <NoticeCardItem
+            noticeInfo={item}
+            key={item.uri}
+            onClick={() => router.push('/posts/' + encodeURIComponent(item.uri))}
+          />
         })}
       </div>
     </div>
@@ -43,10 +50,11 @@ const NoticeBoard = () => {
 
 export default NoticeBoard;
 
-export function NoticeCardItem({ noticeInfo }: {
+export function NoticeCardItem({ noticeInfo, onClick }: {
   noticeInfo?: PostFeedItemType
+  onClick: () => void
 }) {
-  return <div className={S.cardItem}>
+  return <div className={S.cardItem} onClick={onClick}>
     <p className={S.title}>
       {noticeInfo?.title}
     </p>
