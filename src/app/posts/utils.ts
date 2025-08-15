@@ -31,8 +31,10 @@ export type SectionItem = {
 }
 
 /* 获取版区列表 */
-export async function getSectionList() {
-  return await server<SectionItem[]>('/section/list', 'GET')
+export async function getSectionList(did?: string) {
+  return await server<SectionItem[]>('/section/list', 'GET', {
+    repo: did
+  })
 }
 
 type PostRecordType = {
