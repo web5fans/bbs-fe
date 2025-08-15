@@ -8,11 +8,11 @@ import cx from "classnames";
 import Avatar from "@/components/Avatar";
 import server from "@/server";
 import FeedStatistic from "@/components/FeedStatistic";
-import dayjs from "dayjs";
 import { handleToNickName } from "@/lib/handleToNickName";
 import LoadMoreView from "@/components/LoadMoreView";
 import { useRouter } from "next/navigation";
 import { PostFeedItemType } from "@/app/posts/utils";
+import utcToLocal from "@/lib/utcToLocal";
 
 const PAGE_SIZE = 20
 
@@ -134,7 +134,7 @@ function FeedItem({ feed, onClick }: {
         <span>{feed.section}</span>
         <FeedStatistic />
       </div>
-      <span className={S.time}>{dayjs(feed.created).format('YYYY/MM/DD')}</span>
+      <span className={S.time}>{utcToLocal(feed.created)}</span>
     </div>
   </div>
 }

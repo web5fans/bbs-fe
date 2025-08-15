@@ -3,9 +3,9 @@
 import S from './index.module.scss'
 import Avatar from "@/components/Avatar";
 import FeedStatistic from "@/components/FeedStatistic";
-import dayjs from "dayjs";
 import TipTapEditor from "@/components/TipTapEditor";
 import cx from "classnames";
+import utcToLocal from "@/lib/utcToLocal";
 
 type PostItemProps = {
   isOriginPoster?: boolean
@@ -49,7 +49,7 @@ const PostItem = (props: PostItemProps) => {
       </div>
 
       <div className={S.floor}>
-        <span>{dayjs(postInfo.created).format('YYYY/MM/DD')}</span>
+        <span>{utcToLocal(postInfo.created)}</span>
         <span>{floor}楼</span>
       </div>
     </div>

@@ -5,10 +5,10 @@ import CardWindow from "@/components/CardWindow";
 import Marquee from "react-fast-marquee";
 import AvatarIcon from '@/assets/avatar/icons/icon1.svg'
 import { PostFeedItemType } from "@/app/posts/utils";
-import dayjs from "dayjs";
 import { useRequest } from "ahooks";
 import server from "@/server";
 import { useRouter } from "next/navigation";
+import utcToLocal from "@/lib/utcToLocal";
 
 const NoticeBoard = () => {
   const { data: list } = useRequest(async () => {
@@ -61,7 +61,7 @@ export function NoticeCardItem({ noticeInfo, onClick }: {
 
     <div className={S.info}>
       <p className={'flex items-center gap-[8px]'}><AvatarIcon />{noticeInfo?.author?.displayName}</p>
-      <span>{dayjs(noticeInfo?.updated).format('YYYY/MM/DD')}</span>
+      <span>{utcToLocal(noticeInfo?.updated)}</span>
     </div>
   </div>
 }
