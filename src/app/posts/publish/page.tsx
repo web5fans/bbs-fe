@@ -18,7 +18,6 @@ import { useRequest } from "ahooks";
 import { getSectionList, writesPDSOperation } from "@/app/posts/utils";
 import cx from "classnames";
 import { useToast } from "../../../provider/toast";
-import dayjs from "dayjs";
 
 const PublishPostPage = () => {
   const searchParams = useSearchParams()
@@ -39,7 +38,7 @@ const PublishPostPage = () => {
   const router = useRouter()
 
   const { data: sectionList } = useRequest(async () => {
-    const result = await getSectionList()
+    const result = await getSectionList(userInfo?.did)
     const options = result.map(i => ({
       ...i,
       value: i.id.toString(),
@@ -50,6 +49,8 @@ const PublishPostPage = () => {
     }
 
     return options
+  }, {
+    refreshDeps: [userInfo?.did],
   })
 
   // if (!userInfo) {
