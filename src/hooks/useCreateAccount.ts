@@ -30,7 +30,7 @@ export default function useCreateAccount({ createSuccess }: {
   const { userHandle } = useNickName()
   const { signer, walletClient, address } = useWallet()
   const pdsClient = usePDSClient()
-  const { setStoreData, did, createUser, createdTx } = useUserInfoStore()
+  const { setStoreData, did, createUser, createdTx, logout } = useUserInfoStore()
 
   const [extraIsEnough, setExtraIsEnough] = useState([initialCapacity, false])
 
@@ -195,6 +195,8 @@ export default function useCreateAccount({ createSuccess }: {
     try {
       await prepareAccount()
     } catch (err) {
+      pdsClient.logout()
+      logout()
       setCreateLoading(false)
       setCreateStatus({
         status: CREATE_STATUS.FAILURE,
@@ -204,6 +206,10 @@ export default function useCreateAccount({ createSuccess }: {
   }
 
   useEffect(() => {
+    setCreateStatus({
+      status: CREATE_STATUS.INIT,
+      reason: undefined
+    })
     setExtraIsEnough([initialCapacity, false])
     validateIsEnough()
   }, [signer]);

@@ -15,6 +15,7 @@ import MultiDid from "@/app/register-login/(components)/MultiDid";
 import Authorize from "@/app/register-login/(components)/Authorize";
 import AppHeader from "@/app/@header/default";
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
+import cx from "classnames";
 
 export default function RegisterLogin() {
   const { visible, closeRegisterPop } = useRegisterPopUp()
@@ -109,8 +110,8 @@ export default function RegisterLogin() {
   </div>
 }
 
-export function Left({ children }: { children: React.ReactNode }) {
-  return <div className={S.left}>
+export function Left({ children, className }: { children: React.ReactNode, className?: string }) {
+  return <div className={cx(S.left, className)}>
     {children}
   </div>
 }

@@ -62,7 +62,7 @@ const OnChain = (props: {
   }
 
   return <>
-    <Left>
+    <Left className={S.leftWrap}>
       <LeftInner>
         <BreadCrumbs activeStep={CREATE_ACCOUNT_STEP.ON_CHAIN} />
         <div className={S.wrap}>

@@ -13,6 +13,10 @@
   left: -89px;
 }
 
+.leftWrap {
+  max-width: 630px;
+}
+
 .wrap {
   padding: 75px 150px 77px 0;
   display: flex;
@@ -28,5 +32,6 @@
   text-align: center;
 }
 .err {
+  width: 100%;
   color: #CE0D36;
 }
