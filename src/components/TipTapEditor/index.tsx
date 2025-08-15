@@ -262,7 +262,7 @@ export default function TipTapEditor(props: TipTapEditorProps) {
   useEffect(() => {
     if (!editor || !props.initialContent) return
     editor.commands.setContent(props.initialContent)
-  }, [props.initialContent]);
+  }, [editor, props.initialContent]);
 
   React.useEffect(() => {
     if (!isMobile && mobileView !== "main") {
