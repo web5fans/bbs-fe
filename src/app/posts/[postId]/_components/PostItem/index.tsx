@@ -5,6 +5,7 @@ import Avatar from "@/components/Avatar";
 import FeedStatistic from "@/components/FeedStatistic";
 import dayjs from "dayjs";
 import TipTapEditor from "@/components/TipTapEditor";
+import cx from "classnames";
 
 type PostItemProps = {
   isOriginPoster?: boolean
@@ -13,15 +14,11 @@ type PostItemProps = {
 }
 
 const PostItem = (props: PostItemProps) => {
-  const { postInfo = {}, floor } = props;
-
-  const title = postInfo.title ? JSON.parse(postInfo.title) : postInfo.title
-
-  const richText = postInfo.text ? JSON.parse(postInfo.text) : postInfo.text
+  const { postInfo = {}, floor, isOriginPoster } = props;
 
   return <div className={S.wrap}>
     <div className={S.user}>
-      <div className={S.avatarWrap}>
+      <div className={cx(S.avatarWrap, !isOriginPoster && S.normal)}>
         <Avatar nickname={'Scvcd'} className={S.avatar} />
         <img src={'/assets/poster.png'} alt="" className={S.poster} />
       </div>
@@ -34,18 +31,22 @@ const PostItem = (props: PostItemProps) => {
     </div>
 
     <div className={S.content}>
-      <p className={S.title}>{title}</p>
-      <div className={S.statis}>
-        {postInfo.section}
-        <FeedStatistic />
-      </div>
+      <div>
+        {postInfo.title && <>
+          <p className={S.title}>{postInfo.title}</p>
+          <div className={S.statis}>
+            {postInfo.section}
+            <FeedStatistic />
+          </div>
+        </>}
 
-      <TipTapEditor
-        initialContent={richText}
-        editable={false}
-        editorClassName={S.richText}
-        editorWrapClassName={'!h-auto'}
-      />
+        <TipTapEditor
+          initialContent={postInfo.text}
+          editable={false}
+          editorClassName={S.richText}
+          editorWrapClassName={'!h-auto'}
+        />
+      </div>
 
       <div className={S.floor}>
         <span>{dayjs(postInfo.created).format('YYYY/MM/DD')}</span>

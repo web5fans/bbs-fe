@@ -62,6 +62,7 @@ const PostDetail = (props: PostDetailProps) => {
       })}
 
       <Pagination
+        hideOnSinglePage
         pageSize={20}
         total={replyList?.total || 0}
         onChange={(page) => run(page)}

@@ -83,8 +83,16 @@ const PublishPostPage = () => {
         did: userInfo?.did!
       })
       setPublishing(false)
+
+      const encodeUri = encodeURIComponent(uri)
+      let href = '/posts/'+ encodeUri
+      if (defaultSection) {
+        href = `/section/${defaultSection}` + encodeUri
+      }
+
+      router.replace(href)
+
       toast({ title: '发布成功', icon: 'success'})
-      router.replace('/posts/'+ uri)
     } catch (error) {
       setPublishing(false)
       toast({ title: '发布失败', icon: 'error'})

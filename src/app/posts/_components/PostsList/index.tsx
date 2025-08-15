@@ -100,9 +100,9 @@ function FeedItem({ feed, onClick }: {
 
   const nickname = handleToNickName(author.displayName);
 
-  const title = feed.title ? JSON.parse(feed.title) : feed.title
+  const title = feed.title
 
-  const html = feed.text ? JSON.parse(feed.text) : feed.text
+  const html = feed.text
 
   useEffect(() => {
     const text = contentRef.current?.innerText
