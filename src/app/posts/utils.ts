@@ -7,6 +7,7 @@ import { uint8ArrayToHex } from "@/lib/dag-cbor";
 import { CID } from 'multiformats/cid'
 import * as cbor from '@ipld/dag-cbor'
 import { TID } from '@atproto/common-web'
+import dayjs from "dayjs";
 
 export type PostFeedItemType = {
   uri: string,
@@ -39,13 +40,14 @@ type PostRecordType = {
   section_id: string;
   title: string;
   text: string;
-  created: string
 } | {
   $type: 'app.bbs.reply'
   root: string  // 原帖uri
   parent?: string  // 原帖uri 或 回复的uri
   text: string;
-  created: string
+} | {
+  $type: 'app.actor.profile'
+  display_name: string;
 }
 
 type CreatePostResponse = {
@@ -61,19 +63,27 @@ type CreatePostResponse = {
 }
 
 /* 发帖、跟帖回复 */
-export async function publishNewPostAndReply(params: {
+export async function writesPDSOperation(params: {
   record: PostRecordType
   did: string
+  rkey?: string
 }) {
   const pdsClient = usePDSClient()
-  const rkey = TID.next().toString()
+
+  const rkey = params.rkey || TID.next().toString()
+
+  const newRecord = {
+    ...params.record,
+    created: dayjs.utc().format()
+  }
+
   const writeRes = await pdsClient.com.atproto.web5.preDirectWrites({
     repo: params.did,
     writes: [{
       $type: "com.atproto.web5.preDirectWrites#create",
-      collection: params.record.$type,
+      collection: newRecord.$type,
       rkey,
-      value: params.record
+      value: newRecord
     }],
     validate: false,
   })
@@ -113,7 +123,7 @@ export async function publishNewPostAndReply(params: {
   const res = await server<CreatePostResponse>('/record/create', 'POST', {
     repo: params.did,
     rkey,
-    value: params.record,
+    value: newRecord,
     signing_key: signingKey,
     root: {
       did: writerData.did,

@@ -7,8 +7,7 @@ import FaceIcon from '@/assets/login/multiDid/face.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import PublishPostCancelButton from "@/components/PublishPostCancelButton";
 import { useState } from "react";
-import { publishNewPostAndReply } from "@/app/posts/utils";
-import dayjs from "dayjs";
+import { writesPDSOperation } from "@/app/posts/utils";
 import { useToast } from "@/provider/toast";
 import useUserInfoStore from "@/store/userInfo";
 
@@ -34,13 +33,12 @@ const PostDiscuss = (props: {
   const publishReply = async () => {
     setPublishing(true)
     try {
-      await publishNewPostAndReply({
+      await writesPDSOperation({
         record: {
           $type: 'app.bbs.reply',
           text: richText,
           root: props.postUri,
           parent: props.postUri,
-          created: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         },
         did: userInfo?.did!
       })

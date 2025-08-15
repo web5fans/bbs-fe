@@ -15,7 +15,7 @@ import ReplyIcon from '@/assets/posts/reply.svg'
 import MoneyIcon from '@/assets/posts/money.svg'
 import SectionEarth from '@/assets/posts/section.svg'
 import { useRequest } from "ahooks";
-import { getSectionList, publishNewPostAndReply } from "@/app/posts/utils";
+import { getSectionList, writesPDSOperation } from "@/app/posts/utils";
 import cx from "classnames";
 import { useToast } from "../../../provider/toast";
 import dayjs from "dayjs";
@@ -72,13 +72,12 @@ const PublishPostPage = () => {
   const publishPost = async () => {
     setPublishing(true)
     try {
-      const uri = await publishNewPostAndReply({
+      const uri = await writesPDSOperation({
         record: {
           $type: 'app.bbs.post',
           section_id: sectionId!,
           title: postTitle,
           text: richText,
-          created: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         },
         did: userInfo?.did!
       })

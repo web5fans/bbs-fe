@@ -4,6 +4,13 @@ import { useEffect } from "react";
 import useUserInfoStore from "@/store/userInfo";
 import useDeviceFlex from "@/hooks/useDeviceFlex";
 
+import duration from 'dayjs/plugin/duration';
+import utc from 'dayjs/plugin/utc'
+import dayjs from "dayjs";
+
+dayjs.extend(duration)
+dayjs.extend(utc);
+
 const MainContent = (props: {
   children: React.ReactNode;
 }) => {
