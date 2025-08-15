@@ -1,0 +1,80 @@
+.wrap {
+  width: 500px;
+  padding-top: 86px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-CLFN);
+  position: relative;
+  height: 100%;
+
+  .chain {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .walletOur {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .walletWrap {
+    position: relative;
+  }
+
+  .connect {
+    width: 144px;
+    height: 50px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .wallet {
+    height: 50px;
+    padding: 10px 20px;
+    font-size: 18px;
+    gap: 5px;
+  }
+
+  .popup {
+    position: absolute;
+    margin-top: 10px;
+    margin-left: -3.5px;
+    min-width: 236px;
+    padding: 18px;
+    border: 1px solid var(--text-hover-800, #363636);
+    background: var(--white, #FFF);
+    box-shadow: 3px 3px 0 0 #000;
+
+    height: 80px;
+    overflow: hidden;
+    transition: all .15s;
+
+    &.close {
+      height: 0;
+      box-shadow: none;
+      padding-block: 0;
+      border: none;
+    }
+
+    .menuItem {
+      padding: 10px 12px 8px;
+      font-size: 16px;
+      cursor: pointer;
+
+      &:hover {
+        background: #F3F3F3;
+        color: var(--primary-color);
+      }
+    }
+  }
+}

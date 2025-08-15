@@ -1,0 +1,79 @@
+@use '@/styles/rem';
+
+.header {
+  margin-top: 22px;
+  background: radial-gradient(black 20%, transparent 16%) 0 0,
+  radial-gradient(black 20%, transparent 16%) rem.px2flexible(2) rem.px2flexible(2),
+  radial-gradient(rgba(255, 255, 255, .1) 15%, transparent 20%) 0 1px,
+  radial-gradient(rgba(255, 255, 255, .1) 15%, transparent 20%) 8px 9px;
+  background-size: rem.px2flexible(4) rem.px2flexible(4);
+
+  height: rem.px2flexible(45);
+  padding-left: rem.px2flexible(5);
+  padding-right: rem.px2flexible(8);
+
+  .hContent {
+    top: -7px;
+    position: relative;
+    border: rem.px2flexible(2) solid #000000;
+    background: var(--background);
+    display: flex;
+    align-items: center;
+    padding: 0 rem.px2flexible(6);
+    font-size: rem.px2flexible(20);
+    height: rem.px2flexible(40);
+    box-shadow: rem.px2flexible(2) rem.px2flexible(2) 0px 0px #000;
+
+    .lineWrap{
+      position: absolute;
+      left: rem.px2flexible(6);
+      right: rem.px2flexible(6);
+    }
+
+    .line {
+      width: 100%;
+      height: 0;
+      border: rem.px2flexible(1) solid #000000;
+
+      & + .line {
+        margin-top: rem.px2flexible(2.5);
+      }
+    }
+  }
+
+  .main {
+    padding: 0 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+  }
+
+  .title {
+    background: var(--background);
+    display: flex;
+    align-items: center;
+    padding: 0 rem.px2flexible(10);
+    font-family: var(--font-arcade);
+    height: 100%;
+  }
+
+  .userWrap {
+    padding: 0 20px;
+    background: var(--background);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    .button {
+      width: 200px;
+      height: 50px;
+      font-size: 18px;
+    }
+
+    .userIcon {
+      cursor: pointer;
+    }
+  }
+}

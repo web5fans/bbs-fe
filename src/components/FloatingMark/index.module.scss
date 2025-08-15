@@ -1,0 +1,16 @@
+.sticky {
+  position: fixed;
+  bottom: 100px;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.2s ease-in-out;
+
+  .toTop {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 2px 2px 0px 0px #000;
+  }
+}

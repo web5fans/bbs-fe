@@ -1,0 +1,25 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 255px;
+
+  .cardItem {
+    cursor: default;
+    --opacity: 0;
+
+    &::before {
+      opacity: var(--opacity);
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-image: url("/assets/login/card-loading.svg");
+      background-size: 41px 24px;
+      background-repeat: no-repeat;
+      background-position: right 1px bottom -1px;
+    }
+  }
+}

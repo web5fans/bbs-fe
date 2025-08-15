@@ -1,0 +1,9 @@
+.divide {
+  svg {
+    line {
+      stroke: #000;
+      stroke-width: 1;
+      stroke-dasharray: 14 2; /* 等同于SVG的stroke-dasharray */
+    }
+  }
+}

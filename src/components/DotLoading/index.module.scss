@@ -1,0 +1,28 @@
+.dotLoading {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 2px;
+
+  > span {
+    animation: fade 1.5s infinite;
+  }
+
+  span:first-child {
+    animation-delay: 0s;
+  }
+  .dot2 {
+    animation-delay: 0.5s;
+  }
+  span:last-child {
+    animation-delay: 1s;
+  }
+
+  @keyframes fade {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}

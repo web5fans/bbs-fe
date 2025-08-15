@@ -1,0 +1,126 @@
+.container {
+  width: 1094px;
+  margin: 30px auto 80px;
+
+  .window {
+    --card-window-line-gap: 2px;
+  }
+}
+
+.breadCrumb {
+  padding: 0 10px;
+  position: absolute;
+  left: 40px;
+  height: 100%;
+  background: #EAEAEA;
+}
+
+.wrap {
+  padding: 40px;
+}
+
+.pagination {
+  margin: 40px 0;
+  font-size: 12px;
+
+  > li {
+    min-width: 22px;
+    line-height: 20px;
+    height: 22px;
+    border-color: transparent;
+    background: transparent;
+    border-radius: 0;
+    margin-right: 4px;
+
+    &:hover,
+    &:focus {
+      border-color: var(--primary-color);
+
+      a {
+        color: var(--primary-color);
+      }
+    }
+
+    a {
+      font-family: var(--font-CLFN);
+    }
+  }
+
+  :global {
+    .rc-pagination-prev .rc-pagination-item-link, .rc-pagination-next .rc-pagination-item-link {
+      border-color: transparent;
+      background-color: transparent;
+    }
+
+    .rc-pagination-item-active {
+      font-weight: 400;
+      border-color: var(--primary-color);
+      a {
+        color: var(--primary-color);
+      }
+    }
+
+    .rc-pagination-jump-prev button:after, .rc-pagination-jump-next button:after {
+      content: '...';
+      font-size: 16px;
+    }
+    .rc-pagination-prev,
+    .rc-pagination-next{
+      button:after {
+        content: '上一页';
+        font-family: var(--font-CLFN);
+      }
+    }
+
+    .rc-pagination-prev {
+      margin-right: 16px;
+    }
+    .rc-pagination-next {
+      margin-left: 10px;
+    }
+
+    .rc-pagination-prev button{
+      position: relative;
+
+      &:after {
+        padding-left: 10px;
+      }
+
+      &:before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        background-image: url("/assets/pagination-right-arrow.svg");
+        background-repeat: no-repeat;
+        background-position: right center;
+        transform: scaleX(-1);
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+
+    .rc-pagination-next button:after {
+      content: '下一页';
+      background-image: url("/assets/pagination-right-arrow.svg");
+      background-repeat: no-repeat;
+      background-position: right center;
+      padding-right: 10px;
+    }
+
+    .rc-pagination-disabled .rc-pagination-item-link, .rc-pagination-disabled:hover .rc-pagination-item-link, .rc-pagination-disabled:focus .rc-pagination-item-link {
+      color: #B7B7B7;
+    }
+
+    .rc-pagination-prev.rc-pagination-disabled {
+      button:before {
+        background-image: url("/assets/pagination-right-arrow-dis.svg");
+      }
+    }
+    .rc-pagination-next.rc-pagination-disabled {
+      button:after {
+        background-image: url("/assets/pagination-right-arrow-dis.svg");
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+.loading {
+  position: absolute;
+  left: -100px;
+  top: calc(86px + var(--moveY));
+  transform: translateY(-90%);
+  z-index: 99;
+}
+
+.arrowRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-90%);
+  left: -89px;
+}
+
+.wrap {
+  padding: 75px 150px 77px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.info, .err {
+  margin-top: 45px;
+  font-size: 16px;
+  font-family: var(--font-CLFN);
+  color: #6C6C6C;
+  text-align: center;
+}
+.err {
+  color: #CE0D36;
+}

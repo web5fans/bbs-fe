@@ -1,0 +1,12 @@
+.breadCrumb {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+
+  a {
+    cursor: pointer;
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}

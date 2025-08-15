@@ -1,0 +1,33 @@
+'use client'
+
+import { useEffect } from "react";
+import useUserInfoStore from "@/store/userInfo";
+import useDeviceFlex from "@/hooks/useDeviceFlex";
+
+const MainContent = (props: {
+  children: React.ReactNode;
+}) => {
+  const { initialize } = useUserInfoStore();
+  const { centerWidth, isUseDoubleSize } = useDeviceFlex()
+
+  useEffect(() => {
+    document.documentElement.style.visibility = 'visible';
+  }, []);
+
+  useEffect(() => {
+    initialize()
+  }, []);
+
+  useEffect(() => {
+    document.body.style.setProperty('--center-content-width', centerWidth + 'px');
+    document.body.style.setProperty('--flexible-design-size', !isUseDoubleSize ? '375' : '16');
+    document.body.style.setProperty('--flexible-size-unit', !isUseDoubleSize ? '100vw' : '2rem');
+
+  }, [centerWidth, isUseDoubleSize]);
+
+  return <div className={'flex flex-col'}>
+    {props.children}
+  </div>
+}
+
+export default MainContent;

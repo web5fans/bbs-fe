@@ -1,0 +1,10 @@
+@use '@/styles/rem';
+
+.wrap {
+  width: 259px;
+  aspect-ratio: 259 / 329;
+  background: url("/assets/login/computer.png") no-repeat;
+  background-size: contain;
+  padding-top: 66px;
+  user-select: none;
+}

@@ -1,0 +1,44 @@
+variables:
+  # 版本号，默认取流水线ID
+  VERSION_NUMBER: ""
+  # 镜像tag: release-x.x.x
+  IMAGE_TAG: ""
+  # 容器名
+  CONTAINER_NAME: "bbs-fe"
+  # 镜像名
+  PROD_IMAGE_NAME: "$RIVTOWER_REGISTRY_ADDRESS/web5/bbsbescard-fe"
+
+before_script:
+  - VERSION_NUMBER=$(echo $CI_COMMIT_REF_NAME | cut -d'-' -f2)
+  - IMAGE_TAG="release-$VERSION_NUMBER"
+
+docker-build-production:
+  stage: build
+  tags:
+    - shell-executor
+  script:
+    - echo $PROD_IMAGE_NAME:$IMAGE_TAG
+    - docker build -t $PROD_IMAGE_NAME:$IMAGE_TAG .
+    - docker login $RIVTOWER_REGISTRY_ADDRESS -u $RIVTOWER_REGISTRY_USERNAME -p $RIVTOWER_REGISTRY_PASSWORD
+    - docker push $PROD_IMAGE_NAME:$IMAGE_TAG
+  when: manual
+
+deploy-production:
+  stage: deploy
+  tags:
+    - bescard
+  needs:
+    - docker-build-production
+  script:
+    - echo "Deploy"
+    - docker pull $PROD_IMAGE_NAME:$IMAGE_TAG
+    - docker stop $CONTAINER_NAME || true
+    - docker rm $CONTAINER_NAME || true
+    - |
+      docker run \
+        --name $CONTAINER_NAME \
+        --restart unless-stopped \
+        --network bescard-network \
+        -d \
+        $PROD_IMAGE_NAME:$IMAGE_TAG
+  when: manual

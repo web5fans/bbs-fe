@@ -1,0 +1,53 @@
+@use "sass:list";
+
+.wrap {
+  width: 84px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 500;
+  position: relative;
+
+  .nick {
+    color: #FFFFFF;
+    position: relative;
+  }
+
+  $colors: #993131, #995231, #999631, #5B9931, #319946, #319978,
+  #318D99, #315099, #3F3199, #653199, #99318B, #993152;
+
+  @for $i from 1 through list.length($colors) {
+    &.color-#{$i} {
+      .circleInner {
+        path {
+          fill: list.nth($colors, $i);
+        }
+      }
+    }
+  }
+
+
+  .circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+
+    path {
+      fill: var(--avatar-outer-color, black)
+    }
+  }
+
+  .circleInner {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 92%;
+    height: 92%;
+  }
+}

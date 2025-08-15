@@ -1,0 +1,65 @@
+.wrap {
+  font-family: var(--font-CLFN);
+
+  .header {
+    letter-spacing: normal !important;
+    font-weight: 500;
+  }
+}
+
+.content {
+  padding-top: 28px;
+
+  .marquee {
+    font-size: 14px;
+    line-height: 16px;
+    color: #524F4F;
+
+    > span {
+      color: var(--primary-color);
+    }
+  }
+
+  .cardContent {
+    margin: 28px 20px;
+    padding-bottom: 20px;
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+  }
+}
+
+.cardItem {
+  flex-shrink: 0;
+  border: 2px solid #000;
+  background: #FFF;
+  box-shadow: 3px 3px 6px 0 #DBDBDB inset;
+  padding: 24px 20px 20px 20px;
+  width: 360px;
+  cursor: pointer;
+  //margin-right: 20px;
+  //
+  //&:first-child {
+  //  margin-left: 20px;
+  //}
+
+  .title {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    word-break: break-all;
+    display: -webkit-box;          /* 使用弹性伸缩盒子模型 */
+    -webkit-box-orient: vertical;  /* 垂直排列子元素 */
+    -webkit-line-clamp: 3;         /* 限制显示的行数 */
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .info {
+    font-size: 12px;
+    color: #6C6C6C;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

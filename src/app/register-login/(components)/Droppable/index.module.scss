@@ -1,0 +1,20 @@
+.wrap {
+  padding: 0 80px;
+
+  .block {
+    width: 130px;
+    aspect-ratio: 1 / 1;
+    background: #000;
+    box-shadow: 3px 3px 0 0 #000;
+    font-size: 16px;
+    transition: all .2s;
+
+    &.half {
+      width: 75px;
+    }
+
+    &.twice {
+      width: 260px;
+    }
+  }
+}

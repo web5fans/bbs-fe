@@ -1,0 +1,20 @@
+variables:
+  # 版本号，默认取流水线ID
+  VERSION_NUMBER: "0.0.$CI_PIPELINE_ID"
+  # 镜像tag: develop-0.0.x
+  IMAGE_TAG: "develop-$VERSION_NUMBER"
+
+deploy-development:
+  stage: deploy
+  tags:
+    - build-in-docker
+  image: registry.devops.rivtower.com/library/helmfile/helmfile:v0.169.1
+  needs:
+    - send-helm
+  variables:
+    KUBECONFIG: $KUBERNETES_RIVTOWER_DEVELOPING_120
+  script:
+    - helmfile -e development apply -f ci/helm/helmfile.yaml
+
+include:
+  - local: 'ci/pipelines/common.yml'

@@ -1,0 +1,34 @@
+@use '@/styles/rem';
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: rem.px2flexible(16);
+  flex-wrap: wrap;
+}
+
+.button {
+  padding: rem.px2flexible(5) 0;
+  width: rem.px2flexible(125);
+  font-size: rem.px2flexible(12);
+}
+
+.tourist {
+  gap: rem.px2flexible(7.5);
+  font-size: rem.px2flexible(12);
+  padding: rem.px2flexible(5) rem.px2flexible(20);
+  user-select: none;
+
+  .arrow {
+    width: rem.px2flexible(10);
+    aspect-ratio: 1;
+    color: #000000;
+  }
+
+  &:hover, &:active {
+
+    .arrow {
+      color: var(--primary-color);
+    }
+  }
+}

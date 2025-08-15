@@ -1,0 +1,28 @@
+.wrap {
+  font-size: 24px;
+  font-family: var(--font-CLFN);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .breadWrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bread {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6C6C6C;
+
+    &.active {
+      color: var(--primary-color);
+    }
+  }
+
+  .arrow {
+    width: 24px;
+  }
+}

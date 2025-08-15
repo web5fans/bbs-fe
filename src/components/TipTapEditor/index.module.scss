@@ -1,0 +1,26 @@
+.wrap {
+  height: 100%;
+  .editor {
+    height: calc(100% - var(--tt-toolbar-height));
+    background: #FFFFFF;
+    font-family: var(--font-CLFN);
+    :global {
+      .tiptap.ProseMirror {
+        height: 100%;
+        padding: 20px;
+        overflow-y: auto;
+      }
+    }
+  }
+}
+
+.disabledToolBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #6C6C6C;
+  opacity: 0.1;
+  cursor: not-allowed;
+}

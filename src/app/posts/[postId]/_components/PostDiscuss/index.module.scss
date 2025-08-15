@@ -1,0 +1,62 @@
+.wrap {
+  padding-top: 20px;
+
+  .title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 18px;
+  }
+
+  .editor {
+    border: 1px solid;
+    border-left-width: 2px;
+    border-top-width: 2px;
+    font-size: 16px;
+    height: 332px;
+
+    &:focus-within {
+      border-color: var(--primary-color);
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin-top: 20px;
+    gap: 20px;
+
+    .publish {
+      width: 100px;
+      height: 32px;
+      font-size: 14px;
+    }
+  }
+}
+
+.empty {
+  border: 2px solid var(--200, #CFCFCF);
+  background: var(--white, #FFF);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 74px 0;
+
+  .tips {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .log {
+    width: 100px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .mes {
+    font-size: 14px;
+    cursor: pointer;
+  }
+}

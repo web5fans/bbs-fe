@@ -1,0 +1,28 @@
+.wrap {
+  width: 92px;
+  height: 86px;
+  margin: 0 auto;
+
+  .eye {
+    animation: blink 2.4s infinite;
+  }
+}
+
+@keyframes blink {
+  0%,
+  82.6%,
+  100% {
+    x: 85px;
+    y: 0.0283203px;
+    width: 6.99998px;
+    height: 21px;
+  }
+
+  83%,
+  99.7% {
+    x: 78px;
+    y: 8px;
+    height: 6.99998px;
+    width: 21px;
+  }
+}

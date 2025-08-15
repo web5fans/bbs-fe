@@ -1,0 +1,22 @@
+.overlay {
+  background: rgba(0, 0, 0, 0.20);
+  display: grid;
+  place-items: center;
+}
+
+.modal {
+  border-top: 2px solid #000;
+  border-right: 4px solid #000;
+  border-bottom: 4px solid #000;
+  border-left: 2px solid #000;
+  background: #EAEAEA;
+  padding: 18px;
+  font-family: var(--font-CLFN);
+  outline: none;
+
+  .inner {
+    border: 2px solid #000;
+    background: #FFF;
+    box-shadow: 3px 3px 6px 0 #DBDBDB inset;
+  }
+}

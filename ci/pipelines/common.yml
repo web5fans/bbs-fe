@@ -1,0 +1,21 @@
+next-build:
+  stage: build
+  tags:
+    - shell-executor
+  script:
+    - echo $IMAGE_NAME:$IMAGE_TAG
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker login $RIVTOWER_REGISTRY_ADDRESS -u $RIVTOWER_REGISTRY_USERNAME -p $RIVTOWER_REGISTRY_PASSWORD
+    - docker push $IMAGE_NAME:$IMAGE_TAG
+
+send-helm:
+  stage: send-helm
+  image: registry.devops.rivtower.com/ci-test/helmpush:v0.1
+  tags:
+    - build-in-docker
+  script:
+    - helm version
+    - echo $CHART_REPO
+    - helm package ci/helm/chart --app-version=$IMAGE_TAG --version=$VERSION_NUMBER
+    - helm repo add $CHART_REPO_NAME $CHART_REPO --username $RIVTOWER_REGISTRY_USERNAME --password $RIVTOWER_REGISTRY_PASSWORD
+    - helm cm-push $CHART_NAME-$VERSION_NUMBER.tgz $CHART_REPO_NAME

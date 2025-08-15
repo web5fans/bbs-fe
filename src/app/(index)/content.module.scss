@@ -1,0 +1,43 @@
+@use '@/styles/rem';
+
+.container {
+  max-width: 1110px;
+  .inner {
+    padding-block: rem.px2flexible(17);
+    font-size: min(20px, #{rem.px2flexible(12)});
+    font-family: var(--font-CLFN);
+
+    $padding: clamp(22px, #{rem.px2flexible(22)}, 50px);
+
+    .content {
+      padding-inline: $padding;
+    }
+
+    .buttonWrap {
+      padding-left: $padding;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      margin-bottom: rem.px2flexible(14);
+
+      .text {
+        margin: 0 rem.px2flexible(5);
+
+        &.user {
+          font-weight: 500;
+          color: var(--primary-color);
+        }
+      }
+
+      .titleDivide {
+        flex: 1;
+      }
+    }
+
+    .divide {
+      margin: rem.px2flexible(14) 0;
+    }
+  }
+}

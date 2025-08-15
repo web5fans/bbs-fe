@@ -1,0 +1,80 @@
+@use '@/styles/rem';
+
+.container {
+  .content {
+    width: var(--center-content-width);
+    margin: rem.px2flexible(25) auto 0;
+  }
+
+  .slogan {
+    font-family: var(--font-arcade);
+    //font-size: rem.px2flexible(36);
+    font-size: rem.px2flexible(36);
+    color: var(--primary-color);
+    line-height: 130%;
+    text-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0px #000;
+    -webkit-text-stroke-width: rem.px2flexible(0.5);
+    -webkit-text-stroke-color: #000;
+    margin-bottom: min(44px, #{ rem.px2flexible(23) });
+  }
+
+  .center {
+    display: flex;
+    gap: min(50px, #{ rem.px2flexible(27) });
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    .fileWrap {
+      flex: 1;
+      display: flex;
+      align-items: self-start;
+      justify-content: start;
+      flex-wrap: wrap;
+      gap: min(50px, #{ rem.px2flexible(27) });
+
+      @media screen and (min-width: 1348px) {
+        width: rem.px2flexible(44);
+        flex: none;
+      }
+    }
+
+    .file {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-CLFN);
+      font-size: min(16px, #{rem.px2flexible(12)});
+      cursor: pointer;
+      width: rem.px2flexible(44);
+
+      img {
+        margin-bottom: min(15px, #{rem.px2flexible(9.7)});
+      }
+      .fileImg {
+        width: min(51px, #{ rem.px2flexible(37.5) });
+        height: min(55px, #{ rem.px2flexible(41.25) });
+      }
+
+      .storageImg {
+        width: min(51px, #{ rem.px2flexible(37.5) });
+        height: min(65px, #{ rem.px2flexible(48) });
+      }
+
+      .fileTitle {
+        text-align: center;
+      }
+    }
+  }
+
+  .footer {
+    $fontSize: min(24px, #{rem.px2flexible(14)});
+
+    padding: rem.px2flexible(25) 0 10px 0;
+    font-size: $fontSize;
+    letter-spacing: calc($fontSize * .13);
+    font-family: var(--font-CLFN);
+    color: #333;
+  }
+}

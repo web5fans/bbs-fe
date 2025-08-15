@@ -1,0 +1,42 @@
+'use client'
+
+import S from "./index.module.scss";
+import Button from "@/components/Button";
+import UserIcon from '@/assets/header/user.svg'
+import useUserInfoStore from "@/store/userInfo";
+import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
+import { usePathname } from "next/navigation";
+
+export default function AppHeader(props: {
+  isPopUp?: boolean
+}) {
+  const { userInfo } = useUserInfoStore()
+  const { openRegisterPop } = useRegisterPopUp()
+  const pathname = usePathname()
+
+  const isIndex = pathname === '/'
+
+  return <header className={S.header}>
+    <div className={S.hContent}>
+      <div className={S.lineWrap}>
+        {new Array(6).fill(0).map((_, i) => <div
+          className={S.line}
+          key={i}
+        />)}
+      </div>
+      <div className={S.main}>
+        <div className={S.title}>
+          BBS
+        </div>
+
+        <div className={`${S.userWrap} ${(userInfo || props.isPopUp || isIndex) && '!hidden'}`}>
+          <Button
+            type={'primary'}
+            className={S.button}
+            onClick={openRegisterPop}
+          >创建账号加入</Button>
+        </div>
+      </div>
+    </div>
+  </header>
+}

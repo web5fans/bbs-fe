@@ -1,0 +1,37 @@
+@use 'sass:math';
+@use 'sass:map';
+$designSize: 75;
+
+// 定义响应式断点函数
+@function responsive-query($mobile, $pad, $pc) {
+  // 返回包含媒体查询的 map 结构
+  @return (
+          mobile: "screen and (max-width: #{$mobile})",
+          pad: "screen and (min-width: #{$mobile + 1}) and (max-width: #{$pad})",
+          pc: "screen and (min-width: #{$pad + 1})"
+  );
+}
+
+$breakpoint-mobile: 767px;
+$breakpoint-pad: 767px;
+$breakpoint-pc: 1440px;
+
+$media-queries: responsive-query($breakpoint-mobile, $breakpoint-pad, $breakpoint-pc);
+
+@mixin respond-to($device) {
+  @if map.has-key($media-queries, $device) {
+    @media #{map.get($media-queries, $device)} {
+      @content;
+    }
+  } @else {
+    @error "Unknown device `#{$device}`. Available devices: #{map-keys($media-queries)}";
+  }
+}
+
+@function px2rem($px) {
+  @return  math.div($px, $designSize) * 1rem;
+}
+
+@function px2flexible($px) {
+  @return calc(#{$px} / var(--flexible-design-size) * var(--flexible-size-unit))
+}

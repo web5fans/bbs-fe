@@ -1,0 +1,43 @@
+@use "@/styles/rem";
+
+@use "@/styles/tt-variables";
+@use "rc-pagination/assets";
+//@use "@/styles/scroll-bar";
+
+@use "tailwindcss";
+
+//html { font-size: rem.$designSize + px; }
+
+:root {
+  --primary-color: #319999;
+  --primary-color-hover: #1D5C5C;
+  --danger-color: #CB2C3C;
+
+
+  --background: #F1ECE3;
+  --foreground: #000;
+}
+
+body {
+  min-height: 100vh;
+  min-width: fit-content;
+  display: flex;
+  flex-direction: column;
+
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-CLFN);
+}
+
+p {
+  margin: 0;
+}
+
+
+@media screen and (max-width: 767px) {
+  //html { font-size: rem.$designSize + px; }
+}
+
+@media screen and (min-width: 768px) {
+  //:root { font-size: rem.$designSize * 2 + px; }
+}

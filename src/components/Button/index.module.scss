@@ -1,0 +1,57 @@
+@use '@/styles/rem';
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: rem.px2flexible(1) solid #000;
+  user-select: none;
+  font-family: var(--font-CLFN);
+  background: #FFFFFF;
+
+  /* button shadow */
+  box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0px 0px #000;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--primary-color);
+    background: #F3F3F3;
+  }
+
+  &:active {
+    border-width: 1px !important;
+    color: var(--primary-color);
+    box-shadow: 0 0 rem.px2flexible(3) rem.px2flexible(1) #CFCFCF inset;
+  }
+
+  &.primary {
+    color: #FFFFFF;
+    background: var(--primary-color);
+    &:hover {
+      color: #FFFFFF;
+      background: var(--primary-color-hover);
+    }
+
+    &:active {
+      background: var(--primary-color-hover);
+      box-shadow: 0 0 rem.px2flexible(3) rem.px2flexible(1) rgba(0, 0, 0, 0.40) inset;
+    }
+  }
+
+  @mixin btn-disabled {
+    border: rem.px2flexible(1) solid var(--btn-disabled-border, #6C6C6C) !important;
+    background: var(--btn-disabled-bg, #B7B7B7);
+    box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0 0 var(--id-600, #6C6C6C);
+    color: #878787;
+  }
+
+  &.disabled {
+    @include btn-disabled;
+    cursor: not-allowed;
+
+    &:hover,
+    &:active {
+      @include btn-disabled;
+    }
+  }
+}

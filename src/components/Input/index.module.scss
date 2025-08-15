@@ -1,0 +1,119 @@
+@use '@/styles/rem';
+
+@mixin err-style {
+  color: var(--input-danger-text-color, var(--danger-color));
+  border-color: var(--danger-color) !important;
+  box-shadow: 6px 6px 0 0 var(--danger-color) inset;
+}
+
+.wrap {
+  position: relative;
+  line-height: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  overflow: hidden;
+  border: 1px solid #000;
+  box-shadow: 6px 6px 0 0 #000 inset;
+  background: #FFFFFF;
+  padding-inline: rem.px2flexible(10);
+  padding-block: rem.px2flexible(11);
+  transition: all .1s;
+
+  width: 530px;
+  height: 80px;
+
+  &:focus-within,
+  &.checkedPass {
+    border: 1px solid var(--primary-color);
+    box-shadow: 6px 6px 0 0 var(--primary-color) inset;
+  }
+
+  &.checkedPass {
+    color: var(--primary-color);
+  }
+
+  &:focus-within {
+    .caret {
+      display: block;
+    }
+
+    .lengthLimit {
+      display: block;
+    }
+
+    &.lengthSuccess {
+      border-color: var(--primary-color);
+
+      .lengthLimit {
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  &.err {
+    @include err-style;
+
+    &:focus-within {
+      @include err-style;
+    }
+
+    .lengthLimit {
+      color: var(--danger-color);
+    }
+  }
+
+  input {
+    flex: 1;
+    font-family: var(--font-CLFN);
+    font-size: var(--input-font-size, 22px);
+    outline: none;
+    caret-color: transparent;
+
+    &:focus-visible {
+      &::placeholder {
+        opacity: 0;
+      }
+    }
+
+    &::placeholder {
+      font-size: var(--input-font-size, 22px);
+      color: #CFCFCF;
+    }
+  }
+
+  .icon {
+    width: 33px;
+    height: 33px;
+    background: #FFFFFF;
+  }
+
+  .caret {
+    display: none;
+    position: absolute;
+    bottom: var(--caret-bottom, 22px);
+    //left: calc(20px + var(--left-deviation));
+    left: 20px;
+    height: 2px;
+    width: 12px;
+    background-color: var(--primary-color);
+    will-change: left;
+    animation: blink 1s infinite;
+  }
+
+  .hiddenSpan {
+    font-size: rem.px2flexible(12);
+  }
+}
+
+.lengthLimit {
+  display: none;
+  font-size: 20px;
+  font-family: var(--font-CLFN);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

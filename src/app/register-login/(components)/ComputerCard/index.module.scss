@@ -1,0 +1,103 @@
+@use '@/styles/rem';
+
+.card {
+   width: 157px;
+   height: 91px;
+   padding-inline: 15px;
+   color: #FFFFFF;
+   font-size: 16px;
+   display: flex;
+   align-items: center;
+   background: var(--primary-color);
+   margin: 0 auto;
+   font-family: var(--font-CLFN);
+   gap: 11px;
+   position: relative;
+   cursor: grab;
+
+  &.disabled {
+    background: #CFCFCF;
+    color: #1D5C5C;
+
+    .user {
+      color: #1D5C5C;
+    }
+
+    .bottom, .right {
+      background: #6C6C6C;
+    }
+  }
+
+  &.dragging {
+    cursor: grabbing;
+  }
+
+  &.dragOverlay {
+    .move {
+      visibility: visible;
+    }
+  }
+
+   .user {
+     width: 44px;
+     height: 57px;
+     color: #FFFFFF;
+   }
+
+   .name {
+     flex: 1;
+     word-break: break-all;
+     display: -webkit-box;          /* 使用弹性伸缩盒子模型 */
+     -webkit-box-orient: vertical;  /* 垂直排列子元素 */
+     -webkit-line-clamp: 3;         /* 限制显示的行数 */
+     text-overflow: ellipsis;
+     overflow: hidden;
+   }
+
+   .right, .bottom {
+     position: absolute;
+     background: var(--primary-color-hover);
+   }
+
+   .right {
+     width: 3px;
+     height: 100%;
+     right: 0;
+   }
+
+   .bottom {
+     height: 3px;
+     width: 100%;
+     bottom: 0;
+     left: 0;
+   }
+
+   .move {
+     visibility: hidden;
+     position: absolute;
+     width: 24px;
+     height: 17px;
+     left: -8px;
+     bottom: -8px;
+   }
+}
+
+.cardS {
+  width: 43px;
+  height: 25px;
+  padding-inline: 4.12px;
+  font-size: 4px;
+  gap: 2.8px;
+
+  .user {
+    width: 12px;
+    height: 15px;
+  }
+
+  .right{
+    width: 0.8px;
+  }
+  .bottom {
+    height: 0.8px;
+  }
+}
