@@ -107,7 +107,7 @@ const MainToolbarContent = ({
         <MarkButton type="bold" tooltip={'加粗'} />
         <MarkButton type="italic" tooltip={'斜体'} />
         <MarkButton type="strike" tooltip={'删除线'} />
-        {/*<MarkButton type="code" />*/}
+        {/*<MarkButton type="code" tooltip={'代码'} />*/}
         <MarkButton type="underline" tooltip={'下划线'} />
         {!isMobile ? (
           <ColorHighlightPopover />
@@ -133,11 +133,11 @@ const MainToolbarContent = ({
         <TextAlignButton align="justify" />
       </ToolbarGroup>
 
-      <ToolbarSeparator />
+      {/*<ToolbarSeparator />*/}
 
-      <ToolbarGroup>
-        <ImageUploadButton text="图片" />
-      </ToolbarGroup>
+      {/*<ToolbarGroup>*/}
+      {/*  <ImageUploadButton text="图片" />*/}
+      {/*</ToolbarGroup>*/}
 
       {/*<Spacer />*/}
 
@@ -188,6 +188,7 @@ type TipTapEditorProps = {
   editorClassName?: string
   editable?: boolean
   initialContent?: HTMLContent
+  ref?: Ref<any>
 }
 
 export default function TipTapEditor(props: TipTapEditorProps) {
@@ -197,6 +198,12 @@ export default function TipTapEditor(props: TipTapEditorProps) {
     "main" | "highlighter" | "link"
   >("main")
   const toolbarRef = React.useRef<HTMLDivElement>(null)
+
+  useImperativeHandle(props.ref, () => {
+    return {
+      setContent: (text: string) => editor?.commands.setContent(text)
+    }
+  })
 
   const extensions = [
     StarterKit,
@@ -255,7 +262,7 @@ export default function TipTapEditor(props: TipTapEditorProps) {
   useEffect(() => {
     if (!editor || !props.initialContent) return
     editor.commands.setContent(props.initialContent)
-  }, [props.initialContent, editor]);
+  }, [props.initialContent]);
 
   React.useEffect(() => {
     if (!isMobile && mobileView !== "main") {
