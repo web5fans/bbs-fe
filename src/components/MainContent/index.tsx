@@ -14,7 +14,7 @@ dayjs.extend(utc);
 const MainContent = (props: {
   children: React.ReactNode;
 }) => {
-  const { initialize } = useUserInfoStore();
+  const { initialize, initialized } = useUserInfoStore();
   const { centerWidth, isUseDoubleSize } = useDeviceFlex()
 
   useEffect(() => {
@@ -31,6 +31,8 @@ const MainContent = (props: {
     document.body.style.setProperty('--flexible-size-unit', !isUseDoubleSize ? '100vw' : '2rem');
 
   }, [centerWidth, isUseDoubleSize]);
+
+  if (!initialized) return null;
 
   return <div className={'flex flex-col'}>
     {props.children}

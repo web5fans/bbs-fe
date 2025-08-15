@@ -11,6 +11,7 @@ type UserInfoStoreValue = {
   createdTx?: ccc.Transaction
   did?: string
   userInfo?: ComAtprotoServerCreateSession.OutputSchema
+  initialized?: boolean
 }
 
 
@@ -28,6 +29,7 @@ const useUserInfoStore = createSelectors(
     createTx: undefined,
     did: undefined,
     userInfo: undefined,
+    initialized: undefined,
 
     setStoreData: (params) => {
       set(() => ({ ...params }))
@@ -93,6 +95,7 @@ const useUserInfoStore = createSelectors(
 
     initialize: async () => {
       await get().web5Login()
+      set(() => ({ initialized: true }))
     }
 
   })),
