@@ -4,6 +4,8 @@ import { ccc } from "@ckb-ccc/core";
 import usePDSClient from "@/hooks/usePDSClient";
 import storage from "@/lib/storage";
 import { ComAtprotoWeb5CreateAccount, ComAtprotoServerCreateSession } from "web5-api";
+import { writesPDSOperation } from "@/app/posts/utils";
+import { handleToNickName } from "@/lib/handleToNickName";
 
 type UserInfoStoreValue = {
   createdTx?: ccc.Transaction
@@ -40,6 +42,15 @@ const useUserInfoStore = createSelectors(
         did: userInfo.did,
         signKey: params.password,
         walletAddress: params.ckbAddr
+      })
+
+      writesPDSOperation({
+        record: {
+          $type: "app.actor.profile",
+          display_name: handleToNickName(userInfo.handle),
+        },
+        did: userInfo.did,
+        rkey: "self"
       })
 
       set(() => ({ userInfo }))
