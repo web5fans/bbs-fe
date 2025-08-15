@@ -123,7 +123,7 @@ function FeedItem({ feed, onClick }: {
       dangerouslySetInnerHTML={{ __html: html }}
     />
 
-    <pre className={S.feedInfo}>{innerRichText}</pre>
+    <p className={S.feedInfo}>{innerRichText}</p>
 
     <div className={S.footer}>
       <div className={S.left}>
