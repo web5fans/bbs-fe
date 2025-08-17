@@ -10,6 +10,7 @@ import ts from 'highlight.js/lib/languages/typescript'
 import html from 'highlight.js/lib/languages/xml'
 
 import { common, createLowlight } from 'lowlight'
+import hastToHtml from "@/lib/hastToHTML";
 
 // create a lowlight instance
 const lowlight = createLowlight(common)
@@ -19,6 +20,42 @@ lowlight.register('html', html)
 lowlight.register('css', css)
 lowlight.register('js', js)
 lowlight.register('ts', ts)
+
+export function highlightWithLowlight(html: string) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  const codeBlockNodes = doc.querySelectorAll('pre code');
+
+  codeBlockNodes.forEach((block) => {
+    const language = block.getAttribute('class')?.replace('language-', '');
+    const code = block.textContent;
+
+    let nodes;
+    try {
+      if (language && lowlight.registered(language)) {
+        nodes = lowlight.highlight(language, code).children;
+      } else {
+        nodes = lowlight.highlightAuto(code).children;
+      }
+      block.innerHTML = hastToHtml(nodes)
+
+      if (block.parentElement) {
+        const parentNode = block.parentElement
+        parentNode.setAttribute('data-language', language || 'auto')
+        parentNode.setAttribute('data-textcontent', block.textContent)
+      }
+
+    } catch (e) {
+      console.warn('Failed to highlight code:', e);
+    }
+  });
+
+  return {
+    html: doc.body.innerHTML,
+    needParse: codeBlockNodes.length > 0,
+  };
+}
 
 function CodeBlockNode({
   node: {

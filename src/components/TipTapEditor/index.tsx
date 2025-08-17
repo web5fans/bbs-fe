@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { EditorContent, EditorContext, generateJSON, useEditor } from "@tiptap/react"
+import { EditorContent, EditorContext, generateHTML, generateJSON, useEditor } from "@tiptap/react"
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
 import { Image } from "@tiptap/extension-image"
@@ -208,7 +208,6 @@ export default function TipTapEditor(props: TipTapEditorProps) {
   const extensions = [
     StarterKit,
     TextAlign.configure({ types: ["heading", "paragraph"] }),
-    Highlight,
     Underline,
     LiteralTab,
     Highlight.configure({ multicolor: true }),
@@ -261,7 +260,7 @@ export default function TipTapEditor(props: TipTapEditorProps) {
 
   useEffect(() => {
     if (!editor || !props.initialContent) return
-    editor.commands.setContent(props.initialContent)
+    // editor.commands.setContent(props.initialContent)
   }, [editor, props.initialContent]);
 
   React.useEffect(() => {

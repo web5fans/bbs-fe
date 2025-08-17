@@ -38,6 +38,7 @@
     "crypto": "^1.0.1",
     "dayjs": "^1.11.13",
     "highlight.js": "^11.11.1",
+    "html-react-parser": "^5.2.6",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "lowlight": "^3.3.0",

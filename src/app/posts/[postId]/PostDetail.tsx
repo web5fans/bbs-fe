@@ -58,7 +58,7 @@ const PostDetail = (props: PostDetailProps) => {
       <PostItem isOriginPoster postInfo={originPosterInfo} floor={1} />
 
       {replyList?.replies.map((p, idx) => {
-        return <PostItem postInfo={p} floor={idx+2} />
+        return <PostItem key={p.uri} postInfo={p} floor={idx+2} />
       })}
 
       <Pagination

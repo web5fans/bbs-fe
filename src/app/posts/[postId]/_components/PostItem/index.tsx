@@ -3,9 +3,9 @@
 import S from './index.module.scss'
 import Avatar from "@/components/Avatar";
 import FeedStatistic from "@/components/FeedStatistic";
-import TipTapEditor from "@/components/TipTapEditor";
 import cx from "classnames";
 import utcToLocal from "@/lib/utcToLocal";
+import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
 
 type PostItemProps = {
   isOriginPoster?: boolean
@@ -16,7 +16,7 @@ type PostItemProps = {
 const PostItem = (props: PostItemProps) => {
   const { postInfo = {}, floor, isOriginPoster } = props;
 
-  return <div className={S.wrap}>
+    return <div className={S.wrap}>
     <div className={S.user}>
       <div className={cx(S.avatarWrap, !isOriginPoster && S.normal)}>
         <Avatar nickname={'Scvcd'} className={S.avatar} />
@@ -40,12 +40,13 @@ const PostItem = (props: PostItemProps) => {
           </div>
         </>}
 
-        <TipTapEditor
-          initialContent={postInfo.text}
-          editable={false}
-          editorClassName={S.richText}
-          editorWrapClassName={'!h-auto'}
-        />
+        {/*<TipTapEditor*/}
+        {/*  initialContent={postInfo.text}*/}
+        {/*  editable={false}*/}
+        {/*  editorClassName={S.richText}*/}
+        {/*  editorWrapClassName={'!h-auto'}*/}
+        {/*/>*/}
+        <JSONToHtml html={postInfo.text} />
       </div>
 
       <div className={S.floor}>
