@@ -17,12 +17,11 @@ const PostItem = (props: PostItemProps) => {
   const { postInfo = {}, floor, isOriginPoster } = props;
 
   const nickname = postInfo.author?.displayName
-  const userDid = postInfo.author?.did || ''
 
     return <div className={S.wrap}>
     <div className={S.user}>
       <div className={cx(S.avatarWrap, !isOriginPoster && S.normal)}>
-        <Avatar did={userDid} nickname={nickname} className={S.avatar} />
+        <Avatar nickname={nickname} className={S.avatar} />
         <img src={'/assets/poster.png'} alt="" className={S.poster} />
       </div>
       <p className={S.title}>{nickname}</p>
