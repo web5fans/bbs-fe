@@ -7,9 +7,11 @@ import Marquee from "react-fast-marquee";
 import { AnchorHTMLAttributes } from "react";
 import cx from "classnames";
 import useUserInfoStore from "@/store/userInfo";
+import { useWallet } from "@/provider/WalletProvider";
 
 export default function Home() {
   const { userInfo, logout } = useUserInfoStore()
+  const { disconnect } = useWallet()
 
   return (
     <div className={S.container}>
@@ -30,7 +32,10 @@ export default function Home() {
               imageType={'storage'}
               title={'本地Web5数据库'}
               className={!userInfo ? '!hidden' : ''}
-              onClick={logout}
+              onClick={() => {
+                disconnect()
+                logout()
+              }}
             />
           </div>
         </div>

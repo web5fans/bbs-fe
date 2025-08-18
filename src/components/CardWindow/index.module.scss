@@ -44,7 +44,7 @@ $bg: #EAEAEA;
       //top: rem.px2flexible(3);
       top: 50%;
       transform: translateX(-50%) translateY(-50%);
-      letter-spacing: calc($fontSize * 0.13);
+      letter-spacing: var(--card-window-title-letter-spacing, calc($fontSize * 0.13));
       //height: 100%;
     }
 

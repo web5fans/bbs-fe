@@ -34,7 +34,8 @@
   }
 
   .windowHeader {
-    letter-spacing: normal !important;
+    --card-window-title-letter-spacing: normal;
+    //letter-spacing: normal !important;
   }
 
   .content {

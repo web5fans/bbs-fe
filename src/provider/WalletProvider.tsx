@@ -51,8 +51,8 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
           open()
         },
         disconnect: async () => {
-          await signer?.disconnect();
           if (cccSigner) {
+            await signer?.disconnect();
             disconnect();
           }
           setIsConnected(false)
