@@ -1,10 +1,12 @@
 import S from './index.module.scss'
 
-const FeedStatistic = () => {
+const FeedStatistic = (props: {
+  visitedCount?: number
+}) => {
   return <div className={S.wrap}>
     <p className={S.item}>
       <BrowseIcon />
-      0
+      {props.visitedCount || 0}
     </p>
     <p className={S.item}>
       <CommentIcon />

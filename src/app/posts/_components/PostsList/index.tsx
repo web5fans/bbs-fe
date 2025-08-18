@@ -13,6 +13,7 @@ import LoadMoreView from "@/components/LoadMoreView";
 import { useRouter } from "next/navigation";
 import { PostFeedItemType } from "@/app/posts/utils";
 import utcToLocal from "@/lib/utcToLocal";
+import Link from "next/link";
 
 const PAGE_SIZE = 20
 
@@ -56,18 +57,17 @@ const PostsList = ({ sectionId }: {
   return <div className={S.wrap}>
     <p className={S.title}>最新帖子</p>
     <div className={cx(S.content, clickedShowMore && '!max-h-none')}>
-      {dataSource?.list.map((item, index) => <FeedItem
-        key={item.uri}
-        feed={item}
-        onClick={() => {
-          const uri = encodeURIComponent(item.uri)
-          let href = `/posts/${uri}`
-          if (sectionId) {
-            href = `/section/${sectionId}/${uri}`
-          }
-          router.push(href)
-        }}
-      />)}
+      {dataSource?.list.map((item, index) => {
+        const uri = encodeURIComponent(item.uri)
+        let href = `/posts/${uri}`
+        if (sectionId) {
+          href = `/section/${sectionId}/${uri}`
+        }
+
+        return <Link href={href} prefetch as={href} key={item.uri}>
+          <FeedItem feed={item} />
+        </Link>
+      })}
 
 
       {!clickedShowMore && (dataSource?.list.length || 0) > 6 &&<div
@@ -91,7 +91,7 @@ export default PostsList;
 
 function FeedItem({ feed, onClick }: {
   feed: PostFeedItemType;
-  onClick: () => void
+  onClick?: () => void
 }) {
   const { author } = feed;
 
@@ -132,7 +132,7 @@ function FeedItem({ feed, onClick }: {
           {nickname}
         </div>
         <span>{feed.section}</span>
-        <FeedStatistic />
+        <FeedStatistic visitedCount={feed.visited_count} />
       </div>
       <span className={S.time}>{utcToLocal(feed.created)}</span>
     </div>
