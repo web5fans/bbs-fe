@@ -17,7 +17,8 @@ type RegisterNickNameProviderProps = {
 
   showBlinkAnimate?: boolean
   validate?: ValidateResult
-  setValidate: (v: ValidateResult) => void
+  setValidate: (v?: ValidateResult) => void
+  resetContext: () => void
 }
 
 const SetNickNameContext = createContext<RegisterNickNameProviderProps>({
@@ -25,7 +26,8 @@ const SetNickNameContext = createContext<RegisterNickNameProviderProps>({
   setNickName: nickname => {},
   isInputFocus: undefined,
   setIsInputFocus: is => {},
-  setValidate: (v: ValidateResult) => {}
+  setValidate: (v?: ValidateResult) => {},
+  resetContext: () => {}
 });
 
 export const SetNickNameProvider = (props: {
@@ -41,6 +43,12 @@ export const SetNickNameProvider = (props: {
 
   const userHandle = nickname + `.${USER_DOMAIN}`
 
+  const reset = () => {
+    setNickName('')
+    setIsInputFocus(false)
+    setValidate(undefined)
+  }
+
   return <SetNickNameContext.Provider
     value={{
       nickname,
@@ -53,6 +61,7 @@ export const SetNickNameProvider = (props: {
       showBlinkAnimate,
       validate,
       setValidate,
+      resetContext: reset
     }}
   >
     {props.children}

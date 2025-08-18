@@ -41,7 +41,7 @@ type StepNickNameProps = {
 
 export const StepNickNameLeft = (props: StepNickNameProps) => {
   const { goPrev, goNext } = props;
-  const { setNickName, setIsInputFocus, validate, setValidate } = useNickName()
+  const { setNickName, setIsInputFocus, validate, setValidate, resetContext } = useNickName()
   const { disconnect } = useWallet();
 
   const pdsClient = usePDSClient()
@@ -75,6 +75,7 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
   }, 500), [])
 
   const goBack = async () => {
+    resetContext()
     await disconnect()
     goPrev()
   }
