@@ -1,8 +1,6 @@
 .sticky {
   position: fixed;
   bottom: 100px;
-  height: 0;
-  overflow: hidden;
   transition: height 0.2s ease-in-out;
 
   .toTop {

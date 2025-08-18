@@ -3,36 +3,24 @@
 import S from './index.module.scss'
 import SectionDetailCard from "@/app/section/[sectionId]/_components/SectionDetailCard";
 import Recommend from "@/app/section/[sectionId]/_components/Recommend";
-import { useEffect, useRef } from "react";
-import FloatingMark from "@/components/FloatingMark";
+import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark";
 import Button from "@/components/Button";
 import { useParams, useRouter } from "next/navigation";
 import PostsList from "@/app/posts/_components/PostsList";
 
 const SectionDetailPage = () => {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const stickyRef = useRef<HTMLDivElement>(null);
-
   const { sectionId } = useParams<{ sectionId: string }>()
 
   const router = useRouter()
 
-  useEffect(() => {
-    const instance = contentRef.current;
-    if (!instance) return
-
-    const left = instance.offsetLeft + instance.clientWidth + 16
-
-    stickyRef.current.style.left = left + 'px'
-
-  }, []);
+  const { rootRef, stickyRef } = useFloatingMarkDistance()
 
   const goToPublish = () => {
     router.push('/posts/publish?section=' + sectionId)
   }
 
   return <div className={S.container}>
-    <div className={S.inner} ref={contentRef}>
+    <div className={S.inner} ref={rootRef}>
       <SectionDetailCard goToPublish={goToPublish} sectionId={sectionId} />
 
       <Recommend sectionId={sectionId} />

@@ -26,7 +26,7 @@ const FloatingMark = (props: FloatingMarkProps) => {
     }
   }, []);
 
-  return <div {...rest} className={cx(S.sticky, rest.className, visible && '!h-auto')}>
+  return <div {...rest} className={cx(S.sticky, rest.className, !visible && '!h-0 !overflow-hidden')}>
     {children}
     <Button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className={S.toTop}>
       <TopIcon />
@@ -36,6 +36,26 @@ const FloatingMark = (props: FloatingMarkProps) => {
 }
 
 export default FloatingMark;
+
+export function useFloatingMarkDistance() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const instance = rootRef.current;
+    if (!instance) return
+
+    const left = instance.offsetLeft + instance.clientWidth + 16
+
+    stickyRef.current.style.left = left + 'px'
+
+  }, []);
+
+  return {
+    rootRef,
+    stickyRef,
+  }
+}
 
 function TopIcon() {
   return <svg

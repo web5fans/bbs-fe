@@ -58,7 +58,7 @@ const PostDiscuss = (props: {
     </div>
   }
 
-  return <div className={S.wrap}>
+  return <div className={S.wrap} id={'comment_post'}>
     <p className={S.title}>跟帖讨论</p>
     <div className={S.editor}>
       <TipTapEditor onUpdate={editorUpdate} />
