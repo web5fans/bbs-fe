@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import UserIcon from '@/assets/header/user.svg'
 import useUserInfoStore from "@/store/userInfo";
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function AppHeader(props: {
   isPopUp?: boolean
@@ -13,6 +13,8 @@ export default function AppHeader(props: {
   const { userInfo } = useUserInfoStore()
   const { openRegisterPop } = useRegisterPopUp()
   const pathname = usePathname()
+
+  const router = useRouter()
 
   const isIndex = pathname === '/'
 
@@ -25,7 +27,7 @@ export default function AppHeader(props: {
         />)}
       </div>
       <div className={S.main}>
-        <div className={S.title}>
+        <div className={S.title} onClick={() => router.replace('/')}>
           BBS
         </div>
 
