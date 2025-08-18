@@ -3,6 +3,8 @@
 import { UniqueIdentifier, useDroppable } from "@dnd-kit/core";
 import S from './index.module.scss'
 import cx from "classnames";
+import Image from 'next/image'
+import DefaultImage from '@/assets/login/byte-static.png'
 
 
 interface Props {
@@ -29,7 +31,8 @@ const ChainItem = ({ id, isOverHalf, droppedId }: Props) => {
       hover && S.twice,
       droppedId === id && S.twice,
     )}>
-      <img src={'/assets/login/byte-s.gif'} alt="" />
+      <Image src={DefaultImage} alt="" priority className={S.bgImage} />
+      <img src={'/assets/login/byte-s.gif'} alt="" className={S.gif} />
     </div>
   </div>
 }
