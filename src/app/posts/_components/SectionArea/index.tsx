@@ -41,11 +41,11 @@ function SectionItem(props: {
       <div className={S.info}>
         <p className={S.infoItem}>
           <ReadIcon />
-          0
+          {section.post_count}
         </p>
         <p className={S.infoItem}>
           <ReplyIcon />
-          0
+          {section.reply_count}
         </p>
         {/*<p className={S.infoItem}>*/}
         {/*  <MoneyIcon />*/}

@@ -169,11 +169,11 @@ function SelectDropItem(props: {
       <div className={S.info}>
         <p className={S.infoItem}>
           <ReadIcon />
-          0
+          {itemInfo.post_count}
         </p>
         <p className={S.infoItem}>
           <ReplyIcon />
-          0
+          {itemInfo.reply_count}
         </p>
         {/*<p className={S.infoItem}>*/}
         {/*  <MoneyIcon />*/}

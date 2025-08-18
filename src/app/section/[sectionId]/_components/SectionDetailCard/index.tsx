@@ -86,7 +86,7 @@ const SectionDetailCard = (props: {
           {/*<p>*/}
           {/*  版主：<span className={'text-black'}>{sectionInfo?.owner}</span>*/}
           {/*</p>*/}
-          <FeedStatistic />
+          <FeedStatistic replyCount={sectionInfo?.reply_count} />
         </div>
         <div className={S.content} ref={infoRef}>
           {renderInfo()}

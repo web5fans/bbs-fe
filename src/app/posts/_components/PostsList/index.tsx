@@ -144,7 +144,7 @@ function FeedItem({ feed, onClick, onHover }: {
           {nickname}
         </div>}
         <span>{feed.section}</span>
-        <FeedStatistic visitedCount={feed.visited_count} />
+        <FeedStatistic visitedCount={feed.visited_count} replyCount={feed.reply_count} />
       </div>
       <span className={S.time}>{utcToLocal(feed.created)}</span>
     </div>

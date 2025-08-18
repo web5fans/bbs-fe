@@ -19,7 +19,7 @@ type PostDetailProps = {
 const PostDetail = (props: PostDetailProps) => {
   const { breadCrumb, postId } = props;
 
-  const { data: originPosterInfo } = useRequest(async () => {
+  const { data: originPosterInfo, refresh: refreshOrigin } = useRequest(async () => {
     const result = await server('/post/detail', 'GET', {
       uri: postId
     })
@@ -28,7 +28,7 @@ const PostDetail = (props: PostDetailProps) => {
     refreshDeps: [postId]
   })
 
-  const { data: replyList, run } = useRequest(async (page: number = 1) => {
+  const { data: replyList, run: reLoadReply } = useRequest(async (page: number = 1) => {
     const result = await server<{
       replies: PostFeedItemType[],
       total: number,
@@ -46,7 +46,7 @@ const PostDetail = (props: PostDetailProps) => {
   })
 
   useEffect(() => {
-    run()
+    reLoadReply()
   }, []);
 
   return <CardWindow
@@ -70,7 +70,14 @@ const PostDetail = (props: PostDetailProps) => {
         align={'center'}
       />
 
-      <PostDiscuss sectionId={originPosterInfo?.section_id} postUri={postId} refresh={() => run(1)} />
+      <PostDiscuss
+        sectionId={originPosterInfo?.section_id}
+        postUri={postId}
+        refresh={() => {
+          refreshOrigin()
+          reLoadReply(1)
+        }}
+      />
     </div>
   </CardWindow>
 }

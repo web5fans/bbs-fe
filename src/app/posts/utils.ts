@@ -16,6 +16,7 @@ export type PostFeedItemType = {
   title: string,
   text: string,
   visited_count: number,
+  reply_count: number,
   visited: string, // 时间
   updated: string, // 时间
   created: string, // 时间
@@ -23,6 +24,8 @@ export type PostFeedItemType = {
 }
 
 export type SectionItem = {
+  post_count: string
+  reply_count: string
   id: string;
   name: string
   owner?: Record<string, string> // 版主

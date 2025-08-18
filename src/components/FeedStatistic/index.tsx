@@ -1,7 +1,8 @@
 import S from './index.module.scss'
 
 const FeedStatistic = (props: {
-  visitedCount?: number
+  visitedCount?: string
+  replyCount?: string
 }) => {
   return <div className={S.wrap}>
     <p className={S.item}>
@@ -10,7 +11,7 @@ const FeedStatistic = (props: {
     </p>
     <p className={S.item}>
       <CommentIcon />
-      0
+      {props.replyCount || 0}
     </p>
   </div>
 }
