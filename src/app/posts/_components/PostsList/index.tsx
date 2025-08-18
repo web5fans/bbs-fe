@@ -138,6 +138,7 @@ function FeedItem({ feed, onClick, onHover }: {
       <div className={S.left}>
         {nickname && <div className={S.nickname}>
           <Avatar
+            did={author.did}
             className={S.avatar}
             nickname={nickname}
           />

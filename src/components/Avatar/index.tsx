@@ -5,17 +5,18 @@ const colorsNum = 12
 const Avatar = (props: {
   nickname: string,
   className?: string
+  did: string
 }) => {
-  const { nickname = '' } = props;
+  const { nickname = '', did = '' } = props;
 
   const hash = Math.abs(toHashCode(nickname)) % colorsNum
 
-  if (!nickname) return null
+  const firstLetter = did?.replace('did:web5:', '')
 
   return <div className={`${S.wrap} ${props.className} ${S[`color${hash + 1}`]}`}>
     <CircleInner />
     <CircleOuter className={S.circle} />
-    <span className={S.nick}>{nickname[0]}</span>
+    <span className={S.nick}>{firstLetter[0]}</span>
   </div>
 }
 
