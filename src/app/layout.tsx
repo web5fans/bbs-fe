@@ -33,14 +33,20 @@ const RootLayout = async (props: any) => {
     <html lang="cn" style={{ visibility: "hidden" }}>
       <head>
         <PublicEnvScript />
-      </head>
-      <body
-        className={fontVariables}
-      >
-        <LayoutProvider>
-          <ToastProvider>
-            <MainContent>
-              <RegisterPopUpProvider>
+        <link
+          rel="preload"
+          href="/assets/login/byte-static.png"
+          as="image"
+          type="image/png"
+        />
+    </head>
+  <body
+    className={fontVariables}
+  >
+  <LayoutProvider>
+    <ToastProvider>
+      <MainContent>
+        <RegisterPopUpProvider>
                 {header}
                 <main
                   style={{
