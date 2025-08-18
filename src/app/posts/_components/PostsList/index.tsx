@@ -64,8 +64,11 @@ const PostsList = ({ sectionId }: {
           href = `/section/${sectionId}/${uri}`
         }
 
-        return <Link href={href} prefetch as={href} key={item.uri}>
-          <FeedItem feed={item} />
+        return <Link href={href} prefetch={false} as={href} key={item.uri}>
+          <FeedItem
+            feed={item}
+            onHover={() => router.prefetch(href)}
+          />
         </Link>
       })}
 
@@ -89,9 +92,10 @@ const PostsList = ({ sectionId }: {
 
 export default PostsList;
 
-function FeedItem({ feed, onClick }: {
+function FeedItem({ feed, onClick, onHover }: {
   feed: PostFeedItemType;
   onClick?: () => void
+  onHover?: () => void
 }) {
   const { author } = feed;
 
@@ -112,6 +116,7 @@ function FeedItem({ feed, onClick }: {
   return <div
     className={S.feed}
     onClick={onClick}
+    onMouseEnter={onHover}
   >
     <p className={S.header}>
       {title}
