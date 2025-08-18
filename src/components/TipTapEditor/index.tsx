@@ -181,6 +181,12 @@ const MobileToolbarContent = ({
 
 export type EditorUpdateData = { json: JSONContent, html: string, text: string }
 
+export type EditorRefType = {
+  clearContent: () => void
+  setContent: (newContent: string) => void
+  focus: () => void
+}
+
 type TipTapEditorProps = {
   disabled?: boolean
   onUpdate?: (obj: EditorUpdateData) => void
@@ -188,7 +194,7 @@ type TipTapEditorProps = {
   editorClassName?: string
   editable?: boolean
   initialContent?: HTMLContent
-  ref?: Ref<any>
+  ref?: Ref<EditorRefType>
 }
 
 export default function TipTapEditor(props: TipTapEditorProps) {
@@ -201,7 +207,12 @@ export default function TipTapEditor(props: TipTapEditorProps) {
 
   useImperativeHandle(props.ref, () => {
     return {
-      setContent: (text: string) => editor?.commands.setContent(text)
+      setContent: (text: string) => editor?.commands.setContent(text),
+      clearContent: () => {
+        editor?.commands.clearContent();
+        editor?.commands.focus()
+      },
+      focus: () => editor?.commands.focus()
     }
   })
 

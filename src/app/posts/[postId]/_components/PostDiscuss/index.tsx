@@ -1,12 +1,12 @@
 'use client'
 
 import S from './index.module.scss'
-import TipTapEditor, { EditorUpdateData } from "@/components/TipTapEditor";
+import TipTapEditor, { EditorRefType, EditorUpdateData } from "@/components/TipTapEditor";
 import Button from "@/components/Button";
 import FaceIcon from '@/assets/login/multiDid/face.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import PublishPostCancelButton from "@/components/PublishPostCancelButton";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { writesPDSOperation } from "@/app/posts/utils";
 import { useToast } from "@/provider/toast";
 import useUserInfoStore from "@/store/userInfo";
@@ -20,6 +20,8 @@ const PostDiscuss = (props: {
   const [publishing, setPublishing] = useState(false)
 
   const [richText, setRichText] = useState('')
+
+  const editorRef = useRef<EditorRefType>(null)
 
   const toast = useToast()
 
@@ -45,6 +47,7 @@ const PostDiscuss = (props: {
         did: userInfo?.did!
       })
       setPublishing(false)
+      editorRef.current?.clearContent()
       props.refresh?.()
       toast({ title: '发布成功', icon: 'success'})
     } catch (error) {
@@ -63,7 +66,7 @@ const PostDiscuss = (props: {
   return <div className={S.wrap} id={'comment_post'}>
     <p className={S.title}>跟帖讨论</p>
     <div className={S.editor}>
-      <TipTapEditor onUpdate={editorUpdate} />
+      <TipTapEditor onUpdate={editorUpdate} ref={editorRef} />
     </div>
     <div className={S.footer}>
       {
