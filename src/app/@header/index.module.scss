@@ -16,7 +16,7 @@
     top: -7px;
     position: relative;
     border: rem.px2flexible(2) solid #000000;
-    background: var(--background);
+    background: var(--fixed-header-bg);
     display: flex;
     align-items: center;
     padding: 0 rem.px2flexible(6);
@@ -52,7 +52,7 @@
   }
 
   .title {
-    background: var(--background);
+    background: var(--fixed-header-bg);
     display: flex;
     align-items: center;
     padding: 0 rem.px2flexible(10);
@@ -62,7 +62,7 @@
 
   .userWrap {
     padding: 0 20px;
-    background: var(--background);
+    background: var(--fixed-header-bg);
     height: 100%;
     display: flex;
     align-items: center;

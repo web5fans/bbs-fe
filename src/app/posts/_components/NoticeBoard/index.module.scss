@@ -3,7 +3,6 @@
 
   .header {
     letter-spacing: normal !important;
-    font-weight: 500;
   }
 }
 
@@ -37,11 +36,19 @@
   padding: 24px 20px 20px 20px;
   width: 360px;
   cursor: pointer;
-  //margin-right: 20px;
-  //
-  //&:first-child {
-  //  margin-left: 20px;
-  //}
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+
+    .info {
+      color: var(--primary-color);
+    }
+  }
 
   .title {
     font-size: 18px;

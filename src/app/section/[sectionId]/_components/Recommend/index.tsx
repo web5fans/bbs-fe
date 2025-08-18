@@ -20,6 +20,10 @@ const Recommend = ({ sectionId }: { sectionId: string }) => {
 
   const router = useRouter()
 
+  if (!list || list.length === 0) {
+    return null
+  }
+
   return <div className={S.recommend}>
     <p className={S.recommendTitle}>推荐讨论</p>
     <div className={S.recommendContent}>
