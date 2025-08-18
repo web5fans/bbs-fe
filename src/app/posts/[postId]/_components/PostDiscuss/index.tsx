@@ -13,6 +13,7 @@ import useUserInfoStore from "@/store/userInfo";
 
 const PostDiscuss = (props: {
   postUri: string
+  sectionId: string
   refresh?: () => void
 }) => {
   const { userInfo } = useUserInfoStore()
@@ -39,6 +40,7 @@ const PostDiscuss = (props: {
           text: richText,
           root: props.postUri,
           parent: props.postUri,
+          section_id: props.sectionId,
         },
         did: userInfo?.did!
       })

@@ -70,7 +70,7 @@ const PostDetail = (props: PostDetailProps) => {
         align={'center'}
       />
 
-      <PostDiscuss postUri={postId} refresh={() => run(1)} />
+      <PostDiscuss sectionId={originPosterInfo?.section_id} postUri={postId} refresh={() => run(1)} />
     </div>
   </CardWindow>
 }

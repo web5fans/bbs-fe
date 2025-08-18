@@ -45,8 +45,9 @@ type PostRecordType = {
 } | {
   $type: 'app.bbs.reply'
   root: string  // 原帖uri
-  parent?: string  // 原帖uri 或 回复的uri
+  parent: string  // 原帖uri 或 回复的uri
   text: string;
+  section_id: string;
 } | {
   $type: 'app.actor.profile'
   displayName: string;
