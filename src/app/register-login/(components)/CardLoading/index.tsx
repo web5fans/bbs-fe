@@ -13,7 +13,7 @@ const CardLoading = (props: {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveIndex(prevIndex => (prevIndex + 1) % 5);
+      setActiveIndex(prevIndex => (prevIndex + 1) % 6);
     }, 800);
 
     return () => clearInterval(timer);
