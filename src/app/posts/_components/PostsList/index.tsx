@@ -54,10 +54,14 @@ const PostsList = ({ sectionId }: {
     isNoMore: d => !d?.nextCursor,
   });
 
+  const showClickLoadMore = !clickedShowMore && (dataSource?.list.length || 0) > 6
+
+  const showList = showClickLoadMore ? dataSource?.list.slice(0, 6) : dataSource?.list
+
   return <div className={S.wrap}>
     <p className={S.title}>最新帖子</p>
     <div className={cx(S.content, clickedShowMore && '!max-h-none')}>
-      {dataSource?.list.map((item, index) => {
+      {showList?.map((item, index) => {
         const uri = encodeURIComponent(item.uri)
         let href = `/posts/${uri}`
         if (sectionId) {
@@ -132,10 +136,13 @@ function FeedItem({ feed, onClick, onHover }: {
 
     <div className={S.footer}>
       <div className={S.left}>
-        <div className={S.nickname}>
-          <Avatar className={S.avatar} nickname={nickname} />
+        {nickname && <div className={S.nickname}>
+          <Avatar
+            className={S.avatar}
+            nickname={nickname}
+          />
           {nickname}
-        </div>
+        </div>}
         <span>{feed.section}</span>
         <FeedStatistic visitedCount={feed.visited_count} />
       </div>

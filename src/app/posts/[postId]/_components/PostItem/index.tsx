@@ -16,13 +16,15 @@ type PostItemProps = {
 const PostItem = (props: PostItemProps) => {
   const { postInfo = {}, floor, isOriginPoster } = props;
 
+  const nickname = postInfo.author?.displayName
+
     return <div className={S.wrap}>
     <div className={S.user}>
       <div className={cx(S.avatarWrap, !isOriginPoster && S.normal)}>
-        <Avatar nickname={'Scvcd'} className={S.avatar} />
+        <Avatar nickname={nickname} className={S.avatar} />
         <img src={'/assets/poster.png'} alt="" className={S.poster} />
       </div>
-      <p className={S.title}>Skjsgdhf</p>
+      <p className={S.title}>{nickname}</p>
       <div className={S.divide} />
       <p className={S.postNum}>
         <span>发帖数量</span>

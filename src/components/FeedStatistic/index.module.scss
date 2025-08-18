@@ -3,7 +3,7 @@
   align-items: center;
   gap: 20px;
   font-size: var(--post-statistic-font-size, 12px);
-  color: #6C6C6C;
+  color: var(--post-statistic-font-color, #6C6C6C);
 
   .item {
     display: flex;
