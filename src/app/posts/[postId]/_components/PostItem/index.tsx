@@ -28,7 +28,7 @@ const PostItem = (props: PostItemProps) => {
       <div className={S.divide} />
       <p className={S.postNum}>
         <span>发帖数量</span>
-        <span>12</span>
+        <span>{postInfo.author?.post_count}</span>
       </p>
     </div>
 

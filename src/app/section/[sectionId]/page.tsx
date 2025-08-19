@@ -28,7 +28,7 @@ const SectionDetailPage = () => {
       <SectionDetailCard goToPublish={goToPublish} sectionId={sectionId} />
 
       <Recommend sectionId={sectionId} />
-      <PostsList sectionId={sectionId} />
+      <PostsList sectionId={sectionId} minLimit={20} />
     </div>
     <FloatingMark ref={stickyRef}>
       <Button type={'primary'} onClick={goToPublish} className={cx(S.sticky, !userInfo && '!hidden')}><AddIcon/></Button>

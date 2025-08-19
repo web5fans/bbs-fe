@@ -29,9 +29,12 @@ function SectionItem(props: {
   const { section } = props;
   const router = useRouter()
 
+  const href = `/section/${section.id}`
+
   return <div
     className={S.card}
-    onClick={() => router.push(`/section/${section.id}`)}
+    onClick={() => router.push(href)}
+    onMouseEnter={() => router.prefetch(href)}
   >
     <div className={S.image}>
       <SectionEarth />

@@ -36,8 +36,9 @@ const NoticeBoard = () => {
       </Marquee>
 
       <div className={S.cardContent}>
-        {[...(list || []), ...(list || []), ...(list || []), ...(list || [])]?.map(item => {
+        {list?.map(item => {
           return <NoticeCardItem
+            key={item.uri}
             noticeInfo={item}
             onClick={() => router.push('/posts/' + encodeURIComponent(item.uri))}
           />

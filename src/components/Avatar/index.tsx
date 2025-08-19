@@ -1,4 +1,7 @@
+'use client'
+
 import S from './index.module.scss'
+import { useMemo } from "react";
 
 const colorsNum = 12
 
@@ -8,9 +11,14 @@ const Avatar = (props: {
 }) => {
   const { nickname = '' } = props;
 
-  const hash = Math.abs(toHashCode(nickname)) % colorsNum
+  const hash = useMemo(() => {
+    if (!nickname) return null;
+    return Math.abs(toHashCode(nickname)) % colorsNum
+  }, [nickname])
 
-  return <div className={`${S.wrap} ${props.className} ${S[`color${hash + 1}`]}`}>
+  if (!hash) return null;
+
+  return <div className={`${S.wrap} ${props.className} ${hash ? S[`color${hash + 1}`] : ''}`}>
     <CircleInner />
     <CircleOuter className={S.circle} />
     <span className={S.nick}>{nickname[0]}</span>

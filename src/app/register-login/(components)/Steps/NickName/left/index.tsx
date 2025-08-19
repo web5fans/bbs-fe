@@ -13,21 +13,21 @@ import usePDSClient from "@/hooks/usePDSClient";
 import { USER_DOMAIN } from "@/constant/Network";
 
 function validateInput(str: string): ValidateResult {
-  // 1. 长度校验
-  if (str.length < 4 || str.length > 18) {
-    return { valid: false, error: "长度需为4~18个字符" };
-  }
-  // 2. 只允许字母、数字、连字符
+  // 只允许字母、数字、连字符
   if (!/^[a-zA-Z0-9-]+$/.test(str)) {
     return { valid: false, error: "仅支持输入字母、数字和连字符（-）" };
   }
-  // 3. 不允许下划线
+  // 不允许下划线
   if (str.includes("_")) {
     return { valid: false, error: "不支持下划线（_）" };
   }
-  // 4. 不能以连字符开头或结尾
+  // 不能以连字符开头或结尾
   if (str.startsWith("-") || str.endsWith("-")) {
     return { valid: false, error: "不能以连字符（-）开头或结尾" };
+  }
+  // 长度校验
+  if (str.length < 4 || str.length > 18) {
+    return { valid: false, error: "长度需为4~18个字符" };
   }
   // 通过
   return { valid: true };

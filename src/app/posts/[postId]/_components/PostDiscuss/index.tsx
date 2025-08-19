@@ -98,11 +98,12 @@ function NoAuth() {
     <Button
       type={'primary'}
       className={S.log}
-    >立刻登陆</Button>
-    <p
-      className={S.mes}
       onClick={openRegisterPop}
-    >没有账号？立刻创建
-    </p>
+    >立刻注册</Button>
+    {/*<p*/}
+    {/*  className={S.mes}*/}
+    {/*  onClick={openRegisterPop}*/}
+    {/*>没有账号？立刻创建*/}
+    {/*</p>*/}
   </div>
 }

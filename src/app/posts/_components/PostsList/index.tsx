@@ -27,8 +27,9 @@ export type PostFeedType = {
   posts: PostFeedItemType[]
 }
 
-const PostsList = ({ sectionId }: {
+const PostsList = ({ sectionId, minLimit = 6 }: {
   sectionId?: string
+  minLimit?: number
 }) => {
   const router = useRouter()
 
@@ -54,13 +55,13 @@ const PostsList = ({ sectionId }: {
     isNoMore: d => !d?.nextCursor,
   });
 
-  const showClickLoadMore = !clickedShowMore && (dataSource?.list.length || 0) > 6
+  const showClickLoadMore = !clickedShowMore && (dataSource?.list.length || 0) > minLimit
 
-  const showList = showClickLoadMore ? dataSource?.list.slice(0, 6) : dataSource?.list
+  const showList = showClickLoadMore ? dataSource?.list.slice(0, minLimit) : dataSource?.list
 
   return <div className={S.wrap}>
     <p className={S.title}>最新帖子</p>
-    <div className={cx(S.content, clickedShowMore && '!max-h-none')}>
+    <div className={cx(S.content)}>
       {showList?.map((item, index) => {
         const uri = encodeURIComponent(item.uri)
         let href = `/posts/${uri}`
@@ -68,16 +69,19 @@ const PostsList = ({ sectionId }: {
           href = `/section/${sectionId}/${uri}`
         }
 
-        return <Link href={href} prefetch={false} as={href} key={item.uri}>
-          <FeedItem
-            feed={item}
-            onHover={() => router.prefetch(href)}
-          />
-        </Link>
+        return <>
+          {index !== 0 && <Divide />}
+          <Link href={href} prefetch={false} as={href} key={item.uri}>
+            <FeedItem
+              feed={item}
+              onHover={() => router.prefetch(href)}
+            />
+          </Link>
+        </>
       })}
 
 
-      {!clickedShowMore && (dataSource?.list.length || 0) > 6 &&<div
+      {showClickLoadMore &&<div
         className={S.load}
         onClick={() => setClickedShowMore(true)}
       >
@@ -149,4 +153,8 @@ function FeedItem({ feed, onClick, onHover }: {
       <span className={S.time}>{utcToLocal(feed.created)}</span>
     </div>
   </div>
+}
+
+function Divide() {
+  return <div className={S.divide} />
 }

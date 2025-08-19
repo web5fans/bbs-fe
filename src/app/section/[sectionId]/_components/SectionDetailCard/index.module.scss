@@ -4,7 +4,6 @@
   .inner {
     padding: 40px;
     display: flex;
-    gap: 20px;
     position: relative;
 
     .sectionImage {
@@ -15,6 +14,7 @@
       background: url("/assets/section-iconx2.png") no-repeat;
       background-size: contain;
       flex-shrink: 0;
+      margin-right: 20px;
     }
 
     .innerContent {
