@@ -9,6 +9,7 @@ import { useRequest } from "ahooks";
 import server from "@/server";
 import { useRouter } from "next/navigation";
 import utcToLocal from "@/lib/utcToLocal";
+import cx from "classnames";
 
 const NoticeBoard = () => {
   const { data: list } = useRequest(async () => {
@@ -19,6 +20,8 @@ const NoticeBoard = () => {
   })
 
   const router = useRouter()
+
+  const hasMoreCard = list?.length > 2
 
   return <CardWindow
     wrapClassName={S.wrap}
@@ -35,7 +38,7 @@ const NoticeBoard = () => {
         </p>
       </Marquee>
 
-      <div className={S.cardContent} style={list?.length > 2 ? { paddingBottom: 20 } : {}}>
+      <div className={cx(S.cardContent, hasMoreCard && S.moreCard)}>
         {list?.map(item => {
           return <NoticeCardItem
             key={item.uri}

@@ -6,6 +6,7 @@ import { useRequest } from "ahooks";
 import server from "@/server";
 import { PostFeedItemType } from "@/app/posts/utils";
 import { useRouter } from "next/navigation";
+import cx from "classnames";
 
 const Recommend = ({ sectionId }: { sectionId: string }) => {
   const { data: list } = useRequest(async () => {
@@ -24,9 +25,11 @@ const Recommend = ({ sectionId }: { sectionId: string }) => {
     return null
   }
 
-  return <div className={S.recommend}>
+  const hasMoreCard = list?.length > 2
+
+  return <div className={cx(S.recommend, hasMoreCard && S.moreCard)}>
     <p className={S.recommendTitle}>推荐讨论</p>
-    <div className={S.recommendContent} style={list?.length > 2 ? { paddingBottom: 20 } : {}}>
+    <div className={S.recommendContent}>
       {list?.map(p => {
         return <NoticeCardItem
           noticeInfo={p}
