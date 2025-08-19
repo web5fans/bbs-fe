@@ -83,29 +83,31 @@ export default function RegisterLogin() {
   const windowTitle = curStep === CREATE_ACCOUNT_STEP.INTRO ? '注册账号' : '创建账号'
 
   return <div className={S.container}>
-    <AppHeader isPopUp />
-    <div className={S.layout}>
-      <div className={S.bgWrap} />
-      <CardWindow
-        header={windowTitle}
-        wrapClassName={S.window}
-        headerClassName={S.windowHeader}
-        showCloseButton
-        onClose={closeRegisterPop}
-      >
-        <SetNickNameProvider>
-          <DndContext>
-            <div className={S.content}>
-              {stepRender}
-            </div>
-            <DraggableOverlay />
-          </DndContext>
-        </SetNickNameProvider>
-      </CardWindow>
+    <div className={'w-full min-w-fit'}>
+      <AppHeader isPopUp />
+      <div className={S.layout}>
+        <div className={S.bgWrap} />
+        <CardWindow
+          header={windowTitle}
+          wrapClassName={S.window}
+          headerClassName={S.windowHeader}
+          showCloseButton
+          onClose={closeRegisterPop}
+        >
+          <SetNickNameProvider>
+            <DndContext>
+              <div className={S.content}>
+                {stepRender}
+              </div>
+              <DraggableOverlay />
+            </DndContext>
+          </SetNickNameProvider>
+        </CardWindow>
 
-      {/*<MultiDid />*/}
+        {/*<MultiDid />*/}
 
-      {/*<Authorize />*/}
+        {/*<Authorize />*/}
+      </div>
     </div>
   </div>
 }

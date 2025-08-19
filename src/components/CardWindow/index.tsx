@@ -1,5 +1,6 @@
 import S from './index.module.scss'
 import cx from "classnames";
+import CloseIcon from '@/assets/window-close.svg'
 
 const CardWindow = (props: {
   children?: React.ReactNode;
@@ -26,7 +27,8 @@ const CardWindow = (props: {
           className={cx(S.close, showCloseButton ? '' : '!hidden')}
           onClick={props.onClose}
         >
-          <img src={'/assets/window-close.svg'} alt="close" />
+          {/*<img src={'/assets/window-close.svg'} alt="close" />*/}
+          <CloseIcon className={S.image} />
         </div>
         <div className={cx(S.title, headerClassName)}>
           {props.header}

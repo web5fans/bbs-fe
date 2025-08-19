@@ -11,7 +11,7 @@ export default function AppHeader(props: {
   isPopUp?: boolean
 }) {
   const { userInfo } = useUserInfoStore()
-  const { openRegisterPop } = useRegisterPopUp()
+  const { openRegisterPop, closeRegisterPop } = useRegisterPopUp()
   const pathname = usePathname()
 
   const router = useRouter()
@@ -27,7 +27,10 @@ export default function AppHeader(props: {
         />)}
       </div>
       <div className={S.main}>
-        <div className={S.title} onClick={() => router.replace('/')}>
+        <div className={S.title} onClick={() => {
+          if (isIndex) closeRegisterPop()
+          router.replace('/')
+        }}>
           BBS
         </div>
 

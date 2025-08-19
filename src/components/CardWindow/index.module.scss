@@ -57,8 +57,17 @@ $bg: #EAEAEA;
       right: 20px;
       cursor: pointer;
       padding-left: 20px;
+      color: #050505;
 
-      img {
+      &:hover {
+        color: var(--primary-color);
+
+        > svg path:first-child {
+          stroke: var(--primary-color);
+        }
+      }
+
+      .image {
         width: rem.px2flexible(16);
         aspect-ratio: 1 / 1;
       }
