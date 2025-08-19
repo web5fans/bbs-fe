@@ -28,7 +28,7 @@ export type SectionItem = {
   reply_count: string
   id: string;
   name: string
-  owner?: Record<string, string> // 版主
+  owner?: { did: string; displayName?: string } // 版主
   description?: string // 描述
   administrators?: any[]  // 管理员列表
 }

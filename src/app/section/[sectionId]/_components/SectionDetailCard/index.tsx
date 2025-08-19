@@ -83,10 +83,10 @@ const SectionDetailCard = (props: {
       <div className={S.innerContent}>
         <p className={S.title}>{sectionInfo?.name}</p>
         <div className={S.statis}>
-          {/*<p>*/}
-          {/*  版主：<span className={'text-black'}>{sectionInfo?.owner}</span>*/}
-          {/*</p>*/}
-          <FeedStatistic replyCount={sectionInfo?.reply_count} />
+          {sectionInfo?.owner?.displayName && <p>
+            版主：<span className={'text-black'}>{sectionInfo?.owner?.displayName}</span>
+          </p>}
+          <FeedStatistic replyCount={sectionInfo?.reply_count} visitedCount={sectionInfo?.visited_count} />
         </div>
         <div className={S.content} ref={infoRef}>
           {renderInfo()}

@@ -52,7 +52,7 @@ const PostItem = (props: PostItemProps) => {
       </div>
 
       <div className={S.floor}>
-        <span>{utcToLocal(postInfo.created)}</span>
+        <span>{utcToLocal(postInfo.created, 'YYYY/MM/DD HH:mm:ss')}</span>
         <span>{floor}楼</span>
       </div>
     </div>
