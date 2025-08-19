@@ -26,7 +26,7 @@ const Recommend = ({ sectionId }: { sectionId: string }) => {
 
   return <div className={S.recommend}>
     <p className={S.recommendTitle}>推荐讨论</p>
-    <div className={S.recommendContent}>
+    <div className={S.recommendContent} style={list?.length > 2 ? { paddingBottom: 20 } : {}}>
       {list?.map(p => {
         return <NoticeCardItem
           noticeInfo={p}

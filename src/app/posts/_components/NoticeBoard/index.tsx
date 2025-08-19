@@ -35,7 +35,7 @@ const NoticeBoard = () => {
         </p>
       </Marquee>
 
-      <div className={S.cardContent}>
+      <div className={S.cardContent} style={list?.length > 2 ? { paddingBottom: 20 } : {}}>
         {list?.map(item => {
           return <NoticeCardItem
             key={item.uri}
