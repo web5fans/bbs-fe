@@ -9,6 +9,7 @@ import { useParams, useRouter } from "next/navigation";
 import PostsList from "@/app/posts/_components/PostsList";
 import cx from "classnames";
 import useUserInfoStore from "@/store/userInfo";
+import { EmptyPostsList } from "@/components/Empty";
 
 const SectionDetailPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>()
@@ -28,7 +29,7 @@ const SectionDetailPage = () => {
       <SectionDetailCard goToPublish={goToPublish} sectionId={sectionId} />
 
       <Recommend sectionId={sectionId} />
-      <PostsList sectionId={sectionId} minLimit={20} />
+      <PostsList sectionId={sectionId} minLimit={20} listEmptyRender={<EmptyPostsList goPublish={goToPublish} />} />
     </div>
     <FloatingMark ref={stickyRef}>
       <Button type={'primary'} onClick={goToPublish} className={cx(S.sticky, !userInfo && '!hidden')}><AddIcon/></Button>

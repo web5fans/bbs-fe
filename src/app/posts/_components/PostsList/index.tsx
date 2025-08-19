@@ -27,9 +27,10 @@ export type PostFeedType = {
   posts: PostFeedItemType[]
 }
 
-const PostsList = ({ sectionId, minLimit = 6 }: {
+const PostsList = ({ sectionId, minLimit = 6, listEmptyRender }: {
   sectionId?: string
   minLimit?: number
+  listEmptyRender?: React.ReactNode
 }) => {
   const router = useRouter()
 
@@ -59,6 +60,15 @@ const PostsList = ({ sectionId, minLimit = 6 }: {
 
   const showList = showClickLoadMore ? dataSource?.list.slice(0, minLimit) : dataSource?.list
 
+  if (dataSource?.list.length === 0 && listEmptyRender) {
+    return <div className={S.wrap}>
+      <p className={S.title}>最新帖子</p>
+      <div className={cx(S.content)}>
+        {listEmptyRender}
+      </div>
+    </div>
+  }
+
   return <div className={S.wrap}>
     <p className={S.title}>最新帖子</p>
     <div className={cx(S.content)}>
@@ -69,15 +79,15 @@ const PostsList = ({ sectionId, minLimit = 6 }: {
           href = `/section/${sectionId}/${uri}`
         }
 
-        return <>
+        return <div key={item.uri}>
           {index !== 0 && <Divide />}
-          <Link href={href} prefetch={false} as={href} key={item.uri}>
+          <Link href={href} prefetch={false} as={href}>
             <FeedItem
               feed={item}
               onHover={() => router.prefetch(href)}
             />
           </Link>
-        </>
+        </div>
       })}
 
 
