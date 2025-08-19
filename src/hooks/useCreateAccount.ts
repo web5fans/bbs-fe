@@ -6,12 +6,14 @@ import * as cbor from "@ipld/dag-cbor";
 import { ccc, hexFrom, Script, numFrom, fixedPointToString } from '@ckb-ccc/core'
 import { tokenConfig } from "@/constant/token";
 import { DidWeb5Data } from "@/lib/molecules";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useUserInfoStore from "@/store/userInfo";
 import { base32 } from "@scure/base";
 import { hexToUint8Array, uint8ArrayToHex } from "@/lib/dag-cbor";
 import { UnsignedCommit } from "@atproto/repo";
 import { CID } from "multiformats";
+import { useRequest } from "ahooks";
+import dayjs from "dayjs";
 
 export enum CREATE_STATUS {
   INIT,
@@ -39,8 +41,11 @@ export default function useCreateAccount({ createSuccess }: {
     status: CREATE_STATUS.INIT
   })
 
+  const intervalRef = useRef(null);
+
   // 判断CKB是否足够
   const validateIsEnough = async () => {
+    // console.log('pollingGetExtra', dayjs().format('YYYY-MM-DD HH:mm:ss'))
     if (!signer) return
     const fromAddress = await signer.getAddresses()
 
@@ -88,6 +93,7 @@ export default function useCreateAccount({ createSuccess }: {
       cell = c
     }
     if (!cell) {
+      startPolling()
       return
     }
 
@@ -112,6 +118,7 @@ export default function useCreateAccount({ createSuccess }: {
     } catch (error) {
       const expectedCapacity = fixedPointToString(tx.getOutputsCapacity() + numFrom(0))
       setExtraIsEnough([expectedCapacity, false])
+      startPolling()
       return
     }
 
@@ -124,6 +131,23 @@ export default function useCreateAccount({ createSuccess }: {
       did: `did:web5:${preDid}`
     })
   }
+
+
+  // 启动轮询
+  const startPolling = () => {
+    if (intervalRef.current) return
+
+    // 设置10秒轮询
+    intervalRef.current = setInterval(validateIsEnough, 10000);
+  };
+
+  // 停止轮询
+  const stopPolling = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
 
   const prepareAccount = async () => {
     setCreateLoading(true)
@@ -192,6 +216,8 @@ export default function useCreateAccount({ createSuccess }: {
   }
 
   const createAccount = async () => {
+    stopPolling()
+
     try {
       await prepareAccount()
     } catch (err) {
@@ -205,6 +231,7 @@ export default function useCreateAccount({ createSuccess }: {
   }
 
   useEffect(() => {
+    stopPolling();
     setCreateStatus({
       status: CREATE_STATUS.INIT,
       reason: undefined
@@ -212,6 +239,12 @@ export default function useCreateAccount({ createSuccess }: {
     setExtraIsEnough([initialCapacity, false])
     validateIsEnough()
   }, [signer]);
+
+  useEffect(() => {
+    return () => {
+      stopPolling()
+    }
+  }, []);
 
   return {
     extraIsEnough,
