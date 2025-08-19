@@ -11,14 +11,10 @@
 
   &:hover:not(&.disabled) {
     color: var(--primary-color);
-    background: #F3F3F3;
   }
 
-  &.active,
-  &:active:not(&.disabled) {
+  &.active {
     color: var(--primary-color);
-    background: var(--white, #FFF);
-    box-shadow: 0 0 rem.px2flexible(3) rem.px2flexible(1) var(--200, #CFCFCF) inset;
   }
 
   &.disabled {

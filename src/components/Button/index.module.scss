@@ -1,38 +1,54 @@
 @use '@/styles/rem';
 
 .button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: rem.px2flexible(1) solid #000;
   user-select: none;
   font-family: var(--font-CLFN);
-  background: #FFFFFF;
-
-  /* button shadow */
-  box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0px 0px #000;
+  position: relative;
   cursor: pointer;
 
-  &:hover {
-    color: var(--primary-color);
-    background: #F3F3F3;
+  .shadow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: rem.px2flexible(1.5);
+    top: rem.px2flexible(1.5);
+    background: #000;
   }
 
-  &:active {
+  .inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: rem.px2flexible(1) solid #000;
+    position: relative;
+    background: #FFFFFF;
+  }
+
+  &:hover .inner {
+    color: var(--primary-color);
+  }
+
+  &:active .inner {
     border-width: 1px !important;
     color: var(--primary-color);
-    box-shadow: 0 0 rem.px2flexible(3) rem.px2flexible(1) #CFCFCF inset;
+    box-shadow: 0 0 rem.px2flexible(3) rem.px2flexible(1) #6C6C6C inset;
+    top: rem.px2flexible(1.5);
+    left: rem.px2flexible(1.5);
   }
 
   &.primary {
     color: #FFFFFF;
-    background: var(--primary-color);
-    &:hover {
+    .inner {
+      background: var(--primary-color);
+    }
+    &:hover .inner {
       color: #FFFFFF;
       background: var(--primary-color-hover);
     }
 
-    &:active {
+    &:active .inner {
       background: var(--primary-color-hover);
       box-shadow: 0 0 rem.px2flexible(3) rem.px2flexible(1) rgba(0, 0, 0, 0.40) inset;
     }
@@ -46,12 +62,18 @@
   }
 
   &.disabled {
-    @include btn-disabled;
+    .inner {
+      @include btn-disabled;
+    }
     cursor: not-allowed;
 
     &:hover,
     &:active {
-      @include btn-disabled;
+      .inner {
+        @include btn-disabled;
+        top: 0;
+        left: 0
+      }
     }
   }
 }

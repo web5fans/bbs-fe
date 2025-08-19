@@ -77,6 +77,7 @@ const useUserInfoStore = createSelectors(
 
     logout: () => {
       storage.removeToken()
+      usePDSClient().logout()
       set(() => ({ userInfo: undefined }))
     },
 

@@ -30,7 +30,10 @@ const Button = (props: ButtonProps) => {
       onClick?.(e)
     }}
   >
-    {children}
+    <div className={S.shadow} />
+    <div className={S.inner}>
+      {children}
+    </div>
   </div>
 }
 
