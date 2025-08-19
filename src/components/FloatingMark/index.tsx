@@ -16,10 +16,11 @@ const FloatingMark = (props: FloatingMarkProps) => {
     const f = () => {
       const scrollTop = document.documentElement.scrollTop;
       const clientHeight = document.documentElement.clientHeight;
-      setVisible(scrollTop > clientHeight);
+      const visible = scrollTop >= clientHeight
+      setVisible(visible);
     }
 
-    window.addEventListener('scroll', f, false);
+    window.addEventListener('scroll', f);
 
     return () => {
       window.removeEventListener('scroll', f);

@@ -6,9 +6,13 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark";
 import Button from "@/components/Button";
 import { useParams } from "next/navigation";
+import useUserInfoStore from "@/store/userInfo";
+import cx from "classnames";
 
 export default function PostDetailPage() {
   const { postId } = useParams<{ postId: string }>()
+
+  const { userInfo } = useUserInfoStore()
 
   const { rootRef, stickyRef } = useFloatingMarkDistance()
 
@@ -30,7 +34,7 @@ export default function PostDetailPage() {
     <FloatingMark ref={stickyRef}>
       <Button
         type={'primary'}
-        className={S.comment}
+        className={cx(S.comment, !userInfo && '!hidden')}
         onClick={() => {
           document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
         }}

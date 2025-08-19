@@ -7,9 +7,13 @@ import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark
 import Button from "@/components/Button";
 import { useParams, useRouter } from "next/navigation";
 import PostsList from "@/app/posts/_components/PostsList";
+import cx from "classnames";
+import useUserInfoStore from "@/store/userInfo";
 
 const SectionDetailPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>()
+
+  const { userInfo } = useUserInfoStore()
 
   const router = useRouter()
 
@@ -27,7 +31,7 @@ const SectionDetailPage = () => {
       <PostsList sectionId={sectionId} />
     </div>
     <FloatingMark ref={stickyRef}>
-      <Button type={'primary'} onClick={goToPublish} className={S.sticky}><AddIcon/></Button>
+      <Button type={'primary'} onClick={goToPublish} className={cx(S.sticky, !userInfo && '!hidden')}><AddIcon/></Button>
     </FloatingMark>
   </div>
 }
