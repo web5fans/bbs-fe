@@ -23,7 +23,7 @@
     background: #F3F3F3;
   }
 
-  &:active {
+  &:active:not(.disabled) {
     border-width: 1px !important;
     color: var(--primary-color);
     box-shadow: 0 0 rem.px2flexible(3) rem.px2flexible(1) #CFCFCF inset;
