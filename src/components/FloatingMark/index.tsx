@@ -30,7 +30,6 @@ const FloatingMark = (props: FloatingMarkProps) => {
   return <div {...rest} className={cx(S.sticky, rest.className, !visible && '!h-0 !overflow-hidden')}>
     {children}
     <Button
-      showClickAnimate={false}
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       className={S.toTop}
     >
@@ -48,12 +47,23 @@ export function useFloatingMarkDistance() {
 
   useEffect(() => {
     const instance = rootRef.current;
-    if (!instance) return
+    if (!instance || !stickyRef.current) return
 
     const left = instance.offsetLeft + instance.clientWidth + 16
 
     stickyRef.current.style.left = left + 'px'
 
+    const f = () => {
+      if (!stickyRef.current) return
+
+      const scrollLeft = left - document.documentElement.scrollLeft;
+      stickyRef.current.style.left = scrollLeft + 'px'
+    }
+    window.addEventListener('scroll', f)
+
+    return () => {
+      window.removeEventListener('scroll', f)
+    }
   }, []);
 
   return {

@@ -33,7 +33,6 @@ const SectionDetailPage = () => {
     </div>
     <FloatingMark ref={stickyRef}>
       <Button
-        showClickAnimate={false}
         type={'primary'}
         onClick={goToPublish}
         className={cx(S.sticky, !isWhiteUser && '!hidden')}>

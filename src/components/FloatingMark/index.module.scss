@@ -3,12 +3,15 @@
   bottom: 100px;
   transition: height 0.2s ease-in-out;
 
+  --button-move-dis-top: 2px;
+  --button-move-dis-left: 2px;
+  --button-box-shaow: 2px;
+
   .toTop {
     width: 40px;
     height: 40px;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    box-shadow: 2px 2px 0px 0px #000;
   }
 }

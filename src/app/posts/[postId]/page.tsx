@@ -33,7 +33,6 @@ export default function PostDetailPage() {
     />
     <FloatingMark ref={stickyRef}>
       <Button
-        showClickAnimate={false}
         type={'primary'}
         className={cx(S.comment, !hasLoggedIn && '!hidden')}
         onClick={() => {
