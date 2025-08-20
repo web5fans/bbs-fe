@@ -7,10 +7,10 @@ import Button from "@/components/Button";
 import MouseToolTip from "@/components/MouseToolTip";
 import { useEffect, useRef, useState } from "react";
 import BreadCrumbs from "@/components/BreadCrumbs";
-import useUserInfoStore from "@/store/userInfo";
 import { useRequest } from "ahooks";
 import server from "@/server";
 import { SectionItem } from "@/app/posts/utils";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const SPLIT_NUMBER = 145
 const DESCRIPTION_MIN_HEIGHT = 64
@@ -19,7 +19,7 @@ const SectionDetailCard = (props: {
   goToPublish: () => void
   sectionId: string
 }) => {
-  const { userInfo } = useUserInfoStore()
+  const { hasLoggedIn, isWhiteUser } = useCurrentUser()
   const [expand, setExpand] = useState(false)
   const infoRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -93,12 +93,12 @@ const SectionDetailCard = (props: {
         </div>
       </div>
 
-      <MouseToolTip open={!userInfo}>
+      <MouseToolTip open={!isWhiteUser} message={hasLoggedIn && !isWhiteUser ? '目前仅限白名单用户才可以发帖' : ''}>
         <div className={S.buttonWrap}>
           <Button
             type={'primary'}
             className={S.button}
-            disabled={!userInfo}
+            disabled={!isWhiteUser}
             onClick={props.goToPublish}
           >
             <PlusIcon />发布讨论

@@ -11,12 +11,12 @@ import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark
 import Button from "@/components/Button";
 import { CommentIcon } from "@/app/posts/[postId]/page";
 import cx from "classnames";
-import useUserInfoStore from "@/store/userInfo";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function SectionPostPage(){
   const { postId, sectionId } = useParams<{ postId: string; sectionId: string }>()
 
-  const { userInfo } = useUserInfoStore()
+  const { hasLoggedIn } = useCurrentUser()
 
   const { data: sectionInfo } = useRequest(async () => {
     return await server<SectionItem>('/section/detail', 'GET', {
@@ -53,7 +53,7 @@ export default function SectionPostPage(){
         <Button
           showClickAnimate={false}
           type={'primary'}
-          className={cx(S.comment, !userInfo && '!hidden')}
+          className={cx(S.comment, !hasLoggedIn && '!hidden')}
           onClick={() => {
             document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
           }}

@@ -4,17 +4,17 @@ import S from './enderButton.module.scss'
 import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
-import useUserInfoStore from "@/store/userInfo";
 import FlatButton from "@/components/FlatButton";
 import Link from "next/link";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const EnterButton = () => {
   const router = useRouter()
   const { openRegisterPop } = useRegisterPopUp()
-  const { userInfo } = useUserInfoStore()
+  const { hasLoggedIn } = useCurrentUser()
 
   const joinBuild = () => {
-    if (!userInfo) {
+    if (!hasLoggedIn) {
       openRegisterPop()
       return
     }
@@ -23,7 +23,7 @@ const EnterButton = () => {
 
   const goMainSite = () => router.push('/posts')
 
-  const buttonName = userInfo ? '进入建设' : '加入建设'
+  const buttonName = hasLoggedIn ? '进入建设' : '加入建设'
 
   return <div className={S.footer}>
     <Button
@@ -32,7 +32,7 @@ const EnterButton = () => {
       onClick={joinBuild}
       onMouseEnter={() => router.prefetch('/posts')}
     >{buttonName}</Button>
-    <Link href={'/posts'} prefetch className={userInfo && '!hidden'}>
+    <Link href={'/posts'} prefetch className={hasLoggedIn ? '!hidden' : ''}>
       <FlatButton className={S.tourist}>
         游客看看
         <div className={S.arrow}>

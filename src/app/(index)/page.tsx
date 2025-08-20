@@ -6,12 +6,11 @@ import Slogan from "@/app/(index)/Slogan";
 import Marquee from "react-fast-marquee";
 import { AnchorHTMLAttributes } from "react";
 import cx from "classnames";
-import useUserInfoStore from "@/store/userInfo";
-import { useWallet } from "@/provider/WalletProvider";
 import MouseToolTip from "@/components/MouseToolTip";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function Home() {
-  const { userInfo } = useUserInfoStore()
+  const { hasLoggedIn } = useCurrentUser()
 
   return (
     <div className={S.container}>
@@ -28,7 +27,7 @@ export default function Home() {
               href={'https://www.nervos.org/zh/knowledge-base/web5-extra-decentralized'}
               target="_blank"
             />
-            {userInfo && <MouseToolTip
+            {hasLoggedIn && <MouseToolTip
               message={'功能正在研发中，敬请期待'}
               open
             >

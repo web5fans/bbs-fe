@@ -3,14 +3,14 @@
 import S from "./index.module.scss";
 import Button from "@/components/Button";
 import UserIcon from '@/assets/header/user.svg'
-import useUserInfoStore from "@/store/userInfo";
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import { usePathname, useRouter } from "next/navigation";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function AppHeader(props: {
   isPopUp?: boolean
 }) {
-  const { userInfo } = useUserInfoStore()
+  const { hasLoggedIn } = useCurrentUser()
   const { openRegisterPop, closeRegisterPop } = useRegisterPopUp()
   const pathname = usePathname()
 
@@ -34,7 +34,7 @@ export default function AppHeader(props: {
           BBS
         </div>
 
-        <div className={`${S.userWrap} ${(userInfo || props.isPopUp || isIndex) && '!hidden'}`}>
+        <div className={`${S.userWrap} ${(hasLoggedIn || props.isPopUp || isIndex) && '!hidden'}`}>
           <Button
             type={'primary'}
             className={S.button}

@@ -1,7 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { env } from 'next-runtime-env'
-import storage from "./storage";
-import useUserInfoStore from "@/store/userInfo";
 import usePDSClient from "@/hooks/usePDSClient";
 
 const isServer = typeof window === "undefined";

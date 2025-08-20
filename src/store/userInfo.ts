@@ -6,12 +6,24 @@ import storage from "@/lib/storage";
 import { ComAtprotoWeb5CreateAccount, ComAtprotoServerCreateSession } from "web5-api";
 import { writesPDSOperation } from "@/app/posts/utils";
 import { handleToNickName } from "@/lib/handleToNickName";
+import server from "@/server";
+
+type UserProfileType = {
+  did: string
+  displayName: string
+  highlight?: string  // 在白名单内才有这个字段
+  post_count: string
+  reply_count: string
+  created: string
+}
 
 type UserInfoStoreValue = {
   createdTx?: ccc.Transaction
   did?: string
   userInfo?: ComAtprotoServerCreateSession.OutputSchema
   initialized?: boolean
+  userProfile?: UserProfileType
+  isWhiteListUser?: boolean
 }
 
 
@@ -20,6 +32,7 @@ type UserInfoStore = UserInfoStoreValue & {
   setStoreData: (storeData: UserInfoStoreValue) => void
   createUser: (obj: ComAtprotoWeb5CreateAccount.InputSchema) => Promise<void>
   web5Login: () => Promise<void>
+  getUserProfile: () => Promise<void>;
   logout: () => void
   initialize: (signer?: ccc.Signer) => Promise<void>
 }
@@ -30,6 +43,8 @@ const useUserInfoStore = createSelectors(
     did: undefined,
     userInfo: undefined,
     initialized: undefined,
+    userProfile: undefined,
+    isWhiteListUser: undefined,
 
     setStoreData: (params) => {
       set(() => ({ ...params }))
@@ -56,16 +71,17 @@ const useUserInfoStore = createSelectors(
       })
 
       set(() => ({ userInfo }))
+      get().getUserProfile()
     },
 
     web5Login: async () => {
+      const pdsClient = usePDSClient()
       const localStorage = storage.getToken()
 
       if (!localStorage) return
 
       const { did, signKey, walletAddress } = localStorage
 
-      const pdsClient = usePDSClient()
       const userInfoRes = await pdsClient.web5Login({
         identifier: did,
         password: signKey!,
@@ -73,12 +89,25 @@ const useUserInfoStore = createSelectors(
       })
 
       set(() => ({ userInfo: userInfoRes.data }))
+      await get().getUserProfile()
     },
 
     logout: () => {
       storage.removeToken()
       usePDSClient().logout()
-      set(() => ({ userInfo: undefined }))
+      set(() => ({ userInfo: undefined, userProfile: undefined, isWhiteListUser: false, initialized: false }))
+    },
+
+    getUserProfile: async () => {
+      const userInfo = get().userInfo
+      if (!userInfo) return
+      const result = await server<UserProfileType>('/repo/profile', 'GET', {
+        repo: userInfo.did
+      })
+      set(() => ({
+        userProfile: result,
+        isWhiteListUser: !!result.highlight,
+      }))
     },
 
     // getSigningKey: (walletAddress) => {

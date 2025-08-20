@@ -17,7 +17,7 @@ type RegisterNickNameProviderProps = {
 
   showBlinkAnimate?: boolean
   validate?: ValidateResult
-  setValidate: (v?: ValidateResult) => void
+  setValidate:  React.Dispatch<React.SetStateAction<ValidateResult | undefined>>
   resetContext: () => void
 }
 

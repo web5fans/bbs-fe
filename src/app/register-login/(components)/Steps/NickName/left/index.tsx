@@ -7,10 +7,12 @@ import cx from "classnames";
 import Button from "@/components/Button";
 import { useWallet } from "@/provider/WalletProvider";
 import { Secp256k1Keypair } from "@atproto/crypto";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import debounce from "lodash.debounce"
 import usePDSClient from "@/hooks/usePDSClient";
 import { USER_DOMAIN } from "@/constant/Network";
+import useDebounceWithCancel from "@/hooks/useDebounceWithCancel";
+import Loading from "@/components/Loading";
 
 function validateInput(str: string): ValidateResult {
   // 只允许字母、数字、连字符
@@ -46,6 +48,8 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
 
   const pdsClient = usePDSClient()
 
+  const [loading, setLoading] = useState(false)
+
   const onChange = (value: string) => {
     const name = value;
     setNickName(name);
@@ -57,6 +61,7 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
   };
 
   const valiNameRepeat = useCallback(debounce(async (name: string) => {
+    setLoading(true)
     const keyPair = await Secp256k1Keypair.create()
     const signingKey = keyPair.did()
 
@@ -66,10 +71,18 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
         signingKey,
         did: 'did:plc:n5d3aggygtfxs56gbjkcajxw',
       })
-      setValidate({ valid: true, repeatPass: true })
+      setValidate((prev) => {
+        if (!prev?.valid) return prev;
+        return { valid: true, repeatPass: true }
+      })
+      setLoading(false)
     } catch (err) {
       // const message = err.message === 'Handle not available' ? '名字已经被占用' : err.message;
-      setValidate({ valid: false, error: '名字已经被占用' })
+      setValidate(prev => {
+        if (!prev?.valid) return prev;
+        return { valid: false, error: '名字已经被占用' }
+      })
+      setLoading(false)
     }
 
   }, 500), [])
@@ -92,7 +105,9 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
         onBlur={() => setIsInputFocus(false)}
         checkedPass={checkedPass}
         error={!!validate?.error}
-      />
+      >
+        {loading && <Loading />}
+      </Input>
       <div className={cx(S.warning, !validate?.error && '!hidden')}>
         <img
           src={'/assets/warning.svg'}

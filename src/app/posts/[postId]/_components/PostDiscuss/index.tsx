@@ -9,14 +9,14 @@ import PublishPostCancelButton from "@/components/PublishPostCancelButton";
 import { useRef, useState } from "react";
 import { writesPDSOperation } from "@/app/posts/utils";
 import { useToast } from "@/provider/toast";
-import useUserInfoStore from "@/store/userInfo";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const PostDiscuss = (props: {
   postUri: string
   sectionId: string
   refresh?: () => void
 }) => {
-  const { userInfo } = useUserInfoStore()
+  const { userProfile, hasLoggedIn } = useCurrentUser()
   const [publishing, setPublishing] = useState(false)
 
   const [richText, setRichText] = useState('')
@@ -44,7 +44,7 @@ const PostDiscuss = (props: {
           parent: props.postUri,
           section_id: props.sectionId,
         },
-        did: userInfo?.did!
+        did: userProfile?.did!
       })
       setPublishing(false)
       editorRef.current?.clearContent()
@@ -56,7 +56,7 @@ const PostDiscuss = (props: {
     }
   }
 
-  if (!userInfo) {
+  if (!hasLoggedIn) {
     return <div className={S.wrap}>
       <p className={S.title}>跟帖讨论</p>
       <NoAuth />

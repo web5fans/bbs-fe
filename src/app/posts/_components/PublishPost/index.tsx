@@ -2,20 +2,20 @@
 
 import S from './index.module.scss'
 import Button from "@/components/Button";
-import useUserInfoStore from "@/store/userInfo";
 import MouseToolTip from "@/components/MouseToolTip";
 import { useRouter } from "next/navigation";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const PublishPost = () => {
-  const { userInfo } = useUserInfoStore()
+  const { hasLoggedIn, isWhiteUser } = useCurrentUser()
   const router = useRouter()
 
 
-  return <MouseToolTip open={!userInfo}>
+  return <MouseToolTip open={!isWhiteUser} message={hasLoggedIn && !isWhiteUser ? '目前仅限白名单用户才可以发帖' : ''}>
     <Button
       type={'primary'}
       className={S.button}
-      disabled={!userInfo}
+      disabled={!isWhiteUser}
       onClick={() => router.push('/posts/publish')}
       showClickAnimate={false}
     >

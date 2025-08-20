@@ -7,7 +7,6 @@ import TipTapEditor, { EditorUpdateData } from "@/components/TipTapEditor";
 import Button from "@/components/Button";
 import numeral from 'numeral'
 import { useState } from "react";
-import useUserInfoStore from "@/store/userInfo";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import PublishPostCancelButton from "@/components/PublishPostCancelButton";
 import ReadIcon from '@/assets/posts/read.svg'
@@ -18,13 +17,14 @@ import { useRequest } from "ahooks";
 import { getSectionList, writesPDSOperation } from "@/app/posts/utils";
 import cx from "classnames";
 import { useToast } from "../../../provider/toast";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const PublishPostPage = () => {
   const searchParams = useSearchParams()
 
   const defaultSection = searchParams.get('section') || ''
 
-  const { userInfo } = useUserInfoStore()
+  const { isWhiteUser, userProfile } = useCurrentUser()
   const [textNumber, setTextNumber] = useState(0)
   const [postTitle, setPostTitle] = useState('')
   const [richText, setRichText] = useState('')
@@ -38,7 +38,7 @@ const PublishPostPage = () => {
   const router = useRouter()
 
   const { data: sectionList } = useRequest(async () => {
-    const result = await getSectionList(userInfo?.did)
+    const result = await getSectionList(userProfile?.did)
     const options = result.map(i => ({
       ...i,
       value: i.id.toString(),
@@ -50,12 +50,8 @@ const PublishPostPage = () => {
 
     return options
   }, {
-    refreshDeps: [userInfo?.did],
+    refreshDeps: [userProfile?.did],
   })
-
-  // if (!userInfo) {
-  //   router.replace('/')
-  // }
 
   const editorUpdate = ({ json, text, html }: EditorUpdateData) => {
     const textNumber = text.length
@@ -80,7 +76,7 @@ const PublishPostPage = () => {
           title: postTitle,
           text: richText,
         },
-        did: userInfo?.did!
+        did: userProfile?.did!
       })
       setPublishing(false)
 
@@ -101,7 +97,7 @@ const PublishPostPage = () => {
 
   const allowPublish = !!richText && !!postTitle
 
-  const noAuth = !userInfo
+  const noAuth = !isWhiteUser
 
   return <div className={S.container}>
     <div className={S.wrap}>

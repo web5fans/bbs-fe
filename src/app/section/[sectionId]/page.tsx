@@ -8,13 +8,13 @@ import Button from "@/components/Button";
 import { useParams, useRouter } from "next/navigation";
 import PostsList from "@/app/posts/_components/PostsList";
 import cx from "classnames";
-import useUserInfoStore from "@/store/userInfo";
 import { EmptyPostsList } from "@/components/Empty";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const SectionDetailPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>()
 
-  const { userInfo } = useUserInfoStore()
+  const { hasLoggedIn, isWhiteUser } = useCurrentUser()
 
   const router = useRouter()
 
@@ -36,7 +36,7 @@ const SectionDetailPage = () => {
         showClickAnimate={false}
         type={'primary'}
         onClick={goToPublish}
-        className={cx(S.sticky, !userInfo && '!hidden')}>
+        className={cx(S.sticky, !isWhiteUser && '!hidden')}>
         <AddIcon/></Button>
     </FloatingMark>
   </div>
