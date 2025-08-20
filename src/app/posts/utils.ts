@@ -1,5 +1,5 @@
 import server from "@/server";
-import usePDSClient from "@/hooks/usePDSClient";
+import getPDSClient from "@/lib/pdsClient";
 import storage from "@/lib/storage";
 import * as crypto from '@atproto/crypto'
 import { signCommit, UnsignedCommit } from '@atproto/repo'
@@ -74,7 +74,7 @@ export async function writesPDSOperation(params: {
   did: string
   rkey?: string
 }) {
-  const pdsClient = usePDSClient()
+  const pdsClient = getPDSClient()
 
   const rkey = params.rkey || TID.next().toString()
 

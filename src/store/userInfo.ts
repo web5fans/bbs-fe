@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import createSelectors from './helper/createSelector';
 import { ccc } from "@ckb-ccc/core";
-import usePDSClient from "@/hooks/usePDSClient";
+import getPDSClient from "@/lib/pdsClient";
 import storage from "@/lib/storage";
 import { ComAtprotoWeb5CreateAccount, ComAtprotoServerCreateSession } from "web5-api";
 import { writesPDSOperation } from "@/app/posts/utils";
@@ -51,7 +51,7 @@ const useUserInfoStore = createSelectors(
     },
 
     createUser: async (params) => {
-      const pdsClient = usePDSClient()
+      const pdsClient = getPDSClient()
       const createRes = await pdsClient.web5CreateAccount(params)
       const userInfo = createRes.data
 
@@ -75,7 +75,7 @@ const useUserInfoStore = createSelectors(
     },
 
     web5Login: async () => {
-      const pdsClient = usePDSClient()
+      const pdsClient = getPDSClient()
       const localStorage = storage.getToken()
 
       if (!localStorage) return
@@ -94,7 +94,7 @@ const useUserInfoStore = createSelectors(
 
     logout: () => {
       storage.removeToken()
-      usePDSClient().logout()
+      getPDSClient().logout()
       set(() => ({ userInfo: undefined, userProfile: undefined, isWhiteListUser: false, initialized: false }))
     },
 

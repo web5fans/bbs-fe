@@ -1,4 +1,4 @@
-import usePDSClient from "@/hooks/usePDSClient";
+import getPDSClient from "@/lib/pdsClient";
 import { ccc } from "@ckb-ccc/core";
 import axios from "axios";
 import { formatMessageForSigning, generateDid, generateWeb3LoginMessage } from "@/lib/utils";
@@ -60,7 +60,7 @@ export default async function useCheckUserHadDid(signer?: ccc.Signer) {
     const didoc = cbor.decode(hexToUint8Array(didata.value.document))
     const userHandle = didoc.alsoKnownAs[0].replace('at://', '')
 
-    const pdsClient = usePDSClient()
+    const pdsClient = getPDSClient()
 
     // todo 走登录流程
     const message = generateWeb3LoginMessage(address, pdsClient.serviceUrl.origin, userHandle) // change to front domain

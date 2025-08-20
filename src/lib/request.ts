@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { env } from 'next-runtime-env'
-import usePDSClient from "@/hooks/usePDSClient";
+import getPDSClient from "@/lib/pdsClient";
 
 const isServer = typeof window === "undefined";
 
@@ -48,7 +48,7 @@ export async function requestAPI<T = unknown, O = RequestConfig>(url: string, co
 export async function requestAPI(url: string, config: RequestConfig) {
   // let response = null
   // try {
-  //   const token = usePDSClient().session?.accessJwt
+  //   const token = getPDSClient().session?.accessJwt
   //   response = await axios(`${ SERVER }${ url }`, {
   //     ...config,
   //     headers: {
@@ -64,7 +64,7 @@ export async function requestAPI(url: string, config: RequestConfig) {
   //     }
   //   }
   // }
-  const token = usePDSClient().session?.accessJwt
+  const token = getPDSClient().session?.accessJwt
   const response = await axios(`${ SERVER }${ url }`, {
     ...config,
     headers: {

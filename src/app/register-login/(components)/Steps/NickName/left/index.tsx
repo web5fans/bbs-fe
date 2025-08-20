@@ -9,7 +9,7 @@ import { useWallet } from "@/provider/WalletProvider";
 import { Secp256k1Keypair } from "@atproto/crypto";
 import { useCallback, useState } from "react";
 import debounce from "lodash.debounce"
-import usePDSClient from "@/hooks/usePDSClient";
+import getPDSClient from "@/lib/pdsClient";
 import { USER_DOMAIN } from "@/constant/Network";
 import useDebounceWithCancel from "@/hooks/useDebounceWithCancel";
 import Loading from "@/components/Loading";
@@ -46,8 +46,6 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
   const { setNickName, setIsInputFocus, validate, setValidate, resetContext } = useNickName()
   const { disconnect } = useWallet();
 
-  const pdsClient = usePDSClient()
-
   const [loading, setLoading] = useState(false)
 
   const onChange = (value: string) => {
@@ -66,7 +64,7 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
     const signingKey = keyPair.did()
 
     try {
-      const res = await pdsClient.com.atproto.web5.preCreateAccount({
+      const res = await getPDSClient().com.atproto.web5.preCreateAccount({
         handle: name + `.${USER_DOMAIN}`,
         signingKey,
         did: 'did:plc:n5d3aggygtfxs56gbjkcajxw',

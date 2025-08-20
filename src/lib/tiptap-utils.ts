@@ -1,6 +1,6 @@
 import type { Attrs, Node } from "@tiptap/pm/model"
 import type { Editor } from "@tiptap/react"
-import usePDSClient from "@/hooks/usePDSClient";
+import getPDSClient from "@/lib/pdsClient";
 
 export const MAX_FILE_SIZE = 2 * 1024 * 1024 // 5MB
 
@@ -150,7 +150,7 @@ export const handleImageUpload = async (
     )
   }
 
-  const agent = usePDSClient()
+  const agent = getPDSClient()
   const result = await agent.uploadBlob(file, { encoding: file.type })
   const blob = result.data.blob
   console.log('result>>>>', result)

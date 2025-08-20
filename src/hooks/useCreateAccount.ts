@@ -1,6 +1,6 @@
 import { useNickName } from "@/provider/RegisterNickNameProvider";
 import { useWallet } from "@/provider/WalletProvider";
-import usePDSClient from "@/hooks/usePDSClient";
+import getPDSClient from "@/lib/pdsClient";
 import { Secp256k1Keypair } from "@atproto/crypto";
 import * as cbor from "@ipld/dag-cbor";
 import { ccc, hexFrom, Script, numFrom, fixedPointToString } from '@ckb-ccc/core'
@@ -31,7 +31,6 @@ export default function useCreateAccount({ createSuccess }: {
 }) {
   const { userHandle } = useNickName()
   const { signer, walletClient, address } = useWallet()
-  const pdsClient = usePDSClient()
   const { setStoreData, did, createUser, createdTx } = useUserInfoStore()
 
   const [extraIsEnough, setExtraIsEnough] = useState([initialCapacity, false])
@@ -60,7 +59,7 @@ export default function useCreateAccount({ createSuccess }: {
       services: {
         atproto_pds: {
           type: 'AtprotoPersonalDataServer',
-          endpoint: pdsClient.serviceUrl.origin,
+          endpoint: getPDSClient().serviceUrl.origin,
         },
       },
     }
@@ -160,7 +159,7 @@ export default function useCreateAccount({ createSuccess }: {
 
     const signingKey = keyPair.did()
 
-    const res = await pdsClient.com.atproto.web5.preCreateAccount({
+    const res = await getPDSClient().com.atproto.web5.preCreateAccount({
       handle: userHandle!,
       signingKey,
       did,
@@ -221,7 +220,7 @@ export default function useCreateAccount({ createSuccess }: {
     try {
       await prepareAccount()
     } catch (err) {
-      pdsClient.logout()
+      getPDSClient().logout()
       setCreateLoading(false)
       setCreateStatus({
         status: CREATE_STATUS.FAILURE,
