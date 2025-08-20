@@ -27,7 +27,7 @@ export type PostFeedType = {
   posts: PostFeedItemType[]
 }
 
-const PostsList = ({ sectionId, minLimit = 6, listEmptyRender }: {
+const PostsList = ({ sectionId, minLimit = 20, listEmptyRender }: {
   sectionId?: string
   minLimit?: number
   listEmptyRender?: React.ReactNode

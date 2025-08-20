@@ -29,7 +29,7 @@ const SectionDetailPage = () => {
       <SectionDetailCard goToPublish={goToPublish} sectionId={sectionId} />
 
       <Recommend sectionId={sectionId} />
-      <PostsList sectionId={sectionId} minLimit={20} listEmptyRender={<EmptyPostsList goPublish={goToPublish} />} />
+      <PostsList sectionId={sectionId} listEmptyRender={<EmptyPostsList goPublish={goToPublish} />} />
     </div>
     <FloatingMark ref={stickyRef}>
       <Button
