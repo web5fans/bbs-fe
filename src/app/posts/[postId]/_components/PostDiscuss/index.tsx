@@ -94,7 +94,7 @@ function NoAuth() {
 
   return <div className={S.empty}>
     <FaceIcon />
-    <p className={S.tips}>抱歉！仅限已登陆BBS论坛用户跟帖讨论</p>
+    <p className={S.tips}>抱歉！仅限已注册BBS论坛账号的用户跟帖讨论</p>
     <Button
       type={'primary'}
       className={S.log}

@@ -8,10 +8,10 @@ import { AnchorHTMLAttributes } from "react";
 import cx from "classnames";
 import useUserInfoStore from "@/store/userInfo";
 import { useWallet } from "@/provider/WalletProvider";
+import MouseToolTip from "@/components/MouseToolTip";
 
 export default function Home() {
-  const { userInfo, logout } = useUserInfoStore()
-  const { disconnect } = useWallet()
+  const { userInfo } = useUserInfoStore()
 
   return (
     <div className={S.container}>
@@ -28,15 +28,16 @@ export default function Home() {
               href={'https://www.nervos.org/zh/knowledge-base/web5-extra-decentralized'}
               target="_blank"
             />
-            <FileDocument
-              imageType={'storage'}
-              title={'本地Web5数据库'}
-              className={!userInfo ? '!hidden' : ''}
-              onClick={() => {
-                disconnect()
-                logout()
-              }}
-            />
+            {userInfo && <MouseToolTip
+              message={'功能正在研发中，敬请期待'}
+              open
+            >
+              <FileDocument
+                imageType={'storage'}
+                title={'本地Web5数据库'}
+                className={'opacity-50'}
+              />
+            </MouseToolTip>}
           </div>
         </div>
       </div>

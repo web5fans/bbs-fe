@@ -29,7 +29,11 @@ const FloatingMark = (props: FloatingMarkProps) => {
 
   return <div {...rest} className={cx(S.sticky, rest.className, !visible && '!h-0 !overflow-hidden')}>
     {children}
-    <Button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className={S.toTop}>
+    <Button
+      showClickAnimate={false}
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      className={S.toTop}
+    >
       <TopIcon />
       <TopText />
     </Button>

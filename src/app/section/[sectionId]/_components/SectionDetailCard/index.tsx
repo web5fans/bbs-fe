@@ -4,7 +4,7 @@ import CardWindow from "@/components/CardWindow";
 import S from './index.module.scss'
 import FeedStatistic from "@/components/FeedStatistic";
 import Button from "@/components/Button";
-import PublishPostToolTip from "@/components/PublishPostToolTip";
+import MouseToolTip from "@/components/MouseToolTip";
 import { useEffect, useRef, useState } from "react";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import useUserInfoStore from "@/store/userInfo";
@@ -93,16 +93,18 @@ const SectionDetailCard = (props: {
         </div>
       </div>
 
-      <PublishPostToolTip open={!userInfo}>
-        <Button
-          type={'primary'}
-          className={S.button}
-          disabled={!userInfo}
-          onClick={props.goToPublish}
-        >
-          <PlusIcon />发布讨论
-        </Button>
-      </PublishPostToolTip>
+      <MouseToolTip open={!userInfo}>
+        <div className={S.buttonWrap}>
+          <Button
+            type={'primary'}
+            className={S.button}
+            disabled={!userInfo}
+            onClick={props.goToPublish}
+          >
+            <PlusIcon />发布讨论
+          </Button>
+        </div>
+      </MouseToolTip>
     </div>
 
 

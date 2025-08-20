@@ -1,79 +1,67 @@
 @use '@/styles/rem';
 
 .button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   user-select: none;
   font-family: var(--font-CLFN);
+  background: #FFFFFF;
   position: relative;
+
+  border-width: rem.px2flexible(1);
+  border-style: solid;
+  border-color: #000;
+
+  /* button shadow */
+  box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0px 0px #000;
   cursor: pointer;
 
-  .shadow {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: rem.px2flexible(1.5);
-    top: rem.px2flexible(1.5);
-    background: #000;
-  }
-
-  .inner {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: rem.px2flexible(1) solid #000;
-    position: relative;
-    background: #FFFFFF;
-  }
-
-  &:hover .inner {
+  &:hover {
     color: var(--primary-color);
+    background: #F3F3F3;
   }
 
-  &:active .inner {
-    border-width: 1px !important;
+  &:active {
+    border-width: 1px;
     color: var(--primary-color);
-    box-shadow: 0 0 rem.px2flexible(3) rem.px2flexible(1) #6C6C6C inset;
-    top: rem.px2flexible(1.5);
-    left: rem.px2flexible(1.5);
+    box-shadow: 0 0 rem.px2flexible(3) rem.px2flexible(1) #CFCFCF inset;
+    &.showClickAni {
+      top: var(--button-move-dis-top, rem.px2flexible(1.5));
+      left: var(--button-move-dis-left, rem.px2flexible(1.5));
+    }
   }
 
   &.primary {
     color: #FFFFFF;
-    .inner {
-      background: var(--primary-color);
-    }
-    &:hover .inner {
+    background: var(--primary-color);
+    &:hover {
       color: #FFFFFF;
       background: var(--primary-color-hover);
     }
 
-    &:active .inner {
+    &:active {
       background: var(--primary-color-hover);
       box-shadow: 0 0 rem.px2flexible(3) rem.px2flexible(1) rgba(0, 0, 0, 0.40) inset;
     }
   }
 
   @mixin btn-disabled {
-    border: rem.px2flexible(1) solid var(--btn-disabled-border, #6C6C6C) !important;
+    border-width: rem.px2flexible(1);
+    border-color: var(--btn-disabled-border, #6C6C6C);
     background: var(--btn-disabled-bg, #B7B7B7);
     box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0 0 var(--id-600, #6C6C6C);
     color: #878787;
   }
 
   &.disabled {
-    .inner {
-      @include btn-disabled;
-    }
+    @include btn-disabled;
     cursor: not-allowed;
 
     &:hover,
     &:active {
-      .inner {
-        @include btn-disabled;
-        top: 0;
-        left: 0
-      }
+      @include btn-disabled;
     }
   }
 }

@@ -3,9 +3,10 @@
 import S from './index.module.scss'
 import { useRef } from "react";
 
-const PublishPostTooltip = (props: {
+const MouseToolTip = (props: {
   children?: React.ReactNode;
   open?: boolean
+  message?: string
 }) => {
   const tipsRef = useRef<HTMLDivElement>(null)
 
@@ -35,9 +36,9 @@ const PublishPostTooltip = (props: {
     {props.children}
 
     <div className={S.tips} ref={tipsRef}>
-      有 Web5 did 账号才可发帖，请先创建账号～
+      {props.message || '有 Web5 did 账号才可发帖，请先创建账号～'}
     </div>
   </div>
 }
 
-export default PublishPostTooltip;
+export default MouseToolTip;

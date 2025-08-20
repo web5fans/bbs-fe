@@ -10,6 +10,7 @@ type ButtonProps = {
   onClick?: () => void;
   type?: 'primary' | 'normal';
   disabled?: boolean;
+  showClickAnimate?: boolean
 } & HTMLAttributes<HTMLDivElement>
 
 const Button = (props: ButtonProps) => {
@@ -19,21 +20,19 @@ const Button = (props: ButtonProps) => {
     onClick,
     type = 'normal',
     disabled,
+    showClickAnimate = true,
     ...rest
   } = props;
 
   return <div
     {...rest}
-    className={cx(S.button, className, type === 'primary' && S.primary, disabled && S.disabled)}
+    className={cx(S.button, showClickAnimate && S.showClickAni, className, type === 'primary' && S.primary, disabled && S.disabled)}
     onClick={(e) => {
       if (disabled) return
       onClick?.(e)
     }}
   >
-    <div className={S.shadow} />
-    <div className={S.inner}>
-      {children}
-    </div>
+    {children}
   </div>
 }
 

@@ -32,7 +32,12 @@ const SectionDetailPage = () => {
       <PostsList sectionId={sectionId} minLimit={20} listEmptyRender={<EmptyPostsList goPublish={goToPublish} />} />
     </div>
     <FloatingMark ref={stickyRef}>
-      <Button type={'primary'} onClick={goToPublish} className={cx(S.sticky, !userInfo && '!hidden')}><AddIcon/></Button>
+      <Button
+        showClickAnimate={false}
+        type={'primary'}
+        onClick={goToPublish}
+        className={cx(S.sticky, !userInfo && '!hidden')}>
+        <AddIcon/></Button>
     </FloatingMark>
   </div>
 }

@@ -23,13 +23,15 @@ const EnterButton = () => {
 
   const goMainSite = () => router.push('/posts')
 
+  const buttonName = userInfo ? '进入建设' : '加入建设'
+
   return <div className={S.footer}>
     <Button
       className={S.button}
       type={'primary'}
       onClick={joinBuild}
       onMouseEnter={() => router.prefetch('/posts')}
-    >加入建设</Button>
+    >{buttonName}</Button>
     <Link href={'/posts'} prefetch className={userInfo && '!hidden'}>
       <FlatButton className={S.tourist}>
         游客看看

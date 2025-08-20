@@ -3,7 +3,7 @@
 import S from './index.module.scss'
 import Button from "@/components/Button";
 import useUserInfoStore from "@/store/userInfo";
-import PublishPostToolTip from "@/components/PublishPostToolTip";
+import MouseToolTip from "@/components/MouseToolTip";
 import { useRouter } from "next/navigation";
 
 const PublishPost = () => {
@@ -11,18 +11,18 @@ const PublishPost = () => {
   const router = useRouter()
 
 
-  return <PublishPostToolTip open={!userInfo}>
+  return <MouseToolTip open={!userInfo}>
     <Button
       type={'primary'}
       className={S.button}
-      style={{ borderRightWidth: '4px !important', borderBottomWidth: '4px !important' }}
       disabled={!userInfo}
       onClick={() => router.push('/posts/publish')}
+      showClickAnimate={false}
     >
       <Icon />
       发布讨论
     </Button>
-  </PublishPostToolTip>
+  </MouseToolTip>
 }
 
 export default PublishPost;
