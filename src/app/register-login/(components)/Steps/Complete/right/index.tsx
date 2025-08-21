@@ -1,10 +1,10 @@
 import S from './index.module.scss'
-import useUserInfoStore from "@/store/userInfo";
 import { useNickName } from "@/provider/RegisterNickNameProvider";
 import CopyText from "@/components/CopyText";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export const CompleteRight = () => {
-  const { did } = useUserInfoStore();
+  const { userProfile } = useCurrentUser();
   const { userHandle } = useNickName()
 
   return <div className={S.wrap}>
@@ -18,8 +18,8 @@ export const CompleteRight = () => {
         </div>
         <p className={S.name}>{userHandle}</p>
         <p className={S.did}>
-          {did}
-          <CopyText text={did!} className={S.icon} />
+          {userProfile?.did}
+          <CopyText text={userProfile?.did!} className={S.icon} />
         </p>
       </div>
     </div>

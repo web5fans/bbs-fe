@@ -65,7 +65,7 @@ const PostDetail = (props: PostDetailProps) => {
         hideOnSinglePage
         pageSize={20}
         total={replyList?.total || 0}
-        onChange={(page) => run(page)}
+        onChange={(page) => reLoadReply(page)}
         className={S.pagination}
         align={'center'}
       />

@@ -64,7 +64,11 @@ export default function useCreateAccount({ createSuccess }: {
     if (!signer) return
     const fromAddress = await signer.getAddresses()
 
-    const keyPair = await Secp256k1Keypair.create()
+    const keyPair = await Secp256k1Keypair.create({
+      exportable: true
+    })
+    const signKeyPriv = await keyPair.export()
+    const strSignKeyPriv = ccc.hexFrom(signKeyPriv)
     const signingKey = keyPair.did()
 
     const diDoc = {
@@ -143,7 +147,8 @@ export default function useCreateAccount({ createSuccess }: {
 
     changeParams({
       createdTx: tx,
-      did: `did:web5:${preDid}`
+      did: `did:web5:${preDid}`,
+      createdSignKeyPriv: strSignKeyPriv
     })
   }
 
@@ -167,11 +172,9 @@ export default function useCreateAccount({ createSuccess }: {
   const prepareAccount = async () => {
     setCreateLoading(true)
 
-    const keyPair = await Secp256k1Keypair.create({
-      exportable: true
-    })
-    const signKeyPriv = await keyPair.export()
-    const strSignKeyPriv = ccc.hexFrom(signKeyPriv)
+    const signKey = createUserParamsRef.current.createdSignKeyPriv
+
+    const keyPair = await Secp256k1Keypair.import(signKey?.slice(2))
 
     const signingKey = keyPair.did()
 
@@ -206,7 +209,7 @@ export default function useCreateAccount({ createSuccess }: {
 
     await createUser({
       handle: userHandle!,
-      password: strSignKeyPriv,
+      password: signKey,
       signingKey,
       ckbAddr: address,
       root: {
@@ -218,8 +221,6 @@ export default function useCreateAccount({ createSuccess }: {
         signedBytes: uint8ArrayToHex(commit.sig),
       },
     })
-
-    changeParams({ createdSignKeyPriv: strSignKeyPriv })
 
     let txHash;
 
@@ -236,7 +237,7 @@ export default function useCreateAccount({ createSuccess }: {
     const txRes = await walletClient?.waitTransaction(txHash)
     console.log('txRes', txRes)
     if (txRes?.status !== 'committed') {
-      await deleteErrUser(preCreateResult.did, address, strSignKeyPriv)
+      await deleteErrUser(preCreateResult.did, address, signKey!)
     }
 
     setCreateLoading(false)
@@ -253,6 +254,7 @@ export default function useCreateAccount({ createSuccess }: {
     try {
       await prepareAccount()
     } catch (err) {
+      console.log('err.message', err.message)
 
       if (err.message === SEND_TRANSACTION_ERR_MESSAGE) {
         const params = createUserParamsRef.current

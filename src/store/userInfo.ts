@@ -89,7 +89,7 @@ const useUserInfoStore = createSelectors(
     logout: () => {
       storage.removeToken()
       getPDSClient().logout()
-      set(() => ({ userInfo: undefined, userProfile: undefined, isWhiteListUser: false, initialized: false }))
+      set(() => ({ userInfo: undefined, userProfile: undefined, isWhiteListUser: false }))
     },
 
     getUserProfile: async () => {
