@@ -1,15 +1,10 @@
 import getPDSClient from "@/lib/pdsClient";
-import storage from "@/lib/storage";
+import storage, { TokenStorageType } from "@/lib/storage";
 import { Secp256k1Keypair } from "@atproto/crypto";
 import { bytesFrom, hexFrom } from "@ckb-ccc/core";
-import { ComAtprotoWeb5IndexAction, ComAtprotoWeb5PreIndexAction } from "web5-api";
+import { AtpAgent, ComAtprotoWeb5IndexAction, ComAtprotoWeb5PreIndexAction } from "web5-api";
 
-export async function userLogin(): Promise<ComAtprotoWeb5IndexAction.CreateSessionResult | undefined> {
-  const pdsClient = getPDSClient()
-
-  const localStorage = storage.getToken()
-
-  if (!localStorage) return
+export async function userLogin(pdsClient: AtpAgent, localStorage: TokenStorageType): Promise<ComAtprotoWeb5IndexAction.CreateSessionResult | undefined> {
 
   const { did, signKey, walletAddress } = localStorage
 
