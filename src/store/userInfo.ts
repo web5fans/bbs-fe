@@ -7,6 +7,7 @@ import { ComAtprotoWeb5CreateAccount, ComAtprotoServerCreateSession } from "web5
 import { writesPDSOperation } from "@/app/posts/utils";
 import { handleToNickName } from "@/lib/handleToNickName";
 import server from "@/server";
+import { userLogin } from "@/lib/user-account";
 
 type UserProfileType = {
   did: string
@@ -18,8 +19,6 @@ type UserProfileType = {
 }
 
 type UserInfoStoreValue = {
-  createdTx?: ccc.Transaction
-  did?: string
   userInfo?: ComAtprotoServerCreateSession.OutputSchema
   initialized?: boolean
   userProfile?: UserProfileType
@@ -39,8 +38,6 @@ type UserInfoStore = UserInfoStoreValue & {
 
 const useUserInfoStore = createSelectors(
   create<UserInfoStore>((set, get) => ({
-    createTx: undefined,
-    did: undefined,
     userInfo: undefined,
     initialized: undefined,
     userProfile: undefined,
@@ -75,20 +72,11 @@ const useUserInfoStore = createSelectors(
     },
 
     web5Login: async () => {
-      const pdsClient = getPDSClient()
-      const localStorage = storage.getToken()
+      const userInfoRes = await userLogin()
 
-      if (!localStorage) return
+      if (!userInfoRes) return
 
-      const { did, signKey, walletAddress } = localStorage
-
-      const userInfoRes = await pdsClient.web5Login({
-        identifier: did,
-        password: signKey!,
-        ckbAddr: walletAddress
-      })
-
-      set(() => ({ userInfo: userInfoRes.data }))
+      set(() => ({ userInfo: userInfoRes }))
       await get().getUserProfile()
     },
 

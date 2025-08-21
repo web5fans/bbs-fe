@@ -12,8 +12,7 @@ import { base32 } from "@scure/base";
 import { hexToUint8Array, uint8ArrayToHex } from "@/lib/dag-cbor";
 import { UnsignedCommit } from "@atproto/repo";
 import { CID } from "multiformats";
-import { useRequest } from "ahooks";
-import dayjs from "dayjs";
+import { deleteErrUser } from "@/lib/user-account";
 
 export enum CREATE_STATUS {
   INIT,
@@ -25,13 +24,20 @@ export type CreateAccountStatus = { status: CREATE_STATUS; reason?: string }
 
 const initialCapacity = 355
 
+const SEND_TRANSACTION_ERR_MESSAGE = 'SendTransaction Error'
+
+type CreateUserParamsType = {
+  did?: string
+  createdTx?: ccc.Transaction
+  createdSignKeyPriv?: string
+}
 
 export default function useCreateAccount({ createSuccess }: {
   createSuccess?: () => void
 }) {
   const { userHandle } = useNickName()
   const { signer, walletClient, address } = useWallet()
-  const { setStoreData, did, createUser, createdTx } = useUserInfoStore()
+  const { createUser, logout } = useUserInfoStore()
 
   const [extraIsEnough, setExtraIsEnough] = useState([initialCapacity, false])
 
@@ -41,6 +47,16 @@ export default function useCreateAccount({ createSuccess }: {
   })
 
   const intervalRef = useRef(null);
+
+  const createUserParamsRef = useRef<CreateUserParamsType>({
+    did: undefined,
+    createdTx: undefined,
+    createdSignKeyPriv: undefined
+  })
+
+  const changeParams = (obj: CreateUserParamsType) => {
+    createUserParamsRef.current = {...createUserParamsRef.current, ...obj}
+  }
 
   // 判断CKB是否足够
   const validateIsEnough = async () => {
@@ -125,7 +141,7 @@ export default function useCreateAccount({ createSuccess }: {
 
     const preDid = base32.encode(hexToUint8Array(args.slice(2, 42))).toLowerCase()
 
-    setStoreData({
+    changeParams({
       createdTx: tx,
       did: `did:web5:${preDid}`
     })
@@ -162,7 +178,7 @@ export default function useCreateAccount({ createSuccess }: {
     const res = await getPDSClient().com.atproto.web5.preCreateAccount({
       handle: userHandle!,
       signingKey,
-      did,
+      did: createUserParamsRef.current.did!,
     })
 
     const preCreateResult = res.data
@@ -203,8 +219,25 @@ export default function useCreateAccount({ createSuccess }: {
       },
     })
 
-    const txHash = await signer?.sendTransaction(createdTx!)
+    changeParams({ createdSignKeyPriv: strSignKeyPriv })
+
+    let txHash;
+
+    const createdTx = createUserParamsRef.current.createdTx
+
+    try {
+      txHash = await signer?.sendTransaction(createdTx!)
+    } catch (error) {
+      throw new Error(SEND_TRANSACTION_ERR_MESSAGE);
+    }
+
     console.log('txHash', txHash)
+    if (!txHash) return
+    const txRes = await walletClient?.waitTransaction(txHash)
+    console.log('txRes', txRes)
+    if (txRes?.status !== 'committed') {
+      await deleteErrUser(preCreateResult.did, address, strSignKeyPriv)
+    }
 
     setCreateLoading(false)
     createSuccess?.()
@@ -220,11 +253,23 @@ export default function useCreateAccount({ createSuccess }: {
     try {
       await prepareAccount()
     } catch (err) {
-      getPDSClient().logout()
+
+      if (err.message === SEND_TRANSACTION_ERR_MESSAGE) {
+        const params = createUserParamsRef.current
+        await deleteErrUser(params.did!, address, params.createdSignKeyPriv!)
+      }
+
+      logout()
+
       setCreateLoading(false)
       setCreateStatus({
         status: CREATE_STATUS.FAILURE,
         reason: err.message || err
+      })
+      changeParams({
+        did: undefined,
+        createdTx: undefined,
+        createdSignKeyPriv: undefined,
       })
     }
   }
