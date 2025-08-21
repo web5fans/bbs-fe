@@ -128,11 +128,14 @@ export async function writesPDSOperation(params: {
   }
   let signingKey = keyPair.did()
 
+  const localStorage = storage.getToken()
+
   const res = await server<CreatePostResponse>('/record/create', 'POST', {
     repo: params.did,
     rkey,
     value: newRecord,
     signing_key: signingKey,
+    ckb_addr: localStorage?.walletAddress,
     root: {
       did: writerData.did,
       version: 3,
