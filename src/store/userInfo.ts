@@ -58,7 +58,7 @@ const useUserInfoStore = createSelectors(
         walletAddress: params.ckbAddr
       })
 
-      writesPDSOperation({
+      await writesPDSOperation({
         record: {
           $type: "app.actor.profile",
           displayName: handleToNickName(userInfo.handle),
