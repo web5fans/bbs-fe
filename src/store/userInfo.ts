@@ -73,13 +73,11 @@ const useUserInfoStore = createSelectors(
     },
 
     web5Login: async () => {
-      const pdsClient = getPDSClient()
-
       const localStorage = storage.getToken()
 
       if (!localStorage) return
 
-      const userInfoRes = await userLogin(pdsClient, localStorage)
+      const userInfoRes = await userLogin(localStorage)
 
       if (!userInfoRes) return
 

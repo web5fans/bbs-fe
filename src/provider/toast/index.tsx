@@ -21,7 +21,7 @@ type ToastOptions = {
   message?: string;
   icon?: 'success' | 'error'
   duration?: number;
-  id: string
+  id?: string
 };
 
 const iconsMap = {

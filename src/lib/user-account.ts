@@ -2,10 +2,11 @@ import getPDSClient from "@/lib/pdsClient";
 import storage, { TokenStorageType } from "@/lib/storage";
 import { Secp256k1Keypair } from "@atproto/crypto";
 import { bytesFrom, hexFrom } from "@ckb-ccc/core";
-import { AtpAgent, ComAtprotoWeb5IndexAction, ComAtprotoWeb5PreIndexAction } from "web5-api";
+import { ComAtprotoWeb5IndexAction, ComAtprotoWeb5PreIndexAction } from "web5-api";
+import { showGlobalToast } from "@/provider/toast";
 
-export async function userLogin(pdsClient: AtpAgent, localStorage: TokenStorageType): Promise<ComAtprotoWeb5IndexAction.CreateSessionResult | undefined> {
-
+export async function userLogin(localStorage: TokenStorageType): Promise<ComAtprotoWeb5IndexAction.CreateSessionResult | undefined> {
+  const pdsClient = getPDSClient()
   const { did, signKey, walletAddress } = localStorage
 
   const preLoginIndex = {
@@ -41,16 +42,25 @@ export async function userLogin(pdsClient: AtpAgent, localStorage: TokenStorageT
 
   const signingKey = keyPair.did()
 
-  const loginInfo = await pdsClient.web5Login({
-    did,
-    message: preLogin.data.message,
-    signingKey: signingKey,
-    signedBytes: hexFrom(loginSig),
-    ckbAddr: walletAddress,
-    index: loginIndex,
-  })
+  try {
+    const loginInfo = await pdsClient.web5Login({
+      did,
+      message: preLogin.data.message,
+      signingKey: signingKey,
+      signedBytes: hexFrom(loginSig),
+      ckbAddr: walletAddress,
+      index: loginIndex,
+    })
+    return loginInfo.data.result as ComAtprotoWeb5IndexAction.CreateSessionResult
 
-  return loginInfo.data.result as ComAtprotoWeb5IndexAction.CreateSessionResult
+  } catch (err) {
+    showGlobalToast({
+      title: '登录失败',
+      message: '用户信息有误，请清除缓存，重新注册',
+      icon: 'error',
+      duration: 4000
+    })
+  }
 }
 
 
