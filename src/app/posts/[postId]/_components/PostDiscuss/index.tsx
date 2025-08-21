@@ -16,7 +16,7 @@ const PostDiscuss = (props: {
   sectionId: string
   refresh?: () => void
 }) => {
-  const { userProfile, hasLoggedIn } = useCurrentUser()
+  const { userProfile, hasLoggedIn, isWhiteUser } = useCurrentUser()
   const [publishing, setPublishing] = useState(false)
 
   const [richText, setRichText] = useState('')
@@ -63,6 +63,14 @@ const PostDiscuss = (props: {
     </div>
   }
 
+  if (!isWhiteUser) {
+    return <div className={S.wrap}>
+      <p className={S.title}>跟帖讨论</p>
+      <NoWhiteAuth />
+    </div>
+  }
+
+
   return <div className={S.wrap} id={'comment_post'}>
     <p className={S.title}>跟帖讨论</p>
     <div className={S.editor}>
@@ -105,5 +113,12 @@ function NoAuth() {
     {/*  onClick={openRegisterPop}*/}
     {/*>没有账号？立刻创建*/}
     {/*</p>*/}
+  </div>
+}
+
+function NoWhiteAuth() {
+  return <div className={S.empty}>
+    <FaceIcon />
+    <p className={S.tips}>抱歉！仅限白名单用户跟帖讨论</p>
   </div>
 }
