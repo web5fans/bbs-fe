@@ -62,6 +62,7 @@ const useUserInfoStore = createSelectors(
         record: {
           $type: "app.actor.profile",
           displayName: handleToNickName(userInfo.handle),
+          handle: userInfo.handle
         },
         did: userInfo.did,
         rkey: "self"

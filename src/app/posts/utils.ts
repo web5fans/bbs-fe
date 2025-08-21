@@ -54,6 +54,8 @@ type PostRecordType = {
 } | {
   $type: 'app.actor.profile'
   displayName: string;
+  handle: string;
+  [key: string]: any;
 }
 
 type CreatePostResponse = {
