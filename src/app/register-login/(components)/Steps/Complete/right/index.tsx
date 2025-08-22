@@ -8,11 +8,23 @@ export const CompleteRight = () => {
   const { userHandle } = useNickName()
 
   return <div className={S.wrap}>
+    <div className={S.bgWrap}>
+      <img
+        src={'/assets/login/byte-static-m.png'}
+        alt=""
+        className={S.bgImage}
+      />
+      <img
+        src={'/assets/login/byte-m.gif'}
+        alt=""
+        className={S.gif}
+      />
+    </div>
     <div className={S.card}>
       <span className={S.title}>BBS</span>
       <div className={S.inner}>
         <div className={S.top}>
-          <Colon />
+        <Colon />
           web5 DID
           <Colon />
         </div>

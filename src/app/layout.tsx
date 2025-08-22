@@ -31,23 +31,29 @@ const RootLayout = async (props: any) => {
 
   return (
     <html lang="cn" style={{ visibility: "hidden" }}>
-      <head>
-        <PublicEnvScript />
-        <link
-          rel="preload"
-          href="/assets/login/byte-static.png"
-          as="image"
-          type="image/png"
-        />
+    <head>
+      <PublicEnvScript />
+      <link
+        rel="preload"
+        href="/assets/login/byte-static.png"
+        as="image"
+        type="image/png"
+      />
+      <link
+        rel="preload"
+        href="/assets/login/byte-static-m.png"
+        as="image"
+        type="image/png"
+      />
     </head>
-  <body
-    className={fontVariables}
-  >
-  <LayoutProvider>
-    <ToastProvider>
-      <MainContent>
-        <RegisterPopUpProvider>
-                {header}
+    <body
+      className={fontVariables}
+    >
+    <LayoutProvider>
+      <ToastProvider>
+        <MainContent>
+          <RegisterPopUpProvider>
+          {header}
                 <main
                   style={{
                     flex: 1,

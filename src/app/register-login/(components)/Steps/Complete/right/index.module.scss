@@ -1,13 +1,34 @@
 .wrap {
   width: 518px;
   height: 639px;
-  background-image: url("/assets/login/byte-m.gif");
+  //background-image: url("/assets/login/byte-m.gif");
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 30px;
+  position: relative;
+
+  .bgWrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  .gif {
+    position: relative;
+    height: 100%;
+  }
+
+  .bgImage {
+    position: absolute;
+    top: 0;
+    height: 102%;
+  }
 
   .card {
     width: 100%;
