@@ -56,7 +56,6 @@ export async function userLogin(localStorage: TokenStorageType): Promise<ComAtpr
   } catch (err) {
     showGlobalToast({
       title: '登录失败',
-      message: '用户信息有误，请清除缓存，重新注册',
       icon: 'error',
       duration: 4000
     })
