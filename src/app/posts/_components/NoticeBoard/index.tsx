@@ -10,8 +10,11 @@ import server from "@/server";
 import { useRouter } from "next/navigation";
 import utcToLocal from "@/lib/utcToLocal";
 import cx from "classnames";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const NoticeBoard = () => {
+  const { hasLoggedIn, userProfile, visitorId } = useCurrentUser()
+
   const { data: list } = useRequest(async () => {
     const result = await server<{ posts: PostFeedItemType[] }>('/post/top', 'POST', {
       section_id: '0',
@@ -30,12 +33,22 @@ const NoticeBoard = () => {
     noInnerWrap
   >
     <div className={S.content}>
-      <Marquee autoFill speed={120}>
-        <p style={{marginRight: 20}} className={S.marquee}>
-          欢迎你
-          <span>xxx</span>
-          ！这是你第 1 度来到 BBS 社区，目前论坛有 0 人与你同在，有 0 人曾与你共享同一个网络～
-        </p>
+      <Marquee autoFill speed={100}>
+        {hasLoggedIn ? <p
+          style={{ marginRight: 20 }}
+          className={S.marquee}
+        >
+          欢迎你&nbsp;
+          <span className={'capitalize'}>{userProfile?.displayName}</span>
+          ！这是你第 1 个来到 BBS 社区，目前论坛有 0 人与你同在，有 0 人曾与你共享同一个网络～
+        </p> : <p
+          style={{ marginRight: 20 }}
+          className={S.marquee}
+        >
+          欢迎你&nbsp;
+          <span className={'capitalize'}>访客{visitorId}</span>
+          &nbsp;来到 BBS 社区，目前有 0 人与你同在，期待你成为社区一员，一起加入BBS讨论～
+        </p>}
       </Marquee>
 
       <div className={cx(S.cardContent, hasMoreCard && S.moreCard)}>

@@ -24,7 +24,10 @@ type UserInfoStoreValue = {
   initialized?: boolean
   userProfile?: UserProfileType
   isWhiteListUser?: boolean
+  visitorId?: string
 }
+
+const STORAGE_VISITOR = '@bbs:visitor'
 
 
 type UserInfoStore = UserInfoStoreValue & {
@@ -43,6 +46,7 @@ const useUserInfoStore = createSelectors(
     initialized: undefined,
     userProfile: undefined,
     isWhiteListUser: undefined,
+    visitorId: undefined,
 
     setStoreData: (params) => {
       set(() => ({ ...params }))
@@ -119,7 +123,13 @@ const useUserInfoStore = createSelectors(
 
     initialize: async () => {
       await get().web5Login()
-      set(() => ({ initialized: true }))
+      let visitor = localStorage.getItem(STORAGE_VISITOR)
+      if (!visitor) {
+        const random4Digit = Math.floor(Math.random() * 9000) + 1000;
+        visitor = random4Digit.toString()
+        localStorage.setItem(STORAGE_VISITOR, visitor)
+      }
+      set(() => ({ initialized: true, visitorId: visitor }))
     }
 
   })),
