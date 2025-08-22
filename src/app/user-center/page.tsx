@@ -10,17 +10,27 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { useRequest } from "ahooks";
 import server from "@/server";
 import { UserProfileType } from "@/store/userInfo";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const { userProfile, hasLoggedIn } = useCurrentUser()
 
+  const router = useRouter();
+
   const { data: userInfo } = useRequest(async () => {
     return await server<UserProfileType>('/repo/profile', 'GET', {
-      repo: userProfile.did
+      repo: userProfile?.did
     })
   }, {
     ready: !!userProfile?.did
   })
+
+  useEffect(() => {
+    if (!hasLoggedIn) {
+      router.replace('/')
+    }
+  }, []);
 
   if (!hasLoggedIn) {
     return null
