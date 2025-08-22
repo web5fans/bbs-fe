@@ -4,7 +4,25 @@
   margin: 0 auto;
 
   .eye {
-    animation: blink 2.4s infinite;
+    animation: startBlink 1s, blink 2.4s infinite 1s;
+  }
+}
+
+@keyframes startBlink {
+  0%,
+  51% {
+    x: 85px;
+    y: 0.0283203px;
+    width: 6.99998px;
+    height: 21px;
+  }
+
+  55%,
+  100% {
+    x: 78px;
+    y: 8px;
+    height: 6.99998px;
+    width: 21px;
   }
 }
 
