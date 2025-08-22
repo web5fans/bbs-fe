@@ -229,6 +229,9 @@ export default function useCreateAccount({ createSuccess }: {
     try {
       txHash = await signer?.sendTransaction(createdTx!)
     } catch (error) {
+      // 用户不签名的message
+      // User Rejected
+      // Popup closed
       throw new Error(SEND_TRANSACTION_ERR_MESSAGE);
     }
 
