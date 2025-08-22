@@ -37,7 +37,7 @@ export default function useCreateAccount({ createSuccess }: {
 }) {
   const { userHandle } = useNickName()
   const { signer, walletClient, address } = useWallet()
-  const { createUser, logout } = useUserInfoStore()
+  const { createUser, resetUserStore } = useUserInfoStore()
 
   const [extraIsEnough, setExtraIsEnough] = useState([initialCapacity, false])
 
@@ -264,7 +264,7 @@ export default function useCreateAccount({ createSuccess }: {
         await deleteErrUser(params.did!, address, params.createdSignKeyPriv!)
       }
 
-      logout()
+      resetUserStore()
 
       setCreateLoading(false)
       setCreateStatus({

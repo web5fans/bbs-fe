@@ -24,7 +24,6 @@ export async function userLogin(localStorage: TokenStorageType): Promise<ComAtpr
   } catch (err) {
     if (err.message.includes("CKB Testnet Response referring_cells error")) {
       await deleteErrUser(did, walletAddress, signKey)
-      storage.removeToken()
       return
     }
   }

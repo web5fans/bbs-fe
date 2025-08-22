@@ -37,6 +37,7 @@ type UserInfoStore = UserInfoStoreValue & {
   web5Login: () => Promise<void>
   getUserProfile: () => Promise<void>;
   logout: () => void
+  resetUserStore: () => void
   initialize: (signer?: ccc.Signer) => Promise<void>
 }
 
@@ -90,8 +91,14 @@ const useUserInfoStore = createSelectors(
       await get().getUserProfile()
     },
 
+    /* 清除用户信息+缓存 */
     logout: () => {
       storage.removeToken()
+      get().resetUserStore()
+    },
+
+    /* 只清除用户信息，保留缓存 */
+    resetUserStore() {
       getPDSClient().logout()
       set(() => ({ userInfo: undefined, userProfile: undefined, isWhiteListUser: false }))
     },
