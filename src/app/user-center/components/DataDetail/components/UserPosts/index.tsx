@@ -5,7 +5,7 @@ import server from "@/server";
 import { PostFeedType } from "@/app/posts/_components/PostsList";
 import PostFeedItem from "@/components/PostFeedItem";
 import LoadMoreView from "@/components/LoadMoreView";
-import { EmptyPostsList } from "@/components/Empty";
+import { EmptyPostsList, EmptyText } from "@/components/Empty";
 import { JSX } from "react";
 import { useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -47,9 +47,13 @@ const UserPosts = (props: UserPostsPropsType) => {
 
   if (dataSource?.list && dataSource?.list.length === 0) {
     if (isMe) {
-      return <EmptyPostsList goPublish={() => {}} className={'!h-[440px]'} message={'暂无帖子，快去发帖讨论吧！'} />
+      return <EmptyPostsList
+        goPublish={() => router.push('/posts/publish')}
+        className={'!h-[440px]'}
+        message={'暂无帖子，快去发帖讨论吧！'}
+      />
     }
-    return <EmptyPostsList className={'!h-[440px]'} message={'此人的帖子正在酝酿中...'} />
+    return <EmptyText className={'!h-[440px]'} message={'此人的帖子正在酝酿中...'} />
   }
 
   return <div>

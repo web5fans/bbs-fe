@@ -1,0 +1,18 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  height: 321px;
+
+  > img {
+    width: 158px;
+    height: 55px;
+  }
+
+  .emptyTip {
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
