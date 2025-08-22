@@ -90,7 +90,7 @@ const PostDiscuss = (props: {
             onClick={publishReply}
           >发布</Button>
       }
-      <PublishPostCancelButton className={S.publish} />
+      <PublishPostCancelButton className={S.publish} disabled={!richText} />
     </div>
   </div>
 }

@@ -139,7 +139,7 @@ const PublishPostPage = () => {
                 onClick={publishPost}
               >发布</Button>
           }
-          <PublishPostCancelButton disabled={noAuth} />
+          <PublishPostCancelButton disabled={!allowPublish || noAuth} />
         </div>
       </div>
     </div>
