@@ -5,7 +5,7 @@ import cx from "classnames";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  breads: { title: string; route?: string }[]
+  breads: { title: string; route?: string, onClick?: () => void }[]
   className?: string
 }
 
@@ -13,10 +13,16 @@ const BreadCrumbs = ({ breads, className }: Props) => {
   const router = useRouter();
 
   return <div className={cx(S.breadCrumb, className)}>
-    {breads.map(({ title, route }, index) => {
-      return <div key={index} className={'flex items-center'}>
+    {breads.map(({ title, route, onClick }, index) => {
+      return <div key={index} className={'flex items-center capitalize'}>
         {index !== 0 && <Arrow />}
-        {route ? <a onClick={() => router.replace(route)}>{title}</a> : <span>{title}</span>}
+        {(route || onClick) ? <a onClick={() => {
+          if (onClick) {
+            onClick()
+            return
+          }
+          router.replace(route)
+        }}>{title}</a> : <span>{title}</span>}
       </div>
     })}
   </div>

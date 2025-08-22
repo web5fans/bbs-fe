@@ -6,6 +6,7 @@ import FeedStatistic from "@/components/FeedStatistic";
 import cx from "classnames";
 import utcToLocal from "@/lib/utcToLocal";
 import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
+import { useRouter } from "next/navigation";
 
 type PostItemProps = {
   isOriginPoster?: boolean
@@ -16,10 +17,14 @@ type PostItemProps = {
 const PostItem = (props: PostItemProps) => {
   const { postInfo = {}, floor, isOriginPoster } = props;
 
+  const router = useRouter()
+
   const nickname = postInfo.author?.displayName
 
+  const href = `/user-center/${encodeURIComponent(postInfo.author?.did)}`
+
     return <div className={S.wrap}>
-    <div className={S.user}>
+    <div className={S.user} onClick={() => router.push(href)} onMouseEnter={() => router.prefetch(href)}>
       <div className={cx(S.avatarWrap, !isOriginPoster && S.normal)}>
         <Avatar nickname={nickname} className={S.avatar} />
         <img src={'/assets/poster.png'} alt="" className={S.poster} />

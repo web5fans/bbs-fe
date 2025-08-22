@@ -3,17 +3,13 @@
 import S from './index.module.scss'
 import { useInfiniteScroll } from 'ahooks'
 import ArrowSDown from '@/assets/arrow-s.svg'
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import cx from "classnames";
-import Avatar from "@/components/Avatar";
 import server from "@/server";
-import FeedStatistic from "@/components/FeedStatistic";
-import { handleToNickName } from "@/lib/handleToNickName";
 import LoadMoreView from "@/components/LoadMoreView";
 import { useRouter } from "next/navigation";
 import { PostFeedItemType } from "@/app/posts/utils";
-import utcToLocal from "@/lib/utcToLocal";
-import Link from "next/link";
+import PostFeedItem from "@/components/PostFeedItem";
 
 const PAGE_SIZE = 20
 
@@ -79,15 +75,12 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender }: {
           href = `/section/${sectionId}/${uri}`
         }
 
-        return <div key={item.uri}>
-          {index !== 0 && <Divide />}
-          <Link href={href} prefetch={false} as={href}>
-            <FeedItem
-              feed={item}
-              onHover={() => router.prefetch(href)}
-            />
-          </Link>
-        </div>
+        return <PostFeedItem
+          feed={item}
+          key={item.uri}
+          onClick={() => router.push(href)}
+          onHover={() => router.prefetch(href)}
+        />
       })}
 
 
@@ -109,62 +102,3 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender }: {
 }
 
 export default PostsList;
-
-function FeedItem({ feed, onClick, onHover }: {
-  feed: PostFeedItemType;
-  onClick?: () => void
-  onHover?: () => void
-}) {
-  const { author } = feed;
-
-  const [innerRichText, setInnerRichText] = useState('')
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  const nickname = handleToNickName(author.displayName);
-
-  const title = feed.title
-
-  const html = feed.text
-
-  useEffect(() => {
-    const text = contentRef.current?.innerText
-    setInnerRichText(text)
-  }, []);
-
-  return <div
-    className={S.feed}
-    onClick={onClick}
-    onMouseEnter={onHover}
-  >
-    <p className={S.header}>
-      {title}
-    </p>
-    
-    <div
-      ref={contentRef}
-      className={'h-0 overflow-hidden'}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
-
-    <p className={S.feedInfo}>{innerRichText}</p>
-
-    <div className={S.footer}>
-      <div className={S.left}>
-        {nickname && <div className={S.nickname}>
-          <Avatar
-            className={S.avatar}
-            nickname={nickname}
-          />
-          {nickname}
-        </div>}
-        <span>{feed.section}</span>
-        <FeedStatistic visitedCount={feed.visited_count} replyCount={feed.reply_count} />
-      </div>
-      <span className={S.time}>{utcToLocal(feed.created)}</span>
-    </div>
-  </div>
-}
-
-function Divide() {
-  return <div className={S.divide} />
-}

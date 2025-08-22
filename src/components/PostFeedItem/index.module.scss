@@ -1,0 +1,81 @@
+.feed {
+  padding: var(--feed-padding, 20px);
+  cursor: pointer;
+  position: relative;
+
+  & + .feed {
+    &::before {
+      content: '';
+      display: block;
+      height: 1px;
+      border-bottom: 1px dashed #F3F3F3;
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      top: 0;
+    }
+  }
+
+  &:hover {
+    background: #F3F3F3;
+
+    --hover-text-color: var(--primary-color);
+    --avatar-outer-color: var(--primary-color);
+    --post-statistic-font-color: var(--primary-color);
+
+    > * {
+      color: var(--primary-color);
+    }
+  }
+
+  .header {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .feedInfo {
+    overflow: hidden;
+    color: var(--hover-text-color, #6C6C6C);
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    margin-bottom: 11px;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--hover-text-color, #6C6C6C);
+    font-size: 12px;
+
+    .left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      .nickname {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: capitalize;
+      }
+
+      .avatar {
+        width: 14px;
+        height: 14px;
+        font-size: 8px;
+      }
+    }
+
+    .time {
+      color: var(--hover-text-color, #6C6C6C);
+      font-size: 12px;
+    }
+  }
+}

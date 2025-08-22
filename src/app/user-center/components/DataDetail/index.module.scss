@@ -1,0 +1,48 @@
+.container {
+  border-top: 2px solid #000;
+  border-right: 4px solid #000;
+  border-bottom: 4px solid #000;
+  border-left: 2px solid #000;
+  background: var(--border-100, #E7E7E7);
+  padding: 20px;
+  margin-top: 40px;
+
+  .header {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .tabs {
+    display: inline-flex;
+    gap: 16px;
+    border-bottom: 2px solid var(--black, #000);
+    position: relative;
+    bottom: -2px;
+    > span {
+      border: 2px solid var(--black, #000);
+      background: var(--white, #FFF);
+      padding: 10px 30px 8px;
+      font-size: 18px;
+      position: relative;
+      bottom: -2px;
+      cursor: pointer;
+      transition: padding 0.15s;
+      height: 50px;
+
+      &.active {
+        padding-inline: 50px;
+        background: var(--primary-color);
+        color: #FFFFFF;
+        border-bottom: none;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .content {
+    border: 2px solid #000;
+    background: #FFF;
+    padding: 20px;
+  }
+}

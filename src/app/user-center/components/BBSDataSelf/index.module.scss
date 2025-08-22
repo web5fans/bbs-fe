@@ -1,0 +1,73 @@
+.container {
+  border: 2px solid #000;
+  background: var(--100, #E7E7E7);
+
+  /* bg hover */
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25) inset;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 0 40px;
+
+  .header {
+    font-size: 28px;
+    font-weight: 500;
+  }
+
+  .card {
+    width: 100%;
+    height: 152px;
+    margin-top: 12px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: #6C6C6C;
+
+    .title {
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .location {
+      font-size: 26px;
+      font-weight: 500;
+      color: #000;
+    }
+
+    .tips {
+      font-size: 12px;
+      opacity: 0.3;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: default;
+    }
+  }
+
+  .data {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding-left: 9px;
+    justify-content: start;
+    align-self: stretch;
+    > p {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      >span:first-child {
+        font-size: 24px;
+        font-weight: 500;
+      }
+
+      > span:last-child {
+        font-size: 14px;
+      }
+    }
+  }
+}

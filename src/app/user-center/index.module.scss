@@ -1,0 +1,32 @@
+.container {
+  width: 1224px;
+  margin: 30px auto 100px;
+  font-family: var(--font-CLFN);
+
+  --card-window-line-gap: 2px;
+
+  .wrap {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .left {
+      width: 770px;
+      flex-shrink: 0;
+    }
+
+    .right {
+      flex: 1;
+      align-self: stretch;
+    }
+  }
+}
+
+.breadCrumb {
+  padding: 0 10px;
+  position: absolute;
+  left: 40px;
+  height: 100%;
+  background: #EAEAEA;
+}

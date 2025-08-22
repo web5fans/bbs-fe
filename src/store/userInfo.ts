@@ -9,13 +9,14 @@ import { handleToNickName } from "@/lib/handleToNickName";
 import server from "@/server";
 import { userLogin } from "@/lib/user-account";
 
-type UserProfileType = {
+export type UserProfileType = {
   did: string
   displayName: string
   highlight?: string  // 在白名单内才有这个字段
   post_count: string
   reply_count: string
   created: string
+  handle: string
 }
 
 type UserInfoStoreValue = {

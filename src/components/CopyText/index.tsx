@@ -21,7 +21,7 @@ const CopyText = (props: {
     })
   }
 
-  return <CopyIcon className={props.className} onClick={copy} />
+  return <CopyIcon className={props.className} style={{ cursor: 'pointer' }} onClick={copy} />
 }
 
 export default CopyText;

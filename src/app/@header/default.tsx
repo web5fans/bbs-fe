@@ -6,6 +6,7 @@ import UserIcon from '@/assets/header/user.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import { usePathname, useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import Link from "next/link";
 
 export default function AppHeader(props: {
   isPopUp?: boolean
@@ -34,12 +35,15 @@ export default function AppHeader(props: {
           BBS
         </div>
 
-        <div className={`${S.userWrap} ${(hasLoggedIn || props.isPopUp || isIndex) && '!hidden'}`}>
+        <div className={`${S.userWrap} ${(props.isPopUp || isIndex) && '!hidden'}`}>
+          {hasLoggedIn ? <Link href={'/user-center'} prefetch>
+            <UserIcon />
+          </Link> :
           <Button
             type={'primary'}
             className={S.button}
             onClick={openRegisterPop}
-          >创建账号加入</Button>
+          >创建账号加入</Button>}
         </div>
       </div>
     </div>
