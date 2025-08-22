@@ -16,7 +16,6 @@ export default function PostFeedItem({ feed, onClick, onHover }: {
   const { author } = feed;
 
   const [innerRichText, setInnerRichText] = useState('')
-  const contentRef = useRef<HTMLDivElement>(null);
 
   const nickname = handleToNickName(author.displayName);
 
@@ -25,9 +24,11 @@ export default function PostFeedItem({ feed, onClick, onHover }: {
   const html = feed.text
 
   useEffect(() => {
-    const text = contentRef.current?.innerText
-    setInnerRichText(text)
-  }, []);
+    if (!html) return
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    setInnerRichText(div.innerText)
+  }, [html]);
 
   return <div
     className={S.feed}
@@ -37,12 +38,6 @@ export default function PostFeedItem({ feed, onClick, onHover }: {
     <p className={S.header}>
       {title}
     </p>
-
-    <div
-      ref={contentRef}
-      className={'h-0 overflow-hidden'}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
 
     <p className={S.feedInfo}>{innerRichText}</p>
 
