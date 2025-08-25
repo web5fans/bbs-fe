@@ -10,6 +10,8 @@ import server from "@/server";
 import { useEffect } from "react";
 import { PostFeedItemType } from "@/app/posts/utils";
 
+const PAGE_SIZE = 20
+
 type PostDetailProps = {
   breadCrumb?: React.ReactNode;
   sectionId?: string
@@ -37,7 +39,7 @@ const PostDetail = (props: PostDetailProps) => {
       root: postId,
       parent: postId,
       page,
-      per_page: 20,
+      per_page: PAGE_SIZE,
     })
     return result
   }, {
@@ -55,10 +57,15 @@ const PostDetail = (props: PostDetailProps) => {
     headerExtra={breadCrumb}
   >
     <div className={S.wrap}>
-      <PostItem isOriginPoster postInfo={originPosterInfo} floor={1} />
+      {replyList?.page === 1 &&<PostItem
+        isOriginPoster
+        postInfo={originPosterInfo}
+        floor={1}
+      />}
 
       {replyList?.replies.map((p, idx) => {
-        return <PostItem key={p.uri} postInfo={p} floor={idx+2} />
+        const floor = ((replyList?.page || 1) - 1) * PAGE_SIZE + idx + 2;
+        return <PostItem key={p.uri} postInfo={p} floor={floor} />
       })}
 
       <Pagination
