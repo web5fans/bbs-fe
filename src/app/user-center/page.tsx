@@ -50,7 +50,7 @@ const Page = () => {
     />}>
       <div className={S.wrap}>
         <div className={S.left}>
-          <UserInfo userProfile={userInfo} />
+          <UserInfo userProfile={userInfo} isMe />
         </div>
         <div className={S.right}>
           <BBSDataSelf postsCount={userInfo?.post_count} replyCount={userInfo?.reply_count} />

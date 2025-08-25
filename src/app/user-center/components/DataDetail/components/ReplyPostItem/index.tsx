@@ -1,23 +1,19 @@
 'use client'
 
 import { PostFeedItemType } from "@/app/posts/utils";
-import { useEffect, useRef, useState } from "react";
-import { handleToNickName } from "@/lib/handleToNickName";
+import { useEffect, useState } from "react";
 import S from "./index.module.scss";
 import Avatar from "@/components/Avatar";
 import FeedStatistic from "@/components/FeedStatistic";
 import utcToLocal from "@/lib/utcToLocal";
 
-export default function ReplyPostItem({ feed, onClick, onHover }: {
+export default function ReplyPostItem({ feed, onClick, onHover, nickname }: {
   feed: PostFeedItemType;
   onClick?: () => void
   onHover?: () => void
+  nickname: string
 }) {
-  const { author } = feed;
-
   const [innerRichText, setInnerRichText] = useState('')
-
-  const nickname = handleToNickName(author.displayName);
 
   const title = feed.title
 

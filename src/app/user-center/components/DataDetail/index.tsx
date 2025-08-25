@@ -2,14 +2,14 @@
 
 import S from './index.module.scss'
 import { useState } from "react";
-import UserPosts from "@/app/user-center/components/DataDetail/components/UserPosts";
+import UserPosts from "./components/UserPosts";
+import UserReplies from "./components/UserReplies";
 
 const tabs = [{
   title: '发帖'
+},{
+  title: '回帖'
 }
-// ,{
-//   title: '回帖'
-// }
 ]
 
 const DataDetail = (props: { did?: string }) => {
@@ -29,6 +29,7 @@ const DataDetail = (props: { did?: string }) => {
     </div>
     <div className={S.content}>
       {activeTab === 0 && <UserPosts did={did} />}
+      {activeTab === 1 && <UserReplies did={did} />}
     </div>
   </div>
 }

@@ -16,9 +16,9 @@ const Avatar = (props: {
     return Math.abs(toHashCode(nickname)) % colorsNum
   }, [nickname])
 
-  if (!hash) return null;
+  if (!hash && hash !== 0) return null;
 
-  return <div className={`${S.wrap} ${props.className} ${hash ? S[`color${hash + 1}`] : ''}`}>
+  return <div className={`${S.wrap} ${props.className} ${(hash || hash === 0) ? S[`color${hash + 1}`] : ''}`}>
     <CircleInner />
     <CircleOuter className={S.circle} />
     <span className={S.nick}>{nickname[0]}</span>

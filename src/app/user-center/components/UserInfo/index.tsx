@@ -6,8 +6,9 @@ import Avatar from "@/components/Avatar";
 import { UserProfileType } from "@/store/userInfo";
 import utcToLocal from "@/lib/utcToLocal";
 
-const UserInfo = ({ userProfile }: {
+const UserInfo = ({ userProfile, isMe }: {
   userProfile?: UserProfileType
+  isMe?: boolean
 }) => {
   return <div className={S.container}>
     <div className={S.leftWrap}>
@@ -15,8 +16,8 @@ const UserInfo = ({ userProfile }: {
       <p className={S.userName}>{userProfile?.displayName}</p>
     </div>
     <div className={S.rightWrap}>
-      <CardItem title={'Web5域名'} content={userProfile?.handle} />
-      <CardItem title={'Web5 did'} content={userProfile?.did} />
+      <CardItem title={'Web5域名'} content={userProfile?.handle} showCopy={isMe} />
+      <CardItem title={'Web5 did'} content={userProfile?.did} showCopy={isMe} />
       <div className={S.register}>
         <CardItem title={'注册排名'} content={'-'} showCopy={false} className={S.item} />
         <CardItem title={'注册时间'} content={utcToLocal(userProfile?.created, 'YYYY-MM-DD')} showCopy={false} className={S.item} />
