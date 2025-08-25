@@ -4,6 +4,7 @@ import S from './index.module.scss'
 import { useState } from "react";
 import UserPosts from "./components/UserPosts";
 import UserReplies from "./components/UserReplies";
+import { UserProfileType } from "@/store/userInfo";
 
 const tabs = [{
   title: '发帖'
@@ -12,8 +13,8 @@ const tabs = [{
 }
 ]
 
-const DataDetail = (props: { did?: string }) => {
-  const { did } = props;
+const DataDetail = (props: { did?: string; profile: UserProfileType }) => {
+  const { did, profile } = props;
   const [activeTab, setActiveTab] = useState(0)
 
   return <div className={S.container}>
@@ -29,7 +30,7 @@ const DataDetail = (props: { did?: string }) => {
     </div>
     <div className={S.content}>
       {activeTab === 0 && <UserPosts did={did} />}
-      {activeTab === 1 && <UserReplies did={did} />}
+      {activeTab === 1 && <UserReplies did={did} replyName={profile.displayName} />}
     </div>
   </div>
 }

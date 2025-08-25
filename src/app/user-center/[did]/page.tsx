@@ -47,7 +47,7 @@ const UserProfilePage = () => {
       </div>
     </CardWindow>
 
-    <DataDetail did={userInfo?.did} />
+    <DataDetail did={userInfo?.did} profile={userInfo} />
   </div>
 }
 

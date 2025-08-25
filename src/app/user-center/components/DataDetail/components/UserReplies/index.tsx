@@ -7,20 +7,18 @@ import LoadMoreView from "@/components/LoadMoreView";
 import { EmptyPostsList, EmptyText } from "@/components/Empty";
 import { JSX } from "react";
 import { useRouter } from "next/navigation";
-import useCurrentUser from "@/hooks/useCurrentUser";
 import ReplyPostItem from "../ReplyPostItem";
 
 type UserRepliesPropsType = {
   did: string
   emptyRender?: () => JSX.Element
+  replyName: string
 }
 
 const UserReplies = (props: UserRepliesPropsType) => {
-  const { did } = props;
+  const { did, replyName } = props;
 
   const router = useRouter();
-
-  const { userProfile } = useCurrentUser()
 
   const { data: dataSource, loading, loadingMore, loadMore, noMore, reload } = useInfiniteScroll<ISPageData>(async (prevData) => {
 
@@ -56,7 +54,7 @@ const UserReplies = (props: UserRepliesPropsType) => {
         key={item.uri}
         onClick={() => router.push(href)}
         onHover={() => router.prefetch(href)}
-        nickname={userProfile?.displayName}
+        nickname={replyName}
       />
     })}
     {!loading && !noMore && <LoadMoreView onLoadMore={loadMore} />}
