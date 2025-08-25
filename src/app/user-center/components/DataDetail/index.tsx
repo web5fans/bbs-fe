@@ -1,7 +1,7 @@
 'use client'
 
 import S from './index.module.scss'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserPosts from "./components/UserPosts";
 import UserReplies from "./components/UserReplies";
 import { UserProfileType } from "@/store/userInfo";
@@ -16,6 +16,10 @@ const tabs = [{
 const DataDetail = (props: { did?: string; profile: UserProfileType }) => {
   const { did, profile } = props;
   const [activeTab, setActiveTab] = useState(0)
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [activeTab]);
 
   return <div className={S.container}>
     <p className={S.header}>数据详情</p>
