@@ -34,7 +34,7 @@ function CardItem(props: {
   content: string
   showCopy?: boolean
 }) {
-  const { showCopy = true, title, content } = props;
+  const { showCopy = false, title, content } = props;
 
   return <InfoCard className={cx(S.card, props.className)}>
     <div className={S.inner}>
