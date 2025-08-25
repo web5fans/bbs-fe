@@ -47,12 +47,6 @@ const PostItem = (props: PostItemProps) => {
           </div>
         </>}
 
-        {/*<TipTapEditor*/}
-        {/*  initialContent={postInfo.text}*/}
-        {/*  editable={false}*/}
-        {/*  editorClassName={S.richText}*/}
-        {/*  editorWrapClassName={'!h-auto'}*/}
-        {/*/>*/}
         <JSONToHtml html={postInfo.text} />
       </div>
 

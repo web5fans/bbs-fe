@@ -2,7 +2,7 @@ import type { Attrs, Node } from "@tiptap/pm/model"
 import type { Editor } from "@tiptap/react"
 import getPDSClient from "@/lib/pdsClient";
 
-export const MAX_FILE_SIZE = 2 * 1024 * 1024 // 5MB
+export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
 /**
  * Checks if a mark exists in the editor schema
@@ -138,6 +138,7 @@ export function findNodePosition(props: {
 export const handleImageUpload = async (
   file: File,
   abortSignal?: AbortSignal,
+  did: string
 ): Promise<string> => {
   // Validate file
   if (!file) {
@@ -151,12 +152,14 @@ export const handleImageUpload = async (
   }
 
   const agent = getPDSClient()
-  const result = await agent.uploadBlob(file, { encoding: file.type })
-  const blob = result.data.blob
-  console.log('result>>>>', result)
+  const result = await agent.com.atproto.web5.uploadBlob(file, { encoding: file.type })
+  const blobRefStr = result.data.blob.ref.toString()
+  const server = result.data.blobServer
+  const didSlice = did.replace('did:web5:', '')
 
   // Uncomment for production use:
-  return convertFileToBase64(file, abortSignal);
+  // return convertFileToBase64(file, abortSignal);
+  return `${server}/${didSlice}/blocks/${didSlice}/${blobRefStr}`
 }
 
 /**

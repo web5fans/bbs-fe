@@ -75,6 +75,7 @@ import { CodeBlockHighLight } from "@/components/TipTapEditor/components/tiptap-
 import { JSONContent, Content, HTMLContent } from "@tiptap/core";
 import cx from "classnames";
 import { Ref, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -133,11 +134,11 @@ const MainToolbarContent = ({
         <TextAlignButton align="justify" />
       </ToolbarGroup>
 
-      {/*<ToolbarSeparator />*/}
+      <ToolbarSeparator />
 
-      {/*<ToolbarGroup>*/}
-      {/*  <ImageUploadButton text="图片" />*/}
-      {/*</ToolbarGroup>*/}
+      <ToolbarGroup>
+        <ImageUploadButton text="图片" />
+      </ToolbarGroup>
 
       {/*<Spacer />*/}
 
@@ -193,7 +194,6 @@ type TipTapEditorProps = {
   editorWrapClassName?: string
   editorClassName?: string
   editable?: boolean
-  initialContent?: HTMLContent
   ref?: Ref<EditorRefType>
 }
 
@@ -204,6 +204,8 @@ export default function TipTapEditor(props: TipTapEditorProps) {
     "main" | "highlighter" | "link"
   >("main")
   const toolbarRef = React.useRef<HTMLDivElement>(null)
+
+  const { userProfile } = useCurrentUser()
 
   useImperativeHandle(props.ref, () => {
     return {
@@ -216,32 +218,36 @@ export default function TipTapEditor(props: TipTapEditorProps) {
     }
   })
 
-  const extensions = [
-    StarterKit,
-    TextAlign.configure({ types: ["heading", "paragraph"] }),
-    Underline,
-    LiteralTab,
-    Highlight.configure({ multicolor: true }),
-    Image,
-    Typography,
-    Superscript,
-    Subscript,
-    CodeBlockHighLight,
+  const extensions = useMemo(() => {
+    return [
+      StarterKit,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Underline,
+      LiteralTab,
+      Highlight.configure({ multicolor: true }),
+      Image,
+      Typography,
+      Superscript,
+      Subscript,
+      CodeBlockHighLight,
 
-    Selection,
-    ImageUploadNode.configure({
-      accept: "image/*",
-      maxSize: MAX_FILE_SIZE,
-      limit: 3,
-      upload: handleImageUpload,
-      onError: (error) => console.error("Upload failed:", error),
-    }),
-    TrailingNode,
-    Link.configure({ openOnClick: false }),
-    Placeholder.configure({
-      placeholder: "输入正文......",
-    })
-  ]
+      Selection,
+      ImageUploadNode.configure({
+        accept: "image/*",
+        maxSize: MAX_FILE_SIZE,
+        limit: 3,
+        upload: (file, abortSignal) => {
+          return handleImageUpload(file, abortSignal, userProfile?.did!)
+        },
+        onError: (error) => console.error("Upload failed:", error),
+      }),
+      TrailingNode,
+      Link.configure({ openOnClick: false }),
+      Placeholder.configure({
+        placeholder: "输入正文......",
+      })
+    ]
+  }, [userProfile?.did])
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -268,11 +274,6 @@ export default function TipTapEditor(props: TipTapEditorProps) {
       // console.log('text', text, text.length);
     },
   })
-
-  useEffect(() => {
-    if (!editor || !props.initialContent) return
-    // editor.commands.setContent(props.initialContent)
-  }, [editor, props.initialContent]);
 
   React.useEffect(() => {
     if (!isMobile && mobileView !== "main") {
