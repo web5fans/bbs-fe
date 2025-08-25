@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import { useParams } from "next/navigation";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { getPostUriHref } from "@/lib/postUriHref";
 
 export default function PostDetailPage() {
   const { postId } = useParams<{ postId: string }>()
@@ -16,7 +17,7 @@ export default function PostDetailPage() {
 
   const { rootRef, stickyRef } = useFloatingMarkDistance()
 
-  const decodeId = decodeURIComponent(postId)
+  const decodeId = getPostUriHref(postId)
 
   return <div className={S.container} ref={rootRef}>
     <PostDetail

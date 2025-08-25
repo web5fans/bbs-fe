@@ -12,6 +12,7 @@ import Button from "@/components/Button";
 import { CommentIcon } from "@/app/posts/[postId]/page";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { getPostUriHref } from "@/lib/postUriHref";
 
 export default function SectionPostPage(){
   const { postId, sectionId } = useParams<{ postId: string; sectionId: string }>()
@@ -29,7 +30,7 @@ export default function SectionPostPage(){
   const { rootRef, stickyRef } = useFloatingMarkDistance()
 
 
-  const decodeId = decodeURIComponent(postId)
+  const decodeId = getPostUriHref(postId)
 
   return <div className={S.container}>
     <div className={S.inner} ref={rootRef}>

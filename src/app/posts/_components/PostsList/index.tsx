@@ -10,6 +10,7 @@ import LoadMoreView from "@/components/LoadMoreView";
 import { useRouter } from "next/navigation";
 import { PostFeedItemType } from "@/app/posts/utils";
 import PostFeedItem from "@/components/PostFeedItem";
+import { postUriToHref } from "@/lib/postUriHref";
 
 const PAGE_SIZE = 20
 
@@ -69,7 +70,7 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender }: {
     <p className={S.title}>最新帖子</p>
     <div className={cx(S.content)}>
       {showList?.map((item, index) => {
-        const uri = encodeURIComponent(item.uri)
+        const uri = postUriToHref(item.uri)
         let href = `/posts/${uri}`
         if (sectionId) {
           href = `/section/${sectionId}/${uri}`

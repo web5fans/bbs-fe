@@ -18,6 +18,7 @@ import { getSectionList, writesPDSOperation } from "@/app/posts/utils";
 import cx from "classnames";
 import { useToast } from "../../../provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { postUriToHref } from "@/lib/postUriHref";
 
 const PublishPostPage = () => {
   const searchParams = useSearchParams()
@@ -80,7 +81,7 @@ const PublishPostPage = () => {
       })
       setPublishing(false)
 
-      const encodeUri = encodeURIComponent(uri)
+      const encodeUri = postUriToHref(uri)
       let href = '/posts/'+ encodeUri
       if (defaultSection) {
         href = `/section/${defaultSection}` + encodeUri

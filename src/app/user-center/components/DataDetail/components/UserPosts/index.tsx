@@ -9,6 +9,7 @@ import { EmptyPostsList, EmptyText } from "@/components/Empty";
 import { JSX } from "react";
 import { useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { postUriToHref } from "@/lib/postUriHref";
 
 type UserPostsPropsType = {
   did: string
@@ -58,7 +59,7 @@ const UserPosts = (props: UserPostsPropsType) => {
 
   return <div>
     {dataSource?.list.map((item, index) => {
-      const uri = encodeURIComponent(item.uri)
+      const uri = postUriToHref(item.uri)
       const href = `/posts/${uri}`
       return <PostFeedItem
         feed={item}

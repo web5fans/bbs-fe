@@ -8,6 +8,7 @@ import { EmptyPostsList, EmptyText } from "@/components/Empty";
 import { JSX } from "react";
 import { useRouter } from "next/navigation";
 import ReplyPostItem from "../ReplyPostItem";
+import { postUriToHref } from "@/lib/postUriHref";
 
 type UserRepliesPropsType = {
   did: string
@@ -47,7 +48,7 @@ const UserReplies = (props: UserRepliesPropsType) => {
 
   return <div>
     {dataSource?.list.map((item, index) => {
-      const uri = encodeURIComponent(item.uri)
+      const uri = postUriToHref(item.uri)
       const href = `/posts/${uri}`
       return <ReplyPostItem
         feed={item}
