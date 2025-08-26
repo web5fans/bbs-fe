@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: rem.px2flexible(4);
   user-select: none;
   font-family: var(--font-CLFN);
   background: #FFFFFF;

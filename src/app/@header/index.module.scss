@@ -1,48 +1,48 @@
 @use '@/styles/rem';
 
 .header {
-  margin-top: 22px;
+  margin-top: 18px;
   background: radial-gradient(black 20%, transparent 16%) 0 0,
   radial-gradient(black 20%, transparent 16%) rem.px2flexible(2) rem.px2flexible(2),
   radial-gradient(rgba(255, 255, 255, .1) 15%, transparent 20%) 0 1px,
   radial-gradient(rgba(255, 255, 255, .1) 15%, transparent 20%) 8px 9px;
   background-size: rem.px2flexible(4) rem.px2flexible(4);
 
-  height: rem.px2flexible(45);
-  padding-left: rem.px2flexible(5);
-  padding-right: rem.px2flexible(8);
+  height: rem.px2flexible(35);
+  padding-left: rem.px2flexible(3.4);
+  padding-right: rem.px2flexible(4.4);
 
   .hContent {
-    top: -7px;
+    top: -12px;
     position: relative;
-    border: rem.px2flexible(2) solid #000000;
+    border: rem.px2flexible(1.5) solid #000000;
     background: var(--fixed-header-bg);
     display: flex;
     align-items: center;
-    padding: 0 rem.px2flexible(6);
-    font-size: rem.px2flexible(20);
-    height: rem.px2flexible(40);
-    box-shadow: rem.px2flexible(2) rem.px2flexible(2) 0px 0px #000;
+    padding: 0 rem.px2flexible(5);
+    font-size: rem.px2flexible(15);
+    height: rem.px2flexible(33);
+    box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0px 0px #000;
 
     .lineWrap{
       position: absolute;
-      left: rem.px2flexible(6);
-      right: rem.px2flexible(6);
+      left: rem.px2flexible(5);
+      right: rem.px2flexible(5);
     }
 
     .line {
       width: 100%;
       height: 0;
-      border: rem.px2flexible(1) solid #000000;
+      border-bottom: rem.px2flexible(1.5) solid #000000;
 
       & + .line {
-        margin-top: rem.px2flexible(2.5);
+        margin-top: rem.px2flexible(1.7);
       }
     }
   }
 
   .main {
-    padding: 0 60px;
+    padding: 0 rem.px2flexible(20);
     position: relative;
     display: flex;
     align-items: center;
@@ -55,25 +55,27 @@
     background: var(--fixed-header-bg);
     display: flex;
     align-items: center;
-    padding: 0 rem.px2flexible(10);
+    padding: 0 min(9px, rem.px2flexible(8)) 0 min(12px, rem.px2flexible(8));
     font-family: var(--font-arcade);
     height: 100%;
     cursor: pointer;
   }
 
   .userWrap {
-    padding: 0 20px;
+    padding: 0 rem.px2flexible(8);
     background: var(--fixed-header-bg);
     height: 100%;
     display: flex;
     align-items: center;
     .button {
-      width: 200px;
-      height: 50px;
-      font-size: 18px;
+      width: rem.px2flexible(72);
+      height: rem.px2flexible(18.75);
+      font-size: rem.px2flexible(7);
     }
 
     .userIcon {
+      width: rem.px2flexible(20);
+      height: rem.px2flexible(20);
       cursor: pointer;
     }
   }

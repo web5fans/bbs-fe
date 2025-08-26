@@ -37,7 +37,7 @@ export default function AppHeader(props: {
 
         <div className={`${S.userWrap} ${(props.isPopUp || isIndex) && '!hidden'}`}>
           {hasLoggedIn ? <Link href={'/user-center'} prefetch>
-            <UserIcon />
+            <UserIcon className={S.userIcon} />
           </Link> :
           <Button
             type={'primary'}
