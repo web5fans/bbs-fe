@@ -41,7 +41,7 @@ const NoticeBoard = () => {
         >
           欢迎你&nbsp;
           <span className={'capitalize'}>{userProfile?.displayName}</span>
-          ！这是你第 - 个来到 BBS 社区，目前论坛有 - 人与你同在，有 - 人曾与你共享同一个网络～
+          ！这是你第 1 次来到 BBS 社区，目前论坛有 - 人与你同在，有 - 人曾与你共享同一个网络～
         </p> : <p
           style={{ marginRight: 20 }}
           className={S.marquee}
