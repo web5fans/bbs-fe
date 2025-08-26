@@ -4,7 +4,6 @@
 $bg: #EAEAEA;
 
 .container {
-  font-size: rem.px2flexible(14);
   border-top: rem.px2flexible(1) solid;
   border-left: rem.px2flexible(1) solid;
   border-right: rem.px2flexible(2) solid;
@@ -14,7 +13,7 @@ $bg: #EAEAEA;
   //@include thin-border.border(rem.px2rem(0.5), rem.px2rem(1.74));
 
   .header {
-    padding: rem.px2flexible(5) rem.px2flexible(10);
+    padding: rem.px2flexible(4) rem.px2flexible(8);
     display: flex;
     align-items: center;
     //height: rem.px2flexible(20);
@@ -28,16 +27,16 @@ $bg: #EAEAEA;
       background: #000;
 
       & + .line {
-        margin-top: var(--card-window-line-gap, rem.px2flexible(2));
+        margin-top: var(--card-window-line-gap, rem.px2flexible(1.5));
       }
     }
 
     .title {
-      $fontSize: min(24px, #{rem.px2flexible(14)});
+      $fontSize: min(18px, #{rem.px2flexible(12)});
 
       font-family: var(--font-CLFN);
       font-size: $fontSize;
-      padding: 0 rem.px2flexible(10);
+      padding: 0 rem.px2flexible(8);
       background: $bg;
       position: absolute;
       left: 50%;
@@ -54,9 +53,9 @@ $bg: #EAEAEA;
       display: flex;
       align-items: center;
       justify-content: center;
-      right: 20px;
+      right: rem.px2flexible(8);
       cursor: pointer;
-      padding-left: 20px;
+      padding-left: rem.px2flexible(8);
       color: #050505;
 
       &:hover {
@@ -75,7 +74,7 @@ $bg: #EAEAEA;
   }
 
   .content {
-    margin: rem.px2flexible(10);
+    margin: rem.px2flexible(8);
     border: rem.px2flexible(1) solid;
     background: #FFF;
 

@@ -3,24 +3,25 @@
 .footer {
   display: flex;
   align-items: center;
-  gap: rem.px2flexible(16);
+  gap: rem.px2flexible(12);
   flex-wrap: wrap;
 }
 
 .button {
-  height: rem.px2flexible(30);
-  width: rem.px2flexible(125);
-  font-size: rem.px2flexible(12);
+  height: rem.px2flexible(22.5);
+  width: rem.px2flexible(94);
+  font-size: rem.px2flexible(9);
 }
 
 .tourist {
-  gap: rem.px2flexible(7.5);
-  font-size: rem.px2flexible(12);
-  padding: rem.px2flexible(5) rem.px2flexible(20);
+  gap: rem.px2flexible(5.5);
+  font-size: rem.px2flexible(9);
+  height: rem.px2flexible(22.5);
+  width: rem.px2flexible(79);
   user-select: none;
 
   .arrow {
-    width: rem.px2flexible(10);
+    width: rem.px2flexible(7.5);
     aspect-ratio: 1;
     color: #000000;
   }

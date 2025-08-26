@@ -28,6 +28,6 @@ export default function useDeviceFlex() {
   return {
     centerWidth,
     clientWidth,
-    isUseDoubleSize: true,
+    isUseDoubleSize: !is768Size,
   }
 }

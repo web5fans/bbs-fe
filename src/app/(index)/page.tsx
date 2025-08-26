@@ -4,7 +4,7 @@ import S from './index.module.scss'
 import Content from "./Content";
 import Slogan from "@/app/(index)/Slogan";
 import Marquee from "react-fast-marquee";
-import { AnchorHTMLAttributes } from "react";
+import { AnchorHTMLAttributes, useEffect, useMemo } from "react";
 import cx from "classnames";
 import MouseToolTip from "@/components/MouseToolTip";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -12,10 +12,15 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 export default function Home() {
   const { hasLoggedIn } = useCurrentUser()
 
+  const isMobile = useMemo(() => {
+    const deviceType = document.body.style.getPropertyValue('--device-type');
+    return deviceType === 'mobile';
+  }, [])
+
   return (
     <div className={S.container}>
 
-      <div className={S.content} style={{ overflowX: 'hidden' }}>
+      <div className={isMobile ? S.mobileContent : S.content} style={{ overflowX: 'hidden' }}>
         <Slogan />
 
         <div className={S.center}>

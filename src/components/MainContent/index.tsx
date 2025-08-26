@@ -13,6 +13,7 @@ dayjs.extend(utc);
 
 const MainContent = (props: {
   children: React.ReactNode;
+  deviceType?: string;
 }) => {
   const { initialize, initialized } = useUserInfoStore();
   const { centerWidth, isUseDoubleSize } = useDeviceFlex()
@@ -26,6 +27,7 @@ const MainContent = (props: {
   }, []);
 
   useEffect(() => {
+    document.body.style.setProperty('--device-type', props.deviceType || '');
     document.body.style.setProperty('--center-content-width', centerWidth + 'px');
     document.body.style.setProperty('--flexible-design-size', !isUseDoubleSize ? '375' : '16');
     document.body.style.setProperty('--flexible-size-unit', !isUseDoubleSize ? '100vw' : '2rem');

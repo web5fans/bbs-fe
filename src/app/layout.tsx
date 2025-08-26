@@ -51,7 +51,7 @@ const RootLayout = async (props: any) => {
     >
     <LayoutProvider>
       <ToastProvider>
-        <MainContent>
+        <MainContent deviceType={device.type}>
           <RegisterPopUpProvider>
           {header}
                 <main

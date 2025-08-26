@@ -1,4 +1,10 @@
+@use "@/styles/rem";
+
 .container {
   width: var(--center-content-width);
   margin: 0 auto;
+}
+
+.mobileContainer {
+  margin: 0 rem.px2flexible(35);
 }

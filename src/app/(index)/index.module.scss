@@ -2,40 +2,45 @@
 
 .container {
   .content {
-    width: var(--center-content-width);
-    margin: rem.px2flexible(25) auto 0;
+    width: min(1060px, #{var(--center-content-width)});
+    margin: rem.px2flexible(20) auto 0;
+  }
+
+  .mobileContent {
+    width: auto;
+    margin: rem.px2flexible(20) rem.px2flexible(36) 0;
   }
 
   .slogan {
     font-family: var(--font-arcade);
     //font-size: rem.px2flexible(36);
-    font-size: rem.px2flexible(36);
+    font-size: min(56px, rem.px2flexible(36));
     color: var(--primary-color);
     line-height: 130%;
     text-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0px #000;
     -webkit-text-stroke-width: rem.px2flexible(0.5);
     -webkit-text-stroke-color: #000;
-    margin-bottom: min(44px, #{ rem.px2flexible(23) });
+    margin-bottom: min(40px, #{ rem.px2flexible(23) });
   }
 
   .center {
     display: flex;
-    gap: min(50px, #{ rem.px2flexible(27) });
+    gap: 20px;
     flex-wrap: wrap;
     align-items: flex-end;
     justify-content: space-between;
 
     .fileWrap {
-      flex: 1;
       display: flex;
       align-items: self-start;
       justify-content: start;
       flex-wrap: wrap;
       gap: min(50px, #{ rem.px2flexible(27) });
+      width: rem.px2flexible(44);
+      flex: none;
 
-      @media screen and (min-width: 1348px) {
-        width: rem.px2flexible(44);
-        flex: none;
+      @media screen and (max-width: 1134px) {
+        flex: 1;
       }
     }
 
@@ -69,9 +74,9 @@
   }
 
   .footer {
-    $fontSize: min(24px, #{rem.px2flexible(14)});
+    $fontSize: min(20px, #{rem.px2flexible(14)});
 
-    padding: rem.px2flexible(25) 0 10px 0;
+    padding: rem.px2flexible(20) 0 10px 0;
     font-size: $fontSize;
     letter-spacing: calc($fontSize * .13);
     font-family: var(--font-CLFN);

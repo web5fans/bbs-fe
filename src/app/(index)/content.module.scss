@@ -1,29 +1,28 @@
 @use '@/styles/rem';
 
 .container {
-  max-width: 1110px;
+  max-width: 863px;
   .inner {
-    padding-block: rem.px2flexible(17);
-    font-size: min(20px, #{rem.px2flexible(12)});
+    padding-top: min(28px, #{rem.px2flexible(18)});
+    padding-bottom: min(25px, #{rem.px2flexible(14)});
+    font-size: min(15px, #{rem.px2flexible(10)});
     font-family: var(--font-CLFN);
 
-    $padding: clamp(22px, #{rem.px2flexible(22)}, 50px);
-
     .content {
-      padding-inline: $padding;
+      padding-inline: rem.px2flexible(19);
     }
 
     .buttonWrap {
-      padding-left: $padding;
+      padding-left: rem.px2flexible(19);
     }
 
     .title {
       display: flex;
       align-items: center;
-      margin-bottom: rem.px2flexible(14);
+      margin-bottom: min(16px, #{rem.px2flexible(10)});
 
       .text {
-        margin: 0 rem.px2flexible(5);
+        margin: 0 rem.px2flexible(3.75);
 
         &.user {
           font-weight: 500;
@@ -38,7 +37,8 @@
     }
 
     .divide {
-      margin: rem.px2flexible(14) 0;
+      margin-top: min(16px, #{rem.px2flexible(10)});
+      margin-bottom: min(23px, #{rem.px2flexible(15)});
     }
   }
 }
