@@ -1,7 +1,7 @@
 'use client'
 
 import S from './index.module.scss'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import UserPosts from "./components/UserPosts";
 import UserReplies from "./components/UserReplies";
 import { UserProfileType } from "@/store/userInfo";
@@ -17,24 +17,33 @@ const DataDetail = (props: { did?: string; profile: UserProfileType }) => {
   const { did, profile } = props;
   const [activeTab, setActiveTab] = useState(0)
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [activeTab]);
+  const ref = useRef<HTMLDivElement>(null);
 
-  return <div className={S.container}>
+  const startChangeTab = useRef(false)
+
+  const scrollToTop = () => {
+    if(!ref.current || !startChangeTab.current) return
+    const top = ref.current.offsetTop;
+    window.scrollTo({top, behavior: 'smooth'} )
+  }
+
+  return <div className={S.container} ref={ref}>
     <p className={S.header}>数据详情</p>
     <div className={S.tabs}>
       {tabs.map((tab, index) => {
         return <span
           key={index}
-          onClick={() => setActiveTab(index)}
+          onClick={() => {
+            setActiveTab(index)
+            startChangeTab.current = true
+          }}
           className={activeTab === index ? S.active : ""}
         >{tab.title}</span>
       })}
     </div>
     <div className={S.content}>
-      {activeTab === 0 && <UserPosts did={did} />}
-      {activeTab === 1 && <UserReplies did={did} replyName={profile.displayName} />}
+      {activeTab === 0 && <UserPosts did={did} scrollToTop={scrollToTop} />}
+      {activeTab === 1 && <UserReplies did={did} replyName={profile.displayName} scrollToTop={scrollToTop} />}
     </div>
   </div>
 }

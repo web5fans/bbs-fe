@@ -6,7 +6,7 @@ import { PostFeedType } from "@/app/posts/_components/PostsList";
 import PostFeedItem from "@/components/PostFeedItem";
 import LoadMoreView from "@/components/LoadMoreView";
 import { EmptyPostsList, EmptyText } from "@/components/Empty";
-import { JSX } from "react";
+import { JSX, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { postUriToHref } from "@/lib/postUriHref";
@@ -14,6 +14,7 @@ import { postUriToHref } from "@/lib/postUriHref";
 type UserPostsPropsType = {
   did: string
   emptyRender?: () => JSX.Element
+  scrollToTop?: () => void
 }
 
 const UserPosts = (props: UserPostsPropsType) => {
@@ -45,6 +46,12 @@ const UserPosts = (props: UserPostsPropsType) => {
     reloadDeps: [did],
     isNoMore: d => !d?.nextCursor,
   });
+
+  useEffect(() => {
+    if (!loading) {
+      props.scrollToTop?.()
+    }
+  }, [loading]);
 
   if (dataSource?.list && dataSource?.list.length === 0) {
     if (isMe) {

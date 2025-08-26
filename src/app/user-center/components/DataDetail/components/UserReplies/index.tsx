@@ -5,7 +5,7 @@ import server from "@/server";
 import { PostFeedType } from "@/app/posts/_components/PostsList";
 import LoadMoreView from "@/components/LoadMoreView";
 import { EmptyPostsList, EmptyText } from "@/components/Empty";
-import { JSX } from "react";
+import { JSX, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ReplyPostItem from "../ReplyPostItem";
 import { postUriToHref } from "@/lib/postUriHref";
@@ -14,6 +14,7 @@ type UserRepliesPropsType = {
   did: string
   emptyRender?: () => JSX.Element
   replyName: string
+  scrollToTop?: () => void
 }
 
 const UserReplies = (props: UserRepliesPropsType) => {
@@ -41,6 +42,12 @@ const UserReplies = (props: UserRepliesPropsType) => {
     reloadDeps: [did],
     isNoMore: d => !d?.nextCursor,
   });
+
+  useEffect(() => {
+    if (!loading) {
+      props.scrollToTop?.()
+    }
+  }, [loading]);
 
   if (dataSource?.list && dataSource?.list.length === 0) {
     return <EmptyText className={'!h-[440px]'} message={'此人的帖子正在酝酿中...'} />
