@@ -25,7 +25,7 @@ $bg: #EAEAEA;
 
     .line {
       width: 100%;
-      height: math.floor(#{rem.px2flexible(1)});
+      height: rem.px2flexible(1);
       background: #000;
 
       & + .line {
