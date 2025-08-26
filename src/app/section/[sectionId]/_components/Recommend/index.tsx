@@ -7,6 +7,7 @@ import server from "@/server";
 import { PostFeedItemType } from "@/app/posts/utils";
 import { useRouter } from "next/navigation";
 import cx from "classnames";
+import { postUriToHref } from "@/lib/postUriHref";
 
 const Recommend = ({ sectionId }: { sectionId: string }) => {
   const { data: list } = useRequest(async () => {
@@ -34,7 +35,7 @@ const Recommend = ({ sectionId }: { sectionId: string }) => {
         return <NoticeCardItem
           noticeInfo={p}
           key={p.uri}
-          onClick={() => router.push(`/section/${sectionId}/` + encodeURIComponent(p.uri))}
+          onClick={() => router.push(`/section/${sectionId}/` + postUriToHref(p.uri))}
         />
       })}
     </div>

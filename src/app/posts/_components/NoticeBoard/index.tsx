@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import utcToLocal from "@/lib/utcToLocal";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { postUriToHref } from "@/lib/postUriHref";
 
 const NoticeBoard = () => {
   const { hasLoggedIn, userProfile, visitorId } = useCurrentUser()
@@ -56,7 +57,7 @@ const NoticeBoard = () => {
           return <NoticeCardItem
             key={item.uri}
             noticeInfo={item}
-            onClick={() => router.push('/posts/' + encodeURIComponent(item.uri))}
+            onClick={() => router.push('/posts/' + postUriToHref(item.uri))}
           />
         })}
       </div>
