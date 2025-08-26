@@ -8,3 +8,11 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.richText {
+  p {
+    &:empty {
+      height: 1.6rem;
+    }
+  }
+}

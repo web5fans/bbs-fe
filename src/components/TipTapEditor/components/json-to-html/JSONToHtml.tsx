@@ -7,6 +7,7 @@ import {
 import parse, { domToReact } from 'html-react-parser';
 import S from './index.module.scss'
 import CopyText from "@/components/CopyText";
+import cx from "classnames";
 
 const JSONToHtml = ({html}: {html: string}) => {
 
@@ -45,10 +46,10 @@ const JSONToHtml = ({html}: {html: string}) => {
   }, [html]);
 
   if (nodes?.needParse) {
-    return <div className={'tiptap ProseMirror'}>{nodes.node}</div>
+    return <div className={cx('tiptap ProseMirror', S.richText)}>{nodes.node}</div>
   }
 
-  return <div className={'tiptap ProseMirror'} dangerouslySetInnerHTML={{ __html: nodes?.json || '' }} />
+  return <div className={cx('tiptap ProseMirror', S.richText)} dangerouslySetInnerHTML={{ __html: nodes?.json || '' }} />
 }
 
 export default JSONToHtml;
