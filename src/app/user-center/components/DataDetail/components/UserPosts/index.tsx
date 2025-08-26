@@ -30,6 +30,10 @@ const UserPosts = (props: UserPostsPropsType) => {
 
     const { nextCursor } = prevData || {};
 
+    if (!did) {
+      return
+    }
+
     const pagedData = await server<PostFeedType>('/post/list', 'POST', {
       limit: 20,
       cursor: nextCursor,
