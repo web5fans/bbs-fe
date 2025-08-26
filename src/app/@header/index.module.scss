@@ -36,7 +36,7 @@
       border-bottom: rem.px2flexible(1.5) solid #000000;
 
       & + .line {
-        margin-top: rem.px2flexible(1.7);
+        margin-top: rem.px2flexible(2);
       }
     }
   }
@@ -71,6 +71,7 @@
       width: rem.px2flexible(72);
       height: rem.px2flexible(18.75);
       font-size: rem.px2flexible(7);
+      margin-top: rem.px2flexible(-1.5);
     }
 
     .userIcon {
