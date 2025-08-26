@@ -17,7 +17,7 @@ export default function ReplyPostItem({ feed, onClick, onHover, nickname }: {
 
   const title = feed.title
 
-  const html = feed.text
+  const html = feed.reply_text
 
   useEffect(() => {
     if (!html) return
@@ -53,7 +53,7 @@ export default function ReplyPostItem({ feed, onClick, onHover, nickname }: {
           replyCount={feed.reply_count}
         />
       </div>
-      <span className={S.time}>{utcToLocal(feed.created)}</span>
+      <span className={S.time}>{utcToLocal(feed.reply_created)}</span>
     </div>
   </div>
 }
