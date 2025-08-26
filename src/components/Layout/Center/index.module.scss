@@ -3,8 +3,12 @@
 .container {
   width: var(--center-content-width);
   margin: 0 auto;
+  font-family: var(--font-CLFN);
+  overflow: hidden;
 }
 
 .mobileContainer {
   margin: 0 rem.px2flexible(35);
+  font-family: var(--font-CLFN);
+  overflow: hidden;
 }

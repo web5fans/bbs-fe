@@ -2,6 +2,14 @@
 
 .container {
   max-width: 863px;
+
+  --card-window-line-gap: #{rem.px2flexible(1.5)};
+  --card-window-title-size: min(18px, #{rem.px2flexible(12)});
+  --card-window-title-padding-inline: #{rem.px2flexible(8)};
+  --card-window-content-margin: #{rem.px2flexible(8)};
+  --card-window-header-padding-block: #{rem.px2flexible(4)};
+  --card-window-header-padding-inline: #{rem.px2flexible(8)};
+
   .inner {
     padding-top: min(28px, #{rem.px2flexible(18)});
     padding-bottom: min(25px, #{rem.px2flexible(14)});

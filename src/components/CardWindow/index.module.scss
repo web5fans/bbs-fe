@@ -1,5 +1,6 @@
 @use '@/styles/rem';
 @use '@/styles/thin-border';
+@use 'sass:math';
 
 $bg: #EAEAEA;
 
@@ -13,7 +14,8 @@ $bg: #EAEAEA;
   //@include thin-border.border(rem.px2rem(0.5), rem.px2rem(1.74));
 
   .header {
-    padding: rem.px2flexible(4) rem.px2flexible(8);
+    padding-block: var(--card-window-header-padding-block, #{rem.px2flexible(5)});
+    padding-inline: var(--card-window-header-padding-inline, #{rem.px2flexible(10)});
     display: flex;
     align-items: center;
     //height: rem.px2flexible(20);
@@ -23,20 +25,20 @@ $bg: #EAEAEA;
 
     .line {
       width: 100%;
-      height: rem.px2flexible(1);
+      height: math.floor(#{rem.px2flexible(1)});
       background: #000;
 
       & + .line {
-        margin-top: var(--card-window-line-gap, rem.px2flexible(1.5));
+        margin-top: var(--card-window-line-gap, #{rem.px2flexible(2)});
       }
     }
 
     .title {
-      $fontSize: min(18px, #{rem.px2flexible(12)});
+      $fontSize: var(--card-window-title-size, rem.px2flexible(12));
 
       font-family: var(--font-CLFN);
       font-size: $fontSize;
-      padding: 0 rem.px2flexible(8);
+      padding: 0 var(--card-window-title-padding-inline, #{rem.px2flexible(10)});
       background: $bg;
       position: absolute;
       left: 50%;
@@ -74,7 +76,7 @@ $bg: #EAEAEA;
   }
 
   .content {
-    margin: rem.px2flexible(8);
+    margin: var(--card-window-content-margin, #{rem.px2flexible(10)});
     border: rem.px2flexible(1) solid;
     background: #FFF;
 
