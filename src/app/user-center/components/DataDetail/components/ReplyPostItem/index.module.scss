@@ -1,6 +1,7 @@
 .feed {
   padding: 20px 20px 28px;
   cursor: pointer;
+  position: relative;
 
   & + .feed {
     &::before {
