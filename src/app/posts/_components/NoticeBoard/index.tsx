@@ -80,12 +80,13 @@ export function NoticeCardItem({ noticeInfo, onClick }: {
     </p>
 
     <div className={S.info}>
-      <p className={'flex items-center gap-[8px]'}>
+      <div className={'flex items-center gap-[8px]'}>
         <Avatar
           className={S.avatar}
           nickname={nickname}
         />
-        {nickname}</p>
+        {nickname}
+      </div>
       <span>{utcToLocal(noticeInfo?.updated)}</span>
     </div>
   </div>

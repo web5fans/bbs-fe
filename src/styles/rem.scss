@@ -32,6 +32,14 @@ $media-queries: responsive-query($breakpoint-mobile, $breakpoint-pad, $breakpoin
   @return  math.div($px, $designSize) * 1rem;
 }
 
-@function px2flexible($px) {
-  @return calc(#{$px} / var(--flexible-design-size) * var(--flexible-size-unit))
+@function px2flexible($px, $round-type: null) {
+  $result: calc(#{$px} / var(--flexible-design-size) * var(--flexible-size-unit));
+
+  @if($round-type == 'up') {
+    @return round(up, $result, 1px)
+  }
+  @if($round-type == 'down') {
+    @return round(down, $result, 1px)
+  }
+  @return $result
 }

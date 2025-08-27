@@ -105,6 +105,11 @@
         display: flex;
         align-items: center;
         gap: rem.px2flexible(2);
+
+        > svg {
+          width: rem.px2flexible(5.5, 'up');
+          height: rem.px2flexible(6, 'up');
+        }
       }
     }
   }

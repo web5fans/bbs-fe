@@ -1,9 +1,12 @@
+@use "@/styles/rem";
+
 .divide {
   svg {
+    height: rem.px2flexible(1);
     line {
       stroke: #000;
       stroke-width: 1;
-      stroke-dasharray: 14 2; /* 等同于SVG的stroke-dasharray */
+      stroke-dasharray: rem.px2flexible(7) rem.px2flexible(1); /* 等同于SVG的stroke-dasharray */
     }
   }
 }

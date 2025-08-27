@@ -18,7 +18,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
         <ccc.Provider
             connectorProps={{
                 style: {
-                  fontSize: '16px !important'
+                  // fontSize: '12px !important'
                     // "--background": "#232323",
                     // "--divider": "rgba(255, 255, 255, 0.1)",
                     // "--btn-primary": "#2D2F2F",

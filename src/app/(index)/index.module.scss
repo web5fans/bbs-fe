@@ -32,7 +32,7 @@
 
     .fileWrap {
       display: flex;
-      align-items: self-start;
+      //align-items: self-start;
       justify-content: start;
       flex-wrap: wrap;
       gap: min(50px, #{ rem.px2flexible(27) });
@@ -52,7 +52,7 @@
       font-family: var(--font-CLFN);
       font-size: min(16px, #{rem.px2flexible(12)});
       cursor: pointer;
-      width: rem.px2flexible(44);
+      min-width: rem.px2flexible(44);
 
       img {
         margin-bottom: min(15px, #{rem.px2flexible(9.7)});

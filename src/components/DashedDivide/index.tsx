@@ -7,7 +7,6 @@ const DashedDivide = (props: {
   return <p className={cx(S.divide, props.className)}>
     <svg
       width="100%"
-      height="2"
     >
       <line
         x1="0"
