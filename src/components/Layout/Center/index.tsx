@@ -2,17 +2,14 @@
 
 import S from './index.module.scss'
 import cx from "classnames";
-import { useMemo } from "react";
+import useDeviceType from "@/hooks/useDeviceType";
 
 export const LayoutCenter = (props: {
   children: React.ReactNode;
   className?: string;
 }) => {
 
-  const isMobile = useMemo(() => {
-    const deviceType = document.body.style.getPropertyValue('--device-type');
-    return deviceType === 'mobile';
-  }, [])
+  const { isMobile } = useDeviceType()
 
   return <div className={cx(isMobile ? S.mobileContainer :S.container, props.className)}>
     {props.children}

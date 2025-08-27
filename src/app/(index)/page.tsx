@@ -8,14 +8,12 @@ import { AnchorHTMLAttributes, useEffect, useMemo } from "react";
 import cx from "classnames";
 import MouseToolTip from "@/components/MouseToolTip";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useDeviceType from "@/hooks/useDeviceType";
 
 export default function Home() {
   const { hasLoggedIn } = useCurrentUser()
 
-  const isMobile = useMemo(() => {
-    const deviceType = document.body.style.getPropertyValue('--device-type');
-    return deviceType === 'mobile';
-  }, [])
+  const { isMobile } = useDeviceType()
 
   return (
     <div className={S.container}>

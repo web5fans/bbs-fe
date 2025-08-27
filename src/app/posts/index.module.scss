@@ -1,18 +1,24 @@
-.container {
-  font-family: var(--font-CLFN);
-  margin: 30px auto 200px;
+@use '@/styles/rem';
 
-  .wrap {
-    padding: 0 83px;
-    display: flex;
-    gap: 40px;
+.wrap {
+  margin-top: min(30px, #{rem.px2flexible(16)});
+  margin-bottom: 50px;
+  display: flex;
+  gap: 40px;
+  width: 100%;
 
-    .left {
-      width: 952px;
-    }
+  .left {
+    flex: 1;
+    overflow: hidden;
+  }
 
+  .right {
+    width: 290px;
+  }
+
+  @media screen and (max-width: 1023px) {
     .right {
-      width: 290px;
+      display: none;
     }
   }
 }

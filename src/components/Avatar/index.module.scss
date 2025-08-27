@@ -1,8 +1,9 @@
 @use "sass:list";
+@use "@/styles/rem";
 
 .wrap {
-  width: 84px;
-  height: 84px;
+  width: rem.px2flexible(42);
+  height: rem.px2flexible(42);
   display: flex;
   align-items: center;
   justify-content: center;

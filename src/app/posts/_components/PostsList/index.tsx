@@ -24,10 +24,11 @@ export type PostFeedType = {
   posts: PostFeedItemType[]
 }
 
-const PostsList = ({ sectionId, minLimit = 20, listEmptyRender }: {
+const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra }: {
   sectionId?: string
   minLimit?: number
   listEmptyRender?: React.ReactNode
+  headerExtra?: React.ReactNode
 }) => {
   const router = useRouter()
 
@@ -67,7 +68,10 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender }: {
   }
 
   return <div className={S.wrap}>
-    <p className={S.title}>最新帖子</p>
+    <div className={S.title}>
+      <span>最新帖子</span>
+      {headerExtra}
+    </div>
     <div className={cx(S.content)}>
       {showList?.map((item, index) => {
         const uri = postUriToHref(item.uri)
@@ -89,7 +93,7 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender }: {
         className={S.load}
         onClick={() => setClickedShowMore(true)}
       >
-        <ArrowSDown />
+        <ArrowSDown className={S.arrow} />
         加载更多
       </div>}
 

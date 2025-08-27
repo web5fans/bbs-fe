@@ -1,34 +1,44 @@
+@use "@/styles/rem";
+
 .wrap {
-  border-top: 2px solid #000;
-  border-right: 4px solid #000;
-  border-bottom: 4px solid #000;
-  border-left: 2px solid #000;
+  border-top: rem.px2flexible(1) solid #000;
+  border-right: rem.px2flexible(2) solid #000;
+  border-bottom: rem.px2flexible(2) solid #000;
+  border-left: rem.px2flexible(1) solid #000;
   background: #EAEAEA;
-  padding: 20px;
-  margin-top: 40px;
+  padding: rem.px2flexible(10);
+  margin-top: rem.px2flexible(20);
 
   .title {
-    font-size: 20px;
+    font-size: rem.px2flexible(10);
     font-weight: 500;
-    line-height: 20px;
-    margin-bottom: 20px;
+    line-height: 1;
+    margin-bottom: rem.px2flexible(10);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .content {
-    border: 2px solid #000;
+    border: rem.px2flexible(1) solid #000;
     background: #FFF;
-    box-shadow: 3px 3px 6px 0 #DBDBDB inset;
-    padding: 20px;
+    box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) rem.px2flexible(3) 0 #DBDBDB inset;
+    padding: rem.px2flexible(10);
     overflow: hidden;
 
     .load {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: rem.px2flexible(4);
       color: #6C6C6C;
-      font-size: 12px;
+      font-size: rem.px2flexible(6);
       cursor: pointer;
+
+      .arrow {
+        width: rem.px2flexible(6);
+        height: rem.px2flexible(3);
+      }
     }
   }
 }

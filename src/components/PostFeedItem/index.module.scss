@@ -1,5 +1,7 @@
+@use '@/styles/rem';
+
 .feed {
-  padding: var(--feed-padding, 20px);
+  padding: var(--feed-padding, #{rem.px2flexible(10)});
   cursor: pointer;
   position: relative;
 
@@ -10,8 +12,8 @@
       height: 1px;
       border-bottom: 1px dashed #F3F3F3;
       position: absolute;
-      left: 20px;
-      right: 20px;
+      left: rem.px2flexible(10);
+      right: rem.px2flexible(10);
       top: 0;
     }
   }
@@ -33,8 +35,8 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     font-weight: 500;
-    font-size: 18px;
-    margin-bottom: 8px;
+    font-size: min(18px, #{rem.px2flexible(10)});
+    margin-bottom: rem.px2flexible(4);
   }
 
   .feedInfo {
@@ -43,8 +45,8 @@
 
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 14px;
-    margin-bottom: 11px;
+    font-size: min(14px, #{rem.px2flexible(8)});
+    margin-bottom: rem.px2flexible(5);
   }
 
   .footer {
@@ -52,30 +54,30 @@
     align-items: center;
     justify-content: space-between;
     color: var(--hover-text-color, #6C6C6C);
-    font-size: 12px;
+    font-size: rem.px2flexible(6);
 
     .left {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: rem.px2flexible(10);
 
       .nickname {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: rem.px2flexible(4);
         text-transform: capitalize;
       }
 
       .avatar {
-        width: 14px;
-        height: 14px;
-        font-size: 8px;
+        width: rem.px2flexible(7);
+        height: rem.px2flexible(7);
+        font-size: rem.px2flexible(4);
       }
     }
 
     .time {
       color: var(--hover-text-color, #6C6C6C);
-      font-size: 12px;
+      font-size: rem.px2flexible(6);
     }
   }
 }

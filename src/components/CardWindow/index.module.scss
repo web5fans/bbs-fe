@@ -25,8 +25,7 @@ $bg: #EAEAEA;
 
     .line {
       width: 100%;
-      height: rem.px2flexible(1);
-      background: #000;
+      border-bottom: rem.px2flexible(1) solid;
 
       & + .line {
         margin-top: var(--card-window-line-gap, #{rem.px2flexible(2)});

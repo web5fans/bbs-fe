@@ -1,0 +1,12 @@
+@use "@/styles/rem";
+
+.button {
+  width: rem.px2flexible(60);
+  height: rem.px2flexible(22);
+  font-size: rem.px2flexible(8);
+
+  .icon {
+    width: rem.px2flexible(8);
+    height: rem.px2flexible(8);
+  }
+}

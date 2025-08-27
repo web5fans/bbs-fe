@@ -7,22 +7,35 @@ import PostsList from "@/app/posts/_components/PostsList";
 import PublishPost from "@/app/posts/_components/PublishPost";
 import { EmptyPostsList } from "@/components/Empty";
 import { useRouter } from "next/navigation";
+import { LayoutCenter } from "@/components/Layout";
+import SectionAreaMobile from "@/app/posts/_components/SectionArea/mobile";
+import useDeviceFlex from "@/hooks/useDeviceFlex";
+import PublishPostMobile from "./_components/PublishPost/mobile";
+
+const BREAKPOINT_WIDTH = 1024;
 
 const PostsHome = () => {
   const router = useRouter()
+  const { clientWidth } = useDeviceFlex()
 
-  return <div className={S.container}>
+  const isUnderBreakPoint = clientWidth < BREAKPOINT_WIDTH
+
+  return <LayoutCenter>
     <div className={S.wrap}>
       <div className={S.left}>
         <NoticeBoard />
-        <PostsList listEmptyRender={<EmptyPostsList goPublish={() => router.push('/posts/publish')} />} />
+        {isUnderBreakPoint && <SectionAreaMobile />}
+        <PostsList
+          headerExtra={isUnderBreakPoint && <PublishPostMobile />}
+          listEmptyRender={<EmptyPostsList goPublish={() => router.push('/posts/publish')} />}
+        />
       </div>
       <div className={S.right}>
         <PublishPost />
-        <SectionArea />
+        {!isUnderBreakPoint && <SectionArea />}
       </div>
     </div>
-  </div>
+  </LayoutCenter>
 }
 
 export default PostsHome;

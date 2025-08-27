@@ -1,13 +1,25 @@
+@use "@/styles/rem";
+
 .wrap {
   display: flex;
   align-items: center;
-  gap: 20px;
-  font-size: var(--post-statistic-font-size, 12px);
+  gap: rem.px2flexible(10);
+  font-size: var(--post-statistic-font-size, #{rem.px2flexible(6)});
   color: var(--post-statistic-font-color, #6C6C6C);
 
   .item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: rem.px2flexible(4);
+
+    .browse {
+      width: rem.px2flexible(7);
+      height: rem.px2flexible(6);
+    }
+
+    .comment {
+      width: rem.px2flexible(6);
+      height: rem.px2flexible(6);
+    }
   }
 }
