@@ -52,6 +52,8 @@
 
     .info {
       color: var(--primary-color);
+
+      --avatar-outer-color: var(--primary-color);
     }
   }
 
@@ -73,5 +75,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .avatar {
+      width: rem.px2flexible(7);
+      height: rem.px2flexible(7);
+      font-size: rem.px2flexible(4);
+    }
   }
 }

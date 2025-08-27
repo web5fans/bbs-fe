@@ -12,6 +12,7 @@ import utcToLocal from "@/lib/utcToLocal";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { postUriToHref } from "@/lib/postUriHref";
+import Avatar from "@/components/Avatar";
 
 const NoticeBoard = () => {
   const { hasLoggedIn, userProfile, visitorId } = useCurrentUser()
@@ -71,13 +72,20 @@ export function NoticeCardItem({ noticeInfo, onClick }: {
   noticeInfo?: PostFeedItemType
   onClick: () => void
 }) {
+  const nickname = noticeInfo?.author?.displayName
+
   return <div className={S.cardItem} onClick={onClick}>
     <p className={S.title}>
       {noticeInfo?.title}
     </p>
 
     <div className={S.info}>
-      <p className={'flex items-center gap-[8px]'}><AvatarIcon />{noticeInfo?.author?.displayName}</p>
+      <p className={'flex items-center gap-[8px]'}>
+        <Avatar
+          className={S.avatar}
+          nickname={nickname}
+        />
+        {nickname}</p>
       <span>{utcToLocal(noticeInfo?.updated)}</span>
     </div>
   </div>
