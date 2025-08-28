@@ -25,6 +25,7 @@
     margin: rem.px2flexible(14) 0 rem.px2flexible(10) rem.px2flexible(10);
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden;
 
     &.moreCard {
       margin-bottom: rem.px2flexible(10);

@@ -35,8 +35,8 @@
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
-    width: round(down, 100%, 1px);
-    height: round(down, 100%, 1px);
+    width: 100%;
+    aspect-ratio: 1;
 
     path {
       fill: var(--avatar-outer-color, black)
@@ -47,8 +47,9 @@
     position: absolute;
     left: 50%;
     top: 50%;
+    width: 92%;
+    //height: round(up, 92%, 1px);
+    aspect-ratio: 1;
     transform: translateX(-50%) translateY(-50%);
-    width: round(up, 92%, 1px);
-    height: round(up, 92%, 1px);
   }
 }

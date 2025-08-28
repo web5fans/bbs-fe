@@ -30,5 +30,6 @@
     margin-left: rem.px2flexible(10);
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden;
   }
 }

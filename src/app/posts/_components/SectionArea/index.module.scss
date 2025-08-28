@@ -22,6 +22,7 @@
     .sections {
       display: flex;
       overflow-x: auto;
+      overflow-y: hidden;
 
       &.moreCard {
         padding-bottom: rem.px2flexible(10);
