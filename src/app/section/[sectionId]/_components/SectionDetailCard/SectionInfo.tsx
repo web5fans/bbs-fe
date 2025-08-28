@@ -12,7 +12,7 @@ export default function SectionInfo(props: {
   const imageRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
-  const { isUnderAnd768 } = useMediaQuery()
+  const { isMobile } = useMediaQuery()
 
   useEffect(() => {
     if (!contentRef.current) return
@@ -50,9 +50,9 @@ export default function SectionInfo(props: {
             visitedCount={sectionInfo?.visited_count}
           />
         </div>
-        {!isUnderAnd768 && props.children}
+        {!isMobile && props.children}
       </div>
     </div>
-    {isUnderAnd768 && props.children}
+    {isMobile && props.children}
   </>
 };

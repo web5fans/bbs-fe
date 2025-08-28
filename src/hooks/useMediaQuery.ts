@@ -5,9 +5,9 @@ export type Breakpoint = 'desktop' | 'tablet' | 'mobile';
 
 // 断点配置
 export const breakpoints = {
-  desktop: 1024, // >= 1024px
-  tablet: 768,   // 768px - 1023px
-  mobile: 767    // <= 767px
+  desktop: 1024, // > 1024px
+  tablet: 769,   // 768px - 1023px
+  mobile: 768    // <= 768px
 } as const;
 
 /**
@@ -18,7 +18,6 @@ export default function useMediaQuery(): {
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;
-  isUnderAnd768: boolean
 } {
   const [breakpoint, setBreakpoint] = useState<Breakpoint>('desktop');
   const [innerWidth, setInnerWidth] = useState<number | undefined>(undefined);
@@ -28,7 +27,7 @@ export default function useMediaQuery(): {
       const width = window.innerWidth;
       setInnerWidth(width)
 
-      if (width >= breakpoints.desktop) {
+      if (width > breakpoints.desktop) {
         setBreakpoint('desktop');
       } else if (width >= breakpoints.tablet) {
         setBreakpoint('tablet');
@@ -51,6 +50,5 @@ export default function useMediaQuery(): {
     isMobile: breakpoint === 'mobile',
     isTablet: breakpoint === 'tablet',
     isDesktop: breakpoint === 'desktop',
-    isUnderAnd768: !!innerWidth && innerWidth <= 768
   };
 };
