@@ -1,31 +1,33 @@
+@use "@/styles/rem";
+
 .recommend {
-  border-top: 2px solid #000;
-  border-right: 4px solid #000;
-  border-bottom: 4px solid #000;
-  border-left: 2px solid #000;
+  border-top: rem.px2flexible(1) solid #000;
+  border-right: rem.px2flexible(2) solid #000;
+  border-bottom: rem.px2flexible(2) solid #000;
+  border-left: rem.px2flexible(1) solid #000;
   background: #EAEAEA;
-  padding: 20px 0 20px;
-  margin-top: 40px;
+  padding: rem.px2flexible(10) 0 rem.px2flexible(10);
+  margin-top: rem.px2flexible(20);
 
   &.moreCard {
-    padding-bottom: 30px;
+    padding-bottom: rem.px2flexible(15);
 
     .recommendContent {
-      padding-bottom: 20px;
+      padding-bottom: rem.px2flexible(10);
     }
   }
 
   .recommendTitle {
-    padding: 0 20px;
-    font-size: 20px;
+    padding: 0 rem.px2flexible(10);
+    font-size: rem.px2flexible(10);
     font-weight: 500;
-    line-height: 20px;
-    margin-bottom: 20px;
+    line-height: 1;
+    margin-bottom: rem.px2flexible(10);
   }
 
   .recommendContent {
     //padding-bottom: 20px;
-    margin-left: 20px;
+    margin-left: rem.px2flexible(10);
     display: flex;
     overflow-x: auto;
   }

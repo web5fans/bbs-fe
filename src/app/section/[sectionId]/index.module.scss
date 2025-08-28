@@ -1,11 +1,8 @@
-.container {
-  padding: 0 172px;
-  margin: 30px auto 80px;
-  font-family: var(--font-CLFN);
+@use "@/styles/rem";
 
-  .inner {
-    width: 1094px;
-  }
+.container {
+  margin: rem.px2flexible(15) auto 80px;
+  max-width: 1054px;
 
   .sticky {
     width: 40px;

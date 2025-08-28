@@ -10,6 +10,7 @@ import PostsList from "@/app/posts/_components/PostsList";
 import cx from "classnames";
 import { EmptyPostsList } from "@/components/Empty";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { LayoutCenter } from "@/components/Layout";
 
 const SectionDetailPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>()
@@ -24,21 +25,31 @@ const SectionDetailPage = () => {
     router.push('/posts/publish?section=' + sectionId)
   }
 
-  return <div className={S.container}>
-    <div className={S.inner} ref={rootRef}>
-      <SectionDetailCard goToPublish={goToPublish} sectionId={sectionId} />
+  return <LayoutCenter>
+      <div
+        className={S.container}
+        ref={rootRef}
+      >
+        <SectionDetailCard
+          goToPublish={goToPublish}
+          sectionId={sectionId}
+        />
 
-      <Recommend sectionId={sectionId} />
-      <PostsList sectionId={sectionId} listEmptyRender={<EmptyPostsList goPublish={goToPublish} />} />
-    </div>
-    <FloatingMark ref={stickyRef}>
-      <Button
-        type={'primary'}
-        onClick={goToPublish}
-        className={cx(S.sticky, !isWhiteUser && '!hidden')}>
-        <AddIcon/></Button>
-    </FloatingMark>
-  </div>
+        <Recommend sectionId={sectionId} />
+        <PostsList
+          sectionId={sectionId}
+          listEmptyRender={<EmptyPostsList goPublish={goToPublish} />}
+        />
+      </div>
+      <FloatingMark ref={stickyRef}>
+        <Button
+          type={'primary'}
+          onClick={goToPublish}
+          className={cx(S.sticky, !isWhiteUser && '!hidden')}
+        >
+          <AddIcon /></Button>
+      </FloatingMark>
+  </LayoutCenter>
 }
 
 export default SectionDetailPage;

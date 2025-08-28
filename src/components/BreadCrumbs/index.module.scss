@@ -1,7 +1,9 @@
+@use "@/styles/rem";
+
 .breadCrumb {
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: rem.px2flexible(7);
 
   a {
     cursor: pointer;

@@ -1,43 +1,58 @@
-.wrap {
-  --card-window-line-gap: 2px;
+@use "@/styles/rem";
 
-  .inner {
-    padding: 40px;
-    display: flex;
+.wrap {
+  --card-window-line-gap: #{rem.px2flexible(1)};
+
+  .innerWrap {
+    padding: rem.px2flexible(20);
     position: relative;
 
+    .inner {
+      display: flex;
+    }
+
+    .content {
+      font-size: rem.px2flexible(8);
+      line-height: 2;
+    }
+
     .sectionImage {
-      align-self: stretch;
-      max-width: 180px;
+      max-width: 150px;
       width: 100%;
       aspect-ratio: 1;
       background: url("/assets/section-iconx2.png") no-repeat;
       background-size: contain;
       flex-shrink: 0;
-      margin-right: 20px;
+      margin-right: rem.px2flexible(10);
     }
 
     .innerContent {
-      margin-top: 10px;
+      padding-top: rem.px2flexible(5);
+
+      @media screen and (max-width: 1024px) {
+        .statis {
+          flex-direction: column;
+          align-items: start !important;
+          gap: rem.px2flexible(5) !important;
+          margin-bottom: rem.px2flexible(4) !important;
+        }
+      }
+
+
       .title {
-        font-size: 24px;
+        font-size: rem.px2flexible(12);
         font-weight: 500;
         line-height: 1;
-        margin-bottom: 10px;
+        margin-bottom: rem.px2flexible(5);
       }
 
       .statis {
         display: flex;
         align-items: center;
-        gap: 20px;
-        font-size: 12px;
+        gap: rem.px2flexible(10);
+        font-size: rem.px2flexible(6);
         color: #6C6C6C;
         margin-bottom: 19px;
-      }
-
-      .content {
-        font-size: 16px;
-        line-height: 2;
       }
     }
   }
@@ -46,10 +61,10 @@
 .expand, .packUp {
   display: inline-flex;
   align-items: center;
-  font-size: 16px;
+  font-size: rem.px2flexible(8);
   cursor: pointer;
   font-weight: 500;
-  gap: 6px;
+  gap: rem.px2flexible(3);
   color: #000;
 }
 
@@ -62,20 +77,25 @@
 
 .buttonWrap {
   position: absolute;
-  top: 40px;
-  right: 40px;
+  top: rem.px2flexible(20);
+  right: rem.px2flexible(20);
 
   .button {
-    width: 160px;
-    height: 50px;
-    font-size: 20px;
+    width: rem.px2flexible(70);
+    height: rem.px2flexible(25);
+    font-size: rem.px2flexible(10);
+  }
+
+  .plus {
+    width: rem.px2flexible(8);
+    aspect-ratio: 1;
   }
 }
 
 .breadCrumb {
-  padding: 0 10px;
+  padding: 0 rem.px2flexible(5);
   position: absolute;
-  left: 40px;
+  left: rem.px2flexible(20);
   height: 100%;
   background: #EAEAEA;
 }

@@ -11,9 +11,10 @@ import { useRequest } from "ahooks";
 import server from "@/server";
 import { SectionItem } from "@/app/posts/utils";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import SectionInfo from "@/app/section/[sectionId]/_components/SectionDetailCard/SectionInfo";
 
 const SPLIT_NUMBER = 145
-const DESCRIPTION_MIN_HEIGHT = 64
 
 const SectionDetailCard = (props: {
   goToPublish: () => void
@@ -22,7 +23,6 @@ const SectionDetailCard = (props: {
   const { hasLoggedIn, isWhiteUser } = useCurrentUser()
   const [expand, setExpand] = useState(false)
   const infoRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
 
   const { data: sectionInfo } = useRequest(async () => {
     return await server<SectionItem>('/section/detail', 'GET', {
@@ -34,16 +34,6 @@ const SectionDetailCard = (props: {
   })
 
   const needSplit = (sectionInfo?.description?.length || 0) > SPLIT_NUMBER
-
-  useEffect(() => {
-    const height = infoRef.current?.clientHeight
-    if (!height) return
-    if (height > DESCRIPTION_MIN_HEIGHT) {
-      imageRef.current.style.width = '100%'
-    } else {
-      imageRef.current.style.width = '150px'
-    }
-  }, [])
 
   const renderInfo = () => {
     if (!needSplit) return sectionInfo?.description
@@ -78,22 +68,19 @@ const SectionDetailCard = (props: {
       }]}
     />}
   >
-    <div className={S.inner}>
-      <div className={S.sectionImage} ref={imageRef}/>
-      <div className={S.innerContent}>
-        <p className={S.title}>{sectionInfo?.name}</p>
-        <div className={S.statis}>
-          {sectionInfo?.owner?.displayName && <p>
-            版主：<span className={'text-black'}>{sectionInfo?.owner?.displayName}</span>
-          </p>}
-          <FeedStatistic replyCount={sectionInfo?.reply_count} visitedCount={sectionInfo?.visited_count} />
-        </div>
-        <div className={S.content} ref={infoRef}>
+    <div className={S.innerWrap}>
+      <SectionInfo sectionInfo={sectionInfo}>
+        <div
+          className={S.content}
+          ref={infoRef}
+        >
           {renderInfo()}
         </div>
-      </div>
+      </SectionInfo>
 
-      <MouseToolTip open={!isWhiteUser} message={hasLoggedIn && !isWhiteUser ? '目前仅限白名单用户才可以发帖' : ''}>
+      <MouseToolTip
+        open={!isWhiteUser}
+        message={hasLoggedIn && !isWhiteUser ? '目前仅限白名单用户才可以发帖' : ''}>
         <div className={S.buttonWrap}>
           <Button
             type={'primary'}
@@ -101,7 +88,7 @@ const SectionDetailCard = (props: {
             disabled={!isWhiteUser}
             onClick={props.goToPublish}
           >
-            <PlusIcon />发布讨论
+            <PlusIcon className={S.plus} />发布讨论
           </Button>
         </div>
       </MouseToolTip>
@@ -113,13 +100,14 @@ const SectionDetailCard = (props: {
 
 export default SectionDetailCard;
 
-function PlusIcon() {
+function PlusIcon(props: { className?: string }) {
   return <svg
     xmlns="http://www.w3.org/2000/svg"
     width="16"
     height="16"
     viewBox="0 0 16 16"
     fill="none"
+    className={props.className}
   >
     <path
       d="M8.7265 0.00142033V7.2735H15.9986V8.72792H8.7265V16L7.27208 15.9986V8.72792H0V7.2735H7.27208V0L8.7265 0.00142033Z"
