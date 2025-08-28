@@ -41,23 +41,42 @@ const FloatingMark = (props: FloatingMarkProps) => {
 
 export default FloatingMark;
 
+const DEFAULT_DIS = 12;
+
 export function useFloatingMarkDistance() {
   const rootRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
+  const firstScroll = useRef(false);
 
   useEffect(() => {
     const instance = rootRef.current;
     if (!instance || !stickyRef.current) return
 
-    const left = instance.offsetLeft + instance.clientWidth + 16
-
-    stickyRef.current.style.left = left + 'px'
+    const stickyWidth = stickyRef.current.clientWidth
 
     const f = () => {
       if (!stickyRef.current) return
 
-      const scrollLeft = left - document.documentElement.scrollLeft;
-      stickyRef.current.style.left = scrollLeft + 'px'
+      if (firstScroll.current) return
+
+      firstScroll.current = true
+      let left = instance.getBoundingClientRect().right
+      const windowWidth = document.documentElement.clientWidth;
+      const instanceOffsetRight = windowWidth - left
+
+      const rightBoundary = (instanceOffsetRight - stickyWidth) / 2;
+
+      if (rightBoundary < 0) {
+        stickyRef.current.style.right = `calc(5 / var(--flexible-design-size) * var(--flexible-size-unit))`;
+        return;
+      }
+      if (rightBoundary > DEFAULT_DIS) {
+        left += DEFAULT_DIS;
+      } else {
+        left += rightBoundary;
+      }
+
+      stickyRef.current.style.left = left + 'px'
     }
     window.addEventListener('scroll', f)
 
