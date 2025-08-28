@@ -16,19 +16,19 @@ const Avatar = (props: {
   const outerRef = useRef<HTMLDivElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
 
-  const hash = useMemo(() => {
-    if (!nickname) return null;
-    return Math.abs(toHashCode(nickname)) % colorsNum
-  }, [nickname])
-
-  if (!hash && hash !== 0) return null;
-
   useEffect(() => {
     if (!rootRef.current) return
     const width = rootRef.current.clientWidth
     outerRef.current.style.width = `${Math.floor(width)}px`;
     innerRef.current.style.width = `${Math.ceil(width * 0.92)}px`
   }, []);
+
+  const hash = useMemo(() => {
+    if (!nickname) return null;
+    return Math.abs(toHashCode(nickname)) % colorsNum
+  }, [nickname])
+
+  if (!hash && hash !== 0) return null;
 
   return <div ref={rootRef} className={`${S.wrap} ${props.className} ${(hash || hash === 0) ? S[`color${hash + 1}`] : ''}`}>
     <CircleInner className={S.circleInner} ref={innerRef} />
