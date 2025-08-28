@@ -49,7 +49,7 @@ const NoticeBoard = () => {
         >
           欢迎你&nbsp;
           <span className={'capitalize'}>访客{visitorId}</span>
-          &nbsp;来到 BBS 社区，目前有 0 人与你同在，期待你成为社区一员，一起加入BBS讨论～
+          &nbsp;来到 BBS 社区，这里有一群认同技术自由主义、关注去中心化基础设施与Web5 技术栈的朋友，期待你成为社区一员，一起去实现数字世界自由迁徙的愿景～
         </p>}
       </Marquee>
 
