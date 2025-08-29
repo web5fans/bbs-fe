@@ -13,6 +13,7 @@ import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { postUriToHref } from "@/lib/postUriHref";
 import Avatar from "@/components/Avatar";
+import { handleToNickName } from "@/lib/handleToNickName";
 
 const NoticeBoard = () => {
   const { hasLoggedIn, userProfile, visitorId } = useCurrentUser()
@@ -41,7 +42,7 @@ const NoticeBoard = () => {
           className={S.marquee}
         >
           欢迎你&nbsp;
-          <span className={'capitalize'}>{userProfile?.displayName}</span>
+          <span className={'capitalize'}>{handleToNickName(userProfile?.handle)}</span>
           ！这是你第 1 次来到 BBS 社区，这里有一群认同技术自由主义、关注去中心化基础设施与Web5 技术栈的朋友，期待与你一起共建，实现数字世界自由迁徙的愿景
         </p> : <p
           style={{ marginRight: 20 }}
