@@ -13,7 +13,7 @@ import { getPostUriHref } from "@/lib/postUriHref";
 export default function PostDetailPage() {
   const { postId } = useParams<{ postId: string }>()
 
-  const { hasLoggedIn } = useCurrentUser()
+  const { isWhiteUser } = useCurrentUser()
 
   const { rootRef, stickyRef } = useFloatingMarkDistance()
 
@@ -35,7 +35,7 @@ export default function PostDetailPage() {
     <FloatingMark ref={stickyRef}>
       <Button
         type={'primary'}
-        className={cx(S.comment, !hasLoggedIn && '!hidden')}
+        className={cx(S.comment, !isWhiteUser && '!hidden')}
         onClick={() => {
           document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
         }}
