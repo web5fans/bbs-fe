@@ -14,15 +14,13 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const { userProfile, hasLoggedIn, writeProfile } = useCurrentUser()
+  const { userProfile, hasLoggedIn, writeProfile, getUserProfile } = useCurrentUser()
 
   const router = useRouter();
 
   const { data: userInfo } = useRequest(async () => {
     await writeProfile()
-    return await server<UserProfileType>('/repo/profile', 'GET', {
-      repo: userProfile?.did
-    })
+    return await getUserProfile()
   }, {
     ready: !!userProfile?.did
   })
