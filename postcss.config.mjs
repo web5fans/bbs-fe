@@ -1,5 +1,5 @@
 const config = {
-  plugins: ["@csstools/postcss-stepped-value-functions", "@tailwindcss/postcss"],
+  plugins: ["@tailwindcss/postcss"],
 };
 
 export default config;

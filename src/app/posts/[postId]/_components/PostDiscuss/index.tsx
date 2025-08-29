@@ -16,7 +16,7 @@ const PostDiscuss = (props: {
   sectionId: string
   refresh?: () => void
 }) => {
-  const { userProfile, hasLoggedIn, isWhiteUser } = useCurrentUser()
+  const { userProfile, hasLoggedIn, isWhiteUser, updateProfile } = useCurrentUser()
   const [publishing, setPublishing] = useState(false)
 
   const [richText, setRichText] = useState('')
@@ -36,6 +36,7 @@ const PostDiscuss = (props: {
   const publishReply = async () => {
     setPublishing(true)
     try {
+      await updateProfile()
       await writesPDSOperation({
         record: {
           $type: 'app.bbs.reply',

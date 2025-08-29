@@ -1,12 +1,28 @@
 import useUserInfoStore from "@/store/userInfo";
 
 export default function useCurrentUser() {
-  const { userInfo, isWhiteListUser, userProfile, visitorId } = useUserInfoStore()
+  const { writeProfile,
+    getUserProfile,
+    userInfo,
+    isWhiteListUser,
+    userProfile,
+    visitorId,
+  } = useUserInfoStore()
+
+  const updateProfile = async () => {
+    const status = await writeProfile()
+    if (status === 'SUCCESS') {
+      await getUserProfile()
+    }
+  }
 
   return {
     hasLoggedIn: !!userInfo,
     isWhiteUser: userInfo && isWhiteListUser,
     userProfile,
-    visitorId
+    visitorId,
+    writeProfile,
+    getUserProfile,
+    updateProfile,
   }
 }

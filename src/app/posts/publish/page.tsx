@@ -25,7 +25,7 @@ const PublishPostPage = () => {
 
   const defaultSection = searchParams.get('section') || ''
 
-  const { isWhiteUser, userProfile } = useCurrentUser()
+  const { isWhiteUser, userProfile, updateProfile } = useCurrentUser()
   const [textNumber, setTextNumber] = useState(0)
   const [postTitle, setPostTitle] = useState('')
   const [richText, setRichText] = useState('')
@@ -70,6 +70,7 @@ const PublishPostPage = () => {
   const publishPost = async () => {
     setPublishing(true)
     try {
+      await updateProfile()
       const uri = await writesPDSOperation({
         record: {
           $type: 'app.bbs.post',

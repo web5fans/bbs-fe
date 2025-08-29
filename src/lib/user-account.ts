@@ -4,6 +4,15 @@ import { Secp256k1Keypair } from "@atproto/crypto";
 import { bytesFrom, hexFrom } from "@ckb-ccc/core";
 import { ComAtprotoWeb5IndexAction, ComAtprotoWeb5PreIndexAction } from "web5-api";
 import { showGlobalToast } from "@/provider/toast";
+import server from "@/server";
+import { UserProfileType } from "@/store/userInfo";
+
+export async function fetchUserProfile(did: string): Promise<UserProfileType> {
+  const result = await server<UserProfileType>('/repo/profile', 'GET', {
+    repo: did
+  })
+  return result
+}
 
 export async function userLogin(localStorage: TokenStorageType): Promise<ComAtprotoWeb5IndexAction.CreateSessionResult | undefined> {
   const pdsClient = getPDSClient()
@@ -22,7 +31,8 @@ export async function userLogin(localStorage: TokenStorageType): Promise<ComAtpr
       index: preLoginIndex,
     })
   } catch (err) {
-    if (err.message.includes("CKB Testnet Response referring_cells error")) {
+    if (err.error === 'CkbDidocCellNotFound') {
+      console.log('CkbDidocCellNotFound')
       await deleteErrUser(did, walletAddress, signKey)
       return
     }

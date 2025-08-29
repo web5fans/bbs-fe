@@ -7,16 +7,16 @@ import { ComAtprotoWeb5CreateAccount, ComAtprotoServerCreateSession } from "web5
 import { writesPDSOperation } from "@/app/posts/utils";
 import { handleToNickName } from "@/lib/handleToNickName";
 import server from "@/server";
-import { userLogin } from "@/lib/user-account";
+import { fetchUserProfile, userLogin } from "@/lib/user-account";
 
 export type UserProfileType = {
   did: string
-  displayName: string
+  displayName?: string
   highlight?: string  // 在白名单内才有这个字段
-  post_count: string
-  reply_count: string
-  created: string
-  handle: string
+  post_count?: string
+  reply_count?: string
+  created?: string
+  handle?: string
 }
 
 type UserInfoStoreValue = {
@@ -35,8 +35,9 @@ type UserInfoStore = UserInfoStoreValue & {
   setStoreData: (storeData: UserInfoStoreValue) => void
   createUser: (obj: ComAtprotoWeb5CreateAccount.InputSchema) => Promise<void>
   web5Login: () => Promise<void>
-  getUserProfile: () => Promise<void>;
+  getUserProfile: () => Promise<UserProfileType | undefined>;
   logout: () => void
+  writeProfile: () => Promise<'NO_NEED' | 'SUCCESS' | 'FAIL'>
   resetUserStore: () => void
   initialize: (signer?: ccc.Signer) => Promise<void>
 }
@@ -64,18 +65,28 @@ const useUserInfoStore = createSelectors(
         walletAddress: params.ckbAddr
       })
 
-      await writesPDSOperation({
-        record: {
-          $type: "app.actor.profile",
-          displayName: handleToNickName(userInfo.handle),
-          handle: userInfo.handle
-        },
-        did: userInfo.did,
-        rkey: "self"
-      })
+      set(() => ({ userInfo, userProfile: { did: userInfo.did, handle: userInfo.handle } }))
+    },
 
-      set(() => ({ userInfo }))
-      get().getUserProfile()
+    writeProfile: async () => {
+      const { userInfo, userProfile } = get();
+      if (!userInfo || (userProfile && userProfile.displayName)) return 'NO_NEED'
+
+      try {
+        await writesPDSOperation({
+          record: {
+            $type: "app.actor.profile",
+            displayName: handleToNickName(userInfo.handle),
+            handle: userInfo.handle
+          },
+          did: userInfo.did,
+          rkey: "self"
+        })
+        return 'SUCCESS'
+      } catch (e) {
+        console.log('write profile err')
+        return 'FAIL'
+      }
     },
 
     web5Login: async () => {
@@ -106,13 +117,24 @@ const useUserInfoStore = createSelectors(
     getUserProfile: async () => {
       const userInfo = get().userInfo
       if (!userInfo) return
-      const result = await server<UserProfileType>('/repo/profile', 'GET', {
-        repo: userInfo.did
-      })
+      const result = await fetchUserProfile(userInfo.did)
+
       set(() => ({
         userProfile: result,
         isWhiteListUser: !!result.highlight,
       }))
+
+      // 没有displayName说明需要补充写入profile
+      if (!result.displayName) {
+        const status = await get().writeProfile()
+        if (status === 'SUCCESS') {
+          const profile = await fetchUserProfile(userInfo.did)
+          set(() => ({ userProfile: profile }))
+          return profile
+        }
+      }
+
+      return result
     },
 
     // getSigningKey: (walletAddress) => {
