@@ -65,7 +65,12 @@ const PostDetail = (props: PostDetailProps) => {
 
       {replyList?.replies.map((p, idx) => {
         const floor = ((replyList?.page || 1) - 1) * PAGE_SIZE + idx + 2;
-        return <PostItem key={p.uri} postInfo={p} floor={floor} />
+        return <PostItem
+          key={p.uri}
+          postInfo={p}
+          floor={floor}
+          isOriginPoster={p.author.did === originPosterInfo?.author?.did}
+        />
       })}
 
       <Pagination
