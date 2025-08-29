@@ -40,7 +40,7 @@ const OnChain = (props: {
     if (loading) {
       return <div className={S.info}>身份信息正在传输，存储至CKB区块链中<DotLoading /></div>
     }
-    if (createStatus.reason) {
+    if (createStatus.reason && createStatus.status === CREATE_STATUS.FAILURE) {
       return <div className={S.err}>
         因{createStatus.reason}原因，信息储存到区块链失败，
         <br />

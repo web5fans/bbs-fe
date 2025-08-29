@@ -310,10 +310,10 @@ export default function useCreateAccount({ createSuccess }: {
     loading: createLoading,
     createStatus,
     resetCreateStatus: () => {
-      setCreateStatus({
-        status: CREATE_STATUS.INIT,
-        reason: undefined
-      })
+      setCreateStatus(prev => ({
+        ...prev,
+        status: CREATE_STATUS.INIT
+      }))
     }
   }
 }
