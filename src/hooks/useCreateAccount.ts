@@ -257,8 +257,12 @@ export default function useCreateAccount({ createSuccess }: {
 
     try {
       if (createStatus.reason) {
+        setCreateLoading(true)
         const flag = await validateIsEnough()
-        if (!flag) return
+        if (!flag) {
+          setCreateLoading(false)
+          return
+        }
       }
       await prepareAccount()
     } catch (err) {
