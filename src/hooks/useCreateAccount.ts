@@ -113,7 +113,7 @@ export default function useCreateAccount({ createSuccess }: {
     }
     if (!cell) {
       startPolling()
-      return
+      return false
     }
 
     let input = ccc.CellInput.from({ previousOutput: cell.outPoint })
@@ -138,7 +138,7 @@ export default function useCreateAccount({ createSuccess }: {
       const expectedCapacity = fixedPointToString(tx.getOutputsCapacity() + numFrom(0))
       setExtraIsEnough([expectedCapacity, false])
       startPolling()
-      return
+      return false
     }
 
     await tx.completeFeeBy(signer)
@@ -150,6 +150,7 @@ export default function useCreateAccount({ createSuccess }: {
       did: `did:web5:${preDid}`,
       createdSignKeyPriv: strSignKeyPriv
     })
+    return true
   }
 
 
@@ -255,6 +256,10 @@ export default function useCreateAccount({ createSuccess }: {
     stopPolling()
 
     try {
+      if (createStatus.reason) {
+        const flag = await validateIsEnough()
+        if (!flag) return
+      }
       await prepareAccount()
     } catch (err) {
       console.log('err.message', err.message)
