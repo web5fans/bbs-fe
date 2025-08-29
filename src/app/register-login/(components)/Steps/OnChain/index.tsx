@@ -69,7 +69,7 @@ const OnChain = (props: {
           <Computer>
             <DraggableCard
               name={nickname}
-              disabled={!extraIsEnough[1]}
+              disabled={!extraIsEnough[1] || !!createStatus.reason}
               loading={loading}
             />
           </Computer>
