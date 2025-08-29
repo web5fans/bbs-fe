@@ -6,7 +6,7 @@
     line {
       stroke: #000;
       stroke-width: 1;
-      stroke-dasharray: rem.px2flexible(7) 2; /* 等同于SVG的stroke-dasharray */
+      stroke-dasharray: 14 2; /* 等同于SVG的stroke-dasharray */
     }
   }
 }
