@@ -120,7 +120,7 @@ const useUserInfoStore = createSelectors(
       const result = await fetchUserProfile(userInfo.did)
 
       set(() => ({
-        userProfile: result,
+        userProfile: { ...result, handle: userInfo.handle },
         isWhiteListUser: !!result.highlight,
       }))
 

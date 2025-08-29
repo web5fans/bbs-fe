@@ -12,6 +12,7 @@ import server from "@/server";
 import { UserProfileType } from "@/store/userInfo";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { handleToNickName } from "@/lib/handleToNickName";
 
 const Page = () => {
   const { userProfile, hasLoggedIn, writeProfile, getUserProfile } = useCurrentUser()
@@ -20,7 +21,12 @@ const Page = () => {
 
   const { data: userInfo } = useRequest(async () => {
     await writeProfile()
-    return await getUserProfile()
+    const info = await getUserProfile()
+    return {
+      ...info,
+      handle: info?.handle || userProfile?.handle,
+      displayName: info?.displayName || handleToNickName(userProfile?.handle),
+    }
   }, {
     ready: !!userProfile?.did
   })
