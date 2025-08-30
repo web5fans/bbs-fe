@@ -1,0 +1,7 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(#{rem.px2flexible(227)}, 1fr));
+  min-height: rem.px2flexible(233);
+}

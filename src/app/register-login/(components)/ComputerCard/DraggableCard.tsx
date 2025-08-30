@@ -6,7 +6,7 @@ import { useDraggable } from "@dnd-kit/core";
 const DraggableCard = (props: ComputerCardProps & { loading?: boolean }) => {
   const { isDragging, setNodeRef, listeners } = useDraggable({
     id: 'draggable-computer',
-    disabled: props.disabled || props.loading
+    disabled: props.disabled || props.loading,
   });
 
   return  <ComputerCard

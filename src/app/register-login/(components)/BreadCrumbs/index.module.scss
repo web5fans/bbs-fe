@@ -1,20 +1,22 @@
+@use "@/styles/rem";
+
 .wrap {
-  font-size: 24px;
+  font-size: min(18px, #{rem.px2flexible(12)});
   font-family: var(--font-CLFN);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: min(10px, #{rem.px2flexible(6)});
 
   .breadWrap {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: min(10px, #{rem.px2flexible(6)});
   }
 
   .bread {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: min(6px, #{rem.px2flexible(4)});
     color: #6C6C6C;
 
     &.active {
@@ -22,7 +24,7 @@
     }
   }
 
-  .arrow {
-    width: 24px;
+  .arrow, .icon {
+    width: min(18px, #{rem.px2flexible(12)});
   }
 }

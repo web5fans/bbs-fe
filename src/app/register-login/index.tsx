@@ -1,25 +1,31 @@
 'use client'
 
 import S from './index.module.scss'
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { DraggableOverlay } from "./(components)/ComputerCard/DraggableOverlay";
 import { useEffect, useMemo, useState } from "react";
 import CardWindow from "@/components/CardWindow";
 import BreadCrumbs, { CREATE_ACCOUNT_STEP } from "./(components)/BreadCrumbs";
 import { SetNickNameProvider } from "@/provider/RegisterNickNameProvider";
-import { StepNickNameLeft, StepNickNameRight } from "./(components)/Steps/NickName";
+import NickNameStep from "./(components)/Steps/NickName";
 import OnChain from "@/app/register-login/(components)/Steps/OnChain";
-import { IntroLeft, IntroRight } from "@/app/register-login/(components)/Steps/Intro";
+import IntroStep from "@/app/register-login/(components)/Steps/Intro";
 import { CompleteLeft, CompleteRight } from './(components)/Steps/Complete';
 import MultiDid from "@/app/register-login/(components)/MultiDid";
 import Authorize from "@/app/register-login/(components)/Authorize";
 import AppHeader from "@/app/@header/default";
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import cx from "classnames";
+import { LayoutCenter } from "@/components/Layout";
 
 export default function RegisterLogin() {
   const { visible, closeRegisterPop } = useRegisterPopUp()
   const [curStep, setCurSep] = useState<CREATE_ACCOUNT_STEP>(CREATE_ACCOUNT_STEP.INTRO)
+  const mouseSensor = useSensor(MouseSensor)
+  const touchSensor = useSensor(TouchSensor)
+
+  const sensors = useSensors(mouseSensor, touchSensor)
+
 
   const goPrev = () => {
     setCurSep(v => v - 1)
@@ -27,36 +33,18 @@ export default function RegisterLogin() {
 
   useEffect(() => {
     if (!visible) {
-      setCurSep(CREATE_ACCOUNT_STEP.INTRO)
+      setCurSep(CREATE_ACCOUNT_STEP.ON_CHAIN)
     }
   }, [visible]);
 
   const stepRender = useMemo(() => {
     switch (curStep) {
       case CREATE_ACCOUNT_STEP.INTRO: {
-        return <>
-          <Left>
-            <IntroLeft goNext={() => setCurSep(CREATE_ACCOUNT_STEP.NICKNAME)} />
-          </Left>
-          <Right>
-            <IntroRight />
-          </Right>
-        </>
+        return <IntroStep goNext={() => setCurSep(CREATE_ACCOUNT_STEP.NICKNAME)} />
       }
       case CREATE_ACCOUNT_STEP.NICKNAME: {
         return <>
-          <Left>
-            <LeftInner>
-              <BreadCrumbs activeStep={curStep} />
-              <StepNickNameLeft
-                goNext={() => setCurSep(CREATE_ACCOUNT_STEP.ON_CHAIN)}
-                goPrev={goPrev}
-              />
-            </LeftInner>
-          </Left>
-          <Right>
-            <StepNickNameRight />
-          </Right>
+          <NickNameStep goNext={() => setCurSep(CREATE_ACCOUNT_STEP.ON_CHAIN)} goPrevious={goPrev} />
         </>
       }
       case CREATE_ACCOUNT_STEP.ON_CHAIN: {
@@ -87,22 +75,24 @@ export default function RegisterLogin() {
       <AppHeader isPopUp />
       <div className={S.layout}>
         <div className={S.bgWrap} />
-        <CardWindow
-          header={windowTitle}
-          wrapClassName={S.window}
-          headerClassName={S.windowHeader}
-          showCloseButton
-          onClose={closeRegisterPop}
-        >
-          <SetNickNameProvider>
-            <DndContext>
-              <div className={S.content}>
-                {stepRender}
-              </div>
-              <DraggableOverlay />
-            </DndContext>
-          </SetNickNameProvider>
-        </CardWindow>
+        <LayoutCenter style={{ overflow: 'initial' }}>
+          <CardWindow
+            header={windowTitle}
+            wrapClassName={S.window}
+            headerClassName={S.windowHeader}
+            showCloseButton
+            onClose={closeRegisterPop}
+          >
+            <SetNickNameProvider>
+              <DndContext sensors={sensors}>
+                <div className={S.content}>
+                  {stepRender}
+                </div>
+                <DraggableOverlay />
+              </DndContext>
+            </SetNickNameProvider>
+          </CardWindow>
+        </LayoutCenter>
 
         {/*<MultiDid />*/}
 

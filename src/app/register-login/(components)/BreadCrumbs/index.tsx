@@ -14,15 +14,15 @@ export enum CREATE_ACCOUNT_STEP {
 
 const steps = [{
   name: '设置名称',
-  icon: <UserNameIcon />,
+  icon: <UserNameIcon className={S.icon} />,
   value: CREATE_ACCOUNT_STEP.NICKNAME
 },{
   name: '上链存储',
-  icon: <IdentityIcon />,
+  icon: <IdentityIcon className={S.icon} />,
   value: CREATE_ACCOUNT_STEP.ON_CHAIN
 },{
   name: '完成',
-  icon: <DoneIcon />,
+  icon: <DoneIcon className={S.icon} />,
   value: CREATE_ACCOUNT_STEP.DONE
 }]
 

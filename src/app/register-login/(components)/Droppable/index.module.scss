@@ -1,12 +1,27 @@
+@use "@/styles/rem";
+
+.chainWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: min(18px, rem.px2flexible(9.5));
+}
+
 .wrap {
-  padding: 0 80px;
+  padding: 0 60px;
+
+  $shadow: rem.px2flexible(1.5);
+
+  &:has(>.twice) {
+    padding: 0;
+  }
 
   .block {
-    width: 130px;
+    width: min(122px, #{rem.px2flexible(64)});
     aspect-ratio: 1 / 1;
     background: #000;
-    box-shadow: 3px 3px 0 0 #000;
-    font-size: 16px;
+    box-shadow: $shadow $shadow 0 0 #000;
     transition: all .2s;
     position: relative;
 
@@ -21,11 +36,23 @@
     }
 
     &.half {
-      width: 75px;
+      width: rem.px2flexible(34);
     }
 
     &.twice {
-      width: 260px;
+      width: min(220px, #{rem.px2flexible(130)});
     }
+  }
+}
+
+@media screen and (max-width: 1023px){
+  .chainWrap {
+    flex-direction: row;
+    height: 100%;
+  }
+  .wrap {
+    //padding: min(100px, rem.px2flexible(70)) 0 min(60px, rem.px2flexible(50));
+    padding: rem.px2flexible(50) 0 rem.px2flexible(30);
+    transform: translateY(-6%)
   }
 }

@@ -1,9 +1,34 @@
+'use client'
+
 import Computer from "@/app/register-login/(components)/Computer";
 import S from './index.module.scss'
+import { useEffect, useRef } from "react";
+import remResponsive from "@/lib/rem-responsive";
 
 const SmileAnimate = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return
+    const clientWidth = divRef.current?.clientWidth || 0;
+    const scale = (clientWidth / 92).toFixed(2);
+    ref.current.style.transform = `scale(${scale})`;
+
+  }, []);
+
   return <Computer>
-    <div className={S.wrap}>
+    <div
+      ref={divRef}
+      style={{
+        height: 0,
+        width: `min(70px, ${remResponsive(47)})`
+      }}
+    />
+    <div
+      ref={ref}
+      className={S.wrap}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="99"

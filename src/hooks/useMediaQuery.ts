@@ -27,7 +27,7 @@ export default function useMediaQuery(): {
       const width = window.innerWidth;
       setInnerWidth(width)
 
-      if (width > breakpoints.desktop) {
+      if (width >= breakpoints.desktop) {
         setBreakpoint('desktop');
       } else if (width >= breakpoints.tablet) {
         setBreakpoint('tablet');

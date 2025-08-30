@@ -1,3 +1,5 @@
+@use "@/styles/rem";
+
 .container {
   position: fixed;
   top: 0;
@@ -6,11 +8,11 @@
   background: var(--background);
   z-index: 10;
   bottom: 0;
-  overflow: auto;
+  overflow-x: hidden;
 
   .layout {
-    width: 1440px;
-    padding: 125px 0 126px 82px;
+    max-width: 1440px;
+    padding: rem.px2flexible(45.5) 0 rem.px2flexible(63) 0;
     margin: 0 auto;
     position: relative;
 
@@ -20,17 +22,23 @@
       right: 0;
       bottom: 0;
       top: 0;
-      margin-top: 34px;
-      margin-left: 20px;
+      margin-left: rem.px2flexible(10);
       background-image: url("/assets/login/bg-item.svg");
       background-repeat: repeat;
-      background-size: 177.5px 125px;
+      background-size: rem.px2flexible(88.75) rem.px2flexible(55.5);
       z-index: -1;
     }
   }
 
   .window {
-    width: 1170px;
+    max-width: 1054px;
+    margin: 0 auto;
+
+    --card-window-header-padding-block: #{rem.px2flexible(4)};
+    --card-window-header-padding-inline: #{rem.px2flexible(8)};
+    --card-window-title-size: min(18px, #{rem.px2flexible(12)});
+    --card-window-line-gap: #{rem.px2flexible(1.5)};
+    --card-window-content-margin: #{rem.px2flexible(8)};
   }
 
   .windowHeader {
@@ -54,6 +62,14 @@
       background: #DBDBDB;
       box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25) inset;
       position: relative;
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .container {
+    .layout {
+      padding-top: rem.px2flexible(23);
     }
   }
 }

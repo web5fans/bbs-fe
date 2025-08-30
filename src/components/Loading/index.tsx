@@ -1,7 +1,7 @@
 import { createHighlights, svgLinesXY } from "@/components/Loading/utils";
 import { useEffect, useRef, useState } from "react";
 
-const Loading = ({ speed = 60 }: { speed?: number }) => {
+const Loading = ({ speed = 60, className }: { speed?: number; className?: string }) => {
   const { getIndexes, next } = createHighlights()
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const [ highlight, setHighlight ] = useState<number[]>([])
@@ -28,6 +28,7 @@ const Loading = ({ speed = 60 }: { speed?: number }) => {
       viewBox="0 0 33 33"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         d="M12 3V3H9H6V3V6H3V6V9V12V12H0V15V21H3V21V24V27V27H6V30V30H9H12V30V33H18H21V30V30H24H27V30V27H30V27V24V21V21H33V15V12H30V12V9V6V6H27V3V3H24H21V3V0H18H12V3ZM21 6V6H24H27V9V12V12H30V15V21H27V21V24V27H24H21V27V30H18H12V27V27H9H6V24V21V21H3V15V12H6V12V9V6H9H12V6V3H18H21V6Z"

@@ -30,9 +30,9 @@ const CardWindow = (props: {
           {/*<img src={'/assets/window-close.svg'} alt="close" />*/}
           <CloseIcon className={S.image} />
         </div>
-        <div className={cx(S.title, headerClassName)}>
+        {!!props.header && <div className={cx(S.title, headerClassName)}>
           {props.header}
-        </div>
+        </div>}
 
         {props.headerExtra}
       </div>

@@ -1,0 +1,29 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .top {
+    min-width: rem.px2flexible(280);
+    padding: rem.px2flexible(15) rem.px2flexible(15) rem.px2flexible(35) rem.px2flexible(15);
+  }
+
+  .bottom {
+    flex: 1;
+    background: #DBDBDB;
+    box-shadow: 0 0 rem.px2flexible(7.5) 0 rgba(0, 0, 0, 0.25) inset;
+    //position: relative;
+    padding-block: min(80px, rem.px2flexible(71));
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .wrap {
+    .top {
+      min-width: 0;
+      width: 100%;
+    }
+  }
+}

@@ -1,10 +1,10 @@
 @use '@/styles/rem';
 
 .wrap {
-  width: 259px;
-  aspect-ratio: 259 / 329;
+  width: min(194px, #{rem.px2flexible(130)});
+  height: min(247px, #{rem.px2flexible(165)});
   background: url("/assets/login/computer.png") no-repeat;
   background-size: contain;
-  padding-top: 66px;
+  padding-top: min(49.5px, #{rem.px2flexible(33)});
   user-select: none;
 }

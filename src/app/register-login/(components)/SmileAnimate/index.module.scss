@@ -2,6 +2,8 @@
   width: 92px;
   height: 86px;
   margin: 0 auto;
+  transform: scale(0);
+  transform-origin: center top;
 
   .eye {
     animation: startBlink 1s, blink 2.4s infinite 1s;

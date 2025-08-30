@@ -1,40 +1,61 @@
+@use "@/styles/rem";
 .wrap {
-  margin-top: 92px;
+  margin-top: rem.px2flexible(30);
 
   --input-default-border-color: #B7B7B7;
   --input-default-shadow-color: #B7B7B7;
 
+  .loading {
+    width: rem.px2flexible(14);
+    height: rem.px2flexible(14);
+  }
+
   label {
     display: block;
-    font-size: 32px;
-    margin-bottom: 14px;
+    font-size: min(28px, #{rem.px2flexible(16)});
+    margin-bottom: min(30px, #{rem.px2flexible(23)});
     font-family: var(--font-CLFN);
     font-weight: 500;
   }
 
   .warning {
     position: absolute;
-    bottom: -28px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: rem.px2flexible(4);
+    transform: translateY(rem.px2flexible(2));
 
     color: #CE0D36;
-    font-size: 16px;
+    font-size: min(16px, #{rem.px2flexible(10)});
     font-family: var(--font-CLFN);
+
+    img {
+      width: min(16px, #{rem.px2flexible(9)});
+    }
   }
 
   .buttonWrap {
     display: flex;
     align-items: center;
-    gap: 50px;
-    margin-top: 96px;
-    margin-bottom: 110px;
+    gap: min(30px, #{rem.px2flexible(24)});
+    margin-top: min(70px, #{rem.px2flexible(45)});
 
-    .button {
-      width: 108px;
-      height: 50px;
-      font-size: 16px;
+    .button, .nextButton {
+      width: rem.px2flexible(54);
+      height: rem.px2flexible(25);
+      font-size: min(16px, #{rem.px2flexible(12)});
+    }
+
+    .nextButton {
+      width: rem.px2flexible(72);
+    }
+  }
+}
+
+@media screen and (min-width: 1024px){
+  .wrap {
+    .buttonWrap {
+      margin-top: 74px;
     }
   }
 }

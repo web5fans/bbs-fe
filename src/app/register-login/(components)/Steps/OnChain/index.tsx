@@ -3,7 +3,6 @@ import S from "./index.module.scss";
 import { useState } from "react";
 import BreadCrumbs, { CREATE_ACCOUNT_STEP } from "@/app/register-login/(components)/BreadCrumbs";
 import { OnChainRight } from "@/app/register-login/(components)/Steps/OnChain/right";
-import { Left, LeftInner, Right } from "@/app/register-login";
 import useCreateAccount, { CREATE_STATUS } from "@/hooks/useCreateAccount";
 import CardLoading from "@/app/register-login/(components)/CardLoading";
 import { DragEndEvent, DragStartEvent, useDndMonitor } from "@dnd-kit/core";
@@ -12,6 +11,7 @@ import DraggableCard from "@/app/register-login/(components)/ComputerCard/Dragga
 import { useNickName } from "@/provider/RegisterNickNameProvider";
 import ArrowRight from '@/assets/login/arrow-right.svg'
 import DotLoading from "@/components/DotLoading";
+import cx from "classnames";
 
 const OnChain = (props: {
   goNext: () => void
@@ -38,7 +38,11 @@ const OnChain = (props: {
 
   const infoRender = () => {
     if (loading) {
-      return <div className={S.info}>身份信息正在传输，存储至CKB区块链中<DotLoading /></div>
+      return <div className={S.info}>身份信息正在传输，存储至CKB区块链中
+        <DotLoading />
+        {/* 移动端高度占位 */}
+        <p>&nbsp;</p>
+      </div>
     }
     if (createStatus.reason && createStatus.status === CREATE_STATUS.FAILURE) {
       return <div className={S.err}>
@@ -61,32 +65,27 @@ const OnChain = (props: {
     </div>
   }
 
-  return <>
-    <Left className={S.leftWrap}>
-      <LeftInner>
-        <BreadCrumbs activeStep={CREATE_ACCOUNT_STEP.ON_CHAIN} />
-        <div className={S.wrap}>
-          <Computer>
-            <DraggableCard
-              name={nickname}
-              disabled={!extraIsEnough[1]}
-              loading={loading}
-            />
-          </Computer>
-          {infoRender()}
-        </div>
-      </LeftInner>
-    </Left>
-    <Right>
-      {loading ? <div
-        className={S.loading}
-        style={{ '--moveY': {A : '130px', B: '225px', C: '320px'}[overInfo?.id ?? 'B'] }}
-      >
-        <CardLoading name={nickname || ''} />
+  return <div className={S.wrap}>
+    <div className={S.top}>
+      <BreadCrumbs activeStep={CREATE_ACCOUNT_STEP.ON_CHAIN} />
+      <div className={S.leftWrap}>
+        <Computer>
+          <DraggableCard
+            name={nickname}
+            disabled={!extraIsEnough[1]}
+            loading={loading}
+          />
+        </Computer>
+        {infoRender()}
+      </div>
+    </div>
+    <div className={S.bottom}>
+      {loading ? <div className={cx(S.loading, S[overInfo?.id ?? 'B'])}>
+        <CardLoading name={nickname || ''} className={S.cardLoading} />
       </div> : <ArrowRight className={S.arrowRight} />}
       <OnChainRight hasErr={createStatus.status === CREATE_STATUS.FAILURE} />
-    </Right>
-  </>
+    </div>
+  </div>
 }
 
 export default OnChain;

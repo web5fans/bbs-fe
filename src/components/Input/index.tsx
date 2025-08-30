@@ -53,8 +53,9 @@ const Input = (props: Props) => {
       tempSpan.textContent = textBeforeCursor;
 
       const cursorLeft = tempSpan.offsetWidth;
+      const paddingLeftValue = parseFloat(input.offsetLeft);
 
-      const left = 20 + cursorLeft - input.scrollLeft
+      const left = paddingLeftValue + cursorLeft - input.scrollLeft
 
       caretRef.current.style.left = left + 'px'
 
@@ -106,6 +107,10 @@ const Input = (props: Props) => {
       type="text"
       name="username"
       autoComplete="off"
+      autoCapitalize="off"
+      autoCorrect="off"
+      spellCheck="false"
+      inputMode="text"
       onKeyDownCapture={getCursorPosition}
       onKeyUpCapture={getCursorPosition}
       onClick={getCursorPosition}
@@ -113,7 +118,7 @@ const Input = (props: Props) => {
       className={rest.className}
     />
     {props.checkedPass && <span className={S.icon}>
-      <SuccessIcon />
+      <SuccessIcon className={S.icon} />
     </span>}
 
     {showCount && value !== undefined && <span

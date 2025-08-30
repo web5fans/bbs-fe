@@ -4,6 +4,8 @@ import {
   DragMoveEvent, DragEndEvent, UniqueIdentifier,
 } from '@dnd-kit/core';
 import ChainItem from "./ChainItem";
+import S from './index.module.scss'
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 export default function Droppable(props: {
   hasErr?: boolean
@@ -12,6 +14,8 @@ export default function Droppable(props: {
   const [isOverHalf, setIsOverHalf] = useState(false)
   const [droppedId, setDroppedId] = useState<UniqueIdentifier | undefined>(undefined)
   const startPosRef = useRef<number | undefined>(undefined)
+
+  const { isDesktop } = useMediaQuery()
 
   useEffect(() => {
     if (hasErr) setDroppedId(undefined)
@@ -24,13 +28,15 @@ export default function Droppable(props: {
         return;
       }
 
-      const dragWidth = event.activatorEvent.target.clientWidth
-      const currentPosX = event.delta.x
+      const target = event.activatorEvent.target;
+
+      const dragWidth = isDesktop ? target?.clientWidth : target?.clientHeight;
+      const currentPosDis = isDesktop ? event.delta.x : event.delta.y;
       if (!startPosRef.current) {
-        startPosRef.current = currentPosX
+        startPosRef.current = currentPosDis
       }
       if (!startPosRef.current) return
-      const moveHalf = (currentPosX - (startPosRef.current || 0)) > ( dragWidth / 2)
+      const moveHalf = (currentPosDis - (startPosRef.current || 0)) > ( dragWidth / 2)
 
       if (!isOverHalf && moveHalf ) {
         setIsOverHalf(true)
@@ -46,7 +52,7 @@ export default function Droppable(props: {
   })
 
   return (
-    <div className={'flex flex-col gap-[20px] items-center'}>
+    <div className={S.chainWrap}>
       {['A', 'B', 'C'].map((id, i) => <ChainItem
         id={id}
         key={id}

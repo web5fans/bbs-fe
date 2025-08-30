@@ -1,32 +1,62 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .top {
+    min-width: rem.px2flexible(260);
+    //width: 55%;
+    padding: rem.px2flexible(15) rem.px2flexible(15) min(60px, #{rem.px2flexible(20)}) rem.px2flexible(15);
+  }
+
+  .bottom {
+    flex: 1;
+    background: #DBDBDB;
+    box-shadow: 0 0 rem.px2flexible(7.5) 0 rgba(0, 0, 0, 0.25) inset;
+    position: relative;
+  }
+}
+
 .loading {
   position: absolute;
   left: -100px;
-  top: calc(86px + var(--moveY));
-  transform: translateY(-90%);
+  transform: translateY(-50%);
   z-index: 99;
+
+  &.A {
+    top: 170px;
+  }
+
+  &.B {
+    top: 256px;
+  }
+
+  &.C {
+    top: 338px;
+  }
 }
 
 .arrowRight {
   position: absolute;
   top: 50%;
   transform: translateY(-90%);
-  left: -89px;
+  left: -72px;
+  width: rem.px2flexible(25);
+  height: rem.px2flexible(19);
 }
 
 .leftWrap {
-  max-width: 630px;
-}
-
-.wrap {
-  padding: 75px 150px 77px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 70px;
 }
 
 .info, .err {
   margin-top: 45px;
-  font-size: 16px;
+  font-size: rem.px2flexible(8);
   font-family: var(--font-CLFN);
   color: #6C6C6C;
   text-align: center;
@@ -34,4 +64,53 @@
 .err {
   width: 100%;
   color: #CE0D36;
+}
+
+@media screen and (max-width: 1023px) {
+  .wrap {
+    .top {
+      min-width: 0;
+      width: 100%;
+    }
+  }
+
+  .leftWrap, .info, .err{
+    margin-top: rem.px2flexible(15);
+  }
+
+  .arrowRight {
+    top: rem.px2flexible(-4);
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+  }
+
+  .loading {
+    left: 50%;
+    transform: translateX(-50%);
+
+    $blockWidth: min(220px, #{rem.px2flexible(130)});
+    $loadingCardHeight: rem.px2flexible(12.5);
+    $loadingCardGap: rem.px2flexible(5);
+
+    $top: calc($loadingCardHeight * -1.5 - $loadingCardGap);
+
+    &.A {
+      top: $top;
+      left: calc(50% - #{$blockWidth} * 0.36);
+    }
+
+    &.B {
+      top: $top;
+    }
+
+    &.C {
+      top: $top;
+      left: calc(50% + #{$blockWidth} * 0.36);
+    }
+
+    .cardLoading {
+      flex-direction: column;
+      width: auto;
+    }
+  }
 }

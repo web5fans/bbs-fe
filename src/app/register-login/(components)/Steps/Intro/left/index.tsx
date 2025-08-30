@@ -22,7 +22,7 @@ export const IntroLeft = (props: IntroLeftProps) => {
 
   return <div className={S.wrap}>
     <div className={S.inner}>
-      <AvatarUserIcon />
+      <AvatarUserIcon className={S.avatar} />
 
       <div>
         <p className={S.title}>创建你的个人Web5 DID 账号，获得：</p>
@@ -33,7 +33,7 @@ export const IntroLeft = (props: IntroLeftProps) => {
             '专属域名（如yuming.bbs.xyz）',
           ].map((mes, idx) => {
             return <div className={S.mesItem} key={idx}>
-              <CheckIcon />
+              <CheckIcon className={S.check} />
               <p>{mes}</p>
             </div>
           })

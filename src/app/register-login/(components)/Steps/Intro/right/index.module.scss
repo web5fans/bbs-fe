@@ -1,26 +1,30 @@
+@use "@/styles/rem";
+
 .wrap {
-  width: 558px;
-  padding: 50px 34px 0;
+  padding: rem.px2flexible(20) rem.px2flexible(15);
   font-family: var(--font-CLFN);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 41px;
+  justify-content: center;
+  gap: min(30px, #{rem.px2flexible(20)});
+  background: #DBDBDB;
+  box-shadow: 0 0 rem.px2flexible(7.5)  0 rgba(0, 0, 0, 0.25) inset;
+  position: relative;
 
   .header {
-    font-size: 32px;
+    font-size: min(24px, #{rem.px2flexible(16)});
     font-weight: 500;
   }
 
   .content {
-    padding: 16px 44px;
+    padding: rem.px2flexible(15) rem.px2flexible(20);
     background: #E2F2F2;
     width: 100%;
     position: relative;
-    height: 288px;
 
     .inner {
-      font-size: 20px;
+      font-size: min(16px, #{rem.px2flexible(10)});
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -38,7 +42,7 @@
 
     .inner1 {
       .info {
-        font-size: 16px;
+        font-size: rem.px2flexible(8);
       }
     }
   }
@@ -46,9 +50,9 @@
   .change {
     //display: flex;
     //align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    font-size: 18px;
+    gap: 8px;
+    padding: rem.px2flexible(5) rem.px2flexible(10);
+    font-size: min(16px, #{rem.px2flexible(12)});
     //cursor: pointer;
     //user-select: none;
   }
@@ -65,22 +69,22 @@
   .bb {
     left: 0;
     width: 100%;
-    height: 5px;
+    height: rem.px2flexible(2);
   }
 
   .br, .bl {
     top: 0;
-    width: 5px;
+    width: rem.px2flexible(2);
     height: 100%;
   }
 
   .bt {
-    top: -5px;
+    top: rem.px2flexible(-2);
     background: var(--primary-color);
   }
   .br {
-    right: -5px;
+    right: rem.px2flexible(-2);
   }
-  .bb { bottom: -5px }
-  .bl { left: -5px; background: var(--primary-color) }
+  .bb { bottom: rem.px2flexible(-2) }
+  .bl { left: rem.px2flexible(-2); background: var(--primary-color) }
 }

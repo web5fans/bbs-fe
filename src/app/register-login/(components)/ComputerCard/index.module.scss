@@ -1,19 +1,20 @@
 @use '@/styles/rem';
 
 .card {
-   width: 157px;
-   height: 91px;
-   padding-inline: 15px;
+  width: min(117.75px, #{rem.px2flexible(78.5)});
+  height: min(68.25px, #{rem.px2flexible(45.5)});
+   padding-inline:min(11.5px, #{rem.px2flexible(7.5)});
    color: #FFFFFF;
-   font-size: 16px;
+   font-size: min(12px, #{rem.px2flexible(8)});
    display: flex;
    align-items: center;
    background: var(--primary-color);
    margin: 0 auto;
    font-family: var(--font-CLFN);
-   gap: 11px;
+   gap: min(8px, #{rem.px2flexible(5.5)});
    position: relative;
    cursor: grab;
+   touch-action: none;
 
   &.disabled {
     background: #CFCFCF;
@@ -39,10 +40,28 @@
   }
 
    .user {
-     width: 44px;
-     height: 57px;
+     width: min(33px, #{rem.px2flexible(22)});
+     height: min(42px, #{rem.px2flexible(28)});
      color: #FFFFFF;
    }
+
+  .right, .bottom {
+    position: absolute;
+    background: var(--primary-color-hover);
+  }
+
+  .right {
+    width: rem.px2flexible(1);
+    height: 100%;
+    right: 0;
+  }
+
+  .bottom {
+    height: rem.px2flexible(1);
+    width: 100%;
+    bottom: 0;
+    left: 0;
+  }
 
    .name {
      flex: 1;
@@ -52,24 +71,6 @@
      -webkit-line-clamp: 3;         /* 限制显示的行数 */
      text-overflow: ellipsis;
      overflow: hidden;
-   }
-
-   .right, .bottom {
-     position: absolute;
-     background: var(--primary-color-hover);
-   }
-
-   .right {
-     width: 3px;
-     height: 100%;
-     right: 0;
-   }
-
-   .bottom {
-     height: 3px;
-     width: 100%;
-     bottom: 0;
-     left: 0;
    }
 
    .move {
@@ -83,21 +84,21 @@
 }
 
 .cardS {
-  width: 43px;
-  height: 25px;
-  padding-inline: 4.12px;
-  font-size: 4px;
-  gap: 2.8px;
+  width: rem.px2flexible(21);
+  height: rem.px2flexible(12.5);
+  padding-inline: rem.px2flexible(2);
+  font-size: rem.px2flexible(2);
+  gap: rem.px2flexible(1.4);
 
   .user {
-    width: 12px;
-    height: 15px;
+    width: rem.px2flexible(6);
+    height: rem.px2flexible(7.5);
   }
 
   .right{
-    width: 0.8px;
+    width: rem.px2flexible(0.4);
   }
   .bottom {
-    height: 0.8px;
+    height: rem.px2flexible(0.4);
   }
 }

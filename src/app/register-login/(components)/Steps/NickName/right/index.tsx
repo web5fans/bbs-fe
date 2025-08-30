@@ -1,17 +1,28 @@
+'use client'
+
 import SmileAnimate from "../../../SmileAnimate";
 import Computer from "../../../Computer";
 import ComputerCard from "../../../ComputerCard";
 import { useNickName } from "@/provider/RegisterNickNameProvider";
 import S from './index.module.scss'
 import cx from "classnames";
+import { useEffect, useRef } from "react";
 
 
 export const StepNickNameRight = () => {
   const { showBlinkAnimate, validate, nickname } = useNickName()
+  const ref = useRef<HTMLDivElement | null>(null);
+  const flyRef = useRef<HTMLDivElement | null>(null);
 
   const disabled = !(validate?.valid && validate?.repeatPass)
 
-  return <div className={S.wrap}>
+  useEffect(() => {
+    if (!ref.current || !flyRef.current) return;
+    flyRef.current.style.left = ref.current.getBoundingClientRect().right + 'px';
+
+  }, []);
+
+  return <div className={S.wrap} ref={ref}>
     {showBlinkAnimate
       ? <SmileAnimate />
       : <Computer>
@@ -19,7 +30,7 @@ export const StepNickNameRight = () => {
       </Computer>
     }
 
-    <div className={cx(S.flyCard, showBlinkAnimate && '!hidden')}>
+    <div className={cx(S.flyCard, showBlinkAnimate && '!hidden')} ref={flyRef}>
       <ComputerCard name={nickname} disabled={disabled} />
     </div>
   </div>

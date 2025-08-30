@@ -1,7 +1,9 @@
+@use "@/styles/rem";
+
 .wrap {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: rem.px2flexible(5);
   width: 255px;
 
   .cardItem {
@@ -17,7 +19,7 @@
       bottom: 0;
       left: 0;
       background-image: url("/assets/login/card-loading.svg");
-      background-size: 41px 24px;
+      background-size: rem.px2flexible(21) rem.px2flexible(12);
       background-repeat: no-repeat;
       background-position: right 1px bottom -1px;
     }

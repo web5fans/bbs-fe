@@ -35,9 +35,9 @@ const WalletInfo = () => {
       active={popUpVis}
     >
       {ellipsis(address)}
-      <CopyText text={address} />
+      <CopyText text={address} className={S.copyIcon} />
     </FlatButton> : <Button className={S.connect} onClick={openSigner}>
-      <WalletIcon />
+      <WalletIcon className={S.icon} />
       连接钱包
     </Button>}
 

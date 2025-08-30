@@ -104,7 +104,7 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
         checkedPass={checkedPass}
         error={!!validate?.error}
       >
-        {loading && <Loading />}
+        {loading && <Loading className={S.loading} />}
       </Input>
       <div className={cx(S.warning, !validate?.error && '!hidden')}>
         <img
@@ -117,7 +117,7 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
 
     <div className={S.buttonWrap}>
       <Button className={S.button} onClick={goBack}>上一步</Button>
-      <Button type={'primary'} className={S.button} onClick={goNext} disabled={!checkedPass}>下一步</Button>
+      <Button type={'primary'} className={S.nextButton} onClick={goNext} disabled={!checkedPass}>下一步</Button>
     </div>
   </div>
 }

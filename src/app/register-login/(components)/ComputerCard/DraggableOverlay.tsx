@@ -45,7 +45,7 @@ export function DraggableOverlay({
 
   if (typeof window === 'object') {
     return createPortal(
-      <DragOverlay dropAnimation={dropAnimation}>
+      <DragOverlay dropAnimation={dropAnimation} style={{touchAction: 'none'}}>
         {active ? <ComputerCard dragging dragOverlay name={nickname} /> : null}
       </DragOverlay>,
       document?.body
