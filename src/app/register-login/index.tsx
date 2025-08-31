@@ -5,12 +5,12 @@ import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from "@dn
 import { DraggableOverlay } from "./(components)/ComputerCard/DraggableOverlay";
 import { useEffect, useMemo, useState } from "react";
 import CardWindow from "@/components/CardWindow";
-import BreadCrumbs, { CREATE_ACCOUNT_STEP } from "./(components)/BreadCrumbs";
+import { CREATE_ACCOUNT_STEP } from "./(components)/BreadCrumbs";
 import { SetNickNameProvider } from "@/provider/RegisterNickNameProvider";
 import NickNameStep from "./(components)/Steps/NickName";
 import OnChain from "@/app/register-login/(components)/Steps/OnChain";
 import IntroStep from "@/app/register-login/(components)/Steps/Intro";
-import { CompleteLeft, CompleteRight } from './(components)/Steps/Complete';
+import CompleteStep from './(components)/Steps/Complete';
 import MultiDid from "@/app/register-login/(components)/MultiDid";
 import Authorize from "@/app/register-login/(components)/Authorize";
 import AppHeader from "@/app/@header/default";
@@ -33,7 +33,7 @@ export default function RegisterLogin() {
 
   useEffect(() => {
     if (!visible) {
-      setCurSep(CREATE_ACCOUNT_STEP.ON_CHAIN)
+      setCurSep(CREATE_ACCOUNT_STEP.INTRO)
     }
   }, [visible]);
 
@@ -51,17 +51,7 @@ export default function RegisterLogin() {
         return <OnChain goNext={() => setCurSep(CREATE_ACCOUNT_STEP.DONE)} />
       }
       case CREATE_ACCOUNT_STEP.DONE: {
-        return <>
-          <Left>
-            <LeftInner>
-              <BreadCrumbs activeStep={curStep} />
-              <CompleteLeft />
-            </LeftInner>
-          </Left>
-          <Right>
-            <CompleteRight />
-          </Right>
-        </>
+        return <CompleteStep />
       }
     }
   }, [curStep])
@@ -99,23 +89,5 @@ export default function RegisterLogin() {
         {/*<Authorize />*/}
       </div>
     </div>
-  </div>
-}
-
-export function Left({ children, className }: { children: React.ReactNode, className?: string }) {
-  return <div className={cx(S.left, className)}>
-    {children}
-  </div>
-}
-
-export function Right({ children }: { children: React.ReactNode }) {
-  return <div className={S.right}>
-    {children}
-  </div>
-}
-
-export function LeftInner({ children }: { children: React.ReactNode }) {
-  return <div className={S.leftInner}>
-    {children}
   </div>
 }

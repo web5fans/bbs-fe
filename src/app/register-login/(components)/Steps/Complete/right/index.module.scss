@@ -1,13 +1,14 @@
+@use "@/styles/rem";
+
 .wrap {
-  width: 518px;
-  height: 639px;
-  //background-image: url("/assets/login/byte-m.gif");
+  width: 100%;
+  min-height: rem.px2flexible(200);
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 30px;
+  padding: 88px 30px;
   position: relative;
 
   .bgWrap {
@@ -21,58 +22,60 @@
 
   .gif {
     position: relative;
+    width: 100%;
     height: 100%;
   }
 
   .bgImage {
     position: absolute;
     top: 0;
+    width: 100%;
     height: 102%;
   }
 
   .card {
     width: 100%;
-    height: 224px;
-    border: 2px solid;
+    height: rem.px2flexible(105);
+    border: rem.px2flexible(1) solid;
     background: rgba(255, 255, 255, 0.90);
-    padding: 4px 0 0 5px;
+    padding: rem.px2flexible(3.5);
     position: relative;
 
     .title {
       position: absolute;
-      right: 13px;
-      top: 4px;
+      right: rem.px2flexible(7);
+      top: rem.px2flexible(3);
       font-family: var(--font-arcade);
-      font-size: 16px;
+      font-size: rem.px2flexible(8);
     }
 
     .inner {
       height: 100%;
       background-image: url("/assets/login/complete-card-bg.png");
       background-repeat: no-repeat;
-      background-size: 445px 212px;
+      background-size: 100% 100%;
       font-family: var(--font-CLFN);
 
       .top {
-        padding-top: 10px;
-        padding-left: 22px;
-        font-size: 12px;
+        padding-top: rem.px2flexible(5.5);
+        padding-left: rem.px2flexible(5.5);
+        font-size: rem.px2flexible(6);
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: rem.px2flexible(5);
         text-transform: capitalize;
       }
 
       .name {
-        margin-top: 27px;
-        font-size: 35px;
+        margin-top: rem.px2flexible(12.5);
+        font-size: rem.px2flexible(16);
         font-weight: 500;
         text-align: center;
-        margin-bottom: 25px;
+        margin-bottom: rem.px2flexible(9);
       }
       .did {
-        font-size: 18px;
-        padding: 0 25px;
+        font-size: rem.px2flexible(9);
+        padding: 0 rem.px2flexible(12.5);
         word-break: break-word;
         text-align: center;
 
@@ -81,6 +84,7 @@
           display: inline-block;
           margin-left: 10px;
           cursor: pointer;
+          width: rem.px2flexible(8);
         }
       }
     }
@@ -97,5 +101,11 @@
     width: 2px;
     height: 2px;
     background: #363636;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .gif, .bgImage {
+    height: auto !important;
   }
 }

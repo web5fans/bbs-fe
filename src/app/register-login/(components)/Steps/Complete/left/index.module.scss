@@ -1,32 +1,36 @@
+@use "@/styles/rem";
+
 .wrap {
-  padding-top: 54px;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: var(--font-CLFN);
-  margin-left: -78px;
+
+  $marginTop: min(50px, #{rem.px2flexible(30)});
 
   .gif {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 54px;
+    width: rem.px2flexible(50);
+    height: rem.px2flexible(50);
+    margin-top: $marginTop;
   }
 
 
   .title {
-    font-size: 34px;
+    font-size: min(24px, #{rem.px2flexible(16)});
     font-weight: 500;
+    margin-top: $marginTop;
+    margin-bottom: rem.px2flexible(9);
   }
 
   .info {
-    font-size: 23px;
-    margin-top: 15px;
+    font-size: min(18px, #{rem.px2flexible(12)});
+    text-align: center;
   }
 
   .button {
-    width: 112px;
-    height: 50px;
-    font-size: 18px;
-    margin-top: 74px;
+    width: min(132px, #{rem.px2flexible(96)});
+    height: rem.px2flexible(25);
+    font-size: min(18px, #{rem.px2flexible(12)});
+    margin-top: $marginTop;
   }
 }

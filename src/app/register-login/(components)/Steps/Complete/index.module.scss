@@ -1,0 +1,19 @@
+@use "@/styles/rem";
+
+.wrap {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(#{rem.px2flexible(227)}, 1fr));
+
+  .left {
+    padding: rem.px2flexible(15);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .wrap {
+    .left {
+      padding-bottom: 99px;
+    }
+  }
+}
