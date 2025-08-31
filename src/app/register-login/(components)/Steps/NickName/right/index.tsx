@@ -18,7 +18,8 @@ export const StepNickNameRight = () => {
 
   useEffect(() => {
     if (!ref.current || !flyRef.current) return;
-    flyRef.current.style.left = ref.current.getBoundingClientRect().right + 'px';
+    const left = ref.current.offsetLeft + ref.current.clientWidth
+    flyRef.current.style.left = left + 'px';
 
   }, []);
 
