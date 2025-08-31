@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { getPostUriHref } from "@/lib/postUriHref";
+import { LayoutCenter } from "@/components/Layout";
 
 export default function PostDetailPage() {
   const { postId } = useParams<{ postId: string }>()
@@ -19,29 +20,34 @@ export default function PostDetailPage() {
 
   const decodeId = getPostUriHref(postId)
 
-  return <div className={S.container} ref={rootRef}>
-    <PostDetail
-      postId={decodeId}
-      breadCrumb={<BreadCrumbs
-        className={S.breadCrumb}
-        breads={[{
-          title: '首页',
-          route: '/posts'
-        }, {
-          title: '帖子详情'
-        }]}
-      />}
-    />
-    <FloatingMark ref={stickyRef}>
-      <Button
-        type={'primary'}
-        className={cx(S.comment, !isWhiteUser && '!hidden')}
-        onClick={() => {
-          document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
-        }}
-      ><CommentIcon /></Button>
-    </FloatingMark>
-  </div>
+  return <LayoutCenter>
+    <div
+      className={S.container}
+      ref={rootRef}
+    >
+      <PostDetail
+        postId={decodeId}
+        breadCrumb={<BreadCrumbs
+          className={S.breadCrumb}
+          breads={[{
+            title: '首页',
+            route: '/posts'
+          }, {
+            title: '帖子详情'
+          }]}
+        />}
+      />
+      <FloatingMark ref={stickyRef}>
+        <Button
+          type={'primary'}
+          className={cx(S.comment, !isWhiteUser && '!hidden')}
+          onClick={() => {
+            document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
+          }}
+        ><CommentIcon /></Button>
+      </FloatingMark>
+    </div>
+  </LayoutCenter>
 }
 
 export function CommentIcon() {

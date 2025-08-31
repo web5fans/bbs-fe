@@ -140,7 +140,7 @@ const MainToolbarContent = ({
         <ImageUploadButton text="图片" />
       </ToolbarGroup>
 
-      {/*<Spacer />*/}
+      <Spacer />
 
       {/*{isMobile && <ToolbarSeparator />}*/}
 

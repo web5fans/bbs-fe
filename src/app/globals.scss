@@ -32,12 +32,3 @@ body {
 p {
   margin: 0;
 }
-
-
-@media screen and (max-width: 767px) {
-  //html { font-size: rem.$designSize + px; }
-}
-
-@media screen and (min-width: 768px) {
-  //:root { font-size: rem.$designSize * 2 + px; }
-}

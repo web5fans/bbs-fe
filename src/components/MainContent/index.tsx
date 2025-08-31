@@ -7,6 +7,7 @@ import useDeviceFlex from "@/hooks/useDeviceFlex";
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc'
 import dayjs from "dayjs";
+import "./index.scss";
 
 dayjs.extend(duration)
 dayjs.extend(utc);
@@ -27,10 +28,10 @@ const MainContent = (props: {
   }, []);
 
   useEffect(() => {
-    document.body.style.setProperty('--device-type', props.deviceType || '');
-    document.body.style.setProperty('--center-content-width', centerWidth + 'px');
-    document.body.style.setProperty('--flexible-design-size', !isUseDoubleSize ? '375' : '16');
-    document.body.style.setProperty('--flexible-size-unit', !isUseDoubleSize ? '100vw' : '2rem');
+    document.documentElement.style.setProperty('--device-type', props.deviceType || '');
+    document.documentElement.style.setProperty('--center-content-width', centerWidth + 'px');
+    document.documentElement.style.setProperty('--flexible-design-size', !isUseDoubleSize ? '375' : '16');
+    document.documentElement.style.setProperty('--flexible-size-unit', !isUseDoubleSize ? '100vw' : '2rem');
 
   }, [centerWidth, isUseDoubleSize]);
 

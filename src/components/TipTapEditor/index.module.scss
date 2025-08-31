@@ -1,3 +1,5 @@
+@use "@/styles/rem";
+
 .wrap {
   height: 100%;
   .editor {
@@ -7,7 +9,7 @@
     :global {
       .tiptap.ProseMirror {
         height: 100%;
-        padding: 20px;
+        padding: rem.px2flexible(10);
         overflow-y: auto;
       }
     }

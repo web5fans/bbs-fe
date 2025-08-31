@@ -54,6 +54,7 @@
     flex-grow: 1;
     text-align: left;
     line-height: 1.5rem;
+    flex-shrink: 0;
   }
 
   &[data-text-trim="on"] {

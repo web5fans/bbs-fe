@@ -11,4 +11,9 @@
       color: var(--primary-color);
     }
   }
+
+  .arrow {
+    width: rem.px2flexible(11);
+    height: rem.px2flexible(11);
+  }
 }

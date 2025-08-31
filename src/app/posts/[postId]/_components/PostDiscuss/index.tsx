@@ -57,19 +57,19 @@ const PostDiscuss = (props: {
     }
   }
 
-  if (!hasLoggedIn) {
-    return <div className={S.wrap}>
-      <p className={S.title}>跟帖讨论</p>
-      <NoAuth />
-    </div>
-  }
-
-  if (!isWhiteUser) {
-    return <div className={S.wrap}>
-      <p className={S.title}>跟帖讨论</p>
-      <NoWhiteAuth />
-    </div>
-  }
+  // if (!hasLoggedIn) {
+  //   return <div className={S.wrap}>
+  //     <p className={S.title}>跟帖讨论</p>
+  //     <NoAuth />
+  //   </div>
+  // }
+  //
+  // if (!isWhiteUser) {
+  //   return <div className={S.wrap}>
+  //     <p className={S.title}>跟帖讨论</p>
+  //     <NoWhiteAuth />
+  //   </div>
+  // }
 
 
   return <div className={S.wrap} id={'comment_post'}>
@@ -102,7 +102,7 @@ function NoAuth() {
   const { openRegisterPop } = useRegisterPopUp()
 
   return <div className={S.empty}>
-    <FaceIcon />
+    <FaceIcon className={S.faceIcon} />
     <p className={S.tips}>抱歉！仅限已注册BBS论坛账号的用户跟帖讨论</p>
     <Button
       type={'primary'}
@@ -119,7 +119,7 @@ function NoAuth() {
 
 function NoWhiteAuth() {
   return <div className={S.empty}>
-    <FaceIcon />
+    <FaceIcon className={S.faceIcon} />
     <p className={S.tips}>抱歉！仅限白名单用户跟帖讨论</p>
   </div>
 }
