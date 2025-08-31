@@ -15,7 +15,7 @@ const CancelOperation = (props: {
 
   return <>
     <Button
-      className={cx(S.cancel, props.className)}
+      className={cx(props.className)}
       disabled={props.disabled}
       onClick={() => setVisible(true)}
     >取消</Button>
@@ -23,7 +23,7 @@ const CancelOperation = (props: {
     <Modal visible={visible} onVisibleChange={setVisible}>
       <div className={S.modal}>
         <div className={S.info}>
-          <WarningIcon />
+          <WarningIcon className={S.warningIcon} />
           确定取消内容？取消不保留内容。有重要内容，请先备份哦！
         </div>
         <div className={S.modalFooter}>

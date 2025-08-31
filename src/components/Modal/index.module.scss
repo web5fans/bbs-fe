@@ -1,3 +1,5 @@
+@use "@/styles/rem";
+
 .overlay {
   background: rgba(0, 0, 0, 0.20);
   display: grid;
@@ -5,18 +7,18 @@
 }
 
 .modal {
-  border-top: 2px solid #000;
-  border-right: 4px solid #000;
-  border-bottom: 4px solid #000;
-  border-left: 2px solid #000;
+  border-top: rem.px2flexible(1) solid #000;
+  border-right: rem.px2flexible(2) solid #000;
+  border-bottom: rem.px2flexible(2) solid #000;
+  border-left: rem.px2flexible(1) solid #000;
   background: #EAEAEA;
-  padding: 18px;
+  padding: rem.px2flexible(9);
   font-family: var(--font-CLFN);
   outline: none;
 
   .inner {
-    border: 2px solid #000;
+    border: rem.px2flexible(1) solid #000;
     background: #FFF;
-    box-shadow: 3px 3px 6px 0 #DBDBDB inset;
+    box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) rem.px2flexible(3) 0 #DBDBDB inset;
   }
 }
