@@ -10,14 +10,14 @@ type FloatingMarkProps = {
 
 const FloatingMark = (props: FloatingMarkProps) => {
   const { children, ...rest } = props;
-  const [ visible, setVisible ] = useState(true)
+  const [ visible, setVisible ] = useState(false)
 
   useEffect(() => {
     const f = () => {
       const scrollTop = document.documentElement.scrollTop;
       const clientHeight = document.documentElement.clientHeight;
       const visible = scrollTop >= clientHeight
-      // setVisible(visible);
+      setVisible(visible);
     }
 
     window.addEventListener('scroll', f);

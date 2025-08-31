@@ -2,13 +2,13 @@
 
 import S from "@/app/posts/[postId]/index.module.scss";
 import PostItem from "@/app/posts/[postId]/_components/PostItem";
-import Pagination from "rc-pagination";
 import PostDiscuss from "@/app/posts/[postId]/_components/PostDiscuss";
 import CardWindow from "@/components/CardWindow";
 import { useRequest } from "ahooks";
 import server from "@/server";
 import { useEffect } from "react";
 import { PostFeedItemType } from "@/app/posts/utils";
+import BBSPagination from "@/components/BBSPagination";
 
 const PAGE_SIZE = 20
 
@@ -73,12 +73,11 @@ const PostDetail = (props: PostDetailProps) => {
         />
       })}
 
-      <Pagination
+      <BBSPagination
         hideOnSinglePage
         pageSize={20}
         total={replyList?.total || 0}
         onChange={(page) => reLoadReply(page)}
-        className={S.pagination}
         align={'center'}
       />
 
@@ -95,9 +94,3 @@ const PostDetail = (props: PostDetailProps) => {
 }
 
 export default PostDetail;
-
-function OuterWrap() {
-  return <div>
-
-  </div>
-}

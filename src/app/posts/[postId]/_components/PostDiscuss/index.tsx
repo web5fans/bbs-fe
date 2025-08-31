@@ -57,19 +57,19 @@ const PostDiscuss = (props: {
     }
   }
 
-  // if (!hasLoggedIn) {
-  //   return <div className={S.wrap}>
-  //     <p className={S.title}>跟帖讨论</p>
-  //     <NoAuth />
-  //   </div>
-  // }
-  //
-  // if (!isWhiteUser) {
-  //   return <div className={S.wrap}>
-  //     <p className={S.title}>跟帖讨论</p>
-  //     <NoWhiteAuth />
-  //   </div>
-  // }
+  if (!hasLoggedIn) {
+    return <div className={S.wrap}>
+      <p className={S.title}>跟帖讨论</p>
+      <NoAuth />
+    </div>
+  }
+
+  if (!isWhiteUser) {
+    return <div className={S.wrap}>
+      <p className={S.title}>跟帖讨论</p>
+      <NoWhiteAuth />
+    </div>
+  }
 
 
   return <div className={S.wrap} id={'comment_post'}>

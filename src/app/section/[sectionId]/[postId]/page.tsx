@@ -13,6 +13,7 @@ import { CommentIcon } from "@/app/posts/[postId]/page";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { getPostUriHref } from "@/lib/postUriHref";
+import { LayoutCenter } from "@/components/Layout";
 
 export default function SectionPostPage(){
   const { postId, sectionId } = useParams<{ postId: string; sectionId: string }>()
@@ -32,33 +33,38 @@ export default function SectionPostPage(){
 
   const decodeId = getPostUriHref(postId)
 
-  return <div className={S.container}>
-    <div className={S.inner} ref={rootRef}>
-      <PostDetail
-        sectionId={sectionId}
-        postId={decodeId}
-        breadCrumb={<BreadCrumbs
-          className={S.breadCrumb}
-          breads={[{
-            title: '首页',
-            route: '/posts'
-          }, {
-            title: sectionInfo?.name || '',
-            route: `/section/${sectionId}`
-          }, {
-            title: '帖子详情'
-          }]}
-        />}
-      />
-      <FloatingMark ref={stickyRef}>
-        <Button
-          type={'primary'}
-          className={cx(S.comment, !hasLoggedIn && '!hidden')}
-          onClick={() => {
-            document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
-          }}
-        ><CommentIcon /></Button>
-      </FloatingMark>
+  return <LayoutCenter>
+    <div className={S.container}>
+      <div
+        className={S.inner}
+        ref={rootRef}
+      >
+        <PostDetail
+          sectionId={sectionId}
+          postId={decodeId}
+          breadCrumb={<BreadCrumbs
+            className={S.breadCrumb}
+            breads={[{
+              title: '首页',
+              route: '/posts'
+            }, {
+              title: sectionInfo?.name || '',
+              route: `/section/${sectionId}`
+            }, {
+              title: '帖子详情'
+            }]}
+          />}
+        />
+        <FloatingMark ref={stickyRef}>
+          <Button
+            type={'primary'}
+            className={cx(S.comment, !hasLoggedIn && '!hidden')}
+            onClick={() => {
+              document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
+            }}
+          ><CommentIcon /></Button>
+        </FloatingMark>
+      </div>
     </div>
-  </div>
+  </LayoutCenter>
 }

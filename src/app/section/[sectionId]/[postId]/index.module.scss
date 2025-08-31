@@ -1,27 +1,25 @@
+@use "@/styles/rem";
+
 .container {
-  padding: 0 172px;
-  margin: 30px auto 80px;
+  max-width: 1054px;
+  margin: rem.px2flexible(15) auto rem.px2flexible(40);
   font-family: var(--font-CLFN);
 
-  .inner {
-    width: 1094px;
-  }
-
   .window {
-    --card-window-line-gap: 2px;
+    --card-window-line-gap: #{rem.px2flexible(1)};
   }
 }
 
 .breadCrumb {
-  padding: 0 10px;
+  padding: 0 rem.px2flexible(5);
   position: absolute;
-  left: 40px;
+  left: rem.px2flexible(20);
   height: 100%;
   background: #EAEAEA;
 }
 
 .comment {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   margin-bottom: 8px;
 }
