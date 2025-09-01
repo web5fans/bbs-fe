@@ -14,6 +14,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { postUriToHref } from "@/lib/postUriHref";
 import Avatar from "@/components/Avatar";
 import { handleToNickName } from "@/lib/handleToNickName";
+import useDeviceType from "@/hooks/useDeviceType";
 
 const NoticeBoard = () => {
   const { hasLoggedIn, userProfile, visitorId } = useCurrentUser()
@@ -27,7 +28,11 @@ const NoticeBoard = () => {
 
   const router = useRouter()
 
+  const { isMobile } = useDeviceType()
+
   const hasMoreCard = list?.length > 2
+
+  const marqueeSpeed = isMobile ? 50: 100;
 
   return <CardWindow
     wrapClassName={S.wrap}
@@ -36,7 +41,7 @@ const NoticeBoard = () => {
     noInnerWrap
   >
     <div className={S.content}>
-      <Marquee autoFill speed={100}>
+      <Marquee autoFill speed={marqueeSpeed}>
         {hasLoggedIn ? <p
           style={{ marginRight: 20 }}
           className={S.marquee}
