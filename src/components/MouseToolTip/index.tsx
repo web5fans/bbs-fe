@@ -20,7 +20,6 @@ const MouseToolTip = (props: {
   };
 
   const mouseEnter = (e) => {
-    console.log('e>>>>>', e)
     if (!tipsRef.current || !props.open) return
     if (tipsRef.current) {
       tipsRef.current.style.left = e.nativeEvent.x + 'px';
