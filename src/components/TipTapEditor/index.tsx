@@ -266,6 +266,8 @@ export default function TipTapEditor(props: TipTapEditorProps) {
       const html = editorProp.getHTML()
       const text = editorProp.getText()
 
+      if (!text.trim()) return
+
       props.onUpdate?.({
         json,
         html,
