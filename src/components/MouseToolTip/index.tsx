@@ -2,6 +2,7 @@
 
 import S from './index.module.scss'
 import { useRef } from "react";
+import useDeviceType from "@/hooks/useDeviceType";
 
 const MouseToolTip = (props: {
   children?: React.ReactNode;
@@ -9,6 +10,7 @@ const MouseToolTip = (props: {
   message?: string
 }) => {
   const tipsRef = useRef<HTMLDivElement>(null)
+  const {} = useDeviceType()
 
   const handleMouseMove = (e) => {
     if (tipsRef.current) {
@@ -18,7 +20,12 @@ const MouseToolTip = (props: {
   };
 
   const mouseEnter = (e) => {
+    console.log('e>>>>>', e)
     if (!tipsRef.current || !props.open) return
+    if (tipsRef.current) {
+      tipsRef.current.style.left = e.nativeEvent.x + 'px';
+      tipsRef.current.style.top = e.nativeEvent.y + 'px';
+    }
     tipsRef.current.style.display = 'block'
   }
 

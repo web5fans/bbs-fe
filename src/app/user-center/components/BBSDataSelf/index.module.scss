@@ -44,6 +44,11 @@
       align-items: center;
       gap: rem.px2flexible(5);
       cursor: default;
+
+      .uploadIcon {
+        width: rem.px2flexible(6);
+        height: rem.px2flexible(6);
+      }
     }
   }
 
@@ -88,7 +93,8 @@
 
   .card {
     margin: 0;
-    transform: translateY(rem.px2flexible(1));
+    position: relative;
+    top: rem.px2flexible(1);
   }
 }
 

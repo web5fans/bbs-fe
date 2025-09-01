@@ -2,6 +2,7 @@
 
 import CopyIcon from '@/assets/copy.svg'
 import { useToast } from "../../provider/toast";
+import S from './index.module.scss'
 
 const CopyText = (props: {
   text: string;
@@ -21,7 +22,7 @@ const CopyText = (props: {
     })
   }
 
-  return <CopyIcon className={props.className} style={{ cursor: 'pointer' }} onClick={copy} />
+  return <CopyIcon className={`${S.icon} ${props.className}`} style={{ cursor: 'pointer' }} onClick={copy} />
 }
 
 export default CopyText;

@@ -55,20 +55,21 @@ function DataCard() {
       open
       message={'功能正在研发中，敬请期待～'}>
       <p className={S.tips}>
-        <UploadIcon />
+        <UploadIcon className={S.uploadIcon} />
         切换BBS数据储存位置
       </p>
     </MouseToolTip>
   </InfoCard>
 }
 
-function UploadIcon() {
+function UploadIcon(props: { className?: string }) {
   return <svg
     xmlns="http://www.w3.org/2000/svg"
     width="12"
     height="12"
     viewBox="0 0 12 12"
     fill="none"
+    className={props.className}
   >
     <g clip-path="url(#clip0_324_43440)">
       <rect

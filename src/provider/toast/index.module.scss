@@ -1,17 +1,19 @@
+@use "@/styles/rem";
+
 .toast {
-  border-top: 2px solid #000;
-  border-right: 4px solid #000;
-  border-bottom: 4px solid #000;
-  border-left: 2px solid #000;
+  border-top: rem.px2flexible(1) solid #000;
+  border-right: rem.px2flexible(2) solid #000;
+  border-bottom: rem.px2flexible(2) solid #000;
+  border-left: rem.px2flexible(1) solid #000;
   background: #FFF;
-  padding: 24px;
+  padding: rem.px2flexible(12);
   .inner {
     display: flex;
-    gap: 24px;
+    gap: rem.px2flexible(12);
 
-    > svg {
-      width: 18px;
-      height: 18px;
+    .statusIcon {
+      width: rem.px2flexible(9);
+      height: rem.px2flexible(9);
     }
 
     .info {
@@ -19,16 +21,16 @@
       flex: 1;
 
       .title {
-        font-size: 18px;
-        line-height: 18px;
+        font-size: rem.px2flexible(9);
+        line-height: 1;
         font-weight: 500;
         color: var(--primary-color);
       }
 
       .message {
-        margin-top: 18px;
-        font-size: 14px;
-        line-height: 14px;
+        margin-top: rem.px2flexible(9);
+        font-size: rem.px2flexible(7);
+        line-height: 1;
         color: #363636;
         word-break: break-all;
       }

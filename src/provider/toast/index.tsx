@@ -25,8 +25,8 @@ type ToastOptions = {
 };
 
 const iconsMap = {
-  success: <OKIcon />,
-  error: <ErrIcon />,
+  success: <OKIcon className={S.statusIcon} />,
+  error: <ErrIcon className={S.statusIcon} />,
 }
 
 const NOTIFICATION_WIDTH = 386;
