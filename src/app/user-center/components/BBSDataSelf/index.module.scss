@@ -1,49 +1,48 @@
+@use "@/styles/rem";
 .container {
-  border: 2px solid #000;
+  border: rem.px2flexible(1) solid #000;
   background: var(--100, #E7E7E7);
 
   /* bg hover */
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25) inset;
+  box-shadow: 0 0 rem.px2flexible(7.5) 0 rgba(0, 0, 0, 0.25) inset;
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 100%;
-  padding: 0 40px;
+  padding: rem.px2flexible(14) rem.px2flexible(10);
 
   .header {
-    font-size: 28px;
+    font-size: rem.px2flexible(14);
     font-weight: 500;
   }
 
   .card {
     width: 100%;
-    height: 152px;
-    margin-top: 12px;
-    margin-bottom: 30px;
+    height: rem.px2flexible(76);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: rem.px2flexible(8);
     color: #6C6C6C;
 
     .title {
       text-align: center;
-      font-size: 16px;
+      font-size: rem.px2flexible(8);
     }
 
     .location {
-      font-size: 26px;
+      font-size: rem.px2flexible(13);
       font-weight: 500;
       color: #000;
     }
 
     .tips {
-      font-size: 12px;
+      font-size: rem.px2flexible(6);
       opacity: 0.3;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: rem.px2flexible(5);
       cursor: default;
     }
   }
@@ -51,8 +50,8 @@
   .data {
     display: flex;
     align-items: center;
-    gap: 50px;
-    padding-left: 9px;
+    gap: rem.px2flexible(25);
+    padding-left: rem.px2flexible(4);
     justify-content: start;
     align-self: stretch;
     > p {
@@ -61,12 +60,45 @@
       align-items: center;
 
       >span:first-child {
-        font-size: 24px;
+        font-size: rem.px2flexible(12);
         font-weight: 500;
       }
 
       > span:last-child {
-        font-size: 14px;
+        font-size: rem.px2flexible(7);
+      }
+    }
+  }
+}
+
+.breakPoint1024 {
+  flex-direction: row;
+  gap: rem.px2flexible(20);
+
+  .header {
+    line-height: rem.px2flexible(18);
+  }
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .card {
+    margin: 0;
+    transform: translateY(rem.px2flexible(1));
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .container {
+    padding-top: 22px;
+    padding-bottom: 22px;
+    &:not(.breakPoint1024) {
+      .card {
+        margin: 20px 0;
       }
     }
   }

@@ -1,18 +1,19 @@
+@use "@/styles/rem";
 .empty {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: rem.px2flexible(15);
   align-items: center;
   justify-content: center;
-  height: 321px;
+  height: rem.px2flexible(160);
 
   > img {
-    width: 158px;
-    height: 55px;
+    width: rem.px2flexible(79);
+    height: rem.px2flexible(27.5);
   }
 
   .emptyTip {
-    font-size: 18px;
+    font-size: rem.px2flexible(9);
     font-weight: 500;
   }
 }

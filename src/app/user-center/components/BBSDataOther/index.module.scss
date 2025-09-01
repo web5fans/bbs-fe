@@ -1,47 +1,79 @@
+@use "@/styles/rem";
 .container {
-  border: 2px solid #000;
+  border: rem.px2flexible(1) solid #000;
   background: var(--100, #E7E7E7);
 
   /* bg hover */
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25) inset;
+  box-shadow: 0 0 rem.px2flexible(7.5) 0 rgba(0, 0, 0, 0.25) inset;
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 46px 40px 0;
+  padding: rem.px2flexible(17) rem.px2flexible(10);
+  box-sizing: border-box;
 
   .header {
-    font-size: 28px;
+    font-size: rem.px2flexible(14);
     font-weight: 500;
-    margin-bottom: 48px;
+    margin-bottom: rem.px2flexible(20);
   }
 
   .card {
+    flex: 1;
     width: 100%;
-    height: 152px;
+    min-width: 106px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 25px;
   }
 
   .data {
     display: flex;
     align-items: center;
-    gap: 50px;
-    padding-left: 9px;
-    justify-content: start;
+    gap: rem.px2flexible(15);
+    justify-content: center;
     align-self: stretch;
+    flex-wrap: wrap;
+    padding: rem.px2flexible(10) 0;
     > p {
       display: flex;
       flex-direction: column;
       align-items: center;
+      flex-shrink: 0;
 
       >span:first-child {
-        font-size: 24px;
+        font-size: rem.px2flexible(12);
         font-weight: 500;
       }
 
       > span:last-child {
-        font-size: 14px;
+        font-size: min(14px, #{rem.px2flexible(8)});
+      }
+    }
+  }
+}
+
+@media (min-width: 1130px) { // 试出来的断点  这个时候card不会换行
+  .container {
+    .card {
+      height: 152px;
+      flex: none;
+    }
+  }
+}
+
+@media (max-width: 1023px) {
+  .container {
+    padding: rem.px2flexible(14) rem.px2flexible(10);
+    flex-direction: row;
+    align-items: center;
+    gap: rem.px2flexible(20);
+    .header {
+      margin-bottom: 0;
+      > span {
+        position: relative;
+        left: 10%;
       }
     }
   }

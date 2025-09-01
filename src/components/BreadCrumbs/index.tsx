@@ -14,7 +14,7 @@ const BreadCrumbs = ({ breads, className }: Props) => {
 
   return <div className={cx(S.breadCrumb, className)}>
     {breads.map(({ title, route, onClick }, index) => {
-      return <div key={index} className={'flex items-center capitalize'}>
+      return <div key={index} className={S.wrap}>
         {index !== 0 && <Arrow className={S.arrow} />}
         {(route || onClick) ? <a onClick={() => {
           if (onClick) {

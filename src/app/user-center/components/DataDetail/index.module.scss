@@ -1,37 +1,38 @@
+@use "@/styles/rem";
+
 .container {
-  border-top: 2px solid #000;
-  border-right: 4px solid #000;
-  border-bottom: 4px solid #000;
-  border-left: 2px solid #000;
+  border-top: rem.px2flexible(1) solid #000;
+  border-right: rem.px2flexible(2) solid #000;
+  border-bottom: rem.px2flexible(2) solid #000;
+  border-left: rem.px2flexible(1) solid #000;
   background: var(--border-100, #E7E7E7);
-  padding: 20px;
-  margin-top: 40px;
+  padding: rem.px2flexible(10);
+  margin-top: rem.px2flexible(20);
 
   .header {
-    font-size: 20px;
+    font-size: rem.px2flexible(10);
     font-weight: 500;
-    margin-bottom: 14px;
+    margin-bottom: rem.px2flexible(7);
   }
 
   .tabs {
     display: inline-flex;
-    gap: 16px;
-    border-bottom: 2px solid var(--black, #000);
+    gap: rem.px2flexible(8);
+    border-bottom: rem.px2flexible(1) solid var(--black, #000);
     position: relative;
-    bottom: -2px;
+    bottom: rem.px2flexible(-1);
     > span {
-      border: 2px solid var(--black, #000);
+      border: rem.px2flexible(1) solid var(--black, #000);
       background: var(--white, #FFF);
-      padding: 10px 30px 8px;
-      font-size: 18px;
+      padding: rem.px2flexible(5) rem.px2flexible(15) rem.px2flexible(4);
+      font-size: rem.px2flexible(9);
       position: relative;
-      bottom: -2px;
+      bottom: rem.px2flexible(-1);
       cursor: pointer;
       transition: padding 0.15s;
-      height: 50px;
 
       &.active {
-        padding-inline: 50px;
+        padding-inline: rem.px2flexible(25);
         background: var(--primary-color);
         color: #FFFFFF;
         border-bottom: none;
@@ -41,8 +42,8 @@
   }
 
   .content {
-    border: 2px solid #000;
+    border: rem.px2flexible(1) solid #000;
     background: #FFF;
-    padding: 20px;
+    padding: rem.px2flexible(10);
   }
 }

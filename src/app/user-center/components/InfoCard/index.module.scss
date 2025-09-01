@@ -1,3 +1,4 @@
+@use "@/styles/rem";
 .content {
   background: #F6FCFC;
   position: relative;
@@ -14,22 +15,22 @@
   .bb {
     left: 0;
     width: 100%;
-    height: 2px;
+    height: rem.px2flexible(1);
   }
 
   .br, .bl {
     top: 0;
-    width: 2px;
+    width: rem.px2flexible(1);
     height: 100%;
   }
 
   .bt {
-    top: -2px;
+    top: rem.px2flexible(-1);
     background: var(--primary-color);
   }
   .br {
-    right: -2px;
+    right: rem.px2flexible(-1);
   }
-  .bb { bottom: -2px }
-  .bl { left: -2px; background: var(--primary-color) }
+  .bb { bottom: rem.px2flexible(-1) }
+  .bl { left: rem.px2flexible(-1); background: var(--primary-color) }
 }

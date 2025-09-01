@@ -1,26 +1,27 @@
+@use "@/styles/rem";
+
 .container {
-  border: 2px solid #000;
+  border: rem.px2flexible(1) solid #000;
   background: var(--100, #E7E7E7);
 
   /* bg hover */
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25) inset;
-  padding: 30px 38px;
+  box-shadow: 0 0 rem.px2flexible(7.5) 0 rgba(0, 0, 0, 0.25) inset;
+  padding: rem.px2flexible(14) rem.px2flexible(10);
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: rem.px2flexible(12);
 
   .leftWrap {
-    width: 200px;
-    padding: 17px 16px;
+    padding: rem.px2flexible(6);
     .avatar {
-      width: 168px;
-      height: 168px;
-      font-size: 56px;
+      width: rem.px2flexible(52.5);
+      height: rem.px2flexible(52.5);
+      font-size: min(30px, #{rem.px2flexible(18)});
     }
 
     .userName {
-      margin-top: 20px;
-      font-size: 40px;
+      margin-top: rem.px2flexible(10);
+      font-size: min(30px, #{rem.px2flexible(18)});
       font-weight: 500;
       text-align: center;
       text-transform: capitalize;
@@ -31,13 +32,13 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: rem.px2flexible(10);
   }
 
   .register {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: rem.px2flexible(9);
 
     .item {
       flex: 1;
@@ -46,22 +47,21 @@
 }
 
 .card {
-  height: 82px;
-  font-size: 18px;
+  font-size: rem.px2flexible(8);
 
   .inner {
-    padding: 6px 14px;
+    padding: rem.px2flexible(3) rem.px2flexible(7);
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     .left {
-      padding: 4px 0;
+      padding: rem.px2flexible(2) 0;
     }
 
     .title {
       color: #6C6C6C;
-      margin-bottom: 10px;
+      margin-bottom: rem.px2flexible(5);
     }
 
     .content {
@@ -69,9 +69,25 @@
     }
 
     .copy {
-      width: 14px;
-      height: 14px;
+      width: rem.px2flexible(7);
+      height: rem.px2flexible(7);
       background: #FFFFFF;
+    }
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .container {
+    .leftWrap {
+      padding: 17px 16px;
+      .avatar {
+        width: 168px;
+        height: 168px;
+        font-size: 56px;
+      }
+      .userName {
+        font-size: 40px;
+      }
     }
   }
 }

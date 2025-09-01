@@ -5,6 +5,12 @@
   align-items: center;
   font-size: rem.px2flexible(7);
 
+  .wrap {
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+  }
+
   a {
     cursor: pointer;
     &:hover {

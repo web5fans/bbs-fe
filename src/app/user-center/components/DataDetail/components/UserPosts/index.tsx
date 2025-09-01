@@ -10,6 +10,7 @@ import { JSX, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { postUriToHref } from "@/lib/postUriHref";
+import S from './index.module.scss'
 
 type UserPostsPropsType = {
   did: string
@@ -61,11 +62,11 @@ const UserPosts = (props: UserPostsPropsType) => {
     if (isMe) {
       return <EmptyPostsList
         goPublish={() => router.push('/posts/publish')}
-        className={'!h-[440px]'}
+        className={S.empty}
         message={'暂无帖子，快去发帖讨论吧！'}
       />
     }
-    return <EmptyText className={'!h-[440px]'} message={'此人的帖子正在酝酿中...'} />
+    return <EmptyText className={S.empty} message={'此人的帖子正在酝酿中...'} />
   }
 
   return <div>

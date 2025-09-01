@@ -13,6 +13,7 @@ import { UserProfileType } from "@/store/userInfo";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { handleToNickName } from "@/lib/handleToNickName";
+import { LayoutCenter } from "@/components/Layout";
 
 const Page = () => {
   const { userProfile, hasLoggedIn, writeProfile, getUserProfile } = useCurrentUser()
@@ -41,30 +42,42 @@ const Page = () => {
     return null
   }
 
-  return <div className={S.container}>
-    <CardWindow
-      noInnerWrap
-      headerExtra={<BreadCrumbs
-      className={S.breadCrumb}
-      breads={[{
-        title: '论坛首页',
-        route: '/posts'
-      }, {
-        title: '个人中心'
-      }]}
-    />}>
-      <div className={S.wrap}>
-        <div className={S.left}>
-          <UserInfo userProfile={userInfo} isMe />
+  return <LayoutCenter>
+    <div className={S.container}>
+      <CardWindow
+        noInnerWrap
+        headerExtra={<BreadCrumbs
+          className={S.breadCrumb}
+          breads={[{
+            title: '论坛首页',
+            route: '/posts'
+          }, {
+            title: '个人中心'
+          }]}
+        />}
+      >
+        <div className={S.wrap}>
+          <div className={S.left}>
+            <UserInfo
+              userProfile={userInfo}
+              isMe
+            />
+          </div>
+          <div className={S.right}>
+            <BBSDataSelf
+              postsCount={userInfo?.post_count}
+              replyCount={userInfo?.reply_count}
+            />
+          </div>
         </div>
-        <div className={S.right}>
-          <BBSDataSelf postsCount={userInfo?.post_count} replyCount={userInfo?.reply_count} />
-        </div>
-      </div>
-    </CardWindow>
+      </CardWindow>
 
-    <DataDetail did={userProfile?.did} profile={userInfo} />
-  </div>
+      <DataDetail
+        did={userProfile?.did}
+        profile={userInfo}
+      />
+    </div>
+  </LayoutCenter>
 }
 
 export default Page;

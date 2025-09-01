@@ -1,39 +1,66 @@
 import S from './index.module.scss'
 import InfoCard from "@/app/user-center/components/InfoCard";
 import MouseToolTip from "@/components/MouseToolTip";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import cx from "classnames";
 
 const BBSData = (props: {
   postsCount?: string
   replyCount?: string
 }) => {
   const { postsCount = '0', replyCount = '0' } = props;
+  const { innerWidth } = useMediaQuery()
+
+  const breakPoint1024 = innerWidth <= 1024;
+
+  if (breakPoint1024) {
+    return <div className={cx(S.container, S.breakPoint1024)}>
+      <div className={S.left}>
+        <p className={S.header}>BBS 数据</p>
+        <DataStatistic postsCount={postsCount} replyCount={replyCount} />
+      </div>
+      <DataCard />
+    </div>
+  }
 
   return <div className={S.container}>
     <p className={S.header}>BBS 数据</p>
-    <InfoCard className={S.card}>
-      <p className={S.title}>数据存储位置</p>
-      <p className={S.location}>web5.bbs.fans</p>
-      <MouseToolTip open message={'功能正在研发中，敬请期待～'}>
-        <p className={S.tips}>
-          <UploadIcon />
-          切换BBS数据储存位置
-        </p>
-      </MouseToolTip>
-    </InfoCard>
-    <div className={S.data}>
-      <p>
-        <span>{postsCount}</span>
-        <span>帖子</span>
-      </p>
-      <p>
-        <span>{replyCount}</span>
-        <span>回帖</span>
-      </p>
-    </div>
+    <DataCard />
+    <DataStatistic postsCount={postsCount} replyCount={replyCount} />
   </div>
 }
 
 export default BBSData;
+
+function DataStatistic(props: { postsCount: string; replyCount: string }) {
+  const { postsCount = '0', replyCount = '0' } = props;
+
+  return <div className={S.data}>
+    <p>
+      <span>{postsCount}</span>
+      <span>帖子</span>
+    </p>
+    <p>
+      <span>{replyCount}</span>
+      <span>回帖</span>
+    </p>
+  </div>
+}
+
+function DataCard() {
+  return <InfoCard className={S.card}>
+    <p className={S.title}>数据存储位置</p>
+    <p className={S.location}>web5.bbs.fans</p>
+    <MouseToolTip
+      open
+      message={'功能正在研发中，敬请期待～'}>
+      <p className={S.tips}>
+        <UploadIcon />
+        切换BBS数据储存位置
+      </p>
+    </MouseToolTip>
+  </InfoCard>
+}
 
 function UploadIcon() {
   return <svg

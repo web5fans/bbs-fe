@@ -1,0 +1,5 @@
+@use "@/styles/rem";
+
+.empty {
+  height: rem.px2flexible(220) !important;
+}

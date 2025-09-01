@@ -22,6 +22,7 @@
     background: #E2F2F2;
     width: 100%;
     position: relative;
+    box-sizing: border-box;
 
     .inner {
       font-size: min(16px, #{rem.px2flexible(10)});

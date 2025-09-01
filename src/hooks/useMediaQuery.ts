@@ -18,6 +18,7 @@ export default function useMediaQuery(): {
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;
+  innerWidth: number | undefined;
 } {
   const [breakpoint, setBreakpoint] = useState<Breakpoint>('desktop');
   const [innerWidth, setInnerWidth] = useState<number | undefined>(undefined);
@@ -50,5 +51,6 @@ export default function useMediaQuery(): {
     isMobile: breakpoint === 'mobile',
     isTablet: breakpoint === 'tablet',
     isDesktop: breakpoint === 'desktop',
+    innerWidth,
   };
 };

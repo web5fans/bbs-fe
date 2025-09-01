@@ -2,7 +2,7 @@
 
 import S from './index.module.scss'
 import cx from "classnames";
-import useDeviceType from "@/hooks/useDeviceType";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 export const LayoutCenter = (props: {
   children: React.ReactNode;
@@ -10,7 +10,8 @@ export const LayoutCenter = (props: {
   style?: React.CSSProperties;
 }) => {
 
-  const { isMobile } = useDeviceType()
+  const { innerWidth } = useMediaQuery()
+  const isMobile = innerWidth < 768;
 
   return <div style={props.style} className={cx(isMobile ? S.mobileContainer :S.container, props.className)}>
     {props.children}

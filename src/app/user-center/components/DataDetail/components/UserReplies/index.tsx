@@ -9,6 +9,7 @@ import { JSX, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ReplyPostItem from "../ReplyPostItem";
 import { postUriToHref } from "@/lib/postUriHref";
+import S from './index.module.scss'
 
 type UserRepliesPropsType = {
   did: string
@@ -50,7 +51,7 @@ const UserReplies = (props: UserRepliesPropsType) => {
   }, [loading]);
 
   if (dataSource?.list && dataSource?.list.length === 0) {
-    return <EmptyText className={'!h-[440px]'} message={'此人的帖子正在酝酿中...'} />
+    return <EmptyText className={S.empty} message={'此人的帖子正在酝酿中...'} />
   }
 
   return <div>

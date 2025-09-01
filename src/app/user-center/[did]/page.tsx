@@ -3,13 +3,14 @@
 import { useRequest } from "ahooks";
 import server from "@/server";
 import { UserProfileType } from "@/store/userInfo";
-import S from "@/app/user-center/index.module.scss";
+import S from "./index.module.scss";
 import CardWindow from "@/components/CardWindow";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import UserInfo from "@/app/user-center/components/UserInfo";
 import DataDetail from "@/app/user-center/components/DataDetail";
 import { useParams, useRouter } from "next/navigation";
 import BBSDataOther from "@/app/user-center/components/BBSDataOther";
+import { LayoutCenter } from "@/components/Layout";
 
 const UserProfilePage = () => {
   const { did } = useParams<{ did: string }>()
@@ -25,30 +26,39 @@ const UserProfilePage = () => {
     ready: !!decodeDid
   })
 
-  return <div className={S.container}>
-    <CardWindow
-      noInnerWrap
-      headerExtra={<BreadCrumbs
-        className={S.breadCrumb}
-        breads={[{
-          title: '帖子详情',
-          onClick: () => router.back()
-        }, {
-          title: userInfo?.displayName
-        }]}
-      />}>
-      <div className={S.wrap}>
-        <div className={S.left}>
-          <UserInfo userProfile={userInfo} />
+  return <LayoutCenter>
+    <div className={S.container}>
+      <CardWindow
+        noInnerWrap
+        headerExtra={<BreadCrumbs
+          className={S.breadCrumb}
+          breads={[{
+            title: '帖子详情',
+            onClick: () => router.back()
+          }, {
+            title: userInfo?.displayName
+          }]}
+        />}
+      >
+        <div className={S.wrap}>
+          <div className={S.left}>
+            <UserInfo userProfile={userInfo} />
+          </div>
+          <div className={S.right}>
+            <BBSDataOther
+              postsCount={userInfo?.post_count}
+              replyCount={userInfo?.reply_count}
+            />
+          </div>
         </div>
-        <div className={S.right}>
-          <BBSDataOther postsCount={userInfo?.post_count} replyCount={userInfo?.reply_count} />
-        </div>
-      </div>
-    </CardWindow>
+      </CardWindow>
 
-    <DataDetail did={userInfo?.did} profile={userInfo} />
-  </div>
+      <DataDetail
+        did={userInfo?.did}
+        profile={userInfo}
+      />
+    </div>
+  </LayoutCenter>
 }
 
 export default UserProfilePage;

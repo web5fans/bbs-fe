@@ -14,12 +14,11 @@
     gap: rem.px2flexible(10);
 
     .left {
-      flex: 1;
-      flex-shrink: 0;
+      width: 720px;
     }
 
     .right {
-      width: 298px;
+      flex: 1;
       align-self: stretch;
     }
   }
@@ -33,12 +32,17 @@
   background: #EAEAEA;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
   .container{
     .wrap {
       flex-wrap: wrap;
+     .left {
+       flex: 1;
+       flex-shrink: 0;
+     }
       .right {
         width: 100%;
+        flex: none;
       }
     }
   }
