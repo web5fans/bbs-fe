@@ -38,7 +38,7 @@ const OnChain = (props: {
 
   const infoRender = () => {
     if (loading) {
-      return <div className={S.info}>身份信息正在传输，存储至CKB区块链中
+      return <div className={S.info}>身份信息正在传输，存储至CKB区块链中，请稍等
         <DotLoading />
         {/* 移动端高度占位 */}
         <p>&nbsp;</p>
