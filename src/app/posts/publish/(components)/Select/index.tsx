@@ -10,6 +10,7 @@ type SelectProps = {
   renderItem: (item: any) => React.ReactNode
   onChange: (value: string) => void
   selectedValue?: string
+  className?: string
 }
 
 const StyledSelect = (props: SelectProps) => {
@@ -43,7 +44,7 @@ const StyledSelect = (props: SelectProps) => {
   return (
     <div
       ref={selectRef}
-      className={S.wrap}
+      className={cx(S.wrap, props.className)}
       // style={style}
     >
       {/* 选择框 */}

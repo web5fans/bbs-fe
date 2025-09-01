@@ -124,8 +124,9 @@ $inputWidth: rem.px2flexible(247);
 
 .lengthLimit {
   display: none;
-  font-size: 20px;
+  font-size: rem.px2flexible(10);
   font-family: var(--font-CLFN);
+  margin-left: rem.px2flexible(4);
 }
 
 @keyframes blink {
