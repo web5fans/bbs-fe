@@ -1,4 +1,4 @@
-html {
+@mixin global-scroll {
   ::-webkit-scrollbar {
     width: 20px;  /* 垂直滚动条宽度 */
     height: 20px; /* 水平滚动条高度 */
@@ -14,47 +14,88 @@ html {
     background-color: #EAEAEA;
     outline: 2px solid #000; /* 替代border */
     outline-offset: -2px;    /* 向内偏移 */
+    border-bottom: 3px solid;
   }
 
   ::-webkit-scrollbar-thumb:vertical {
-    /* 5条横线图案（总高度 = 5*2px + 4*3.5px = 24px） */
+    /* 5条横线图案（总高度 = 5*2px + 4*4px = 26px） */
     background-image: repeating-linear-gradient(
                     to bottom,
                     #000 0px 2px,    /* 第一条线 */
-                    transparent 2px 5.5px, /* 间隔3.5px (5.5-2=3.5) */
-                    #000 5.5px 7.5px,
-                    transparent 7.5px 11px,
-                    #000 11px 13.5px,
-                    transparent 13.5px 16px,
-                    #000 16px 18px,
-                    transparent 18px 21.5px,
-                    #000 21.5px 23.5px
+                    transparent 2px 6px, /* 间隔4px */
+                    #000 6px 8px,
+                    transparent 8px 12px,
+                    #000 12px 14px,
+                    transparent 14px 18px,
+                    #000 18px 20px,
+                    transparent 20px 24px,
+                    #000 24px 26px
     );
 
     /* 居中显示线条 */
     background-position: center;
-    background-size: 10px 24px; /* 两侧留2px边距 */
+    background-size: 10px 26px; /* 两侧留2px边距 */
     background-repeat: no-repeat;
   }
 
   ::-webkit-scrollbar-thumb:horizontal {
-    /* 5条横线图案（总高度 = 5*2px + 4*3.5px = 24px） */
+    /* 5条横线图案（总高度 = 5*2px + 4*4px = 26px） */
     background-image: repeating-linear-gradient(
                     to right,
                     #000 0px 2px,    /* 第一条线 */
-                    transparent 2px 5.5px, /* 间隔3.5px (5.5-2=3.5) */
-                    #000 5.5px 7.5px,
-                    transparent 7.5px 11px,
-                    #000 11px 13.5px,
-                    transparent 13.5px 16px,
-                    #000 16px 18px,
-                    transparent 18px 21.5px,
-                    #000 21.5px 23.5px
+                    transparent 2px 6px, /* 间隔4px */
+                    #000 6px 8px,
+                    transparent 8px 12px,
+                    #000 12px 14px,
+                    transparent 14px 18px,
+                    #000 18px 20px,
+                    transparent 20px 24px,
+                    #000 24px 26px
     );
 
     /* 居中显示线条 */
     background-position: center;
-    background-size: 24px 10px; /* 两侧留2px边距 */
+    background-size: 26px 10px; /* 两侧留2px边距 */
     background-repeat: no-repeat;
+  }
+}
+
+@mixin component-x-scroll {
+  &::-webkit-scrollbar {
+    width: 10px;  /* 垂直滚动条宽度 */
+    height: 12px; /* 水平滚动条高度 */
+  }
+
+  &::-webkit-scrollbar-track {
+    outline: 1px solid #000; /* 替代border */
+    outline-offset: -4px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    outline: 1px solid #000; /* 替代border */
+    outline-offset: -1px;
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+  }
+
+  &::-webkit-scrollbar-thumb:horizontal {
+    background-size: 26px 5px;
+  }
+}
+
+@mixin component-y-scroll {
+  &::-webkit-scrollbar {
+    width: 12px;  /* 垂直滚动条宽度 */
+    height: 12px; /* 水平滚动条高度 */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-bottom: 4px solid;
+  }
+
+  &::-webkit-scrollbar-thumb:vertical {
+    background-size: 4px 26px;
   }
 }

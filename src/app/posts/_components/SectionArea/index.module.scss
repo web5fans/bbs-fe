@@ -1,4 +1,5 @@
 @use "@/styles/rem";
+@use "@/styles/scroll-bar";
 
 .wrap {
   border-top: rem.px2flexible(1) solid #000;
@@ -23,6 +24,8 @@
       display: flex;
       overflow-x: auto;
       overflow-y: hidden;
+
+      @include scroll-bar.component-x-scroll;
 
       &.moreCard {
         padding-bottom: rem.px2flexible(10);

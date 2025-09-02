@@ -2,11 +2,13 @@
 
 @use "@/styles/tt-variables";
 @use "rc-pagination/assets";
-//@use "@/styles/scroll-bar";
+@use "@/styles/scroll-bar";
 
 @use "tailwindcss";
 
-//html { font-size: rem.$designSize + px; }
+html {
+  @include scroll-bar.global-scroll;
+}
 
 :root {
   --primary-color: #319999;

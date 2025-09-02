@@ -1,4 +1,5 @@
 @use "@/styles/rem";
+@use "@/styles/scroll-bar";
 
 .wrap {
   height: 100%;
@@ -11,6 +12,8 @@
         height: 100%;
         padding: rem.px2flexible(10);
         overflow-y: auto;
+
+        @include scroll-bar.component-y-scroll;
       }
     }
   }
