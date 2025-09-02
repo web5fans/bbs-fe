@@ -238,7 +238,7 @@ export default function useCreateAccount({ createSuccess }: {
 
     console.log('txHash', txHash)
     if (!txHash) return
-    const txRes = await walletClient?.waitTransaction(txHash)
+    const txRes = await walletClient?.waitTransaction(txHash, 0, 60000 * 2)
     console.log('txRes', txRes)
     if (txRes?.status !== 'committed') {
       await deleteErrUser(preCreateResult.did, address, signKey!)
