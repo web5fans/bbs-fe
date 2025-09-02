@@ -2,7 +2,6 @@
 
 import S from './index.module.scss'
 import { useRef } from "react";
-import useDeviceType from "@/hooks/useDeviceType";
 
 const MouseToolTip = (props: {
   children?: React.ReactNode;
@@ -10,7 +9,6 @@ const MouseToolTip = (props: {
   message?: string
 }) => {
   const tipsRef = useRef<HTMLDivElement>(null)
-  const {} = useDeviceType()
 
   const handleMouseMove = (e) => {
     if (tipsRef.current) {
