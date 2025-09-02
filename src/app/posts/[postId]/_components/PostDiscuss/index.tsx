@@ -121,5 +121,9 @@ function NoWhiteAuth() {
   return <div className={S.empty}>
     <FaceIcon className={S.faceIcon} />
     <p className={S.tips}>抱歉！仅限白名单用户跟帖讨论</p>
+    <Button
+      type={'primary'}
+      className={S.white}
+    >申请开通白名单</Button>
   </div>
 }

@@ -55,10 +55,14 @@
     font-weight: 500;
   }
 
-  .log {
+  .log, .white {
     width: rem.px2flexible(50);
     height: rem.px2flexible(16);
     font-size: rem.px2flexible(7);
+  }
+
+  .white {
+    width: rem.px2flexible(65);
   }
 
   .mes {

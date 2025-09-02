@@ -12,7 +12,7 @@ const PublishPost = () => {
   const router = useRouter()
 
 
-  return <MouseToolTip open={!isWhiteUser} message={hasLoggedIn && !isWhiteUser ? '目前仅限白名单用户才可以发帖' : ''}>
+  return <MouseToolTip open={!isWhiteUser} message={hasLoggedIn && !isWhiteUser ? '暂时只有白名单用户可以发帖，可返回首页申请开通' : ''}>
     <Button
       type={'primary'}
       className={S.button}
