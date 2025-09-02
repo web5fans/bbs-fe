@@ -1,0 +1,1 @@
+export const APPLY_WHITE_LIST_URL = 'https://www.bbs.fans'

@@ -10,6 +10,8 @@ import { useRef, useState } from "react";
 import { writesPDSOperation } from "@/app/posts/utils";
 import { useToast } from "@/provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import Link from "next/link";
+import { APPLY_WHITE_LIST_URL } from "@/constant/constant";
 
 const PostDiscuss = (props: {
   postUri: string
@@ -121,9 +123,11 @@ function NoWhiteAuth() {
   return <div className={S.empty}>
     <FaceIcon className={S.faceIcon} />
     <p className={S.tips}>抱歉！仅限白名单用户跟帖讨论</p>
-    <Button
-      type={'primary'}
-      className={S.white}
-    >申请开通白名单</Button>
+    <Link href={APPLY_WHITE_LIST_URL} target={'_blank'}>
+      <Button
+        type={'primary'}
+        className={S.white}
+      >申请开通白名单</Button>
+    </Link>
   </div>
 }

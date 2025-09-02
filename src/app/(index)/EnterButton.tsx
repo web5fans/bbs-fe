@@ -7,7 +7,7 @@ import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import FlatButton from "@/components/FlatButton";
 import Link from "next/link";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import cx from "classnames";
+import { APPLY_WHITE_LIST_URL } from "@/constant/constant";
 
 const EnterButton = () => {
   const router = useRouter()
@@ -33,9 +33,11 @@ const EnterButton = () => {
       onClick={joinBuild}
       onMouseEnter={() => router.prefetch('/posts')}
     >{buttonName}</Button>
-    <FlatButton className={cx(S.tourist, hasLoggedIn && !isWhiteUser ? '' : '!hidden')}>
-      申请开通白名单
-    </FlatButton>
+    <Link href={APPLY_WHITE_LIST_URL} className={hasLoggedIn && !isWhiteUser ? '' : '!hidden'} target={'_blank'}>
+      <FlatButton className={S.tourist}>
+        申请开通白名单
+      </FlatButton>
+    </Link>
     <Link href={'/posts'} prefetch className={hasLoggedIn ? '!hidden' : ''}>
       <FlatButton className={S.tourist}>
         游客看看
