@@ -7,6 +7,7 @@
   border-left: rem.px2flexible(1) solid #000;
   background: #FFF;
   padding: rem.px2flexible(12);
+  max-width: min(386px, #{rem.px2flexible(210)});
   .inner {
     display: flex;
     gap: rem.px2flexible(12);

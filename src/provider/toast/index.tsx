@@ -103,7 +103,6 @@ const ToastItem = ({
             top: '1em',
             right: 0,
             zIndex: 9999,
-            maxWidth: NOTIFICATION_WIDTH,
           }}
           variants={slideIn}
           initial="hidden"

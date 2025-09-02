@@ -12,6 +12,7 @@ import { useNickName } from "@/provider/RegisterNickNameProvider";
 import ArrowRight from '@/assets/login/arrow-right.svg'
 import DotLoading from "@/components/DotLoading";
 import cx from "classnames";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 const OnChain = (props: {
   goNext: () => void
@@ -23,6 +24,8 @@ const OnChain = (props: {
   const { nickname } = useNickName()
 
   const [overInfo, setOverInfo] = useState<DragEndEvent['over']>()
+
+  const { innerWidth } = useMediaQuery()
 
   useDndMonitor({
     onDragStart(event: DragStartEvent) {
@@ -36,6 +39,8 @@ const OnChain = (props: {
     }
   })
 
+  const innerWidth1023 = innerWidth < 1024;
+
   const infoRender = () => {
     if (loading) {
       return <div className={S.info}>身份信息正在传输，存储至CKB区块链中，请稍等
@@ -48,7 +53,7 @@ const OnChain = (props: {
       return <div className={S.err}>
         因{createStatus.reason}原因，信息储存到区块链失败，
         <br />
-        请重新尝试拖动左边信息到右边
+        {innerWidth1023 ? '请重新尝试拖动上边信息到下边' : '请重新尝试拖动左边信息到右边'}
       </div>
     }
 

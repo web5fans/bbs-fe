@@ -2,12 +2,10 @@
 
 .wrap {
   display: flex;
-  flex-wrap: wrap;
   width: 100%;
 
   .top {
     min-width: rem.px2flexible(260);
-    //width: 55%;
     padding: rem.px2flexible(15) rem.px2flexible(15) min(60px, #{rem.px2flexible(20)}) rem.px2flexible(15);
   }
 
@@ -68,6 +66,7 @@
 
 @media screen and (max-width: 1023px) {
   .wrap {
+    flex-wrap: wrap;
     .top {
       min-width: 0;
       width: 100%;
