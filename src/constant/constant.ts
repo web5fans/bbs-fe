@@ -1,1 +1,1 @@
-export const APPLY_WHITE_LIST_URL = 'https://forms.gle/ZMKPm3CMcrDyf1fQ8'
+export const APPLY_WHITE_LIST_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfsP5M3bl-JHGYk-eHKIs7dfbPPmij2v3ARkFugvfMhU7l_Ew/viewform'
