@@ -265,14 +265,11 @@ export default function TipTapEditor(props: TipTapEditorProps) {
       const json = editorProp.getJSON()
       const html = editorProp.getHTML()
       const text = editorProp.getText()
-      const hasUploadedImg = json.content?.find(e => e.type === 'image');
-
-      if (!text.trim() && !hasUploadedImg) return
 
       props.onUpdate?.({
         json,
         html,
-        text,
+        text: text.trim(),
       })
       // console.log('text', text, text.length);
     },

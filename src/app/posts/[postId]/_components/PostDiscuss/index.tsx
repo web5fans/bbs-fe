@@ -22,16 +22,25 @@ const PostDiscuss = (props: {
   const [publishing, setPublishing] = useState(false)
 
   const [richText, setRichText] = useState('')
+  const [publishDis, setPublishDis] = useState(false)
 
   const editorRef = useRef<EditorRefType>(null)
 
   const toast = useToast()
 
-  const editorUpdate = ({ json, html }: EditorUpdateData) => {
+  const editorUpdate = ({ json, html, text }: EditorUpdateData) => {
     const { content } = json
     if (!content) return
     const hasImageUploadErr = content.filter(e => e.type === "imageUpload")[0]
-    if (hasImageUploadErr) return;
+    if (hasImageUploadErr) {
+      setPublishDis(true);
+      return;
+    }
+
+    const hasUploadedImg = json.content?.find(e => e.type === 'image');
+
+    setPublishDis(!text && !hasUploadedImg);
+
     setRichText(html)
   }
 
@@ -89,11 +98,11 @@ const PostDiscuss = (props: {
           : <Button
             type={'primary'}
             className={S.publish}
-            disabled={!richText}
+            disabled={publishDis || !richText}
             onClick={publishReply}
           >发布</Button>
       }
-      <PublishPostCancelButton className={S.publish} disabled={!richText} />
+      <PublishPostCancelButton className={S.publish} disabled={publishDis || !richText} />
     </div>
   </div>
 }

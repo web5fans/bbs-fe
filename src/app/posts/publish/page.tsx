@@ -32,7 +32,7 @@ const PublishPostPage = () => {
   const [richText, setRichText] = useState('')
   const [publishing, setPublishing] = useState(false)
   const [sectionId, setSectionId] = useState(defaultSection)
-
+  const [publishDis, setPublishDis] = useState(false)
 
 
   const toast = useToast()
@@ -60,11 +60,16 @@ const PublishPostPage = () => {
 
     setTextNumber(textNumber)
 
-    console.log('json', json)
     const { content } = json
     if (!content) return
     const hasImageUploadErr = content.filter(e => e.type === "imageUpload")[0]
-    if (hasImageUploadErr || !textNumber) return;
+    if (hasImageUploadErr) {
+      setPublishDis(true)
+      return;
+    }
+    const hasUploadedImg = json.content?.find(e => e.type === 'image');
+
+    setPublishDis(!text && !hasUploadedImg);
     setRichText(html)
   }
 
@@ -98,7 +103,7 @@ const PublishPostPage = () => {
     }
   }
 
-  const allowPublish = !!richText && !!postTitle
+  const allowPublish = !(!richText || publishDis) && !!postTitle
 
   const noAuth = !isWhiteUser
 
