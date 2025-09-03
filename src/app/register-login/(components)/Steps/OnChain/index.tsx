@@ -65,7 +65,7 @@ const OnChain = (props: {
     }
 
     return <div className={S.info}>
-      拖动ID名片到CKB链，<br />
+      {innerWidth1023 ? '拖动ID名片到下方CKB链任意方块' : '拖动ID名片到右侧CKB链任意方块'}，<br />
       授权后即可在区块链上永久存储，不可被第三方篡改
     </div>
   }
