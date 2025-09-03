@@ -1,1 +1,1 @@
-export const APPLY_WHITE_LIST_URL = 'https://www.bbs.fans'
+export const APPLY_WHITE_LIST_URL = 'https://forms.gle/ZMKPm3CMcrDyf1fQ8'
