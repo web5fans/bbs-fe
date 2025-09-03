@@ -17,7 +17,7 @@ const CLFN = localFont({
 
 const fontVariables = [
   ArcadeInterlaced.variable,
-  CLFN.variable,
+  // CLFN.variable,
 ].join(' ')
 
 export default fontVariables;
