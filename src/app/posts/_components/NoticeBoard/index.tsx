@@ -41,7 +41,7 @@ const NoticeBoard = () => {
     noInnerWrap
   >
     <div className={S.content}>
-      <Marquee autoFill speed={marqueeSpeed}>
+      <Marquee autoFill speed={marqueeSpeed} style={{ overflow: 'hidden' }}>
         {hasLoggedIn ? <p
           style={{ marginRight: 20 }}
           className={S.marquee}
