@@ -21,7 +21,7 @@
 
     .userName {
       margin-top: rem.px2flexible(10);
-      font-size: min(30px, #{rem.px2flexible(18)});
+      font-size: rem.px2flexible(13);
       font-weight: 500;
       text-align: center;
       text-transform: capitalize;
@@ -83,9 +83,6 @@
         width: 168px;
         height: 168px;
         font-size: 56px;
-      }
-      .userName {
-        font-size: 40px;
       }
     }
   }
