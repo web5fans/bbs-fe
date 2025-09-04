@@ -9,7 +9,7 @@ const ArcadeInterlaced = localFont({
 
 const CLFN = localFont({
   src: [
-    { path: './CLFN/c16xcnr.ttf', weight: '400', style: 'normal' },
+    { path: './CLFN/c24xcn.ttf', weight: '400', style: 'normal' },
     { path: './CLFN/c16xcnb.ttf', weight: '500', style: 'normal' },
   ],
   variable: '--font-CLFN'
@@ -17,7 +17,7 @@ const CLFN = localFont({
 
 const fontVariables = [
   ArcadeInterlaced.variable,
-  // CLFN.variable,
+  CLFN.variable,
 ].join(' ')
 
 export default fontVariables;
