@@ -5,16 +5,14 @@ import cx from "classnames";
 import Avatar from "@/components/Avatar";
 import { UserProfileType } from "@/store/userInfo";
 import utcToLocal from "@/lib/utcToLocal";
+import { useEffect, useRef } from "react";
 
 const UserInfo = ({ userProfile, isMe }: {
   userProfile?: UserProfileType
   isMe?: boolean
 }) => {
   return <div className={S.container}>
-    <div className={S.leftWrap}>
-      <Avatar nickname={userProfile?.displayName} className={S.avatar} />
-      <p className={S.userName}>{userProfile?.displayName}</p>
-    </div>
+    <LeftInfo nickname={userProfile?.displayName} />
     <div className={S.rightWrap}>
       <CardItem title={'Web5域名'} content={userProfile?.handle} showCopy={isMe} />
       <CardItem title={'Web5 did'} content={userProfile?.did} showCopy={isMe} />
@@ -27,6 +25,61 @@ const UserInfo = ({ userProfile, isMe }: {
 }
 
 export default UserInfo;
+
+function LeftInfo({ nickname }: {
+  nickname?: string
+}) {
+  const avatarRef = useRef<HTMLDivElement>(null);
+  const nameRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (!avatarRef.current) return
+    const textWidth = nameRef.current?.scrollWidth;
+    const defaultSize = getComputedStyle(nameRef.current).fontSize.replace('px', '');
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (!nameRef.current || !avatarRef.current) return
+
+      const isUnderAnd768 = window.innerWidth < 768
+
+      // 获取容器和文本宽度
+      const containerWidth = avatarRef.current?.scrollWidth;
+      if (!containerWidth) return
+
+      if (textWidth > containerWidth) {
+        // 计算需要缩小的比例
+        const ratio = containerWidth / textWidth;
+        let newSize = Math.floor(defaultSize * ratio) - 1;
+
+        // 设置最小字体限制
+        newSize = Math.max(newSize, 8);
+
+        // 应用新字体大小
+        nameRef.current.style.fontSize = newSize + 'px';
+        if (isUnderAnd768) {
+          nameRef.current.style.width = containerWidth + 'px';
+        }
+      }
+
+
+    })
+    resizeObserver.observe(avatarRef.current)
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, []);
+
+  return <div className={S.leftWrap}>
+    <div ref={avatarRef}>
+      <Avatar
+        nickname={nickname}
+        className={S.avatar}
+      />
+    </div>
+    <p className={S.userName} ref={nameRef}>{nickname}</p>
+  </div>
+}
 
 function CardItem(props: {
   className?: string;
