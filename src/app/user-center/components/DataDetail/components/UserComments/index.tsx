@@ -7,19 +7,19 @@ import LoadMoreView from "@/components/LoadMoreView";
 import { EmptyPostsList, EmptyText } from "@/components/Empty";
 import { JSX, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import ReplyPostItem from "../ReplyPostItem";
+import CommentPostItem from "../CommentPostItem";
 import { postUriToHref } from "@/lib/postUriHref";
 import S from './index.module.scss'
 
-type UserRepliesPropsType = {
+type UserCommentsPropsType = {
   did: string
   emptyRender?: () => JSX.Element
-  replyName: string
+  commentName: string
   scrollToTop?: () => void
 }
 
-const UserReplies = (props: UserRepliesPropsType) => {
-  const { did, replyName } = props;
+const UserComments = (props: UserCommentsPropsType) => {
+  const { did, commentName } = props;
 
   const router = useRouter();
 
@@ -27,7 +27,7 @@ const UserReplies = (props: UserRepliesPropsType) => {
 
     const { nextCursor } = prevData || {};
 
-    const pagedData = await server<PostFeedType>('/post/replied', 'POST', {
+    const pagedData = await server<PostFeedType>('/post/commented', 'POST', {
       limit: 20,
       cursor: nextCursor,
       repo: did
@@ -58,16 +58,16 @@ const UserReplies = (props: UserRepliesPropsType) => {
     {dataSource?.list.map((item, index) => {
       const uri = postUriToHref(item.uri)
       const href = `/posts/${uri}`
-      return <ReplyPostItem
+      return <CommentPostItem
         feed={item}
         key={item.uri}
         onClick={() => router.push(href)}
         onHover={() => router.prefetch(href)}
-        nickname={replyName}
+        nickname={commentName}
       />
     })}
     {!loading && !noMore && <LoadMoreView onLoadMore={loadMore} />}
   </div>
 }
 
-export default UserReplies;
+export default UserComments;

@@ -47,7 +47,7 @@ const UserProfilePage = () => {
           <div className={S.right}>
             <BBSDataOther
               postsCount={userInfo?.post_count}
-              replyCount={userInfo?.reply_count}
+              commentCount={userInfo?.comment_count}
             />
           </div>
         </div>

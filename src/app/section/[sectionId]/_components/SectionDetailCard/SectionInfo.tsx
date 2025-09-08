@@ -46,7 +46,7 @@ export default function SectionInfo(props: {
             版主：<span className={'text-black'}>{sectionInfo?.owner?.displayName}</span>
           </p>}
           <FeedStatistic
-            replyCount={sectionInfo?.reply_count}
+            commentCount={sectionInfo?.comment_count}
             visitedCount={sectionInfo?.visited_count}
           />
         </div>

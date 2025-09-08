@@ -44,16 +44,15 @@ const PostDiscuss = (props: {
     setRichText(html)
   }
 
-  const publishReply = async () => {
+  const publishComment = async () => {
     setPublishing(true)
     try {
       await updateProfile()
       await writesPDSOperation({
         record: {
-          $type: 'app.bbs.reply',
+          $type: 'app.bbs.comment',
           text: richText,
-          root: props.postUri,
-          parent: props.postUri,
+          post: props.postUri,
           section_id: props.sectionId,
         },
         did: userProfile?.did!
@@ -99,7 +98,7 @@ const PostDiscuss = (props: {
             type={'primary'}
             className={S.publish}
             disabled={publishDis || !richText}
-            onClick={publishReply}
+            onClick={publishComment}
           >发布</Button>
       }
       <PublishPostCancelButton className={S.publish} disabled={publishDis || !richText} />

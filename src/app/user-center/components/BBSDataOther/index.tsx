@@ -3,9 +3,9 @@ import InfoCard from "@/app/user-center/components/InfoCard";
 
 const BBSDataOther = (props: {
   postsCount?: string
-  replyCount?: string
+  commentCount?: string
 }) => {
-  const { postsCount = '0', replyCount = '0' } = props;
+  const { postsCount = '0', commentCount = '0' } = props;
 
   return <div className={S.container}>
     <p className={S.header}>
@@ -18,7 +18,7 @@ const BBSDataOther = (props: {
           <span>帖子</span>
         </p>
         <p>
-          <span>{replyCount}</span>
+          <span>{commentCount}</span>
           <span>回帖</span>
         </p>
       </div>

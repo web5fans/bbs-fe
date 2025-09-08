@@ -16,7 +16,7 @@ export type PostFeedItemType = {
   title: string,
   text: string,
   visited_count: number,
-  reply_count: number,
+  comment_count: number,
   visited: string, // 时间
   updated: string, // 时间
   created: string, // 时间
@@ -25,7 +25,7 @@ export type PostFeedItemType = {
 
 export type SectionItem = {
   post_count: string
-  reply_count: string
+  comment_count: string
   id: string;
   name: string
   owner?: { did: string; displayName?: string } // 版主
@@ -46,9 +46,8 @@ type PostRecordType = {
   title: string;
   text: string;
 } | {
-  $type: 'app.bbs.reply'
-  root: string  // 原帖uri
-  parent: string  // 原帖uri 或 回复的uri
+  $type: 'app.bbs.comment'
+  post: string  // 原帖uri
   text: string;
   section_id: string;
 } | {

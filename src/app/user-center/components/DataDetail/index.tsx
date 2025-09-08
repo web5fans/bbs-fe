@@ -3,7 +3,7 @@
 import S from './index.module.scss'
 import { useEffect, useRef, useState } from "react";
 import UserPosts from "./components/UserPosts";
-import UserReplies from "./components/UserReplies";
+import UserComments from "./components/UserComments";
 import { UserProfileType } from "@/store/userInfo";
 
 const tabs = [{
@@ -43,7 +43,7 @@ const DataDetail = (props: { did?: string; profile: UserProfileType }) => {
     </div>
     <div className={S.content}>
       {activeTab === 0 && <UserPosts did={did} scrollToTop={scrollToTop} />}
-      {activeTab === 1 && <UserReplies did={did} replyName={profile.displayName} scrollToTop={scrollToTop} />}
+      {activeTab === 1 && <UserComments did={did} commentName={profile.displayName} scrollToTop={scrollToTop} />}
     </div>
   </div>
 }

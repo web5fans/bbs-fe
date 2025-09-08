@@ -1,10 +1,11 @@
 @use "@/styles/rem";
+
 .feed {
   padding: rem.px2flexible(10);
   cursor: pointer;
   position: relative;
 
-  & + .feed {
+  &+.feed {
     &::before {
       content: '';
       display: block;
@@ -24,10 +25,11 @@
     --avatar-outer-color: var(--primary-color);
     --post-statistic-font-color: var(--primary-color);
 
-    > * {
+    >* {
       color: var(--primary-color);
     }
-    .reply {
+
+    .comment {
       color: var(--primary-color) !important;
     }
   }
@@ -48,12 +50,14 @@
     gap: rem.px2flexible(4);
     text-transform: capitalize;
     font-size: rem.px2flexible(6);
+
     .avatar {
       width: rem.px2flexible(7);
       height: rem.px2flexible(7);
       font-size: rem.px2flexible(4);
     }
-    .reply {
+
+    .comment {
       color: #6C6C6C;
     }
   }
