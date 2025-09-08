@@ -14,7 +14,6 @@ const PAGE_SIZE = 20
 
 type PostDetailProps = {
   breadCrumb?: React.ReactNode;
-  sectionId?: string
   postId: string
 }
 
@@ -60,6 +59,7 @@ const PostDetail = (props: PostDetailProps) => {
         isOriginPoster
         postInfo={originPosterInfo}
         floor={1}
+        sectionId={originPosterInfo?.section_id}
       />}
 
       {commentList?.comments.map((p, idx) => {
@@ -69,6 +69,7 @@ const PostDetail = (props: PostDetailProps) => {
           postInfo={p}
           floor={floor}
           isOriginPoster={p.author.did === originPosterInfo?.author?.did}
+          sectionId={originPosterInfo?.section_id}
         />
       })}
 

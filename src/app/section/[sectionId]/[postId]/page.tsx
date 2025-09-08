@@ -40,7 +40,6 @@ export default function SectionPostPage(){
         ref={rootRef}
       >
         <PostDetail
-          sectionId={sectionId}
           postId={decodeId}
           breadCrumb={<BreadCrumbs
             className={S.breadCrumb}

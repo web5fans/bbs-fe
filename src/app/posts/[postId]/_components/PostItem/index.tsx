@@ -4,18 +4,19 @@ import S from './index.module.scss'
 import Avatar from "@/components/Avatar";
 import FeedStatistic from "@/components/FeedStatistic";
 import cx from "classnames";
-import utcToLocal from "@/lib/utcToLocal";
 import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
 import { useRouter } from "next/navigation";
+import PostItemFooter from "./PostItemFooter";
 
 type PostItemProps = {
   isOriginPoster?: boolean
   postInfo: any
+  sectionId: string
   floor: number
 }
 
 const PostItem = (props: PostItemProps) => {
-  const { postInfo = {}, floor, isOriginPoster } = props;
+  const { postInfo = {}, floor, isOriginPoster, sectionId } = props;
 
   const router = useRouter()
 
@@ -50,10 +51,7 @@ const PostItem = (props: PostItemProps) => {
         <JSONToHtml html={postInfo.text} />
       </div>
 
-      <div className={S.floor}>
-        <span>{utcToLocal(postInfo.created, 'YYYY/MM/DD HH:mm:ss')}</span>
-        <span>{floor}楼</span>
-      </div>
+      <PostItemFooter postInfo={postInfo} sectionId={sectionId} floor={floor} />
     </div>
   </div>
 }

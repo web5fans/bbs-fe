@@ -19,8 +19,13 @@ const Avatar = (props: {
   useEffect(() => {
     if (!rootRef.current) return
     const width = rootRef.current.clientWidth
-    outerRef.current.style.width = `${Math.floor(width)}px`;
-    innerRef.current.style.width = `${Math.ceil(width * 0.92)}px`
+    const outerWidth = `${Math.floor(width)}px`
+    outerRef.current.style.width = outerWidth;
+    outerRef.current.style.height = outerWidth;
+
+    const innerWidth = `${Math.ceil(width * 0.92)}px`
+    innerRef.current.style.width = innerWidth
+    innerRef.current.style.height = innerWidth
   }, []);
 
   const hash = useMemo(() => {
@@ -30,7 +35,11 @@ const Avatar = (props: {
 
   if (!hash && hash !== 0) return null;
 
-  return <div ref={rootRef} className={`${S.wrap} ${props.className} ${(hash || hash === 0) ? S[`color${hash + 1}`] : ''}`}>
+  return <div
+    title={nickname}
+    ref={rootRef}
+    className={`${S.wrap} ${props.className} ${(hash || hash === 0) ? S[`color${hash + 1}`] : ''}`}
+  >
     <CircleInner className={S.circleInner} ref={innerRef} />
     <CircleOuter ref={outerRef} className={S.circle} />
     <span className={S.nick}>{nickname[0]}</span>

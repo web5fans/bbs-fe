@@ -1,0 +1,40 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: rem.px2flexible(2);
+  color: #000;
+
+  .icon {
+    width: rem.px2flexible(7);
+    height: rem.px2flexible(6);
+    cursor: pointer;
+
+    &.liked {
+      color: var(--danger-color);
+    }
+
+    &:not(.liked) {
+      &:hover {
+        color: var(--primary-color);
+      }
+
+      &:not(.disabled) {
+        &:active {
+          color: var(--danger-color);
+          transform: scale(1.6);
+        }
+      }
+    }
+  }
+
+  .count {
+    display: inline-block;
+    padding-left: rem.px2flexible(2);
+    cursor: pointer;
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}

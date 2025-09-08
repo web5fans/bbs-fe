@@ -117,6 +117,22 @@
     gap: rem.px2flexible(10);
     margin-top: rem.px2flexible(10);
   }
+
+  .likedDetail {
+    padding: rem.px2flexible(9);
+    background: #F5F5F5;
+    margin-top: rem.px2flexible(10);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, #{rem.px2flexible(14)});
+    row-gap: rem.px2flexible(9);
+    column-gap: rem.px2flexible(6);
+
+    .likedAvatar {
+      font-size: rem.px2flexible(5);
+      width: rem.px2flexible(14);
+      height: rem.px2flexible(14);
+    }
+  }
 }
 
 @media screen and (min-width: 1024px){

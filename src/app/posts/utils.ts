@@ -55,6 +55,10 @@ type PostRecordType = {
   displayName: string;
   handle: string;
   [key: string]: any;
+} | {
+  $type: 'app.bbs.like'
+  to: string; // 点赞的帖子uri或者评论\回复的uri
+  section_id: string;
 }
 
 type CreatePostResponse = {
@@ -69,7 +73,7 @@ type CreatePostResponse = {
   }[]
 }
 
-/* 发帖、跟帖回复 */
+/* PDS写入操作 */
 export async function writesPDSOperation(params: {
   record: PostRecordType
   did: string
