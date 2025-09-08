@@ -6,9 +6,9 @@ import cx from "classnames";
 
 const BBSData = (props: {
   postsCount?: string
-  replyCount?: string
+  commentCount?: string
 }) => {
-  const { postsCount = '0', replyCount = '0' } = props;
+  const { postsCount = '0', commentCount = '0' } = props;
   const { innerWidth } = useMediaQuery()
 
   const breakPoint1024 = innerWidth <= 1024;
@@ -17,7 +17,7 @@ const BBSData = (props: {
     return <div className={cx(S.container, S.breakPoint1024)}>
       <div className={S.left}>
         <p className={S.header}>BBS 数据</p>
-        <DataStatistic postsCount={postsCount} replyCount={replyCount} />
+        <DataStatistic postsCount={postsCount} commentCount={commentCount} />
       </div>
       <DataCard />
     </div>
@@ -26,14 +26,14 @@ const BBSData = (props: {
   return <div className={S.container}>
     <p className={S.header}>BBS 数据</p>
     <DataCard />
-    <DataStatistic postsCount={postsCount} replyCount={replyCount} />
+    <DataStatistic postsCount={postsCount} commentCount={commentCount} />
   </div>
 }
 
 export default BBSData;
 
-function DataStatistic(props: { postsCount: string; replyCount: string }) {
-  const { postsCount = '0', replyCount = '0' } = props;
+function DataStatistic(props: { postsCount: string; commentCount: string }) {
+  const { postsCount = '0', commentCount = '0' } = props;
 
   return <div className={S.data}>
     <p>
@@ -41,7 +41,7 @@ function DataStatistic(props: { postsCount: string; replyCount: string }) {
       <span>帖子</span>
     </p>
     <p>
-      <span>{replyCount}</span>
+      <span>{commentCount}</span>
       <span>回帖</span>
     </p>
   </div>

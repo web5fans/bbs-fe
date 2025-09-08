@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import PublishPostCancelButton from "@/components/PublishPostCancelButton";
 import ReadIcon from '@/assets/posts/read.svg'
-import ReplyIcon from '@/assets/posts/reply.svg'
+import CommentIcon from '@/assets/posts/comment.svg'
 import MoneyIcon from '@/assets/posts/money.svg'
 import SectionEarth from '@/assets/posts/section.svg'
 import { useRequest } from "ahooks";
@@ -185,8 +185,8 @@ function SelectDropItem(props: {
           {itemInfo.post_count}
         </p>
         <p className={S.infoItem}>
-          <ReplyIcon />
-          {itemInfo.reply_count}
+          <CommentIcon />
+          {itemInfo.comment_count}
         </p>
         {/*<p className={S.infoItem}>*/}
         {/*  <MoneyIcon />*/}

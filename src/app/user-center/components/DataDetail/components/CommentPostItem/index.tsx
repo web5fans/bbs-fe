@@ -7,7 +7,7 @@ import Avatar from "@/components/Avatar";
 import FeedStatistic from "@/components/FeedStatistic";
 import utcToLocal from "@/lib/utcToLocal";
 
-export default function ReplyPostItem({ feed, onClick, onHover, nickname }: {
+export default function CommentPostItem({ feed, onClick, onHover, nickname }: {
   feed: PostFeedItemType;
   onClick?: () => void
   onHover?: () => void
@@ -17,7 +17,7 @@ export default function ReplyPostItem({ feed, onClick, onHover, nickname }: {
 
   const title = feed.title
 
-  const html = feed.reply_text
+  const html = feed.comment_text
 
   useEffect(() => {
     if (!html) return
@@ -37,7 +37,7 @@ export default function ReplyPostItem({ feed, onClick, onHover, nickname }: {
         nickname={nickname}
       />
       {nickname}
-      <span className={S.reply}>回复</span>
+      <span className={S.comment}>回复</span>
     </div>
     <p className={S.header}>
       {title}
@@ -50,10 +50,10 @@ export default function ReplyPostItem({ feed, onClick, onHover, nickname }: {
         <span>{feed.section}</span>
         <FeedStatistic
           visitedCount={feed.visited_count}
-          replyCount={feed.reply_count}
+          commentCount={feed.comment_count}
         />
       </div>
-      <span className={S.time}>{utcToLocal(feed.reply_created)}</span>
+      <span className={S.time}>{utcToLocal(feed.comment_created)}</span>
     </div>
   </div>
 }

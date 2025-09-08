@@ -14,7 +14,7 @@ export type UserProfileType = {
   displayName?: string
   highlight?: string  // 在白名单内才有这个字段
   post_count?: string
-  reply_count?: string
+  comment_count?: string
   created?: string
   handle?: string
 }

@@ -43,7 +43,7 @@ const PostItem = (props: PostItemProps) => {
           <p className={S.title}>{postInfo.title}</p>
           <div className={S.statis}>
             {postInfo.section}
-            <FeedStatistic visitedCount={postInfo.visited_count} replyCount={postInfo.reply_count} />
+            <FeedStatistic visitedCount={postInfo.visited_count} commentCount={postInfo.comment_count} />
           </div>
         </>}
 

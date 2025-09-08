@@ -66,7 +66,7 @@ const Page = () => {
           <div className={S.right}>
             <BBSDataSelf
               postsCount={userInfo?.post_count}
-              replyCount={userInfo?.reply_count}
+              commentCount={userInfo?.comment_count}
             />
           </div>
         </div>

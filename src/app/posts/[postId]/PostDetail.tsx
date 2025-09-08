@@ -30,14 +30,13 @@ const PostDetail = (props: PostDetailProps) => {
     refreshDeps: [postId]
   })
 
-  const { data: replyList, run: reLoadReply } = useRequest(async (page: number = 1) => {
+  const { data: commentList, run: reLoadComment } = useRequest(async (page: number = 1) => {
     const result = await server<{
-      replies: PostFeedItemType[],
+      comments: PostFeedItemType[],
       total: number,
       page:number,
-    }>('/reply/list', 'POST', {
-      root: postId,
-      parent: postId,
+    }>('/comment/list', 'POST', {
+      post: postId,
       page,
       per_page: PAGE_SIZE,
     })
@@ -48,7 +47,7 @@ const PostDetail = (props: PostDetailProps) => {
   })
 
   useEffect(() => {
-    reLoadReply()
+    reLoadComment()
   }, []);
 
   return <CardWindow
@@ -57,14 +56,14 @@ const PostDetail = (props: PostDetailProps) => {
     headerExtra={breadCrumb}
   >
     <div className={S.wrap}>
-      {replyList?.page === 1 &&<PostItem
+      {commentList?.page === 1 &&<PostItem
         isOriginPoster
         postInfo={originPosterInfo}
         floor={1}
       />}
 
-      {replyList?.replies.map((p, idx) => {
-        const floor = ((replyList?.page || 1) - 1) * PAGE_SIZE + idx + 2;
+      {commentList?.comments.map((p, idx) => {
+        const floor = ((commentList?.page || 1) - 1) * PAGE_SIZE + idx + 2;
         return <PostItem
           key={p.uri}
           postInfo={p}
@@ -76,8 +75,8 @@ const PostDetail = (props: PostDetailProps) => {
       <BBSPagination
         hideOnSinglePage
         pageSize={20}
-        total={replyList?.total || 0}
-        onChange={(page) => reLoadReply(page)}
+        total={commentList?.total || 0}
+        onChange={(page) => reLoadComment(page)}
         align={'center'}
       />
 
@@ -86,7 +85,7 @@ const PostDetail = (props: PostDetailProps) => {
         postUri={postId}
         refresh={() => {
           refreshOrigin()
-          reLoadReply(1)
+          reLoadComment(1)
         }}
       />
     </div>
