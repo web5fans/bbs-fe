@@ -137,7 +137,6 @@ export function findNodePosition(props: {
  */
 export const handleImageUpload = async (
   file: File,
-  abortSignal?: AbortSignal,
   did: string
 ): Promise<string> => {
   // Validate file
