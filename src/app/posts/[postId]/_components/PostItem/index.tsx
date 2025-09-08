@@ -7,12 +7,14 @@ import cx from "classnames";
 import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
 import { useRouter } from "next/navigation";
 import PostItemFooter from "./PostItemFooter";
+import PostEdit from "@/app/posts/[postId]/_components/PostEdit";
 
 type PostItemProps = {
   isOriginPoster?: boolean
   postInfo: any
   sectionId: string
   floor: number
+  isAuthor?: boolean
 }
 
 const PostItem = (props: PostItemProps) => {
@@ -41,7 +43,10 @@ const PostItem = (props: PostItemProps) => {
     <div className={S.content}>
       <div>
         {postInfo.title && <>
-          <p className={S.title}>{postInfo.title}</p>
+          <div className={S.title}>
+            <span className={S.titleInner}>{postInfo.title}</span>
+            {props.isAuthor && <PostEdit uri={postInfo.uri} />}
+          </div>
           <div className={S.statis}>
             {postInfo.section}
             <FeedStatistic visitedCount={postInfo.visited_count} commentCount={postInfo.comment_count} />

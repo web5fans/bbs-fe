@@ -9,6 +9,7 @@ import server from "@/server";
 import { useEffect } from "react";
 import { PostFeedItemType } from "@/app/posts/utils";
 import BBSPagination from "@/components/BBSPagination";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const PAGE_SIZE = 20
 
@@ -19,6 +20,8 @@ type PostDetailProps = {
 
 const PostDetail = (props: PostDetailProps) => {
   const { breadCrumb, postId } = props;
+
+  const { userProfile } = useCurrentUser()
 
   const { data: originPosterInfo, refresh: refreshOrigin } = useRequest(async () => {
     const result = await server('/post/detail', 'GET', {
@@ -58,6 +61,7 @@ const PostDetail = (props: PostDetailProps) => {
       {commentList?.page === 1 &&<PostItem
         isOriginPoster
         postInfo={originPosterInfo}
+        isAuthor={originPosterInfo?.author.did === userProfile?.did}
         floor={1}
         sectionId={originPosterInfo?.section_id}
       />}

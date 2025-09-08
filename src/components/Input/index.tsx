@@ -12,6 +12,7 @@ type Props = Omit<JSX.IntrinsicElements['input'], 'onChange'> & {
   wrapClassName?: string
   showCount?: boolean
   onChange?: (value: string) => void;
+  initialValue?: string
 }
 
 const TEM_SPAN_ID = 'input_mirror'
@@ -23,12 +24,18 @@ const Input = (props: Props) => {
     children,
     wrapClassName,
     showCount,
+    initialValue,
     ...rest
   } = props;
   const [value, setValue] = useState<string | undefined>();
   const [passValidate, setPassValidate] = useState<boolean | undefined>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
   const caretRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!initialValue) return
+    setValue(initialValue)
+  }, [initialValue]);
 
   const getCursorPosition = (e) => {
     const {selectionStart = 0, selectionEnd = 0} = e.target;
@@ -58,6 +65,7 @@ const Input = (props: Props) => {
       const left = paddingLeftValue + cursorLeft - input.scrollLeft
 
       caretRef.current.style.left = left + 'px'
+      caretRef.current.style.display = 'block'
 
       // setHiddenSpanWidth(left);
     }
@@ -116,6 +124,12 @@ const Input = (props: Props) => {
       onClick={getCursorPosition}
       onChange={inputChange}
       className={rest.className}
+      onBlur={() => {
+        if (caretRef.current) {
+          caretRef.current.style.removeProperty('display');
+        }
+      }}
+      value={value}
     />
     {props.checkedPass && <span className={S.icon}>
       <SuccessIcon className={S.icon} />

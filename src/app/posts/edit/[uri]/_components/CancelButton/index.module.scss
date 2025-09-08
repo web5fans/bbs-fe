@@ -1,0 +1,32 @@
+@use "@/styles/rem";
+
+.modal {
+  padding: rem.px2flexible(20);
+  max-width: rem.px2flexible(300);
+
+  .info {
+    display: flex;
+    align-items: center;
+    font-size: rem.px2flexible(10);
+    gap: rem.px2flexible(8);
+
+    .warningIcon {
+      width: rem.px2flexible(22.5);
+      height: rem.px2flexible(23);
+    }
+  }
+
+  .modalFooter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem.px2flexible(20);
+    margin-top: rem.px2flexible(20);
+
+    > * {
+      width: rem.px2flexible(80);
+      height: rem.px2flexible(25);
+      font-size: rem.px2flexible(9);
+    }
+  }
+}
