@@ -11,6 +11,7 @@ const PostLike = (props: {
   sectionId: string
   liked?: boolean
   showLikeList: () => void
+  reloadLikeList?: () => void
 }) => {
   const { userProfile } = useCurrentUser();
   const [count, setCount] = useState(Number(props.likeCount) || 0)
@@ -36,6 +37,7 @@ const PostLike = (props: {
     })
     setCount(v => v + 1)
     setHasLiked(true)
+    props.reloadLikeList?.()
   }
 
   const disabled = !userProfile || hasLiked

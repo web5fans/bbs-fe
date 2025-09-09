@@ -2,16 +2,19 @@ import S from './index.module.scss'
 import Avatar from "@/components/Avatar";
 import { useInfiniteScroll } from "ahooks";
 import server from "@/server";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import remResponsive from "@/lib/rem-responsive";
+
+export type LikeListRef = { reloadLikeList: () => void }
 
 const LikeList = (props: {
   uri: string
+  componentRef?: Ref<LikeListRef>
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const gridRefCols = useRef<number>(null)
 
-  const { data: likeList, loading, loadingMore, loadMore, noMore, reload } = useInfiniteScroll<ISPageData>(async (prevData) => {
+  const { data: likeList, loading, loadingMore, loadMore, noMore, reload } = useInfiniteScroll(async (prevData) => {
 
     const { nextCursor, rows } = prevData || {};
 
@@ -39,6 +42,12 @@ const LikeList = (props: {
   }, {
     // isNoMore: d => !d?.nextCursor,
   });
+
+  useImperativeHandle(props.componentRef, () => {
+    return {
+      reloadLikeList: reload
+    }
+  })
 
   const calculateCols = () => {
     if (!ref.current) return

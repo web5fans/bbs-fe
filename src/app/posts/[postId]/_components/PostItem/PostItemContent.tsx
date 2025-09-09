@@ -4,7 +4,7 @@ import FeedStatistic from "@/components/FeedStatistic";
 import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import utcToLocal from "@/lib/utcToLocal";
-import LikeList from "@/app/posts/[postId]/_components/PostItem/_components/LikeList";
+import LikeList, { LikeListRef } from "@/app/posts/[postId]/_components/PostItem/_components/LikeList";
 import { useEffect, useRef, useState } from "react";
 
 const PostItemContent = (props: {
@@ -15,6 +15,8 @@ const PostItemContent = (props: {
 }) => {
   const { postInfo, sectionId, floor } = props
   const [ showType, setShowType ] = useState<'like' | 'reply' | undefined>(undefined)
+
+  const likeListRef = useRef<LikeListRef>(null)
 
   return <>
     <div className={S.contentInner}>
@@ -49,12 +51,17 @@ const PostItemContent = (props: {
             }
             setShowType("like")
           }}
+          reloadLikeList={() => {
+            if (showType === 'like') {
+              likeListRef.current?.reloadLikeList()
+            }
+          }}
         />
         <span>{utcToLocal(postInfo.created, 'YYYY/MM/DD HH:mm:ss')}</span>
         <span>{floor}楼</span>
       </div>
     </div>
-    {showType === 'like' && <LikeList uri={postInfo.uri} />}
+    {showType === 'like' && <LikeList uri={postInfo.uri} componentRef={likeListRef} />}
   </>
 }
 
