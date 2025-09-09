@@ -83,10 +83,12 @@ const LikeList = (props: {
     >
       <div className={S.inner}>
         {
-          showAvatars.map((info) => <Avatar
-            nickname={info.author.displayName}
-            className={S.avatar}
-          />)
+          showAvatars.map((info) => <div title={info.author.displayName}>
+            <Avatar
+              nickname={info.author.displayName}
+              className={S.avatar}
+            />
+          </div>)
         }
         {(showAvatars.length !== (likeList?.list?.length || 0)) && <p
           className={S.loadMore}
