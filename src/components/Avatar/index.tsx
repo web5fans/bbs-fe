@@ -36,7 +36,6 @@ const Avatar = (props: {
   if (!hash && hash !== 0) return null;
 
   return <div
-    title={nickname}
     ref={rootRef}
     className={`${S.wrap} ${props.className} ${(hash || hash === 0) ? S[`color${hash + 1}`] : ''}`}
   >

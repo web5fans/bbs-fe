@@ -1,6 +1,6 @@
 import S from './index.module.scss'
 import LikeIcon from '@/assets/posts/like.svg';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { writesPDSOperation } from "@/app/posts/utils";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -10,10 +10,19 @@ const PostLike = (props: {
   uri: string
   sectionId: string
   liked?: boolean
+  showLikeList: () => void
 }) => {
   const { userProfile } = useCurrentUser();
   const [count, setCount] = useState(Number(props.likeCount) || 0)
   const [hasLiked, setHasLiked] = useState(props.liked)
+
+  useEffect(() => {
+    setCount(Number(props.likeCount) || 0)
+  }, [props.likeCount]);
+
+  useEffect(() => {
+    setHasLiked(props.liked)
+  }, [props.liked]);
 
   const handleLike = async () => {
     if (!userProfile || hasLiked) return
@@ -25,15 +34,20 @@ const PostLike = (props: {
       },
       did: userProfile.did
     })
-    setHasLiked(true)
     setCount(v => v + 1)
+    setHasLiked(true)
   }
 
   const disabled = !userProfile || hasLiked
 
   return <div className={S.wrap}>
-    <LikeIcon className={cx(S.icon, disabled && S.disabled, hasLiked && S.liked)} onClick={handleLike} />
-    <span className={S.count}>{count}</span>
+    <div className={cx(S.iconWrap, disabled && S.disabled, hasLiked && S.liked)} onClick={handleLike}>
+      <LikeIcon className={cx(S.icon)} />
+    </div>
+    <span className={S.count} onClick={() => {
+      if (count === 0) return
+      props.showLikeList()
+    }}>{count}</span>
   </div>
 }
 

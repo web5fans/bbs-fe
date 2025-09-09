@@ -25,11 +25,12 @@ const PostDetail = (props: PostDetailProps) => {
 
   const { data: originPosterInfo, refresh: refreshOrigin } = useRequest(async () => {
     const result = await server('/post/detail', 'GET', {
-      uri: postId
+      uri: postId,
+      viewer: userProfile?.did
     })
     return result
   }, {
-    refreshDeps: [postId]
+    refreshDeps: [postId, userProfile?.did]
   })
 
   const { data: commentList, run: reLoadComment } = useRequest(async (page: number = 1) => {
@@ -41,16 +42,17 @@ const PostDetail = (props: PostDetailProps) => {
       post: postId,
       page,
       per_page: PAGE_SIZE,
+      viewer: userProfile?.did
     })
     return result
   }, {
     manual: true,
-    refreshDeps: [postId]
+    refreshDeps: [postId, userProfile?.did]
   })
 
   useEffect(() => {
     reLoadComment()
-  }, []);
+  }, [userProfile?.did]);
 
   return <CardWindow
     noInnerWrap

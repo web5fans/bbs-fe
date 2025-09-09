@@ -1,7 +1,8 @@
 import S from "./index.module.scss";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import utcToLocal from "@/lib/utcToLocal";
-import Avatar from "@/components/Avatar";
+import LikeList from "./_components/LikeList";
+import { useState } from "react";
 
 const PostItemFooter = (props: {
   postInfo: any
@@ -9,23 +10,28 @@ const PostItemFooter = (props: {
   floor: number
 }) => {
   const { postInfo, sectionId, floor } = props;
+  const [ showType, setShowType ] = useState<'like' | 'reply' | undefined>(undefined)
 
   return <div>
     <div className={S.floor}>
       <PostLike
+        liked={postInfo.liked}
         likeCount={postInfo.like_count}
         uri={postInfo.uri}
         sectionId={sectionId}
+        showLikeList={() => {
+          if (showType === 'like') {
+            setShowType(undefined);
+            return
+          }
+          setShowType("like")
+        }}
       />
       <span>{utcToLocal(postInfo.created, 'YYYY/MM/DD HH:mm:ss')}</span>
       <span>{floor}楼</span>
     </div>
 
-    {/*<div className={S.likedDetail}>*/}
-    {/*  {*/}
-    {/*    new Array(17).fill(0).map(() => <Avatar nickname={'CCC'} className={S.likedAvatar} />)*/}
-    {/*  }*/}
-    {/*</div>*/}
+    {showType === 'like' && <LikeList uri={postInfo.uri} />}
   </div>
 }
 
