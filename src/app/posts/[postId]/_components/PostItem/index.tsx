@@ -27,22 +27,22 @@ const PostItem = (props: PostItemProps) => {
   const ref = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const observer = new ResizeObserver(() => {
-      requestAnimationFrame(() => {
-        if (!ref.current) return
-        const height = ref.current.clientHeight
-        contentRef.current.style.setProperty('--height', `${height}px`)
-      })
-    })
-
-    observer.observe(ref.current)
-
-    return () => {
-      if (!ref.current) return
-      observer.unobserve(ref.current)
-    }
-  }, []);
+  // useEffect(() => {
+  //   const observer = new ResizeObserver(() => {
+  //     requestAnimationFrame(() => {
+  //       if (!ref.current) return
+  //       const height = ref.current.clientHeight
+  //       contentRef.current.style.setProperty('--height', `${height}px`)
+  //     })
+  //   })
+  //
+  //   observer.observe(ref.current)
+  //
+  //   return () => {
+  //     if (!ref.current) return
+  //     observer.unobserve(ref.current)
+  //   }
+  // }, []);
 
   return <div className={S.wrap}>
     <div
