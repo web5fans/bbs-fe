@@ -8,6 +8,8 @@
 
 html {
   @include scroll-bar.global-scroll;
+
+  letter-spacing: 0.05rem;
 }
 
 :root {
