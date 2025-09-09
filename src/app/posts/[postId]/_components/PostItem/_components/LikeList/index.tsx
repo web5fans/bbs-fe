@@ -45,7 +45,11 @@ const LikeList = (props: {
 
   useImperativeHandle(props.componentRef, () => {
     return {
-      reloadLikeList: reload
+      reloadLikeList: () => {
+        if (showAvatars.length === (likeList?.list?.length || 0)) {
+          reload()
+        }
+      }
     }
   })
 
