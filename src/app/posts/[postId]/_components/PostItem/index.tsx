@@ -2,12 +2,10 @@
 
 import S from './index.module.scss'
 import Avatar from "@/components/Avatar";
-import FeedStatistic from "@/components/FeedStatistic";
 import cx from "classnames";
-import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
 import { useRouter } from "next/navigation";
-import PostItemFooter from "./PostItemFooter";
-import PostEdit from "@/app/posts/[postId]/_components/PostEdit";
+import PostItemContent from "./PostItemContent";
+import { useEffect, useRef } from "react";
 
 type PostItemProps = {
   isOriginPoster?: boolean
@@ -18,7 +16,7 @@ type PostItemProps = {
 }
 
 const PostItem = (props: PostItemProps) => {
-  const { postInfo = {}, floor, isOriginPoster, sectionId } = props;
+  const { postInfo = {}, floor, isOriginPoster, sectionId, isAuthor } = props;
 
   const router = useRouter()
 
@@ -26,8 +24,33 @@ const PostItem = (props: PostItemProps) => {
 
   const href = `/user-center/${encodeURIComponent(postInfo.author?.did)}`
 
-    return <div className={S.wrap}>
-    <div className={S.user} onClick={() => router.push(href)} onMouseEnter={() => router.prefetch(href)}>
+  const ref = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      requestAnimationFrame(() => {
+        if (!ref.current) return
+        const height = ref.current.clientHeight
+        contentRef.current.style.setProperty('--height', `${height}px`)
+      })
+    })
+
+    observer.observe(ref.current)
+
+    return () => {
+      if (!ref.current) return
+      observer.unobserve(ref.current)
+    }
+  }, []);
+
+  return <div className={S.wrap}>
+    <div
+      ref={ref}
+      className={S.user}
+      onClick={() => router.push(href)}
+      onMouseEnter={() => router.prefetch(href)}
+    >
       <div className={cx(S.avatarWrap, !isOriginPoster && S.normal)}>
         <Avatar nickname={nickname} className={S.avatar} />
         <img src={'/assets/poster.png'} alt="" className={S.poster} />
@@ -40,23 +63,8 @@ const PostItem = (props: PostItemProps) => {
       </p>
     </div>
 
-    <div className={S.content}>
-      <div>
-        {postInfo.title && <>
-          <div className={S.title}>
-            <span className={S.titleInner}>{postInfo.title}</span>
-            {props.isAuthor && <PostEdit uri={postInfo.uri} />}
-          </div>
-          <div className={S.statis}>
-            {postInfo.section}
-            <FeedStatistic visitedCount={postInfo.visited_count} commentCount={postInfo.comment_count} />
-          </div>
-        </>}
-
-        <JSONToHtml html={postInfo.text} />
-      </div>
-
-      <PostItemFooter postInfo={postInfo} sectionId={sectionId} floor={floor} />
+    <div className={S.content} ref={contentRef}>
+      <PostItemContent postInfo={postInfo} sectionId={sectionId} floor={floor} isAuthor={isAuthor} />
     </div>
   </div>
 }

@@ -60,7 +60,7 @@ const PostDetail = (props: PostDetailProps) => {
     headerExtra={breadCrumb}
   >
     <div className={S.wrap}>
-      {commentList?.page === 1 &&<PostItem
+      {commentList?.page === 1 && <PostItem
         isOriginPoster
         postInfo={originPosterInfo}
         isAuthor={originPosterInfo?.author.did === userProfile?.did}

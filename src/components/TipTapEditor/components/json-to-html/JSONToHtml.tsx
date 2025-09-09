@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   highlightWithLowlight
 } from "../tiptap-node/code-block-node/code-block-node";

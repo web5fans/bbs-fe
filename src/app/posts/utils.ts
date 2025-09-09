@@ -15,8 +15,9 @@ export type PostFeedItemType = {
   author: { displayName: string, [key: string]: string },
   title: string,
   text: string,
-  visited_count: number,
-  comment_count: number,
+  visited_count: string,
+  comment_count: string,
+  like_count: string,
   visited: string, // 时间
   updated: string, // 时间
   created: string, // 时间

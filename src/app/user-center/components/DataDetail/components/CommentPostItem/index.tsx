@@ -4,7 +4,7 @@ import { PostFeedItemType } from "@/app/posts/utils";
 import { useEffect, useState } from "react";
 import S from "./index.module.scss";
 import Avatar from "@/components/Avatar";
-import FeedStatistic from "@/components/FeedStatistic";
+import FeedStatistic, { FeedLikes } from "@/components/FeedStatistic";
 import utcToLocal from "@/lib/utcToLocal";
 
 export default function CommentPostItem({ feed, onClick, onHover, nickname }: {
@@ -52,6 +52,7 @@ export default function CommentPostItem({ feed, onClick, onHover, nickname }: {
           visitedCount={feed.visited_count}
           commentCount={feed.comment_count}
         />
+        <FeedLikes likesCount={feed.like_count} />
       </div>
       <span className={S.time}>{utcToLocal(feed.comment_created)}</span>
     </div>

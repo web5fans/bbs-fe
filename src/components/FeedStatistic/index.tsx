@@ -1,4 +1,5 @@
 import S from './index.module.scss'
+import LikeIcon from '@/assets/posts/like.svg'
 
 const FeedStatistic = (props: {
   visitedCount?: string
@@ -17,6 +18,13 @@ const FeedStatistic = (props: {
 }
 
 export default FeedStatistic;
+
+export function FeedLikes({ likesCount }: { likesCount: string }) {
+  return <div className={S.likes}>
+    <LikeIcon className={S.icon} />
+    {likesCount}
+  </div>
+}
 
 function BrowseIcon({ className }: {className?: string}) {
   return <svg

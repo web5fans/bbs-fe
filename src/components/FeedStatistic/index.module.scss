@@ -23,3 +23,14 @@
     }
   }
 }
+
+.likes {
+  display: flex;
+  align-items: center;
+  gap: rem.px2flexible(4);
+
+  .icon {
+    width: rem.px2flexible(7);
+    height: rem.px2flexible(6);
+  }
+}
