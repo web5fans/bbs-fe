@@ -7,6 +7,10 @@ import utcToLocal from "@/lib/utcToLocal";
 import LikeList, { LikeListRef } from "@/app/posts/[postId]/_components/PostItem/_components/LikeList";
 import { useEffect, useRef, useState } from "react";
 
+function formatDate(date: string) {
+  return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
+}
+
 const PostItemContent = (props: {
   postInfo: any
   sectionId: string
@@ -24,7 +28,7 @@ const PostItemContent = (props: {
         {postInfo.title && <>
           <div className={S.title}>
             <span className={S.titleInner}>{postInfo.title}</span>
-            {/*{props.isAuthor && <PostEdit uri={postInfo.uri} />}*/}
+            {props.isAuthor && <PostEdit uri={postInfo.uri} />}
           </div>
           <div className={S.statis}>
             {postInfo.section}
@@ -57,7 +61,8 @@ const PostItemContent = (props: {
             }
           }}
         />
-        <span>{utcToLocal(postInfo.created, 'YYYY/MM/DD HH:mm:ss')}</span>
+        {postInfo.edited ? <span>更新于&nbsp;{formatDate(postInfo.edited)}</span>
+          : <span>{formatDate(postInfo.created)}</span>}
         <span>{floor}楼</span>
       </div>
     </div>

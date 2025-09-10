@@ -1,7 +1,7 @@
 import S from './index.module.scss'
 import LikeIcon from '@/assets/posts/like.svg';
 import { useEffect, useState } from "react";
-import { writesPDSOperation } from "@/app/posts/utils";
+import { postsWritesPDSOperation } from "@/app/posts/utils";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
@@ -27,7 +27,7 @@ const PostLike = (props: {
 
   const handleLike = async () => {
     if (!userProfile || hasLiked) return
-    await writesPDSOperation({
+    await postsWritesPDSOperation({
       record: {
         $type: 'app.bbs.like',
         to: props.uri,

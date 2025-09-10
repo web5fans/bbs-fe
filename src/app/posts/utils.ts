@@ -46,6 +46,8 @@ type PostRecordType = {
   section_id: string;
   title: string;
   text: string;
+  edited?: string
+  created?: string
 } | {
   $type: 'app.bbs.comment'
   post: string  // 原帖uri
@@ -74,31 +76,38 @@ type CreatePostResponse = {
   }[]
 }
 
-/* PDS写入操作 */
-export async function writesPDSOperation(params: {
+/* 发帖、回帖、点赞、编辑帖子PDS写入操作 */
+export async function postsWritesPDSOperation(params: {
   record: PostRecordType
   did: string
   rkey?: string
+  type?: 'update' | 'create'
 }) {
+  const operateType = params.type || 'create'
   const pdsClient = getPDSClient()
 
   const rkey = params.rkey || TID.next().toString()
 
   const newRecord = {
+    created: dayjs.utc().format(),
     ...params.record,
-    created: dayjs.utc().format()
   }
 
-  const writeRes = await pdsClient.com.atproto.web5.preDirectWrites({
+  const $typeMap = {
+    create: "com.atproto.web5.preDirectWrites#create",
+    update: "com.atproto.web5.preDirectWrites#update",
+  }
+
+  const writeRes = await sessionWrapApi(() => pdsClient.com.atproto.web5.preDirectWrites({
     repo: params.did,
     writes: [{
-      $type: "com.atproto.web5.preDirectWrites#create",
+      $type: $typeMap[operateType],
       collection: newRecord.$type,
       rkey,
       value: newRecord
     }],
     validate: false,
-  })
+  }))
 
   const writerData = writeRes.data
 
@@ -134,7 +143,7 @@ export async function writesPDSOperation(params: {
 
   const localStorage = storage.getToken()
 
-  const res = await server<CreatePostResponse>('/record/create', 'POST', {
+  const serverParams = {
     repo: params.did,
     rkey,
     value: newRecord,
@@ -148,7 +157,28 @@ export async function writesPDSOperation(params: {
       data: writerData.data,
       signedBytes: uint8ArrayToHex(commit.sig),
     },
-  })
+  }
+
+  if (operateType === 'update') {
+    const res = await server<CreatePostResponse>('/record/update', 'POST', serverParams)
+
+    return res.results[0].uri
+  }
+  
+  const res = await server<CreatePostResponse>('/record/create', 'POST', serverParams)
 
   return res.results[0].uri
+}
+
+async function sessionWrapApi(callback: () => Promise<any>): Promise<void> {
+  try {
+    const result =  await callback()
+    return result
+  } catch (error) {
+    if (error.message.includes('Token has expired')) {
+      await getPDSClient().sessionManager.refreshSession()
+      return await callback()
+    }
+    throw error
+  }
 }

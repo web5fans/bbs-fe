@@ -4,7 +4,7 @@ import { ccc } from "@ckb-ccc/core";
 import getPDSClient from "@/lib/pdsClient";
 import storage from "@/lib/storage";
 import { ComAtprotoWeb5CreateAccount, ComAtprotoServerCreateSession } from "web5-api";
-import { writesPDSOperation } from "@/app/posts/utils";
+import { postsWritesPDSOperation } from "@/app/posts/utils";
 import { handleToNickName } from "@/lib/handleToNickName";
 import server from "@/server";
 import { fetchUserProfile, userLogin } from "@/lib/user-account";
@@ -73,7 +73,7 @@ const useUserInfoStore = createSelectors(
       if (!userInfo || (userProfile && userProfile.displayName)) return 'NO_NEED'
 
       try {
-        await writesPDSOperation({
+        await postsWritesPDSOperation({
           record: {
             $type: "app.actor.profile",
             displayName: handleToNickName(userInfo.handle),

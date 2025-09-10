@@ -7,7 +7,7 @@ import FaceIcon from '@/assets/login/multiDid/face.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import PublishPostCancelButton from "@/components/PublishPostCancelButton";
 import { useRef, useState } from "react";
-import { writesPDSOperation } from "@/app/posts/utils";
+import { postsWritesPDSOperation } from "@/app/posts/utils";
 import { useToast } from "@/provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Link from "next/link";
@@ -48,7 +48,7 @@ const PostDiscuss = (props: {
     setPublishing(true)
     try {
       await updateProfile()
-      await writesPDSOperation({
+      await postsWritesPDSOperation({
         record: {
           $type: 'app.bbs.comment',
           text: richText,

@@ -90,7 +90,8 @@ const Input = (props: Props) => {
 
     const newValue = e.target.value
     if (showCount) {
-      const pass = !(newValue.length < (rest.minLength || 0)) && !(newValue.length > (rest.maxLength || 0));
+      const showValue = newValue.trim()
+      const pass = !(showValue.length < (rest.minLength || 0)) && !(showValue.length > (rest.maxLength || 0));
       setPassValidate(pass)
       if (!pass) {
         rest.onChange?.('')
@@ -129,7 +130,7 @@ const Input = (props: Props) => {
           caretRef.current.style.removeProperty('display');
         }
       }}
-      value={value}
+      value={value || ''}
     />
     {props.checkedPass && <span className={S.icon}>
       <SuccessIcon className={S.icon} />
@@ -137,7 +138,7 @@ const Input = (props: Props) => {
 
     {showCount && value !== undefined && <span
       className={S.lengthLimit}
-    >{value?.length || 0}/{rest.maxLength}</span>}
+    >{value?.trim().length || 0}/{rest.maxLength}</span>}
 
     {children}
 
