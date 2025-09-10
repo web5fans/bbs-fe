@@ -24,7 +24,7 @@ const PostItemContent = (props: {
         {postInfo.title && <>
           <div className={S.title}>
             <span className={S.titleInner}>{postInfo.title}</span>
-            {props.isAuthor && <PostEdit uri={postInfo.uri} />}
+            {/*{props.isAuthor && <PostEdit uri={postInfo.uri} />}*/}
           </div>
           <div className={S.statis}>
             {postInfo.section}
