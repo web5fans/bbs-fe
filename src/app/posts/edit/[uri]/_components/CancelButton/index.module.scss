@@ -27,6 +27,10 @@
       width: rem.px2flexible(80);
       height: rem.px2flexible(25);
       font-size: rem.px2flexible(9);
+
+      &:focus {
+        outline: none;
+      }
     }
   }
 }

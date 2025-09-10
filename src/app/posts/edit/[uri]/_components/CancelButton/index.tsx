@@ -2,7 +2,7 @@ import S from "./index.module.scss";
 import Button from "@/components/Button";
 import WarningIcon from "@/assets/posts/warning.svg";
 import Modal from "@/components/Modal";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import cx from "classnames";
 
@@ -12,6 +12,12 @@ const CancelButton = (props: {
 }) => {
   const [visible, setVisible] = useState(false)
   const router = useRouter()
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!visible) return
+    ref.current?.focus()
+  }, [visible]);
 
   return <>
     <Button
@@ -27,7 +33,17 @@ const CancelButton = (props: {
           确定放弃编辑？本次修改的内容将会丢失，原帖内容保持不变。
         </div>
         <div className={S.modalFooter}>
-          <Button type='primary' onClick={() => setVisible(false)}>继续编辑</Button>
+          <Button
+            tabIndex={0}
+            ref={ref}
+            type='primary'
+            onClick={() => setVisible(false)}
+            onKeyUpCapture={e => {
+              if (e.key === 'Enter') {
+                setVisible(false)
+              }
+            }}
+          >继续编辑</Button>
           <Button onClick={() => router.back()}>放弃修改</Button>
         </div>
       </div>
