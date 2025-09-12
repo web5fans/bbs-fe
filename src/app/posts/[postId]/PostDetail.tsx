@@ -54,6 +54,11 @@ const PostDetail = (props: PostDetailProps) => {
     reLoadComment()
   }, [userProfile?.did]);
 
+  const reloadList = () => {
+    refreshOrigin()
+    reLoadComment(1)
+  }
+
   return <CardWindow
     noInnerWrap
     wrapClassName={S.window}
@@ -62,10 +67,12 @@ const PostDetail = (props: PostDetailProps) => {
     <div className={S.wrap}>
       {commentList?.page === 1 && <PostItem
         isOriginPoster
+        rootUri={originPosterInfo?.uri}
         postInfo={originPosterInfo}
         isAuthor={originPosterInfo?.author.did === userProfile?.did}
         floor={1}
         sectionId={originPosterInfo?.section_id}
+        refresh={reloadList}
       />}
 
       {commentList?.comments.map((p, idx) => {
@@ -76,6 +83,8 @@ const PostDetail = (props: PostDetailProps) => {
           floor={floor}
           isOriginPoster={p.author.did === originPosterInfo?.author?.did}
           sectionId={originPosterInfo?.section_id}
+          rootUri={originPosterInfo?.uri}
+          refresh={reloadList}
         />
       })}
 
@@ -90,10 +99,7 @@ const PostDetail = (props: PostDetailProps) => {
       <PostDiscuss
         sectionId={originPosterInfo?.section_id}
         postUri={postId}
-        refresh={() => {
-          refreshOrigin()
-          reLoadComment(1)
-        }}
+        refresh={reloadList}
       />
     </div>
   </CardWindow>

@@ -62,6 +62,13 @@ type PostRecordType = {
   $type: 'app.bbs.like'
   to: string; // 点赞的帖子uri或者评论\回复的uri
   section_id: string;
+} | {
+  $type: 'app.bbs.reply'
+  post: string    // 帖子的uri
+  comment?: string   // 跟帖的uri
+  to?: string   // 对方did, 有就填，没有就是直接回复评论的
+  text: string
+  section_id: string
 }
 
 type CreatePostResponse = {

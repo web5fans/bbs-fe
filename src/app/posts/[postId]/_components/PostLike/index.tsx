@@ -10,7 +10,7 @@ const PostLike = (props: {
   uri: string
   sectionId: string
   liked?: boolean
-  showLikeList: () => void
+  showLikeList?: () => void
   reloadLikeList?: () => void
 }) => {
   const { userProfile } = useCurrentUser();
@@ -48,7 +48,7 @@ const PostLike = (props: {
     </div>
     <span className={S.count} onClick={() => {
       if (count === 0) return
-      props.showLikeList()
+      props.showLikeList?.()
     }}>{count}</span>
   </div>
 }

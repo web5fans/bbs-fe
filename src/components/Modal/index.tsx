@@ -20,10 +20,11 @@ type CenterModalProps = {
   visible?: boolean
   onVisibleChange?: (isOpen: boolean) => void
   onClose?: () => void
-  trigger?: ReactElement
+  lockScroll?: boolean
 }
 
 export default function Modal(props: CenterModalProps) {
+  const { lockScroll = true } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   // Floating UI 配置
@@ -64,25 +65,12 @@ export default function Modal(props: CenterModalProps) {
 
   return (
     <>
-      {/* 触发按钮 */}
-      {/*{props.trigger && cloneElement(props.trigger, {*/}
-      {/*  ref: refs.reference,*/}
-      {/*  ...getReferenceProps()*/}
-      {/*})}*/}
-      {/*<div*/}
-      {/*  ref={refs.setReference}*/}
-      {/*  {...getReferenceProps()}*/}
-      {/*  className="px-4 py-2 bg-blue-500 text-white rounded"*/}
-      {/*>*/}
-      {/*  打开弹窗*/}
-      {/*</div>*/}
-
       {/* 弹窗入口 */}
       <FloatingPortal>
         <AnimatePresence>
           {modalVis && (
             <FloatingOverlay
-              lockScroll
+              lockScroll={lockScroll}
               className={S.overlay}
             >
               <motion.div

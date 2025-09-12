@@ -47,7 +47,7 @@ const Avatar = (props: {
 
 export default Avatar;
 
-function toHashCode(value: string) {
+export function toHashCode(value: string) {
   let hash = 0,
     i, chr, len;
   if (value.length == 0) return hash;

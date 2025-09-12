@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from "react";
+import { memo, useEffect, useMemo } from "react";
 import {
   highlightWithLowlight
 } from "../tiptap-node/code-block-node/code-block-node";
@@ -52,4 +52,6 @@ const JSONToHtml = ({html}: {html: string}) => {
   return <div className={cx('tiptap ProseMirror', S.richText)} dangerouslySetInnerHTML={{ __html: nodes?.json || '' }} />
 }
 
-export default JSONToHtml;
+const MemoizedJSONToHtml = memo(JSONToHtml);
+
+export default MemoizedJSONToHtml;

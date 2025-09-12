@@ -16,6 +16,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { PostFeedItemType, postsWritesPDSOperation } from "@/app/posts/utils";
 import dayjs from "dayjs";
 import { useToast } from "@/provider/toast";
+import { checkEditorContent } from "@/lib/tiptap-utils";
 
 const EditPost = () => {
   const { uri } = useParams<{ uri: string }>()
@@ -61,16 +62,8 @@ const EditPost = () => {
 
     setTextNumber(textNumber)
 
-    const { content } = json
-    if (!content) return
-    const hasImageUploadErr = content.filter(e => e.type === "imageUpload")[0]
-    if (hasImageUploadErr) {
-      setPublishDis(true)
-      return;
-    }
-    const hasUploadedImg = json.content?.find(e => e.type === 'image');
-
-    setPublishDis(!text && !hasUploadedImg);
+    const checkResult = checkEditorContent(json, text)
+    setPublishDis(!checkResult)
     setRichText(html)
   }
 

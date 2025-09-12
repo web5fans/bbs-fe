@@ -72,6 +72,7 @@ $bg: #EAEAEA;
       .image {
         width: var(--card-window-close, rem.px2flexible(15));
         height: var(--card-window-close, rem.px2flexible(14));
+        background: $bg;
       }
     }
   }

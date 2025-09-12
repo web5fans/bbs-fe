@@ -37,6 +37,7 @@
     display: inline-block;
     padding-left: rem.px2flexible(2);
     padding-right: rem.px2flexible(8);
+    font-size: rem.px2flexible(6);
     cursor: pointer;
     &:hover {
       color: var(--primary-color);

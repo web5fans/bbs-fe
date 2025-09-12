@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { EditorContent, EditorContext, generateHTML, generateJSON, useEditor } from "@tiptap/react"
+import { Editor, EditorContent, EditorContext, generateHTML, generateJSON, useEditor } from "@tiptap/react"
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
 import { Image } from "@tiptap/extension-image"
@@ -187,6 +187,7 @@ export type EditorRefType = {
   clearContent: () => void
   setContent: (newContent: string) => void
   focus: () => void
+  editor?: Editor | null
 }
 
 type TipTapEditorProps = {
@@ -215,7 +216,8 @@ export default function TipTapEditor(props: TipTapEditorProps) {
         editor?.commands.clearContent();
         editor?.commands.focus()
       },
-      focus: () => editor?.commands.focus()
+      focus: () => editor?.commands.focus(),
+      editor
     }
   })
 

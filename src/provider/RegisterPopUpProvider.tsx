@@ -1,7 +1,8 @@
 'use client'
 
 import React, { createContext, useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { router } from "next/client";
 
 type PopUpProviderProps = {
   visible: boolean

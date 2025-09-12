@@ -20,6 +20,7 @@ import { useToast } from "../../../provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { postUriToHref } from "@/lib/postUriHref";
 import { LayoutCenter } from "@/components/Layout";
+import { checkEditorContent } from "@/lib/tiptap-utils";
 
 const PublishPostPage = () => {
   const searchParams = useSearchParams()
@@ -62,14 +63,8 @@ const PublishPostPage = () => {
 
     const { content } = json
     if (!content) return
-    const hasImageUploadErr = content.filter(e => e.type === "imageUpload")[0]
-    if (hasImageUploadErr) {
-      setPublishDis(true)
-      return;
-    }
-    const hasUploadedImg = json.content?.find(e => e.type === 'image');
-
-    setPublishDis(!text && !hasUploadedImg);
+    const checkResult = checkEditorContent(json, text)
+    setPublishDis(!checkResult)
     setRichText(html)
   }
 

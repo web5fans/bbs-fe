@@ -13,6 +13,8 @@ type PostItemProps = {
   sectionId: string
   floor: number
   isAuthor?: boolean
+  rootUri: string
+  refresh?: () => void
 }
 
 const PostItem = (props: PostItemProps) => {
@@ -64,7 +66,14 @@ const PostItem = (props: PostItemProps) => {
     </div>
 
     <div className={S.content} ref={contentRef}>
-      <PostItemContent postInfo={postInfo} sectionId={sectionId} floor={floor} isAuthor={isAuthor} />
+      <PostItemContent
+        postInfo={postInfo}
+        sectionId={sectionId}
+        floor={floor}
+        isAuthor={isAuthor}
+        rootUri={props.rootUri}
+        refresh={props.refresh}
+      />
     </div>
   </div>
 }
