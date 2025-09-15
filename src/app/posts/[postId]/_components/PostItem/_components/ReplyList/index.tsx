@@ -55,6 +55,8 @@ const ReplyList = (props: {
     })
   }
 
+  if (!replyListInfo) return null;
+
   return <div className={S.wrap}>
     {replyListInfo?.list.map(info => {
       return <ReplyItem
@@ -114,12 +116,14 @@ function HtmlContent(props: {html: string}) {
     if (!htmlRef.current) return
 
     const observer = new ResizeObserver(() => {
-      if (!htmlRef.current) return
-      const scrollHeight = htmlRef.current.scrollHeight
-      const clientHeight = htmlRef.current.clientHeight
-      if (scrollHeight > clientHeight) {
-        setShowDetailVis(true)
-      }
+      requestAnimationFrame(() => {
+        if (!htmlRef.current) return
+        const scrollHeight = htmlRef.current.scrollHeight
+        const clientHeight = htmlRef.current.clientHeight
+        if (scrollHeight > clientHeight) {
+          setShowDetailVis(true)
+        }
+      })
     })
     observer.observe(htmlRef.current)
 

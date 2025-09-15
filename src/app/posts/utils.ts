@@ -8,6 +8,7 @@ import { CID } from 'multiformats/cid'
 import * as cbor from '@ipld/dag-cbor'
 import { TID } from '@atproto/common-web'
 import dayjs from "dayjs";
+import { showGlobalToast } from "@/provider/toast";
 
 export type PostFeedItemType = {
   uri: string,
@@ -183,6 +184,10 @@ async function sessionWrapApi(callback: () => Promise<any>): Promise<void> {
     return result
   } catch (error) {
     if (error.message.includes('Token has expired')) {
+      showGlobalToast({
+        title: '登录信息已过期，请重新刷新页面',
+        icon: 'error'
+      })
       await getPDSClient().sessionManager.refreshSession()
       return await callback()
     }

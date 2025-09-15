@@ -6,7 +6,7 @@ import PostDiscuss from "@/app/posts/[postId]/_components/PostDiscuss";
 import CardWindow from "@/components/CardWindow";
 import { useRequest } from "ahooks";
 import server from "@/server";
-import { useEffect } from "react";
+import { useEffect, useImperativeHandle } from "react";
 import { PostFeedItemType } from "@/app/posts/utils";
 import BBSPagination from "@/components/BBSPagination";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -16,6 +16,9 @@ const PAGE_SIZE = 20
 type PostDetailProps = {
   breadCrumb?: React.ReactNode;
   postId: string
+  componentRef?: React.Ref<{
+    commentRootPostRecord: any
+  }>;
 }
 
 const PostDetail = (props: PostDetailProps) => {
@@ -48,6 +51,17 @@ const PostDetail = (props: PostDetailProps) => {
   }, {
     manual: true,
     refreshDeps: [postId, userProfile?.did]
+  })
+
+  useImperativeHandle(props.componentRef, () => {
+    return {
+      commentRootPostRecord: {
+        type: "comment",
+        postUri: originPosterInfo?.uri,
+        sectionId: originPosterInfo?.section_id,
+        refresh: reloadList
+      }
+    }
   })
 
   useEffect(() => {

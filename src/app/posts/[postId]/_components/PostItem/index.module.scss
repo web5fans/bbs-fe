@@ -92,6 +92,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
   }
 
   .title {
@@ -129,6 +130,25 @@
     color: #6C6C6C;
     gap: rem.px2flexible(10);
     margin-top: rem.px2flexible(10);
+
+    .reply {
+      cursor: pointer;
+      color: black;
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+}
+
+.tabArrow {
+  position: absolute;
+  top: rem.px2flexible(6);
+  height: 0;
+
+  .arrow {
+    width: rem.px2flexible(7);
+    height: rem.px2flexible(4);
   }
 }
 

@@ -5,10 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import CardWindow from "@/components/CardWindow";
 import TipTapEditor, { EditorRefType, EditorUpdateData } from "@/components/TipTapEditor";
 import Button from "@/components/Button";
-import { usePostCommentReply } from "@/provider/PostReplyProvider";
 import { checkEditorContent } from "@/lib/tiptap-utils";
 import numeral from "numeral";
-import { useRouter } from "next/navigation";
 import { postsWritesPDSOperation } from "@/app/posts/utils";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import PackUpIcon from '@/assets/posts/pack-up.svg'
@@ -16,10 +14,10 @@ import { useBoolean } from "ahooks";
 import cx from "classnames";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import { useToast } from "@/provider/toast";
+import useDetectPostCommentReply from "./useDetectPostCommentReply";
 
 const ReplyModal = () => {
   const { updateProfile, userProfile } = useCurrentUser();
-  const { visible, closeModal, modalInfo} = usePostCommentReply()
   const [publishing, setPublishing] = useState(false)
 
   const [textNumber, setTextNumber] = useState(0)
@@ -27,6 +25,12 @@ const ReplyModal = () => {
 
   const [packUp, { toggle: togglePackUp, setFalse: setPackUpFalse }] = useBoolean(false)
   const [confirmModalVis, { setTrue: setConfirmTrue, setFalse: setConfirmFalse }] = useBoolean(false)
+
+  const { visible, modalInfo, closeModal, clearCloseTask } = useDetectPostCommentReply({
+    whenOpenSecondModal: () => {
+      closeWindow(true)
+    }
+  })
 
   const editorRef = useRef<EditorRefType>(null)
   const richTextRef = useRef('')
@@ -59,7 +63,7 @@ const ReplyModal = () => {
     if (!modalInfo) return
     const { type, postUri, commentUri, toDid, sectionId, refresh } = modalInfo;
     setPublishing(true)
-    // await updateProfile()
+    await updateProfile()
     try {
       let record;
       if (['comment', 'quote'].includes(type)) {
@@ -153,13 +157,17 @@ const ReplyModal = () => {
           <div className={S.footer}>
             <p className={S.textNum}>字数：{numeral(textNumber).format('0,0')}</p>
             <div className={S.butonWrap}>
-              <Button
+              {publishing ? <Button
+                type={'primary'}
+                className={S.button}
+                disabled
+              >发布中...</Button> : <Button
                 type={'primary'}
                 className={S.button}
                 disabled={publishDis}
                 onClick={submit}
-              >发布</Button>
-              <Button className={S.button} onClick={() => closeWindow()}>取消</Button>
+              >发布</Button>}
+              <Button className={S.button} disabled={publishing} onClick={() => closeWindow()}>取消</Button>
             </div>
           </div>
         </div>
@@ -176,7 +184,10 @@ const ReplyModal = () => {
         },
         cancel: {
           text: '再想想',
-          onClick: setConfirmFalse,
+          onClick: () => {
+            setConfirmFalse()
+            clearCloseTask()
+          },
         }
       }}
     />

@@ -1,8 +1,8 @@
 'use client'
 
-import React, { createContext, useCallback, useEffect, useMemo, useState } from "react";
+import React, { createContext, useCallback, useState } from "react";
 
-type ModalInfoType = {
+export type ModalInfoType = {
   postUri: string // 主帖
   commentUri?: string // 跟帖
   toDid?: string // 对方did, 回复楼层内的评论时传
