@@ -141,17 +141,6 @@
   }
 }
 
-.tabArrow {
-  position: absolute;
-  top: rem.px2flexible(6);
-  height: 0;
-
-  .arrow {
-    width: rem.px2flexible(7);
-    height: rem.px2flexible(4);
-  }
-}
-
 @media screen and (min-width: 1024px){
   .wrap {
     margin-bottom: 40px;

@@ -4,12 +4,12 @@ import FeedStatistic from "@/components/FeedStatistic";
 import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import utcToLocal from "@/lib/utcToLocal";
-import LikeList, { LikeListRef } from "@/app/posts/[postId]/_components/PostItem/_components/LikeList";
+import LikeList, { LikeListRef } from "./_components/LikeList";
 import { useEffect, useRef, useState } from "react";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
 import QuotePopUp from "./_components/QuotePopUp";
-import ReplyList from "@/app/posts/[postId]/_components/PostItem/_components/ReplyList";
-import TabArrowDown from '@/assets/posts/tab-arrow.svg'
+import ReplyList from "./_components/ReplyList";
+import TabWrap from "./_components/TabWrap";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
@@ -25,6 +25,7 @@ const PostItemContent = (props: {
 }) => {
   const { postInfo, sectionId, floor, rootUri } = props
   const [ showType, setShowType ] = useState<'like' | 'reply' | undefined>(undefined)
+  const [replyTotal, setReplyTotal] = useState('0')
 
   const likeListRef = useRef<LikeListRef>(null)
 
@@ -33,12 +34,19 @@ const PostItemContent = (props: {
   const { openModal } = usePostCommentReply()
 
   const reply = () => {
-    if (!postInfo.reply_count || postInfo.reply_count === '0') return;
+    if (!postInfo.reply_count || postInfo.reply_count === '0') {
+      openReplyModal()
+      return;
+    }
     if (showType === 'reply') {
       setShowType(undefined);
       return
     }
     setShowType('reply')
+    openReplyModal()
+  }
+
+  const openReplyModal = () => {
     openModal({
       type: 'reply',
       postUri: rootUri,
@@ -66,6 +74,10 @@ const PostItemContent = (props: {
       refresh: props.refresh
     })
   }
+
+  useEffect(() => {
+    setReplyTotal(postInfo.reply_count || '0')
+  }, [postInfo.reply_count]);
 
   return <>
     <div className={S.contentInner}>
@@ -117,7 +129,7 @@ const PostItemContent = (props: {
         <span
           className={S.reply}
           onClick={reply}
-        >回复&nbsp;({postInfo.reply_count || 0})</span>
+        >回复&nbsp;({replyTotal})</span>
 
         {postInfo.edited ? <span>更新于&nbsp;{formatDate(postInfo.edited)}</span>
           : <span>{formatDate(postInfo.created)}</span>}
@@ -134,7 +146,8 @@ const PostItemContent = (props: {
 
     {showType === 'reply' && <TabWrap arrowPos={arrowPos}>
       <ReplyList
-        total={postInfo.reply_count || '0'}
+        total={replyTotal}
+        changeTotal={setReplyTotal}
         rootUri={rootUri}
         uri={postInfo.uri}
         sectionId={sectionId}
@@ -144,46 +157,3 @@ const PostItemContent = (props: {
 }
 
 export default PostItemContent;
-
-function TabWrap(props: {
-  children?: React.ReactNode;
-  arrowPos: {left: string} | undefined
-}) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const arrowRef= useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new ResizeObserver(() => {
-      requestAnimationFrame(() => {
-        if (!arrowRef.current || !wrapRef.current) return;
-        const isArrowShow = arrowRef.current?.style.display !== 'none';
-
-        if (isArrowShow) {
-          observer.unobserve(wrapRef.current)
-          return;
-        } else {
-          if (wrapRef.current.clientHeight > 0) {
-            arrowRef.current.style.display = 'block';
-            arrowRef.current.style.left = props.arrowPos.left;
-          }
-        }
-      })
-    })
-    observer.observe(wrapRef.current)
-
-    return () => {
-      if (!wrapRef.current) return;
-      observer.unobserve(wrapRef.current)
-    }
-
-  }, []);
-
-  return <div ref={wrapRef} className={'relative'}>
-    <div
-      ref={arrowRef}
-      className={S.tabArrow}
-      style={{ display: 'none' }}
-    ><TabArrowDown className={S.arrow} /></div>
-    {props.children}
-  </div>
-}

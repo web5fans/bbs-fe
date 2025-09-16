@@ -42,12 +42,12 @@ export default function PostDetailPage() {
           }]}
         />}
       />
-      <FixedMark detailRef={detailRef} stickyRef={stickyRef} isWhiteUser={isWhiteUser} />
+      <PostsFixedMark detailRef={detailRef} stickyRef={stickyRef} isWhiteUser={isWhiteUser} />
     </div>
   </LayoutCenter>
 }
 
-function FixedMark(props: {
+export function PostsFixedMark(props: {
   stickyRef: React.RefObject<HTMLDivElement | null>,
   isWhiteUser?: boolean
   detailRef: React.RefObject<{ commentRootPostRecord: any } | null>

@@ -16,6 +16,7 @@ const ReplyList = (props: {
   rootUri: string
   sectionId: string
   total: string
+  changeTotal: (total: string) => void
 }) => {
   const { userProfile } = useCurrentUser()
 
@@ -51,7 +52,11 @@ const ReplyList = (props: {
       toUserName: info.author.displayName,
       sectionId: props.sectionId,
       toDid: info.author.did,
-      refresh: reload
+      refresh: () => {
+        reload()
+        const total = Number(props.total) + 1
+        props.changeTotal(`${total}`)
+      }
     })
   }
 
@@ -66,7 +71,7 @@ const ReplyList = (props: {
         toReply={() => reply(info)}
       />
     })}
-    {props.total > 5 && !noMore && <div
+    {props.total > 5 && (props.total !== `${replyListInfo.list.length}`) && <div
       className={S.load}
       onClick={loadMore}
     ><ArrowIcon />加载更多</div>}

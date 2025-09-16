@@ -36,7 +36,7 @@ const PostDetail = (props: PostDetailProps) => {
     refreshDeps: [postId, userProfile?.did]
   })
 
-  const { data: commentList, run: reLoadComment } = useRequest(async (page: number = 1) => {
+  const { data: commentList, run: reLoadComment, refresh: refreshComment } = useRequest(async (page: number = 1) => {
     const result = await server<{
       comments: PostFeedItemType[],
       total: number,
@@ -70,7 +70,7 @@ const PostDetail = (props: PostDetailProps) => {
 
   const reloadList = () => {
     refreshOrigin()
-    reLoadComment(1)
+    refreshComment()
   }
 
   return <CardWindow
