@@ -17,15 +17,26 @@ const Avatar = (props: {
   const innerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!rootRef.current) return
-    const width = rootRef.current.clientWidth
-    const outerWidth = `${Math.floor(width)}px`
-    outerRef.current.style.width = outerWidth;
-    outerRef.current.style.height = outerWidth;
+    const f = () => {
+      if (!rootRef.current) return
+      const width = rootRef.current.clientWidth
+      const outerWidth = `${Math.floor(width)}px`
+      outerRef.current.style.width = outerWidth;
+      outerRef.current.style.height = outerWidth;
 
-    const innerWidth = `${Math.ceil(width * 0.92)}px`
-    innerRef.current.style.width = innerWidth
-    innerRef.current.style.height = innerWidth
+      const innerWidth = `${Math.ceil(width * 0.92)}px`
+      innerRef.current.style.width = innerWidth
+      innerRef.current.style.height = innerWidth
+    }
+
+    f()
+
+    window.addEventListener('resize', f);
+
+    return () => {
+      window.removeEventListener('resize', f);
+    }
+
   }, []);
 
   const hash = useMemo(() => {

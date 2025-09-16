@@ -3,6 +3,9 @@ import InfoCard from "@/app/user-center/components/InfoCard";
 import MouseToolTip from "@/components/MouseToolTip";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import cx from "classnames";
+import DidInfoImg from '@/assets/user-center/did-info.svg';
+import QrCodeImg from '@/assets/user-center/qrcode.svg';
+import ExportWeb5DidModal from "@/components/ExportWeb5DidModal";
 
 const BBSData = (props: {
   postsCount?: string
@@ -11,9 +14,9 @@ const BBSData = (props: {
   const { postsCount = '0', commentCount = '0' } = props;
   const { innerWidth } = useMediaQuery()
 
-  const breakPoint1024 = innerWidth <= 1024;
+  const breakPoint = innerWidth < 1130;
 
-  if (breakPoint1024) {
+  if (breakPoint) {
     return <div className={cx(S.container, S.breakPoint1024)}>
       <div className={S.left}>
         <p className={S.header}>BBS 数据</p>
@@ -44,6 +47,22 @@ function DataStatistic(props: { postsCount: string; commentCount: string }) {
       <span>{commentCount}</span>
       <span>回帖</span>
     </p>
+    <MouseToolTip message={'使用可它快捷登录其他设备，请注意安全保存'}>
+      <p className={S.dataItem}>
+        <QrCodeImg className={S.qrcode} />
+        <span>密钥二维码</span>
+      </p>
+    </MouseToolTip>
+
+
+    <ExportWeb5DidModal>
+      <MouseToolTip message={'导出它可快捷登录其他设备，请注意安全保存'}>
+        <p className={S.dataItem}>
+          <DidInfoImg className={S.didInfo} />
+          <span>Web5 DID信息</span>
+        </p>
+      </MouseToolTip>
+    </ExportWeb5DidModal>
   </div>
 }
 

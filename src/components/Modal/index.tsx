@@ -21,6 +21,7 @@ type CenterModalProps = {
   onVisibleChange?: (isOpen: boolean) => void
   onClose?: () => void
   lockScroll?: boolean
+  onlyMask?: boolean
 }
 
 export default function Modal(props: CenterModalProps) {
@@ -80,7 +81,7 @@ export default function Modal(props: CenterModalProps) {
                 exit="hidden"
               >
                 <FloatingFocusManager context={context}>
-                  <motion.div
+                  {!!props.onlyMask ? <>{props.children}</> : <motion.div
                     ref={refs.setFloating}
                     {...getFloatingProps()}
                     variants={modalVariants}
@@ -89,7 +90,7 @@ export default function Modal(props: CenterModalProps) {
                     <div className={S.inner}>
                       {props.children}
                     </div>
-                  </motion.div>
+                  </motion.div>}
                 </FloatingFocusManager>
               </motion.div>
             </FloatingOverlay>

@@ -1,13 +1,14 @@
 'use client'
 
 import S from './index.module.scss'
-import { useRef } from "react";
+import { HTMLAttributes, useRef } from "react";
 
 const MouseToolTip = (props: {
   children?: React.ReactNode;
   open?: boolean
   message?: string
-}) => {
+} & HTMLAttributes<HTMLDivElement>) => {
+  const { open = true, children, message, ...rest } = props;
   const tipsRef = useRef<HTMLDivElement>(null)
 
   const handleMouseMove = (e) => {
@@ -18,7 +19,7 @@ const MouseToolTip = (props: {
   };
 
   const mouseEnter = (e) => {
-    if (!tipsRef.current || !props.open) return
+    if (!tipsRef.current || !open) return
     if (tipsRef.current) {
       tipsRef.current.style.left = e.nativeEvent.x + 'px';
       tipsRef.current.style.top = e.nativeEvent.y + 'px';
@@ -32,6 +33,7 @@ const MouseToolTip = (props: {
   }
 
   return <div
+    {...rest}
     className={S.wrap}
     onMouseEnter={mouseEnter}
     onMouseLeave={mouseLeave}

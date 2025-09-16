@@ -7,11 +7,12 @@ import { UserProfileType } from "@/store/userInfo";
 import utcToLocal from "@/lib/utcToLocal";
 import { useEffect, useRef } from "react";
 
-const UserInfo = ({ userProfile, isMe }: {
+const UserInfo = ({ userProfile, isMe, className }: {
   userProfile?: UserProfileType
   isMe?: boolean
+  className?: string
 }) => {
-  return <div className={S.container}>
+  return <div className={cx(S.container, className)}>
     <LeftInfo nickname={userProfile?.displayName} />
     <div className={S.rightWrap}>
       <CardItem title={'Web5域名'} content={userProfile?.handle} showCopy={isMe} />
@@ -33,33 +34,38 @@ function LeftInfo({ nickname }: {
   const nameRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    if (!avatarRef.current) return
+    if (!avatarRef.current || !nickname) return
     const textWidth = nameRef.current?.scrollWidth;
     const defaultSize = getComputedStyle(nameRef.current).fontSize.replace('px', '');
 
     const resizeObserver = new ResizeObserver((entries) => {
-      if (!nameRef.current || !avatarRef.current) return
+      requestAnimationFrame(() => {
+        if (!nameRef.current || !avatarRef.current) return
 
-      const isUnderAnd768 = window.innerWidth < 768
+        const isUnderAnd768 = window.innerWidth < 768
 
-      // 获取容器和文本宽度
-      const containerWidth = avatarRef.current?.scrollWidth;
-      if (!containerWidth) return
+        // 获取容器和文本宽度
+        const containerWidth = avatarRef.current?.scrollWidth;
 
-      if (textWidth > containerWidth) {
-        // 计算需要缩小的比例
-        const ratio = containerWidth / textWidth;
-        let newSize = Math.floor(defaultSize * ratio) - 1;
+        if (!containerWidth) return
 
-        // 设置最小字体限制
-        newSize = Math.max(newSize, 8);
+        if (textWidth > containerWidth) {
+          // 计算需要缩小的比例
+          const ratio = containerWidth / textWidth;
+          let newSize = Math.floor(defaultSize * ratio) - 1;
 
-        // 应用新字体大小
-        nameRef.current.style.fontSize = newSize + 'px';
-        if (isUnderAnd768) {
-          nameRef.current.style.width = containerWidth + 'px';
+          // 设置最小字体限制
+          newSize = Math.max(newSize, 8);
+
+          // 应用新字体大小
+          nameRef.current.style.fontSize = newSize + 'px';
+          if (isUnderAnd768) {
+            nameRef.current.style.width = containerWidth + 'px';
+          } else {
+            nameRef.current.style.width = 'auto';
+          }
         }
-      }
+      })
 
 
     })
@@ -68,7 +74,7 @@ function LeftInfo({ nickname }: {
     return () => {
       resizeObserver.disconnect()
     }
-  }, []);
+  }, [nickname]);
 
   return <div className={S.leftWrap}>
     <div ref={avatarRef}>

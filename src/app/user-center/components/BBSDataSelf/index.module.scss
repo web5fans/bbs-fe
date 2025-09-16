@@ -55,22 +55,52 @@
   .data {
     display: flex;
     align-items: center;
-    gap: rem.px2flexible(25);
-    padding-left: rem.px2flexible(4);
+    gap: rem.px2flexible(15);
     justify-content: start;
     align-self: stretch;
     > p {
       display: flex;
       flex-direction: column;
       align-items: center;
+      flex-shrink: 0;
 
       >span:first-child {
         font-size: rem.px2flexible(12);
         font-weight: 500;
+        line-height: 1.3;
       }
 
       > span:last-child {
         font-size: rem.px2flexible(7);
+      }
+    }
+
+    .dataItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      align-self: stretch;
+      justify-content: end;
+      cursor: pointer;
+      gap: rem.px2flexible(3);
+
+      > span:last-child {
+        font-size: rem.px2flexible(7);
+      }
+
+      &:hover {
+        color: var(--primary-color);
+      }
+
+      .qrcode {
+        width: rem.px2flexible(11);
+        height: rem.px2flexible(11);
+      }
+
+      .didInfo {
+        width: rem.px2flexible(17);
+        height: rem.px2flexible(11);
       }
     }
   }
@@ -100,8 +130,8 @@
 
 @media screen and (min-width: 1024px) {
   .container {
-    padding-top: 22px;
-    padding-bottom: 22px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     &:not(.breakPoint1024) {
       .card {
         margin: 20px 0;
