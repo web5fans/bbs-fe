@@ -92,7 +92,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    position: relative;
   }
 
   .title {
@@ -130,6 +129,7 @@
     color: #6C6C6C;
     gap: rem.px2flexible(10);
     margin-top: rem.px2flexible(10);
+    position: relative;
 
     .reply {
       cursor: pointer;
