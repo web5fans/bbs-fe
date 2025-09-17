@@ -1,12 +1,16 @@
 import { useCountDown } from "ahooks";
-import { decryptData, encryptData } from "@/lib/encrypt";
+import { encryptData } from "@/lib/encrypt";
 import storage from "@/lib/storage";
 import { memo, useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import S from './index.module.scss'
 import RefreshIcon from '@/assets/refresh.svg'
+import { QRCODE_TIME_ENCRYPT_KEY } from "@/constant/constant";
 
-const KEY = 'SGVsbG8gV29ybGQ=' // btoa('Hello World')
+export type QRCodeDataType = {
+  timestamp: number
+  web5DidInfo: string
+}
 
 const QRCodeStep = ({pinCode}: {
   pinCode: string;
@@ -33,7 +37,7 @@ const QRCodeStep = ({pinCode}: {
       web5DidInfo
     }
 
-    const qrcodeStr = await encryptData(JSON.stringify(params), KEY)
+    const qrcodeStr = await encryptData(JSON.stringify(params), QRCODE_TIME_ENCRYPT_KEY)
     console.log('qrcodeStr', qrcodeStr)
 
     setTargetDate(timestamp)

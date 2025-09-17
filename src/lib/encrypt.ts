@@ -56,8 +56,7 @@ export async function encryptData(data: string, password: string) {
     // await decryptData(base64, password);
   } catch (error) {
     console.error('加密错误:', error);
-    alert('加密失败: ' + error.message);
-    return ''
+    return 'error'
   }
 }
 
@@ -90,6 +89,6 @@ export async function decryptData(encryptedData, password) {
     return decoder.decode(decrypted);
   } catch (error) {
     console.error('解密错误:', error);
-    return '解密失败: 密码错误或数据损坏';
+    return 'error';
   }
 }

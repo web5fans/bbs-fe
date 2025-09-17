@@ -1,0 +1,59 @@
+@use "@/styles/rem";
+
+.container {
+  height: rem.px2flexible(237);
+  padding: rem.px2flexible(23) rem.px2flexible(35) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #DBDBDB;
+  box-shadow: 0 0 rem.px2flexible(7.5) 0 rgba(0, 0, 0, 0.25) inset;
+
+  .title {
+    font-size: rem.px2flexible(14);
+    font-weight: 500;
+    margin-bottom: rem.px2flexible(23);
+  }
+
+  .card {
+    height: rem.px2flexible(120);
+    background: #E2F2F2;
+    width: 100%;
+    cursor: pointer;
+
+    .inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: rem.px2flexible(23);
+
+      .uploadIcon {
+        width: rem.px2flexible(25);
+        height: rem.px2flexible(25);
+      }
+
+      .message {
+        font-size: rem.px2flexible(9);
+        margin-top: rem.px2flexible(15);
+        margin-bottom: rem.px2flexible(5);
+      }
+
+      .info {
+        color: #515151;
+        font-size: rem.px2flexible(7);
+      }
+    }
+  }
+
+  .err {
+    color: var(--danger-color);
+    margin-top: rem.px2flexible(5);
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(2);
+
+    img {
+      width: min(16px, #{rem.px2flexible(9)});
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import S from "./index.module.scss";
 import cx from "classnames";
 
-const InfoCard = (props: {
+const FlatBottomedCard = (props: {
   children?: React.ReactNode;
   className?: string
 }) => {
@@ -15,4 +15,4 @@ const InfoCard = (props: {
   </div>
 }
 
-export default InfoCard;
+export default FlatBottomedCard;

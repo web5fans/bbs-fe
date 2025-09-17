@@ -1,0 +1,5 @@
+@use "@/styles/rem";
+
+.window {
+  max-width: rem.px2flexible(295) !important;
+}

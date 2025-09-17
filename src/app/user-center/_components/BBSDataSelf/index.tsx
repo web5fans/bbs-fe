@@ -1,5 +1,4 @@
 import S from './index.module.scss'
-import InfoCard from "@/app/user-center/_components/InfoCard";
 import MouseToolTip from "@/components/MouseToolTip";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import cx from "classnames";
@@ -7,6 +6,7 @@ import DidInfoImg from '@/assets/user-center/did-info.svg';
 import QrCodeImg from '@/assets/user-center/qrcode.svg';
 import ExportWeb5DidModal from "@/components/ExportWeb5DidModal";
 import KeyQRCodeModal from "@/app/user-center/_components/KeyQRCodeModal";
+import FlatBottomedCard from "@/components/FlatBottomedCard";
 
 const BBSData = (props: {
   postsCount?: string
@@ -70,7 +70,7 @@ function DataStatistic(props: { postsCount: string; commentCount: string }) {
 }
 
 function DataCard() {
-  return <InfoCard className={S.card}>
+  return <FlatBottomedCard className={S.card}>
     <p className={S.title}>数据存储位置</p>
     <p className={S.location}>web5.bbs.fans</p>
     <MouseToolTip
@@ -81,7 +81,7 @@ function DataCard() {
         切换BBS数据储存位置
       </p>
     </MouseToolTip>
-  </InfoCard>
+  </FlatBottomedCard>
 }
 
 function UploadIcon(props: { className?: string }) {

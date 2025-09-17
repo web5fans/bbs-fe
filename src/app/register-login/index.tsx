@@ -11,12 +11,10 @@ import NickNameStep from "./(components)/Steps/NickName";
 import OnChain from "@/app/register-login/(components)/Steps/OnChain";
 import IntroStep from "@/app/register-login/(components)/Steps/Intro";
 import CompleteStep from './(components)/Steps/Complete';
-import MultiDid from "@/app/register-login/(components)/MultiDid";
-import Authorize from "@/app/register-login/(components)/Authorize";
 import AppHeader from "@/app/@header/default";
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
-import cx from "classnames";
 import { LayoutCenter } from "@/components/Layout";
+import ImportDid from "@/app/register-login/(components)/ImportDid";
 
 export default function RegisterLogin() {
   const { visible, closeRegisterPop } = useRegisterPopUp()
@@ -25,6 +23,11 @@ export default function RegisterLogin() {
   const touchSensor = useSensor(TouchSensor)
 
   const sensors = useSensors(mouseSensor, touchSensor)
+
+  const [importDidInfo, setImportDidInfo] = useState<{ type: 'file' | 'scan' | '', visible: boolean }>({
+    type: 'file',
+    visible: true
+  })
 
 
   const goPrev = () => {
@@ -40,7 +43,10 @@ export default function RegisterLogin() {
   const stepRender = useMemo(() => {
     switch (curStep) {
       case CREATE_ACCOUNT_STEP.INTRO: {
-        return <IntroStep goNext={() => setCurSep(CREATE_ACCOUNT_STEP.NICKNAME)} />
+        return <IntroStep
+          goNext={() => setCurSep(CREATE_ACCOUNT_STEP.NICKNAME)}
+          showImport={type => setImportDidInfo({ type, visible: true })}
+        />
       }
       case CREATE_ACCOUNT_STEP.NICKNAME: {
         return <>
@@ -66,27 +72,30 @@ export default function RegisterLogin() {
       <div className={S.layout}>
         <div className={S.bgWrap} />
         <LayoutCenter style={{ overflow: 'initial' }}>
-          <CardWindow
-            header={windowTitle}
-            wrapClassName={S.window}
-            headerClassName={S.windowHeader}
-            showCloseButton
-            onClose={closeRegisterPop}
-          >
-            <SetNickNameProvider>
-              <DndContext sensors={sensors}>
-                <div className={S.content}>
-                  {stepRender}
-                </div>
-                <DraggableOverlay />
-              </DndContext>
-            </SetNickNameProvider>
-          </CardWindow>
+
+          {importDidInfo.visible ? <ImportDid
+              windowClassName={S.window}
+              windowTitleClassName={S.windowHeader}
+              importType={importDidInfo.type}
+            /> : <CardWindow
+              header={windowTitle}
+              wrapClassName={S.window}
+              headerClassName={S.windowHeader}
+              showCloseButton
+              onClose={closeRegisterPop}
+            >
+              <SetNickNameProvider>
+                <DndContext sensors={sensors}>
+                  <div className={S.content}>
+                    {stepRender}
+                  </div>
+                  <DraggableOverlay />
+                </DndContext>
+              </SetNickNameProvider>
+            </CardWindow>
+          }
+
         </LayoutCenter>
-
-        {/*<MultiDid />*/}
-
-        {/*<Authorize />*/}
       </div>
     </div>
   </div>

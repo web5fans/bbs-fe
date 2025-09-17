@@ -34,11 +34,54 @@
       }
     }
 
+    .footer {
+      margin-top: 50px;
+      display: flex;
+      align-items: center;
+      gap: rem.px2flexible(20);
+    }
+
     .button {
-      margin-top: 26px;
-      width: min(156px, #{rem.px2flexible(120)});
-      height: min(56px, #{rem.px2flexible(33)});
-      font-size: min(16px, #{rem.px2flexible(12)});
+      width: min(150px, #{rem.px2flexible(120)});
+      height: min(50px, #{rem.px2flexible(33)});
+      font-size: min(18px, #{rem.px2flexible(12)});
+    }
+  }
+}
+
+.popup {
+  position: absolute;
+  margin-top: rem.px2flexible(4);
+  min-width: rem.px2flexible(118);
+  padding: rem.px2flexible(9);
+  border: 1px solid var(--text-hover-800, #363636);
+  background: var(--white, #FFF);
+  box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0 0 #000;
+
+  height: rem.px2flexible(71);
+  overflow: hidden;
+  transition: all .15s;
+  z-index: 99;
+
+  &.close {
+    height: 0;
+    box-shadow: none;
+    padding-block: 0;
+    border: none;
+  }
+
+  .menuItem {
+    padding: rem.px2flexible(5) rem.px2flexible(6) rem.px2flexible(5) rem.px2flexible(4);
+    font-size: rem.px2flexible(8);
+    cursor: pointer;
+
+    & + .menuItem {
+      margin-top: rem.px2flexible(9);
+    }
+
+    &:hover {
+      background: #F3F3F3;
+      color: var(--primary-color);
     }
   }
 }

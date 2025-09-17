@@ -13,6 +13,7 @@ type Props = Omit<JSX.IntrinsicElements['input'], 'onChange'> & {
   showCount?: boolean
   onChange?: (value: string) => void;
   initialValue?: string
+  inputValue?: string
 }
 
 const TEM_SPAN_ID = 'input_mirror'
@@ -25,6 +26,7 @@ const Input = (props: Props) => {
     wrapClassName,
     showCount,
     initialValue,
+    inputValue,
     ...rest
   } = props;
   const [value, setValue] = useState<string | undefined>();
@@ -36,6 +38,10 @@ const Input = (props: Props) => {
     if (!initialValue) return
     setValue(initialValue)
   }, [initialValue]);
+
+  useEffect(() => {
+    setValue(inputValue)
+  }, [inputValue]);
 
   const getCursorPosition = (e) => {
     const {selectionStart = 0, selectionEnd = 0} = e.target;

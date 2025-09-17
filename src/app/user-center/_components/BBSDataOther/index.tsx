@@ -1,5 +1,5 @@
 import S from './index.module.scss'
-import InfoCard from "@/app/user-center/_components/InfoCard";
+import FlatBottomedCard from "@/components/FlatBottomedCard";
 
 const BBSDataOther = (props: {
   postsCount?: string
@@ -11,7 +11,7 @@ const BBSDataOther = (props: {
     <p className={S.header}>
       <span>BBS 数据</span>
     </p>
-    <InfoCard className={S.card}>
+    <FlatBottomedCard className={S.card}>
       <div className={S.data}>
         <p>
           <span>{postsCount}</span>
@@ -22,7 +22,7 @@ const BBSDataOther = (props: {
           <span>回帖</span>
         </p>
       </div>
-    </InfoCard>
+    </FlatBottomedCard>
   </div>
 }
 

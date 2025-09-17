@@ -1,11 +1,11 @@
 import S from './index.module.scss'
-import InfoCard from "@/app/user-center/_components/InfoCard";
 import CopyText from "@/components/CopyText";
 import cx from "classnames";
 import Avatar from "@/components/Avatar";
 import { UserProfileType } from "@/store/userInfo";
 import utcToLocal from "@/lib/utcToLocal";
 import { useEffect, useRef } from "react";
+import FlatBottomedCard from "@/components/FlatBottomedCard";
 
 const UserInfo = ({ userProfile, isMe, className }: {
   userProfile?: UserProfileType
@@ -95,7 +95,7 @@ function CardItem(props: {
 }) {
   const { showCopy = false, title, content } = props;
 
-  return <InfoCard className={cx(S.card, props.className)}>
+  return <FlatBottomedCard className={cx(S.card, props.className)}>
     <div className={S.inner}>
       <div className={S.left}>
         <p className={S.title}>{title}</p>
@@ -106,5 +106,5 @@ function CardItem(props: {
         className={S.copy}
       />}
     </div>
-  </InfoCard>
+  </FlatBottomedCard>
 }
