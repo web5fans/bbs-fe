@@ -48,7 +48,7 @@ export async function encryptData(data: string, password: string) {
 
     // 转换为Base64字符串
     const base64 = btoa(String.fromCharCode.apply(null, combined));
-    console.log('base64>>', base64)
+    // console.log('base64>>', base64)
 
     return base64
 

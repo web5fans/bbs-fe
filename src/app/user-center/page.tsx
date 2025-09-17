@@ -3,9 +3,9 @@
 import CardWindow from "@/components/CardWindow";
 import S from "./index.module.scss";
 import BreadCrumbs from "@/components/BreadCrumbs";
-import UserInfo from "@/app/user-center/components/UserInfo";
-import BBSDataSelf from "@/app/user-center/components/BBSDataSelf";
-import DataDetail from "@/app/user-center/components/DataDetail";
+import UserInfo from "@/app/user-center/_components/UserInfo";
+import BBSDataSelf from "@/app/user-center/_components/BBSDataSelf";
+import DataDetail from "@/app/user-center/_components/DataDetail";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useRequest } from "ahooks";
 import server from "@/server";

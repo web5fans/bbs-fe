@@ -1,5 +1,5 @@
 import S from './index.module.scss'
-import InfoCard from "@/app/user-center/components/InfoCard";
+import InfoCard from "@/app/user-center/_components/InfoCard";
 
 const BBSDataOther = (props: {
   postsCount?: string

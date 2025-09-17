@@ -1,7 +1,7 @@
 @use "@/styles/rem";
 
 .window {
-  width: 704px;
+  width: rem.px2flexible(352);
   --card-window-header-padding-block: #{rem.px2flexible(4)};
   --card-window-header-padding-inline: #{rem.px2flexible(9)};
   --card-window-content-margin: #{rem.px2flexible(9)};
