@@ -71,9 +71,8 @@ export default function RegisterLogin() {
   const windowTitle = curStep === CREATE_ACCOUNT_STEP.INTRO ? '注册账号' : '创建账号'
 
   return <div className={S.container}>
-    <div className={'w-full min-w-fit'}>
-      <AppHeader isPopUp />
-      <div className={S.layout}>
+    <AppHeader isPopUp />
+    <div className={S.layout}>
         <div className={S.bgWrap} />
         <LayoutCenter style={{ overflow: 'initial' }}>
 
@@ -101,6 +100,5 @@ export default function RegisterLogin() {
 
         </LayoutCenter>
       </div>
-    </div>
   </div>
 }

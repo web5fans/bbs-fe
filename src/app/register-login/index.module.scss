@@ -15,6 +15,7 @@
     padding: rem.px2flexible(45.5) 0 rem.px2flexible(63) 0;
     margin: 0 auto;
     position: relative;
+    min-height: calc(100% - #{rem.px2flexible(44)});
 
     .bgWrap {
       position: absolute;
