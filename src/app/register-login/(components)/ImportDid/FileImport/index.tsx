@@ -8,14 +8,20 @@ import jsQR from "jsqr";
 import { decryptData } from "@/lib/encrypt";
 import { QRCODE_TIME_ENCRYPT_KEY } from "@/constant/constant";
 import { QRCodeDataType } from "@/app/user-center/_components/KeyQRCodeModal/QRCodeStep";
+import ImportLoading from "@/app/register-login/(components)/ImportDid/FileImport/ImportLoading";
+import useUserInfoStore from "@/store/userInfo";
 
-const FileImport = () => {
+const FileImport = (props: {
+  jumpToMain: () => void
+}) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [fileType, setFileType] = useState<'image' | 'text' | undefined>()
   const fileContentRef = useRef<string>('')
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [errMessage, setErrMessage] = useState<string | undefined>()
+
+  const [loading, setLoading] = useState(false)
 
   const readFile = (file: File) => {
     const reader = new FileReader();
@@ -87,11 +93,33 @@ const FileImport = () => {
 
   }
 
+  const cancel = () => {
+    setFileType(undefined)
+    fileContentRef.current = ''
+  }
+
+  const getDidInfo = (info: string) => {
+    setLoading(true)
+    useUserInfoStore.getState().importUserDid(JSON.parse(info))
+  }
+
+  if (loading) {
+    return <ImportLoading jumpToMain={props.jumpToMain} />
+  }
+
   if (fileType === 'image') {
-    return <PINPassword fileText={fileContentRef.current} />
+    return <PINPassword
+      fileText={fileContentRef.current}
+      getDidInfo={getDidInfo}
+      cancel={cancel}
+    />
   }
   if (fileType === 'text') {
-    return <EnterPassword fileText={fileContentRef.current} getDidInfo={() => {}} />
+    return <EnterPassword
+      fileText={fileContentRef.current}
+      getDidInfo={getDidInfo}
+      cancel={cancel}
+    />
   }
 
   return <div className={S.container}>

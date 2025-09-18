@@ -1,0 +1,67 @@
+@use "@/styles/rem";
+
+.wrap {
+  height: rem.px2flexible(237);
+  padding: rem.px2flexible(23) rem.px2flexible(35) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #DBDBDB;
+  box-shadow: 0 0 rem.px2flexible(7.5) 0 rgba(0, 0, 0, 0.25) inset;
+
+  .title {
+    font-size: rem.px2flexible(14);
+    font-weight: 500;
+    margin-bottom: rem.px2flexible(23);
+  }
+
+  .card {
+    height: rem.px2flexible(120);
+    background: #E2F2F2;
+    width: 100%;
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: rem.px2flexible(15);
+    img {
+      width: rem.px2flexible(58);
+      height: rem.px2flexible(73);
+    }
+
+    .message {
+      text-align: center;
+      color: #6C6C6C;
+      font-size: rem.px2flexible(7);
+      margin-top: rem.px2flexible(8);
+    }
+
+    .loadingPos {
+      position: absolute;
+      top: rem.px2flexible(23);
+      right: rem.px2flexible(16);
+    }
+  }
+}
+
+.loadingWrap {
+  width: rem.px2flexible(17);
+  height: rem.px2flexible(3);
+  background: #DCDCDC;
+  overflow: hidden;
+  position: relative;
+
+  .loading {
+    height: 100%;
+    background: #ffffff;
+    position: absolute;
+  }
+
+  .rect {
+    width: rem.px2flexible(1.5);
+    height: rem.px2flexible(3);
+    position: absolute;
+  }
+}

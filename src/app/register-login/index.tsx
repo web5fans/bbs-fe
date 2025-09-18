@@ -26,7 +26,7 @@ export default function RegisterLogin() {
 
   const [importDidInfo, setImportDidInfo] = useState<{ type: 'file' | 'scan' | '', visible: boolean }>({
     type: 'file',
-    visible: true
+    visible: false
   })
 
 
@@ -37,6 +37,10 @@ export default function RegisterLogin() {
   useEffect(() => {
     if (!visible) {
       setCurSep(CREATE_ACCOUNT_STEP.INTRO)
+      setImportDidInfo({
+        type: '',
+        visible: false
+      })
     }
   }, [visible]);
 
@@ -73,7 +77,7 @@ export default function RegisterLogin() {
         <div className={S.bgWrap} />
         <LayoutCenter style={{ overflow: 'initial' }}>
 
-          {importDidInfo.visible ? <ImportDid
+          {importDidInfo.visible && importDidInfo.type ? <ImportDid
               windowClassName={S.window}
               windowTitleClassName={S.windowHeader}
               importType={importDidInfo.type}

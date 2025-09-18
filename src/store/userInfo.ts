@@ -2,11 +2,10 @@ import { create } from 'zustand'
 import createSelectors from './helper/createSelector';
 import { ccc } from "@ckb-ccc/core";
 import getPDSClient from "@/lib/pdsClient";
-import storage from "@/lib/storage";
+import storage, { TokenStorageType } from "@/lib/storage";
 import { ComAtprotoWeb5CreateAccount, ComAtprotoServerCreateSession } from "web5-api";
 import { postsWritesPDSOperation } from "@/app/posts/utils";
 import { handleToNickName } from "@/lib/handleToNickName";
-import server from "@/server";
 import { fetchUserProfile, userLogin } from "@/lib/user-account";
 
 export type UserProfileType = {
@@ -40,6 +39,7 @@ type UserInfoStore = UserInfoStoreValue & {
   writeProfile: () => Promise<'NO_NEED' | 'SUCCESS' | 'FAIL'>
   resetUserStore: () => void
   initialize: (signer?: ccc.Signer) => Promise<void>
+  importUserDid: (info: TokenStorageType) => Promise<void>
 }
 
 const useUserInfoStore = createSelectors(
@@ -137,19 +137,6 @@ const useUserInfoStore = createSelectors(
       return result
     },
 
-    // getSigningKey: (walletAddress) => {
-    //   if (get().signingKey) {
-    //     return get().signingKey;
-    //   }
-    //   const signingKeyMap = storage.getToken();
-    //
-    //   const key = signingKeyMap?.[walletAddress];
-    //   if (key) {
-    //     set(() => ({ signingKey: key }))
-    //   }
-    //   return key
-    // },
-
     initialize: async () => {
       await get().web5Login()
       let visitor = localStorage.getItem(STORAGE_VISITOR)
@@ -159,6 +146,11 @@ const useUserInfoStore = createSelectors(
         localStorage.setItem(STORAGE_VISITOR, visitor)
       }
       set(() => ({ initialized: true, visitorId: visitor }))
+    },
+
+    importUserDid: async (info) => {
+      storage.setToken(info)
+      await get().web5Login()
     }
 
   })),

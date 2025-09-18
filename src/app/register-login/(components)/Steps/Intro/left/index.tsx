@@ -51,7 +51,7 @@ export const IntroLeft = (props: IntroLeftProps) => {
 
         <ExistDidPopUp
           popItems={[{
-            name: '导入Web5 dID密钥登录',
+            name: '导入Web5 DID密钥登录',
             onClick: () => props.showImport('file')
           }, {
             name: '扫一扫登录',

@@ -1,12 +1,18 @@
 import S from './index.module.scss'
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 
 type Digit = "" | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 
 const BOX_COUNT = 4;
 
+export type PinCodeInputRefProps = {
+  clear: () => void
+}
+
 const PINCodeInput = (props: {
   codeChange: (value:string) => void,
+  inputClassName?: string;
+  ref?: Ref<PinCodeInputRefProps>
 }) => {
   const [digits, setDigits] = useState<Digit[]>(Array.from({ length: BOX_COUNT }, () => ""));
   const inputRefs = useRef<Array<HTMLInputElement | null>>(Array.from({ length: BOX_COUNT }, () => null));
@@ -14,6 +20,14 @@ const PINCodeInput = (props: {
   useEffect(() => {
     props.codeChange(digits.join(""))
   }, [digits]);
+
+  useImperativeHandle(props.ref, () => {
+    return {
+      clear: () => {
+        setDigits(Array.from({ length: BOX_COUNT }, () => ""));
+      }
+    }
+  })
 
   const focusIndex = useCallback((index: number) => {
     const el = inputRefs.current[index];
@@ -84,7 +98,7 @@ const PINCodeInput = (props: {
         key={i}
         ref={el => (inputRefs.current[i] = el)}
         value={d}
-        className={`${d ? S.active : ''}`}
+        className={`${d ? S.active : ''} ${props.inputClassName}`}
         inputMode="numeric"
         pattern="\\d*"
         maxLength={1}

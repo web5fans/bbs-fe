@@ -7,6 +7,7 @@ import { decryptData } from "@/lib/encrypt";
 const EnterPassword = (props: {
   fileText: string
   getDidInfo: (info: string) => void
+  cancel: () => void
 }) => {
   const { fileText } = props;
   const [validateStatus, setValidateStatus] = useState<boolean | undefined>(undefined)
@@ -56,6 +57,7 @@ const EnterPassword = (props: {
       >确认</Button>
       <Button
         className={S.button}
+        onClick={props.cancel}
       >取消</Button>
     </div>
   </div>

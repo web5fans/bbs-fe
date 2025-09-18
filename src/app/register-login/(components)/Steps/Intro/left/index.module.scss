@@ -74,6 +74,7 @@
     padding: rem.px2flexible(5) rem.px2flexible(6) rem.px2flexible(5) rem.px2flexible(4);
     font-size: rem.px2flexible(8);
     cursor: pointer;
+    white-space: nowrap;
 
     & + .menuItem {
       margin-top: rem.px2flexible(9);
