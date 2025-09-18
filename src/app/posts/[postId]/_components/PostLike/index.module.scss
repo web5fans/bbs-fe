@@ -20,9 +20,11 @@
       }
 
       &:not(.disabled) {
-        &:active .icon{
-          color: var(--danger-color);
-          transform: scale(1.6);
+        &.active {
+          .icon {
+            color: var(--danger-color);
+            animation: clickLike 1.8s;
+          }
         }
       }
     }
@@ -42,5 +44,11 @@
     &:hover {
       color: var(--primary-color);
     }
+  }
+}
+
+@keyframes clickLike {
+  from, to {
+    transform: scale(1.6);
   }
 }

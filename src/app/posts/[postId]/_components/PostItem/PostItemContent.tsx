@@ -131,8 +131,8 @@ const PostItemContent = (props: {
           onClick={reply}
         >回复&nbsp;({replyTotal})</span>
 
-        {postInfo.edited ? <span>更新于&nbsp;{formatDate(postInfo.edited)}</span>
-          : <span>{formatDate(postInfo.created)}</span>}
+        {postInfo.edited ? <span className={S.opt}>更新于&nbsp;{formatDate(postInfo.edited)}</span>
+          : <span className={S.opt}>{formatDate(postInfo.created)}</span>}
         <span>{floor}楼</span>
       </div>
     </div>

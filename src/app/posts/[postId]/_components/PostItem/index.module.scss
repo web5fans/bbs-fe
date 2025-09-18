@@ -138,6 +138,10 @@
         color: var(--primary-color);
       }
     }
+
+    .opt, .reply {
+      margin-right: rem.px2flexible(8);
+    }
   }
 }
 

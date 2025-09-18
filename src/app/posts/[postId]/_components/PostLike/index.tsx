@@ -17,6 +17,8 @@ const PostLike = (props: {
   const [count, setCount] = useState(Number(props.likeCount) || 0)
   const [hasLiked, setHasLiked] = useState(props.liked)
 
+  const [clickActive, setClickActive] = useState(false)
+
   useEffect(() => {
     setCount(Number(props.likeCount) || 0)
   }, [props.likeCount]);
@@ -27,6 +29,7 @@ const PostLike = (props: {
 
   const handleLike = async () => {
     if (!userProfile || hasLiked) return
+    setClickActive(true)
     await postsWritesPDSOperation({
       record: {
         $type: 'app.bbs.like',
@@ -36,14 +39,13 @@ const PostLike = (props: {
       did: userProfile.did
     })
     setCount(v => v + 1)
-    setHasLiked(true)
     props.reloadLikeList?.()
   }
 
   const disabled = !userProfile || hasLiked
 
   return <div className={S.wrap}>
-    <div className={cx(S.iconWrap, disabled && S.disabled, hasLiked && S.liked)} onClick={handleLike}>
+    <div className={cx(S.iconWrap, disabled && S.disabled, hasLiked && S.liked, clickActive && S.active)} onClick={handleLike}>
       <LikeIcon className={cx(S.icon)} />
     </div>
     <span className={S.count} onClick={() => {
