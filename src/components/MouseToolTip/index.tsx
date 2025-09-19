@@ -2,11 +2,13 @@
 
 import S from './index.module.scss'
 import { HTMLAttributes, useRef } from "react";
+import cx from "classnames";
 
 const MouseToolTip = (props: {
   children?: React.ReactNode;
   open?: boolean
   message?: string
+  tipClassName?: string
 } & HTMLAttributes<HTMLDivElement>) => {
   const { open = true, children, message, ...rest } = props;
   const tipsRef = useRef<HTMLDivElement>(null)
@@ -41,7 +43,7 @@ const MouseToolTip = (props: {
   >
     {props.children}
 
-    <div className={S.tips} ref={tipsRef}>
+    <div className={cx(S.tips, props.tipClassName)} ref={tipsRef}>
       {props.message || '有 Web5 did 账号才可发帖，请先创建账号～'}
     </div>
   </div>

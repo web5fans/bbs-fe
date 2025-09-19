@@ -39,6 +39,10 @@
         width: rem.px2flexible(6);
         height: rem.px2flexible(3);
       }
+
+      &:hover {
+        color: var(--primary-color);
+      }
     }
   }
 }

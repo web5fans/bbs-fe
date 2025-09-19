@@ -19,6 +19,10 @@
       width: rem.px2flexible(6);
       height: rem.px2flexible(3);
     }
+
+    &:hover {
+      color: var(--primary-color);
+    }
   }
 }
 
@@ -52,6 +56,10 @@
     margin-top: rem.px2flexible(-4);
 
     .packup {
+      color: var(--primary-color);
+    }
+
+    &:hover {
       color: var(--primary-color);
     }
 

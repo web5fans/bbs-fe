@@ -31,6 +31,10 @@
       line-height: rem.px2flexible(14);
       text-align: right;
       background: #F5F5F5;
+
+      &:hover {
+        color: var(--primary-color);
+      }
     }
   }
 
@@ -38,5 +42,6 @@
     font-size: rem.px2flexible(5);
     width: rem.px2flexible(14);
     height: rem.px2flexible(14);
+    cursor: pointer;
   }
 }

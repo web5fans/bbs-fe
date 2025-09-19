@@ -4,6 +4,8 @@ import { useInfiniteScroll } from "ahooks";
 import server from "@/server";
 import { Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import remResponsive from "@/lib/rem-responsive";
+import MouseToolTip from "@/components/MouseToolTip";
+import Link from "next/link";
 
 export type LikeListRef = { reloadLikeList: () => void }
 
@@ -96,12 +98,23 @@ const LikeList = (props: {
     >
       <div className={S.inner}>
         {
-          showAvatars.map((info) => <div title={info.author.displayName}>
-            <Avatar
-              nickname={info.author.displayName}
-              className={S.avatar}
-            />
-          </div>)
+          showAvatars.map((info) => {
+            const href = `/user-center/${encodeURIComponent(info.author?.did)}`
+            const name = info.author.displayName
+            const tips = name[0].toUpperCase() + name.slice(1)
+
+            return <MouseToolTip
+              message={tips}
+              tipClassName={'!w-auto'}
+            >
+              <Link href={href}>
+                <Avatar
+                  nickname={info.author.displayName}
+                  className={S.avatar}
+                />
+              </Link>
+            </MouseToolTip>
+          })
         }
         {(showAvatars.length !== (likeList?.list?.length || 0)) && <p
           className={S.loadMore}
