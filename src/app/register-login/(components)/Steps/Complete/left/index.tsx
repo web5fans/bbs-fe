@@ -5,7 +5,9 @@ import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 
 const MAIN_STATION_PATH = '/posts'
 
-export const CompleteLeft = () => {
+export const CompleteLeft = (props: {
+  showExport: () => void
+}) => {
   const { closeRegisterPop } = useRegisterPopUp()
   const pathname = usePathname()
   const router = useRouter()
@@ -26,11 +28,17 @@ export const CompleteLeft = () => {
       <p className={S.info}>未来可使用它穿梭于各类web5技术的网站</p>
     </div>
 
-    <Button
-      type={'primary'}
-      className={S.button}
-      onClick={enterMainSite}
-    >进入主站</Button>
+    <div className={S.footer}>
+      <Button
+        type={'primary'}
+        className={S.button}
+        onClick={props.showExport}
+      >导出密钥信息</Button>
+      <Button
+        className={S.button}
+        onClick={enterMainSite}
+      >进入主站</Button>
+    </div>
   </div>
 }
 

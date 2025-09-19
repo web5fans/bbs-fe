@@ -27,6 +27,13 @@
     text-align: center;
   }
 
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem.px2flexible(15);
+  }
+
   .button {
     width: min(132px, #{rem.px2flexible(96)});
     height: rem.px2flexible(25);

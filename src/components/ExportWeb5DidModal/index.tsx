@@ -3,7 +3,7 @@ import Modal from "@/components/Modal";
 import CardWindow from "@/components/CardWindow";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
-import { cloneElement, useEffect, useRef, useState } from "react";
+import { cloneElement, JSX, useEffect, useRef, useState } from "react";
 import { decryptData, encryptData } from "@/lib/encrypt";
 import storage from "@/lib/storage";
 import { useBoolean } from "ahooks";
@@ -12,11 +12,9 @@ import { useToast } from "@/provider/toast";
 const regex = /^[A-Za-z0-9]{8}$/;
 
 const ExportWeb5DidModal = (props: {
-  children: React.ReactNode;
+  children: JSX.Element;
 }) => {
   const [visible, { setTrue, setFalse, toggle }] = useBoolean(false)
-  const [curStep, setCurStep] = useState<'password' | 'export'>('password')
-  const passwordRef = useRef('')
 
   const test = async () => {
     const text = '6K2CkMsbgpTJYz0WQNv2IUSGPJlIDnpxWoLCEIk1HQ15tNGJWSnvzcNnIN1M5i2C1ZOVYVWfc3oc9a7MKRZCvhWpwltR2paKLC2wLDkitrQ7JPQiLjyqO4eZCG3sccqNYVtc1+9N/svuP9pILwZCRr5c8X6tAntAGkfNuecMXArInmkaJY4I5oPoTpZUxF/RzOnDIFZGacuVgOTdcaXr9BOlRKVtIYlHoNhEwe1zAolRGwn1cTPnnniNtjLmJJ6hsuuwc2JGnfHxIjP8vcJEBZA1ddKbdqPZMLVrr/HtU2ZAOnwJ2zTd04X8AzzH34+EbcpXOFbNoQDR24tPGiYIF3dImkal4cl0uSaAA42Wl3p5lduIgmsjH69bU7sR5GEJtd0A09c=';
@@ -25,40 +23,67 @@ const ExportWeb5DidModal = (props: {
     console.log('result', result);
   }
 
-  const close = () => {
-    passwordRef.current = ''
-    setCurStep('password')
-    setFalse()
-  }
-
   return <>
   {cloneElement(props.children, {
     onClick: toggle
   })}
     <Modal visible={visible} onlyMask>
-      <CardWindow
-        wrapClassName={S.window}
-        header={'Web5 DID信息'}
-        showCloseButton
-        headerClassName={S.header}
-        onClose={close}
-      >
-        {curStep === 'password' && (
-          <StepPassWord
-            inputChange={value => passwordRef.current = value}
-            stepChange={() => setCurStep('export')}
-            cancel={close}
-          />
-        )}
-        {curStep === 'export' && (
-          <StepExport password={passwordRef.current} cancel={close} />
-        )}
-      </CardWindow>
+      <ExportWebDidWindow onClose={setFalse} onCancel={setFalse} />
     </Modal>
   </>
 }
 
 export default ExportWeb5DidModal;
+
+
+
+export function ExportWebDidWindow(props: {
+  onClose?: () => void;
+  headerTitle?: string
+  onCancel: () => void
+  wrapClassName?: string
+  headerTitleClassName?: string
+}) {
+  const [curStep, setCurStep] = useState<'password' | 'export'>('password')
+  const passwordRef = useRef('')
+
+  const close = () => {
+    passwordRef.current = ''
+    setCurStep('password')
+  }
+
+  const cancel = () => {
+    close()
+    props.onCancel?.()
+  }
+
+  return <CardWindow
+    wrapClassName={`${S.window} ${props.wrapClassName}`}
+    header={props.headerTitle || 'Web5 DID信息'}
+    showCloseButton
+    headerClassName={`${S.header} ${props.headerTitleClassName}`}
+    onClose={() => {
+      close();
+      props.onClose?.()
+    }}
+  >
+    {curStep === 'password' && (
+      <StepPassWord
+        inputChange={value => passwordRef.current = value}
+        stepChange={() => setCurStep('export')}
+        cancel={cancel}
+      />
+    )}
+    {curStep === 'export' && (
+      <StepExport
+        password={passwordRef.current}
+        cancel={cancel}
+      />
+    )}
+  </CardWindow>
+}
+
+
 
 function StepPassWord(props: {
   inputChange: (value: string) => void
