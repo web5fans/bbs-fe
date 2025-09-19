@@ -77,6 +77,8 @@ const PostItem = (props: PostItemProps) => {
 
 export default PostItem;
 
+let resizeObserver: ResizeObserver | null = null;
+
 function UserAvatar({ isOriginPoster, nickname }: {
   isOriginPoster?: boolean
   nickname: string
@@ -87,53 +89,68 @@ function UserAvatar({ isOriginPoster, nickname }: {
   useEffect(() => {
     if (!avatarRef.current || !nickname) return
 
-
-    const tempSpan = document.createElement("span");
-    tempSpan.innerText = nickname;
-    tempSpan.style.cssText = `
+    const resizeFont = () => {
+      const tempSpan = document.createElement("span");
+      tempSpan.innerText = nickname;
+      tempSpan.style.cssText = `
         width: fit-content;
         font-family: ${getComputedStyle(nameRef.current).fontFamily};
         font-size: ${remResponsive(9)};
       `;
 
-    document.body.appendChild(tempSpan);
-    const textWidth = tempSpan.clientWidth;
-    const defaultSize = getComputedStyle(tempSpan).fontSize.replace('px', '');
+      document.body.appendChild(tempSpan);
+      const textWidth = tempSpan.clientWidth;
+      const defaultSize = getComputedStyle(tempSpan).fontSize.replace('px', '');
 
-    document.body.removeChild(tempSpan);
+      document.body.removeChild(tempSpan);
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      requestAnimationFrame(() => {
-        if (!nameRef.current || !avatarRef.current) return
+      resizeObserver = new ResizeObserver((entries) => {
+        requestAnimationFrame(() => {
+          if (!nameRef.current || !avatarRef.current) return
 
-        // 获取容器和文本宽度
-        const containerWidth = avatarRef.current?.scrollWidth;
+          // 获取容器和文本宽度
+          const containerWidth = avatarRef.current?.scrollWidth;
 
-        if (!containerWidth) return
+          if (!containerWidth) return
 
-        if (textWidth > containerWidth) {
-          // 计算需要缩小的比例
-          const ratio = containerWidth / textWidth;
-          let newSize = Math.floor(defaultSize * ratio) - 1;
+          if (textWidth > containerWidth) {
+            // 计算需要缩小的比例
+            const ratio = containerWidth / textWidth;
+            let newSize = Math.floor(defaultSize * ratio) - 1;
 
-          // 设置最小字体限制
-          newSize = Math.max(newSize, 8);
+            // 设置最小字体限制
+            newSize = Math.max(newSize, 8);
 
-          // 应用新字体大小
-          nameRef.current.style.fontSize = newSize + 'px';
-          nameRef.current.style.width = containerWidth + 'px';
-          nameRef.current.style.whiteSpace = 'normal';
-        } else {
-          nameRef.current.style.width = 'auto';
-        }
+            // 应用新字体大小
+            nameRef.current.style.fontSize = newSize + 'px';
+            nameRef.current.style.width = containerWidth + 'px';
+            nameRef.current.style.whiteSpace = 'normal';
+            nameRef.current.style.height = 'auto';
+          } else {
+            nameRef.current.style.width = 'auto';
+            nameRef.current.style.height = 'auto';
+          }
+        })
+
+
       })
+      resizeObserver.observe(avatarRef.current)
+    }
 
+    resizeFont()
 
-    })
-    resizeObserver.observe(avatarRef.current)
+    const f = () => {
+      nameRef.current.style.height = nameRef.current.clientHeight + 'px';
+      nameRef.current.style.width = '0px';
+      resizeObserver?.unobserve(avatarRef.current)
+      resizeFont()
+    }
+
+    window.addEventListener('resize', f);
 
     return () => {
       resizeObserver?.disconnect()
+      window.removeEventListener('resize', f);
     }
   }, [nickname]);
 
