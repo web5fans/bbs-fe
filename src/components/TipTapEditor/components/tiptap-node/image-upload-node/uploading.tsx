@@ -1,5 +1,5 @@
 import S from './uploading.module.scss'
-import DotLoading from "@/components/DotLoading";
+import { DotLoading } from "@/components/Loading";
 
 const Uploading = () => {
   return <div className={S.loading}>

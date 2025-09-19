@@ -1,6 +1,6 @@
 import S from "./index.module.scss";
 
-const DotLoading = (props: {
+export const DotLoading = (props: {
   className?: string;
 }) => {
   return <div className={`${S.dotLoading} ${props.className}`}>
@@ -9,5 +9,3 @@ const DotLoading = (props: {
     <span>.</span>
   </div>
 }
-
-export default DotLoading;
