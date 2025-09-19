@@ -140,6 +140,7 @@
     .reply {
       cursor: pointer;
       color: black;
+      flex-shrink: 0;
       &:hover {
         color: var(--primary-color);
       }
