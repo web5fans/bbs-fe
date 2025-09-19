@@ -28,6 +28,7 @@
     .avatarWrap {
       position: relative;
       margin-bottom: rem.px2flexible(10);
+      width: 100%;
 
       &.normal {
         margin-bottom: rem.px2flexible(6);
@@ -49,12 +50,17 @@
       width: rem.px2flexible(36);
       height: rem.px2flexible(36);
       font-size: rem.px2flexible(12);
+      margin: 0 auto;
     }
 
     .title {
       font-size: rem.px2flexible(9);
       font-weight: 500;
       text-transform: capitalize;
+      text-align: center;
+      width: 0;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 

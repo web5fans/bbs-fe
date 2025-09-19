@@ -6,6 +6,7 @@ import cx from "classnames";
 import { useRouter } from "next/navigation";
 import PostItemContent from "./PostItemContent";
 import { useEffect, useRef } from "react";
+import remResponsive from "@/lib/rem-responsive";
 
 type PostItemProps = {
   isOriginPoster?: boolean
@@ -53,11 +54,7 @@ const PostItem = (props: PostItemProps) => {
       onClick={() => router.push(href)}
       onMouseEnter={() => router.prefetch(href)}
     >
-      <div className={cx(S.avatarWrap, !isOriginPoster && S.normal)}>
-        <Avatar nickname={nickname} className={S.avatar} />
-        <img src={'/assets/poster.png'} alt="" className={S.poster} />
-      </div>
-      <p className={S.title}>{nickname}</p>
+      <UserAvatar nickname={nickname} isOriginPoster={isOriginPoster} />
       <div className={S.divide} />
       <p className={S.postNum}>
         <span>发帖数量</span>
@@ -79,3 +76,82 @@ const PostItem = (props: PostItemProps) => {
 }
 
 export default PostItem;
+
+function UserAvatar({ isOriginPoster, nickname }: {
+  isOriginPoster?: boolean
+  nickname: string
+}) {
+  const avatarRef = useRef<HTMLDivElement>(null);
+  const nameRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (!avatarRef.current || !nickname) return
+
+
+    const tempSpan = document.createElement("span");
+    tempSpan.innerText = nickname;
+    tempSpan.style.cssText = `
+        width: fit-content;
+        font-family: ${getComputedStyle(nameRef.current).fontFamily};
+        font-size: ${remResponsive(9)};
+      `;
+
+    document.body.appendChild(tempSpan);
+    const textWidth = tempSpan.clientWidth;
+    const defaultSize = getComputedStyle(tempSpan).fontSize.replace('px', '');
+
+    document.body.removeChild(tempSpan);
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      requestAnimationFrame(() => {
+        if (!nameRef.current || !avatarRef.current) return
+
+        // 获取容器和文本宽度
+        const containerWidth = avatarRef.current?.scrollWidth;
+
+        if (!containerWidth) return
+
+        if (textWidth > containerWidth) {
+          // 计算需要缩小的比例
+          const ratio = containerWidth / textWidth;
+          let newSize = Math.floor(defaultSize * ratio) - 1;
+
+          // 设置最小字体限制
+          newSize = Math.max(newSize, 8);
+
+          // 应用新字体大小
+          nameRef.current.style.fontSize = newSize + 'px';
+          nameRef.current.style.width = containerWidth + 'px';
+          nameRef.current.style.whiteSpace = 'normal';
+        } else {
+          nameRef.current.style.width = 'auto';
+        }
+      })
+
+
+    })
+    resizeObserver.observe(avatarRef.current)
+
+    return () => {
+      resizeObserver?.disconnect()
+    }
+  }, [nickname]);
+
+  return <>
+    <div className={cx(S.avatarWrap, !isOriginPoster && S.normal)} ref={avatarRef}>
+      <Avatar
+        nickname={nickname}
+        className={S.avatar}
+      />
+      <img
+        src={'/assets/poster.png'}
+        alt=""
+        className={S.poster}
+      />
+    </div>
+    <p
+      className={S.title}
+      ref={nameRef}
+    >{nickname}</p>
+  </>
+}
