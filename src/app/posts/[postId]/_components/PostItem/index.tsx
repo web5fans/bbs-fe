@@ -142,6 +142,7 @@ function UserAvatar({ isOriginPoster, nickname }: {
     const f = () => {
       nameRef.current.style.height = nameRef.current.clientHeight + 'px';
       nameRef.current.style.width = '0px';
+      nameRef.current.style.fontSize = remResponsive(9);
       resizeObserver?.unobserve(avatarRef.current)
       resizeFont()
     }
