@@ -88,22 +88,21 @@ function UserAvatar({ isOriginPoster, nickname }: {
 
   useEffect(() => {
     if (!avatarRef.current || !nickname) return
-
-    const resizeFont = () => {
-      const tempSpan = document.createElement("span");
-      tempSpan.innerText = nickname;
-      tempSpan.style.cssText = `
+    const tempSpan = document.createElement("span");
+    tempSpan.innerText = nickname;
+    tempSpan.style.cssText = `
         width: fit-content;
         font-family: ${getComputedStyle(nameRef.current).fontFamily};
         font-size: ${remResponsive(9)};
       `;
 
-      document.body.appendChild(tempSpan);
-      const textWidth = tempSpan.clientWidth;
-      const defaultSize = getComputedStyle(tempSpan).fontSize.replace('px', '');
+    document.body.appendChild(tempSpan);
+    const textWidth = tempSpan.clientWidth;
+    const defaultSize = getComputedStyle(tempSpan).fontSize.replace('px', '');
 
-      document.body.removeChild(tempSpan);
+    document.body.removeChild(tempSpan);
 
+    const resizeFont = () => {
       resizeObserver = new ResizeObserver((entries) => {
         requestAnimationFrame(() => {
           if (!nameRef.current || !avatarRef.current) return
@@ -142,7 +141,6 @@ function UserAvatar({ isOriginPoster, nickname }: {
     const f = () => {
       nameRef.current.style.height = nameRef.current.clientHeight + 'px';
       nameRef.current.style.width = '0px';
-      nameRef.current.style.fontSize = remResponsive(9);
       resizeObserver?.unobserve(avatarRef.current)
       resizeFont()
     }
