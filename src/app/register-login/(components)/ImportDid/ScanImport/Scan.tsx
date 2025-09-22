@@ -82,7 +82,7 @@ const Scan = (props: {
       setErrMessage('二维码已失效，请在个人中心页重新打开密钥二维码');
       return false
     }
-    props.getScanData(code)
+    props.getScanData(obj.web5DidInfo)
     return true
   }
 

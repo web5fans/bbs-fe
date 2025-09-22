@@ -74,7 +74,7 @@ const FileImport = (props: {
       setErrMessage('二维码已失效');
       return
     }
-    fileContentRef.current = code;
+    fileContentRef.current = obj.web5DidInfo;
     setFileType('image')
   }
 
