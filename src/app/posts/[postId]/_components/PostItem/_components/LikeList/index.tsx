@@ -6,6 +6,7 @@ import { Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "
 import remResponsive from "@/lib/rem-responsive";
 import MouseToolTip from "@/components/MouseToolTip";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export type LikeListRef = { reloadLikeList: () => void }
 
@@ -15,6 +16,8 @@ const LikeList = (props: {
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const gridRefCols = useRef<number>(null)
+
+  const router = useRouter()
 
   const { data: likeList, loading, loadingMore, loadMore, noMore, reload } = useInfiniteScroll(async (prevData) => {
 
@@ -101,18 +104,23 @@ const LikeList = (props: {
           showAvatars.map((info) => {
             const href = `/user-center/${encodeURIComponent(info.author?.did)}`
             const name = info.author.displayName || ''
-            const tips = name?.[0]?.toUpperCase() + name.slice(1)
+            const tips = info.author.handle ? name?.[0]?.toUpperCase() + name.slice(1) : '该用户已注销'
 
             return <MouseToolTip
               message={tips}
               tipClassName={'!w-auto'}
             >
-              <Link href={href}>
+              <a onClick={() => {
+                if (info.author.handle) {
+                  router.push(href)
+                  return
+                }
+              }}>
                 <Avatar
                   nickname={info.author.displayName}
                   className={S.avatar}
                 />
-              </Link>
+              </a>
             </MouseToolTip>
           })
         }

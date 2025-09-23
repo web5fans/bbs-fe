@@ -47,14 +47,19 @@ const PostItem = (props: PostItemProps) => {
   //   }
   // }, []);
 
+  const goUserCenter = (author) => {
+    if (!author.handle) return
+    router.push(href)
+  }
+
   return <div className={S.wrap}>
     <div
       ref={ref}
       className={S.user}
-      onClick={() => router.push(href)}
+      onClick={() => goUserCenter(postInfo.author)}
       onMouseEnter={() => router.prefetch(href)}
     >
-      <UserAvatar nickname={nickname} isOriginPoster={isOriginPoster} />
+      <UserAvatar nickname={nickname} isOriginPoster={isOriginPoster} isLoggedOff={!postInfo.author.handle} />
       <div className={S.divide} />
       <p className={S.postNum}>
         <span>发帖数量</span>
@@ -79,9 +84,10 @@ export default PostItem;
 
 let resizeObserver: ResizeObserver | null = null;
 
-function UserAvatar({ isOriginPoster, nickname }: {
+function UserAvatar({ isOriginPoster, nickname, isLoggedOff }: {
   isOriginPoster?: boolean
   nickname: string
+  isLoggedOff?: boolean
 }) {
   const avatarRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLParagraphElement>(null);
@@ -168,6 +174,6 @@ function UserAvatar({ isOriginPoster, nickname }: {
     <p
       className={S.title}
       ref={nameRef}
-    >{nickname}</p>
+    >{isLoggedOff ? '已注销' : nickname}</p>
   </>
 }

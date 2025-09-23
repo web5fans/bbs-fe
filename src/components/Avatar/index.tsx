@@ -11,7 +11,7 @@ const Avatar = (props: {
   nickname: string,
   className?: string
 }) => {
-  const { nickname = '' } = props;
+  const { nickname = '?' } = props;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const outerRef = useRef<HTMLDivElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
@@ -40,7 +40,7 @@ const Avatar = (props: {
   }, []);
 
   const hash = useMemo(() => {
-    if (!nickname) return null;
+    if (!nickname || nickname === '?') return 0;
     return Math.abs(toHashCode(nickname)) % colorsNum
   }, [nickname])
 
