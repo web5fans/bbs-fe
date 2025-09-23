@@ -59,7 +59,7 @@ const PostItem = (props: PostItemProps) => {
       onClick={() => goUserCenter(postInfo.author)}
       onMouseEnter={() => router.prefetch(href)}
     >
-      <UserAvatar nickname={nickname} isOriginPoster={isOriginPoster} isLoggedOff={!postInfo.author.handle} />
+      <UserAvatar nickname={nickname} isOriginPoster={isOriginPoster} isLoggedOff={!postInfo.author?.handle} />
       <div className={S.divide} />
       <p className={S.postNum}>
         <span>发帖数量</span>
@@ -91,11 +91,12 @@ function UserAvatar({ isOriginPoster, nickname, isLoggedOff }: {
 }) {
   const avatarRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLParagraphElement>(null);
+  const name = isLoggedOff ? '已注销' : nickname
 
   useEffect(() => {
-    if (!avatarRef.current || !nickname) return
+    if (!avatarRef.current || !name) return
     const tempSpan = document.createElement("span");
-    tempSpan.innerText = nickname;
+    tempSpan.innerText = name;
     tempSpan.style.cssText = `
         width: fit-content;
         font-family: ${getComputedStyle(nameRef.current).fontFamily};
@@ -157,7 +158,7 @@ function UserAvatar({ isOriginPoster, nickname, isLoggedOff }: {
       resizeObserver?.disconnect()
       window.removeEventListener('resize', f);
     }
-  }, [nickname]);
+  }, [name]);
 
   return <>
     <div className={cx(S.avatarWrap, !isOriginPoster && S.normal)} ref={avatarRef}>
@@ -174,6 +175,6 @@ function UserAvatar({ isOriginPoster, nickname, isLoggedOff }: {
     <p
       className={S.title}
       ref={nameRef}
-    >{isLoggedOff ? '已注销' : nickname}</p>
+    >{name}</p>
   </>
 }
