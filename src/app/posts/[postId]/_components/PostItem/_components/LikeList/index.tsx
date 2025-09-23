@@ -101,7 +101,7 @@ const LikeList = (props: {
           showAvatars.map((info) => {
             const href = `/user-center/${encodeURIComponent(info.author?.did)}`
             const name = info.author.displayName || ''
-            const tips = name?.[0].toUpperCase() + name.slice(1)
+            const tips = name?.[0]?.toUpperCase() + name.slice(1)
 
             return <MouseToolTip
               message={tips}
