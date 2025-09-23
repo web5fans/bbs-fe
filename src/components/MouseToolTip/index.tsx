@@ -10,7 +10,7 @@ const MouseToolTip = (props: {
   message?: string
   tipClassName?: string
 } & HTMLAttributes<HTMLDivElement>) => {
-  const { open = true, children, message, ...rest } = props;
+  const { open = true, children, message, tipClassName, ...rest } = props;
   const tipsRef = useRef<HTMLDivElement>(null)
 
   const handleMouseMove = (e) => {
@@ -43,7 +43,7 @@ const MouseToolTip = (props: {
   >
     {props.children}
 
-    <div className={cx(S.tips, props.tipClassName)} ref={tipsRef}>
+    <div className={cx(S.tips, tipClassName)} ref={tipsRef}>
       {props.message || '有 Web5 did 账号才可发帖，请先创建账号～'}
     </div>
   </div>
