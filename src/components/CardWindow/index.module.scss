@@ -56,10 +56,11 @@ $bg: #EAEAEA;
       display: flex;
       align-items: center;
       justify-content: center;
-      right: rem.px2flexible(8);
+      right: var(--close-right, #{rem.px2flexible(8)});
       cursor: pointer;
-      padding-left: rem.px2flexible(8);
+      padding-left: var(--close-padding-left, #{rem.px2flexible(8)});
       color: #050505;
+      height: 100%;
 
       &:hover {
         color: var(--primary-color);

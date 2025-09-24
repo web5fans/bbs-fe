@@ -117,7 +117,6 @@ const Input = (props: Props) => {
     )}
   >
     <input
-      {...rest}
       ref={inputRef}
       type="text"
       name="username"
@@ -126,6 +125,7 @@ const Input = (props: Props) => {
       autoCorrect="off"
       spellCheck="false"
       inputMode="text"
+      {...rest}
       onKeyDownCapture={getCursorPosition}
       onKeyUpCapture={getCursorPosition}
       onClick={getCursorPosition}

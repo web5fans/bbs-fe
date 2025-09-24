@@ -7,7 +7,6 @@ export default function usePageLeaveConfirm() {
   useEffect(() => {
 
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      debugger
       if (hasUnsavedChanges.current) {
         event.preventDefault();
         event.returnValue = '';
@@ -32,8 +31,7 @@ export default function usePageLeaveConfirm() {
     };
 
     // 监听浏览器刷新、关闭、导航
-    window.addEventListener('beforeunload', () => {
-      console.log('brfeore>>>>')});
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     // 监听浏览器后退/前进按钮
     window.addEventListener('popstate', handlePopState);

@@ -10,6 +10,7 @@ import { usePostCommentReply } from "@/provider/PostReplyProvider";
 import QuotePopUp from "./_components/QuotePopUp";
 import ReplyList from "./_components/ReplyList";
 import TabWrap from "./_components/TabWrap";
+import Donate from "@/app/posts/[postId]/_components/PostItem/_components/Donate";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
@@ -113,6 +114,7 @@ const PostItemContent = (props: {
           setArrowPos({ left: (target.offsetLeft + width - 1) + 'px' })
         }}
       >
+        {/*<Donate />*/}
         <PostLike
           liked={postInfo.liked}
           likeCount={postInfo.like_count}
