@@ -1,0 +1,54 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: rem.px2flexible(2);
+  color: #000;
+
+  .iconWrap {
+    padding-left: rem.px2flexible(8);
+    cursor: pointer;
+
+    &.liked {
+      color: var(--danger-color);
+    }
+
+    &:not(.liked) {
+      &:hover .icon{
+        color: var(--primary-color);
+      }
+
+      &:not(.disabled) {
+        &.active {
+          .icon {
+            color: var(--danger-color);
+            animation: clickLike 1.8s;
+          }
+        }
+      }
+    }
+  }
+
+  .icon {
+    width: rem.px2flexible(7);
+    height: rem.px2flexible(6);
+  }
+
+  .count {
+    display: inline-block;
+    padding-left: rem.px2flexible(2);
+    padding-right: rem.px2flexible(8);
+    font-size: rem.px2flexible(6);
+    cursor: pointer;
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}
+
+@keyframes clickLike {
+  from, to {
+    transform: scale(1.6);
+  }
+}

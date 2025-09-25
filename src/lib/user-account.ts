@@ -33,7 +33,8 @@ export async function userLogin(localStorage: TokenStorageType): Promise<ComAtpr
   } catch (err) {
     if (err.error === 'CkbDidocCellNotFound') {
       console.log('CkbDidocCellNotFound')
-      await deleteErrUser(did, walletAddress, signKey)
+      // await deleteErrUser(did, walletAddress, signKey)
+      showGlobalToast({ title: err.message, icon: 'error' })
       return
     }
   }

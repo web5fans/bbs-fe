@@ -11,26 +11,45 @@ const Avatar = (props: {
   nickname: string,
   className?: string
 }) => {
-  const { nickname = '' } = props;
+  const { nickname = '?' } = props;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const outerRef = useRef<HTMLDivElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!rootRef.current) return
-    const width = rootRef.current.clientWidth
-    outerRef.current.style.width = `${Math.floor(width)}px`;
-    innerRef.current.style.width = `${Math.ceil(width * 0.92)}px`
+    const f = () => {
+      if (!rootRef.current) return
+      const width = rootRef.current.clientWidth
+      const outerWidth = `${Math.floor(width)}px`
+      outerRef.current.style.width = outerWidth;
+      outerRef.current.style.height = outerWidth;
+
+      const innerWidth = `${Math.ceil(width * 0.92)}px`
+      innerRef.current.style.width = innerWidth
+      innerRef.current.style.height = innerWidth
+    }
+
+    f()
+
+    window.addEventListener('resize', f);
+
+    return () => {
+      window.removeEventListener('resize', f);
+    }
+
   }, []);
 
   const hash = useMemo(() => {
-    if (!nickname) return null;
+    if (!nickname || nickname === '?') return 0;
     return Math.abs(toHashCode(nickname)) % colorsNum
   }, [nickname])
 
   if (!hash && hash !== 0) return null;
 
-  return <div ref={rootRef} className={`${S.wrap} ${props.className} ${(hash || hash === 0) ? S[`color${hash + 1}`] : ''}`}>
+  return <div
+    ref={rootRef}
+    className={`${S.wrap} ${props.className} ${(hash || hash === 0) ? S[`color${hash + 1}`] : ''}`}
+  >
     <CircleInner className={S.circleInner} ref={innerRef} />
     <CircleOuter ref={outerRef} className={S.circle} />
     <span className={S.nick}>{nickname[0]}</span>
@@ -39,7 +58,7 @@ const Avatar = (props: {
 
 export default Avatar;
 
-function toHashCode(value: string) {
+export function toHashCode(value: string) {
   let hash = 0,
     i, chr, len;
   if (value.length == 0) return hash;

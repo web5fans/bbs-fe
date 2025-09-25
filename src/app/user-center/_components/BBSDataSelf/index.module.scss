@@ -1,0 +1,141 @@
+@use "@/styles/rem";
+.container {
+  border: rem.px2flexible(1) solid #000;
+  background: var(--100, #E7E7E7);
+
+  /* bg hover */
+  box-shadow: 0 0 rem.px2flexible(7.5) 0 rgba(0, 0, 0, 0.25) inset;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: rem.px2flexible(14) rem.px2flexible(10);
+
+  .header {
+    font-size: rem.px2flexible(14);
+    font-weight: 500;
+  }
+
+  .card {
+    width: 100%;
+    height: rem.px2flexible(76);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: rem.px2flexible(8);
+    color: #6C6C6C;
+
+    .title {
+      text-align: center;
+      font-size: rem.px2flexible(8);
+    }
+
+    .location {
+      font-size: rem.px2flexible(12);
+      font-weight: 500;
+      color: #000;
+    }
+
+    .tips {
+      font-size: rem.px2flexible(6);
+      opacity: 0.3;
+      display: flex;
+      align-items: center;
+      gap: rem.px2flexible(5);
+      cursor: default;
+
+      .uploadIcon {
+        width: rem.px2flexible(6);
+        height: rem.px2flexible(6);
+      }
+    }
+  }
+
+  .data {
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(15);
+    justify-content: start;
+    align-self: stretch;
+    > p {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+
+      >span:first-child {
+        font-size: rem.px2flexible(12);
+        font-weight: 500;
+        line-height: 1.3;
+      }
+
+      > span:last-child {
+        font-size: rem.px2flexible(7);
+      }
+    }
+
+    .dataItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      align-self: stretch;
+      justify-content: end;
+      cursor: pointer;
+      gap: rem.px2flexible(3);
+
+      > span:last-child {
+        font-size: rem.px2flexible(7);
+      }
+
+      &:hover {
+        color: var(--primary-color);
+      }
+
+      .qrcode {
+        width: rem.px2flexible(11);
+        height: rem.px2flexible(11);
+      }
+
+      .didInfo {
+        width: rem.px2flexible(17);
+        height: rem.px2flexible(11);
+      }
+    }
+  }
+}
+
+.breakPoint1024 {
+  flex-direction: row;
+  gap: rem.px2flexible(20);
+
+  .header {
+    line-height: rem.px2flexible(18);
+  }
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .card {
+    margin: 0;
+    position: relative;
+    top: rem.px2flexible(1);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    &:not(.breakPoint1024) {
+      .card {
+        margin: 20px 0;
+      }
+    }
+  }
+}

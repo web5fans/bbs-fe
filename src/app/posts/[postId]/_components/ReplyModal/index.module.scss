@@ -1,0 +1,106 @@
+@use "@/styles/rem";
+
+.wrap {
+  position: fixed;
+  width: 90vw;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: rem.px2flexible(24);
+  height: rem.px2flexible(200);
+  transition: all 100ms;
+
+  &.wrapPack {
+    height: auto;
+    bottom: rem.px2flexible(4);
+
+    .window {
+      border-bottom: none;
+    }
+
+    .content {
+      max-height: 0;
+      margin: 0;
+    }
+
+    .packup .packIcon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .window {
+    --card-window-content-margin: #{rem.px2flexible(6)};
+    --card-window-line-gap: #{rem.px2flexible(1.5)};
+    --card-window-title-size: #{rem.px2flexible(9)};
+    --card-window-header-padding-inline: #{rem.px2flexible(8)};
+    --card-window-header-padding-block: #{rem.px2flexible(4)};
+    --card-window-title-padding-inline: #{rem.px2flexible(8)};
+    --card-window-title-letter-spacing: 'normal';
+
+    border: rem.px2flexible(1) solid #000;
+    //border-bottom: none;
+    box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0 0 #000;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .windowHeader {
+    --card-window-title-size: #{rem.px2flexible(9)};
+    text-transform: capitalize;
+  }
+}
+
+.content {
+  flex: 1;
+  margin: rem.px2flexible(8);
+  overflow: hidden;
+
+  .editor {
+    border: rem.px2flexible(1) solid;
+    height: calc(100% - #{rem.px2flexible(28)});
+    overflow-y: auto;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: rem.px2flexible(8);
+    padding-right: rem.px2flexible(1.5);
+    .textNum {
+      color: #6C6C6C;
+      font-size: rem.px2flexible(7);
+      font-family: var(--font-CLFN);
+    }
+
+    .butonWrap {
+      display: flex;
+      align-items: center;
+      gap: rem.px2flexible(10);
+    }
+
+    .button {
+      width: rem.px2flexible(50);
+      height: rem.px2flexible(16);
+      font-size: rem.px2flexible(7);
+    }
+  }
+}
+
+.packup {
+  padding-left: rem.px2flexible(8);
+  position: absolute;
+  right: rem.px2flexible(31);
+  background: #EAEAEA;
+  cursor: pointer;
+  color: #050505;
+
+  &:hover {
+    color: var(--primary-color);
+  }
+
+  .packIcon {
+    width: rem.px2flexible(15);
+    height: rem.px2flexible(14);
+    background: #EAEAEA;
+  }
+}

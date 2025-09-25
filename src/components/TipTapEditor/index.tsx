@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { EditorContent, EditorContext, generateHTML, generateJSON, useEditor } from "@tiptap/react"
+import { Editor, EditorContent, EditorContext, generateHTML, generateJSON, useEditor } from "@tiptap/react"
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
 import { Image } from "@tiptap/extension-image"
@@ -76,6 +76,7 @@ import { JSONContent, Content, HTMLContent } from "@tiptap/core";
 import cx from "classnames";
 import { Ref, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { EventHandler } from "@/components/TipTapEditor/eventHandler";
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -186,6 +187,7 @@ export type EditorRefType = {
   clearContent: () => void
   setContent: (newContent: string) => void
   focus: () => void
+  editor?: Editor | null
 }
 
 type TipTapEditorProps = {
@@ -214,7 +216,8 @@ export default function TipTapEditor(props: TipTapEditorProps) {
         editor?.commands.clearContent();
         editor?.commands.focus()
       },
-      focus: () => editor?.commands.focus()
+      focus: () => editor?.commands.focus(),
+      editor
     }
   })
 
@@ -230,6 +233,7 @@ export default function TipTapEditor(props: TipTapEditorProps) {
       Superscript,
       Subscript,
       CodeBlockHighLight,
+      EventHandler.configure({ userDid: userProfile?.did! }),
 
       Selection,
       ImageUploadNode.configure({
@@ -237,7 +241,7 @@ export default function TipTapEditor(props: TipTapEditorProps) {
         maxSize: MAX_FILE_SIZE,
         limit: 3,
         upload: (file, abortSignal) => {
-          return handleImageUpload(file, abortSignal, userProfile?.did!)
+          return handleImageUpload(file, userProfile?.did!)
         },
         onError: (error) => console.error("Upload failed:", error),
       }),

@@ -1,0 +1,107 @@
+@use "@/styles/rem";
+
+.window {
+  width: rem.px2flexible(352);
+  --card-window-header-padding-block: #{rem.px2flexible(4)};
+  --card-window-header-padding-inline: #{rem.px2flexible(9)};
+  --card-window-content-margin: #{rem.px2flexible(9)};
+  --card-window-close: #{rem.px2flexible(16)};
+  --card-window-title-letter-spacing: 'normal';
+
+  .header {
+    font-size: rem.px2flexible(12);
+  }
+}
+
+.container {
+  padding: rem.px2flexible(19) rem.px2flexible(17) 0;
+  font-family: var(--font-CLFN);
+
+  .title {
+    font-size: rem.px2flexible(14);
+    font-weight: 500;
+  }
+
+  .message {
+    font-size: rem.px2flexible(11);
+    color: #050505;
+    margin: rem.px2flexible(8) 0 rem.px2flexible(13);
+  }
+
+  .inputWrap {
+    max-width: 100%;
+    --input-default-border-color: #DBDBDB;
+    --input-default-shadow-color: #DBDBDB;
+  }
+
+  .error {
+    color: var(--danger-color);
+    font-size: rem.px2flexible(8);
+    position: absolute;
+    bottom: rem.px2flexible(-14);
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(2);
+
+    img {
+      width: min(16px, #{rem.px2flexible(9)});
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(15);
+    margin: rem.px2flexible(32) 0;
+
+    .button {
+      width: rem.px2flexible(46);
+      height: rem.px2flexible(25);
+      font-size: rem.px2flexible(8);
+    }
+  }
+}
+
+.exportContainer {
+  padding: rem.px2flexible(32) rem.px2flexible(17) 0 rem.px2flexible(23);
+  font-family: var(--font-CLFN);
+
+  .content {
+    display: flex;
+    align-items: center;
+    color: #050505;
+    gap: rem.px2flexible(24);
+    > img {
+      width: rem.px2flexible(72.5);
+      height: rem.px2flexible(92);
+    }
+
+    .title {
+      font-size: rem.px2flexible(14);
+      font-weight: 500;
+    }
+
+    .info {
+      font-size: rem.px2flexible(9);
+      margin-top: rem.px2flexible(15);
+      width: rem.px2flexible(170);
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(15);
+    margin: rem.px2flexible(32) 0;
+
+    .button, .confirm {
+      width: rem.px2flexible(46);
+      height: rem.px2flexible(25);
+      font-size: rem.px2flexible(8);
+    }
+
+    .confirm {
+      width: rem.px2flexible(68);
+    }
+  }
+}

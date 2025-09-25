@@ -8,6 +8,8 @@
 
 html {
   @include scroll-bar.global-scroll;
+
+  letter-spacing: 0.05rem;
 }
 
 :root {
@@ -23,6 +25,7 @@ html {
 
 body {
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   min-width: fit-content;
   display: flex;
   flex-direction: column;

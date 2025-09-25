@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { handleToNickName } from "@/lib/handleToNickName";
 import S from "./index.module.scss";
 import Avatar from "@/components/Avatar";
-import FeedStatistic from "@/components/FeedStatistic";
+import FeedStatistic, { FeedLikes } from "@/components/FeedStatistic";
 import utcToLocal from "@/lib/utcToLocal";
 
 export default function PostFeedItem({ feed, onClick, onHover }: {
@@ -51,7 +51,8 @@ export default function PostFeedItem({ feed, onClick, onHover }: {
           {nickname}
         </div>}
         <span>{feed.section}</span>
-        <FeedStatistic visitedCount={feed.visited_count} replyCount={feed.reply_count} />
+        <FeedStatistic visitedCount={feed.visited_count} commentCount={feed.comment_count} />
+        <FeedLikes likesCount={feed.like_count} />
       </div>
       <span className={S.time}>{utcToLocal(feed.created)}</span>
     </div>

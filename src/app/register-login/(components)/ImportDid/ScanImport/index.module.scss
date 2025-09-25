@@ -1,0 +1,25 @@
+@use "@/styles/rem";
+
+.wrap {
+  border: rem.px2flexible(1) solid #000;
+  background: #2D2D2D;
+  height: rem.px2flexible(237);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: rem.px2flexible(45);
+
+  .videoWrap {
+    width: rem.px2flexible(120);
+    height: rem.px2flexible(120);
+    margin-bottom: rem.px2flexible(15);
+    background: #000000;
+  }
+
+  .message {
+    color: #ffffff;
+    font-size: rem.px2flexible(9);
+    text-align: center;
+    width: rem.px2flexible(156);
+  }
+}

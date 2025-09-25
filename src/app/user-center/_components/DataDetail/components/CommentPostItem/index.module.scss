@@ -1,0 +1,93 @@
+@use "@/styles/rem";
+
+.feed {
+  padding: rem.px2flexible(10);
+  cursor: pointer;
+  position: relative;
+
+  &+.feed {
+    &::before {
+      content: '';
+      display: block;
+      height: 1px;
+      border-bottom: 1px dashed #F3F3F3;
+      position: absolute;
+      left: rem.px2flexible(10);
+      right: rem.px2flexible(10);
+      top: 0;
+    }
+  }
+
+  &:hover {
+    background: #F3F3F3;
+
+    --hover-text-color: var(--primary-color);
+    --avatar-outer-color: var(--primary-color);
+    --post-statistic-font-color: var(--primary-color);
+
+    >* {
+      color: var(--primary-color);
+    }
+
+    .comment {
+      color: var(--primary-color) !important;
+    }
+  }
+
+  .header {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    font-size: min(18px, #{rem.px2flexible(10)});
+    margin-bottom: rem.px2flexible(4);
+    margin-top: rem.px2flexible(4);
+  }
+
+  .nickname {
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(4);
+    text-transform: capitalize;
+    font-size: rem.px2flexible(6);
+
+    .avatar {
+      width: rem.px2flexible(7);
+      height: rem.px2flexible(7);
+      font-size: rem.px2flexible(4);
+    }
+
+    .comment {
+      color: #6C6C6C;
+    }
+  }
+
+  .feedInfo {
+    overflow: hidden;
+    color: var(--hover-text-color, #6C6C6C);
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: min(14px, #{rem.px2flexible(8)});
+    margin-bottom: rem.px2flexible(5.5);
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--hover-text-color, #6C6C6C);
+    font-size: rem.px2flexible(6);
+
+    .left {
+      display: flex;
+      align-items: center;
+      gap: rem.px2flexible(10);
+    }
+
+    .time {
+      color: var(--hover-text-color, #6C6C6C);
+      font-size: rem.px2flexible(6);
+    }
+  }
+}

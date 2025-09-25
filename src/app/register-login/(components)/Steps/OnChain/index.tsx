@@ -10,9 +10,9 @@ import Computer from "@/app/register-login/(components)/Computer";
 import DraggableCard from "@/app/register-login/(components)/ComputerCard/DraggableCard";
 import { useNickName } from "@/provider/RegisterNickNameProvider";
 import ArrowRight from '@/assets/login/arrow-right.svg'
-import DotLoading from "@/components/DotLoading";
 import cx from "classnames";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { DotLoading } from "@/components/Loading";
 
 const OnChain = (props: {
   goNext: () => void

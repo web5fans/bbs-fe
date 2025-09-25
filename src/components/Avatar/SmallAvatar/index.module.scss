@@ -1,0 +1,53 @@
+@use "sass:list";
+@use "@/styles/rem";
+
+.wrap {
+  width: rem.px2flexible(11);
+  height: rem.px2flexible(11);
+  display: flex;
+  justify-content: center;
+  font-weight: 500;
+  position: relative;
+
+  .nick {
+    font-size: rem.px2flexible(8);
+    line-height: rem.px2flexible(10);
+    color: #FFFFFF;
+    position: relative;
+    text-transform: none;
+  }
+
+  $colors: #993131, #995231, #999631, #5B9931, #319946, #319978,
+  #318D99, #315099, #3F3199, #653199, #99318B, #993152;
+
+  @for $i from 1 through list.length($colors) {
+    &.color-#{$i} {
+      .circleInner {
+        path {
+          fill: list.nth($colors, $i);
+        }
+      }
+    }
+  }
+
+
+  .circle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+  }
+
+  .circleInner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc((19 / 22) * 100%);
+    height: calc((20 / 22) * 100%);
+    aspect-ratio: 1;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}

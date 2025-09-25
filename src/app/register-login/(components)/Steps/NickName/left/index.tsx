@@ -11,8 +11,7 @@ import { useCallback, useState } from "react";
 import debounce from "lodash.debounce"
 import getPDSClient from "@/lib/pdsClient";
 import { USER_DOMAIN } from "@/constant/Network";
-import useDebounceWithCancel from "@/hooks/useDebounceWithCancel";
-import Loading from "@/components/Loading";
+import { CircleLoading } from "@/components/Loading";
 
 function validateInput(str: string): ValidateResult {
   // 只允许字母、数字、连字符
@@ -104,7 +103,7 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
         checkedPass={checkedPass}
         error={!!validate?.error}
       >
-        {loading && <Loading className={S.loading} />}
+        {loading && <CircleLoading className={S.loading} />}
       </Input>
       <div className={cx(S.warning, !validate?.error && '!hidden')}>
         <img

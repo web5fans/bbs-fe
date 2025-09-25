@@ -8,6 +8,7 @@ import { CID } from 'multiformats/cid'
 import * as cbor from '@ipld/dag-cbor'
 import { TID } from '@atproto/common-web'
 import dayjs from "dayjs";
+import { showGlobalToast } from "@/provider/toast";
 
 export type PostFeedItemType = {
   uri: string,
@@ -15,8 +16,9 @@ export type PostFeedItemType = {
   author: { displayName: string, [key: string]: string },
   title: string,
   text: string,
-  visited_count: number,
-  reply_count: number,
+  visited_count: string,
+  comment_count: string,
+  like_count: string,
   visited: string, // 时间
   updated: string, // 时间
   created: string, // 时间
@@ -25,7 +27,7 @@ export type PostFeedItemType = {
 
 export type SectionItem = {
   post_count: string
-  reply_count: string
+  comment_count: string
   id: string;
   name: string
   owner?: { did: string; displayName?: string } // 版主
@@ -45,10 +47,11 @@ type PostRecordType = {
   section_id: string;
   title: string;
   text: string;
+  edited?: string
+  created?: string
 } | {
-  $type: 'app.bbs.reply'
-  root: string  // 原帖uri
-  parent: string  // 原帖uri 或 回复的uri
+  $type: 'app.bbs.comment'
+  post: string  // 原帖uri
   text: string;
   section_id: string;
 } | {
@@ -56,6 +59,17 @@ type PostRecordType = {
   displayName: string;
   handle: string;
   [key: string]: any;
+} | {
+  $type: 'app.bbs.like'
+  to: string; // 点赞的帖子uri或者评论\回复的uri
+  section_id: string;
+} | {
+  $type: 'app.bbs.reply'
+  post: string    // 帖子的uri
+  comment?: string   // 跟帖的uri
+  to?: string   // 对方did, 有就填，没有就是直接回复评论的
+  text: string
+  section_id: string
 }
 
 type CreatePostResponse = {
@@ -70,31 +84,38 @@ type CreatePostResponse = {
   }[]
 }
 
-/* 发帖、跟帖回复 */
-export async function writesPDSOperation(params: {
+/* 发帖、回帖、点赞、编辑帖子PDS写入操作 */
+export async function postsWritesPDSOperation(params: {
   record: PostRecordType
   did: string
   rkey?: string
+  type?: 'update' | 'create'
 }) {
+  const operateType = params.type || 'create'
   const pdsClient = getPDSClient()
 
   const rkey = params.rkey || TID.next().toString()
 
   const newRecord = {
+    created: dayjs.utc().format(),
     ...params.record,
-    created: dayjs.utc().format()
   }
 
-  const writeRes = await pdsClient.com.atproto.web5.preDirectWrites({
+  const $typeMap = {
+    create: "com.atproto.web5.preDirectWrites#create",
+    update: "com.atproto.web5.preDirectWrites#update",
+  }
+
+  const writeRes = await sessionWrapApi(() => pdsClient.com.atproto.web5.preDirectWrites({
     repo: params.did,
     writes: [{
-      $type: "com.atproto.web5.preDirectWrites#create",
+      $type: $typeMap[operateType],
       collection: newRecord.$type,
       rkey,
       value: newRecord
     }],
     validate: false,
-  })
+  }))
 
   const writerData = writeRes.data
 
@@ -130,7 +151,7 @@ export async function writesPDSOperation(params: {
 
   const localStorage = storage.getToken()
 
-  const res = await server<CreatePostResponse>('/record/create', 'POST', {
+  const serverParams = {
     repo: params.did,
     rkey,
     value: newRecord,
@@ -144,7 +165,32 @@ export async function writesPDSOperation(params: {
       data: writerData.data,
       signedBytes: uint8ArrayToHex(commit.sig),
     },
-  })
+  }
+
+  if (operateType === 'update') {
+    const res = await server<CreatePostResponse>('/record/update', 'POST', serverParams)
+
+    return res.results[0].uri
+  }
+  
+  const res = await server<CreatePostResponse>('/record/create', 'POST', serverParams)
 
   return res.results[0].uri
+}
+
+async function sessionWrapApi(callback: () => Promise<any>): Promise<void> {
+  try {
+    const result =  await callback()
+    return result
+  } catch (error) {
+    if (error.message.includes('Token has expired')) {
+      showGlobalToast({
+        title: '登录信息已过期，请重新刷新页面',
+        icon: 'error'
+      })
+      await getPDSClient().sessionManager.refreshSession()
+      return await callback()
+    }
+    throw error
+  }
 }

@@ -1,0 +1,54 @@
+import S from "./index.module.scss";
+import Button from "@/components/Button";
+import WarningIcon from "@/assets/posts/warning.svg";
+import Modal from "@/components/Modal";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import cx from "classnames";
+
+const CancelButton = (props: {
+  disabled?: boolean
+  className?: string
+}) => {
+  const [visible, setVisible] = useState(false)
+  const router = useRouter()
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!visible) return
+    ref.current?.focus()
+  }, [visible]);
+
+  return <>
+    <Button
+      className={cx(props.className)}
+      disabled={props.disabled}
+      onClick={() => setVisible(true)}
+    >取消</Button>
+
+    <Modal visible={visible} onVisibleChange={setVisible}>
+      <div className={S.modal}>
+        <div className={S.info}>
+          <WarningIcon className={S.warningIcon} />
+          确定放弃编辑？本次修改的内容将会丢失，原帖内容保持不变。
+        </div>
+        <div className={S.modalFooter}>
+          <Button
+            tabIndex={0}
+            ref={ref}
+            type='primary'
+            onClick={() => setVisible(false)}
+            onKeyUpCapture={e => {
+              if (e.key === 'Enter') {
+                setVisible(false)
+              }
+            }}
+          >继续编辑</Button>
+          <Button onClick={() => router.back()}>放弃修改</Button>
+        </div>
+      </div>
+    </Modal>
+  </>
+}
+
+export default CancelButton;

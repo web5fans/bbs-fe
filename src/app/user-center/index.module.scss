@@ -1,7 +1,7 @@
 @use "@/styles/rem";
 
 .container {
-  max-width: 1054px;
+  max-width: 1276px;
   margin: rem.px2flexible(15) auto;
   font-family: var(--font-CLFN);
 
@@ -12,14 +12,17 @@
     display: flex;
     align-items: center;
     gap: rem.px2flexible(10);
+    flex-wrap: wrap;
 
     .left {
+      min-width: 696px;
       flex: 1;
       flex-shrink: 0;
     }
 
     .right {
-      width: 298px;
+      flex: 1;
+      min-width: 352px;
       align-self: stretch;
     }
   }
@@ -33,12 +36,13 @@
   background: #EAEAEA;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1238px) {
   .container{
     .wrap {
-      flex-wrap: wrap;
-      .right {
+      .left, .right {
+        min-width: auto;
         width: 100%;
+        flex: none;
       }
     }
   }

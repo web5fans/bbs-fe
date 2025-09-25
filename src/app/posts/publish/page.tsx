@@ -10,16 +10,17 @@ import { useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import PublishPostCancelButton from "@/components/PublishPostCancelButton";
 import ReadIcon from '@/assets/posts/read.svg'
-import ReplyIcon from '@/assets/posts/reply.svg'
+import CommentIcon from '@/assets/posts/comment.svg'
 import MoneyIcon from '@/assets/posts/money.svg'
 import SectionEarth from '@/assets/posts/section.svg'
 import { useRequest } from "ahooks";
-import { getSectionList, writesPDSOperation } from "@/app/posts/utils";
+import { getSectionList, postsWritesPDSOperation } from "@/app/posts/utils";
 import cx from "classnames";
 import { useToast } from "../../../provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { postUriToHref } from "@/lib/postUriHref";
 import { LayoutCenter } from "@/components/Layout";
+import { checkEditorContent } from "@/lib/tiptap-utils";
 
 const PublishPostPage = () => {
   const searchParams = useSearchParams()
@@ -62,14 +63,8 @@ const PublishPostPage = () => {
 
     const { content } = json
     if (!content) return
-    const hasImageUploadErr = content.filter(e => e.type === "imageUpload")[0]
-    if (hasImageUploadErr) {
-      setPublishDis(true)
-      return;
-    }
-    const hasUploadedImg = json.content?.find(e => e.type === 'image');
-
-    setPublishDis(!text && !hasUploadedImg);
+    const checkResult = checkEditorContent(json, text)
+    setPublishDis(!checkResult)
     setRichText(html)
   }
 
@@ -77,7 +72,7 @@ const PublishPostPage = () => {
     setPublishing(true)
     try {
       await updateProfile()
-      const uri = await writesPDSOperation({
+      const uri = await postsWritesPDSOperation({
         record: {
           $type: 'app.bbs.post',
           section_id: sectionId!,
@@ -103,7 +98,7 @@ const PublishPostPage = () => {
     }
   }
 
-  const allowPublish = !(!richText || publishDis) && !!postTitle
+  const allowPublish = !(!richText || publishDis) && !!postTitle.trim()
 
   const noAuth = !isWhiteUser
 
@@ -185,8 +180,8 @@ function SelectDropItem(props: {
           {itemInfo.post_count}
         </p>
         <p className={S.infoItem}>
-          <ReplyIcon />
-          {itemInfo.reply_count}
+          <CommentIcon />
+          {itemInfo.comment_count}
         </p>
         {/*<p className={S.infoItem}>*/}
         {/*  <MoneyIcon />*/}

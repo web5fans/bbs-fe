@@ -4,10 +4,11 @@ export default function useCurrentUser() {
   const { writeProfile,
     getUserProfile,
     userInfo,
-    isWhiteListUser,
     userProfile,
     visitorId,
   } = useUserInfoStore()
+
+  const isWhiteListUser = true;
 
   const updateProfile = async () => {
     const status = await writeProfile()

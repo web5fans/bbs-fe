@@ -6,10 +6,10 @@ import { UserProfileType } from "@/store/userInfo";
 import S from "./index.module.scss";
 import CardWindow from "@/components/CardWindow";
 import BreadCrumbs from "@/components/BreadCrumbs";
-import UserInfo from "@/app/user-center/components/UserInfo";
-import DataDetail from "@/app/user-center/components/DataDetail";
+import UserInfo from "@/app/user-center/_components/UserInfo";
+import DataDetail from "@/app/user-center/_components/DataDetail";
 import { useParams, useRouter } from "next/navigation";
-import BBSDataOther from "@/app/user-center/components/BBSDataOther";
+import BBSDataOther from "@/app/user-center/_components/BBSDataOther";
 import { LayoutCenter } from "@/components/Layout";
 
 const UserProfilePage = () => {
@@ -47,7 +47,7 @@ const UserProfilePage = () => {
           <div className={S.right}>
             <BBSDataOther
               postsCount={userInfo?.post_count}
-              replyCount={userInfo?.reply_count}
+              commentCount={userInfo?.comment_count}
             />
           </div>
         </div>

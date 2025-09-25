@@ -69,6 +69,7 @@ export default function detectDevice() {
     browser: browser,
     screen: { width: screenWidth, height: screenHeight },
     pixelRatio: pixelRatio,
-    touch: touchSupport
+    touch: touchSupport,
+    isPortrait
   };
 }

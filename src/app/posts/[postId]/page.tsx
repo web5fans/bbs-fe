@@ -10,6 +10,8 @@ import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { getPostUriHref } from "@/lib/postUriHref";
 import { LayoutCenter } from "@/components/Layout";
+import { usePostCommentReply } from "@/provider/PostReplyProvider";
+import { useRef } from "react";
 
 export default function PostDetailPage() {
   const { postId } = useParams<{ postId: string }>()
@@ -20,12 +22,15 @@ export default function PostDetailPage() {
 
   const decodeId = getPostUriHref(postId)
 
+  const detailRef = useRef<{ commentRootPostRecord: any } | null>(null)
+
   return <LayoutCenter>
     <div
       className={S.container}
       ref={rootRef}
     >
       <PostDetail
+        componentRef={detailRef}
         postId={decodeId}
         breadCrumb={<BreadCrumbs
           className={S.breadCrumb}
@@ -37,17 +42,29 @@ export default function PostDetailPage() {
           }]}
         />}
       />
-      <FloatingMark ref={stickyRef}>
-        <Button
-          type={'primary'}
-          className={cx(S.comment, !isWhiteUser && '!hidden')}
-          onClick={() => {
-            document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
-          }}
-        ><CommentIcon /></Button>
-      </FloatingMark>
+      <PostsFixedMark detailRef={detailRef} stickyRef={stickyRef} isWhiteUser={isWhiteUser} />
     </div>
   </LayoutCenter>
+}
+
+export function PostsFixedMark(props: {
+  stickyRef: React.RefObject<HTMLDivElement | null>,
+  isWhiteUser?: boolean
+  detailRef: React.RefObject<{ commentRootPostRecord: any } | null>
+}) {
+  const { stickyRef, isWhiteUser, detailRef } = props;
+  const { openModal } = usePostCommentReply()
+
+  return <FloatingMark ref={stickyRef}>
+    <Button
+      type={'primary'}
+      className={cx(S.comment, !isWhiteUser && '!hidden')}
+      onClick={() => {
+        openModal(detailRef.current?.commentRootPostRecord)
+        document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
+      }}
+    ><CommentIcon /></Button>
+  </FloatingMark>
 }
 
 export function CommentIcon() {

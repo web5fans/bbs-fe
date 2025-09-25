@@ -7,18 +7,17 @@ import server from "@/server";
 import { SectionItem } from "@/app/posts/utils";
 import { useParams } from "next/navigation";
 import { useRequest } from "ahooks";
-import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark";
-import Button from "@/components/Button";
-import { CommentIcon } from "@/app/posts/[postId]/page";
-import cx from "classnames";
+import { useFloatingMarkDistance } from "@/components/FloatingMark";
+import { PostsFixedMark } from "@/app/posts/[postId]/page";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { getPostUriHref } from "@/lib/postUriHref";
 import { LayoutCenter } from "@/components/Layout";
+import { useRef } from "react";
 
 export default function SectionPostPage(){
   const { postId, sectionId } = useParams<{ postId: string; sectionId: string }>()
 
-  const { hasLoggedIn } = useCurrentUser()
+  const { isWhiteUser } = useCurrentUser()
 
   const { data: sectionInfo } = useRequest(async () => {
     return await server<SectionItem>('/section/detail', 'GET', {
@@ -33,6 +32,8 @@ export default function SectionPostPage(){
 
   const decodeId = getPostUriHref(postId)
 
+  const detailRef = useRef<{ commentRootPostRecord: any } | null>(null)
+
   return <LayoutCenter>
     <div className={S.container}>
       <div
@@ -40,7 +41,7 @@ export default function SectionPostPage(){
         ref={rootRef}
       >
         <PostDetail
-          sectionId={sectionId}
+          componentRef={detailRef}
           postId={decodeId}
           breadCrumb={<BreadCrumbs
             className={S.breadCrumb}
@@ -55,15 +56,7 @@ export default function SectionPostPage(){
             }]}
           />}
         />
-        <FloatingMark ref={stickyRef}>
-          <Button
-            type={'primary'}
-            className={cx(S.comment, !hasLoggedIn && '!hidden')}
-            onClick={() => {
-              document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
-            }}
-          ><CommentIcon /></Button>
-        </FloatingMark>
+        <PostsFixedMark detailRef={detailRef} stickyRef={stickyRef} isWhiteUser={isWhiteUser} />
       </div>
     </div>
   </LayoutCenter>

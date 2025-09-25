@@ -1,0 +1,47 @@
+@use "@/styles/rem";
+
+.password {
+  height: rem.px2flexible(237);
+  padding: rem.px2flexible(47) rem.px2flexible(25) 0;
+  .title {
+    font-size: rem.px2flexible(14);
+    font-weight: 500;
+    margin-bottom: rem.px2flexible(14);
+  }
+  .inputWrap {
+    max-width: 100%;
+    --input-default-border-color: #DBDBDB;
+    --input-default-shadow-color: #DBDBDB;
+  }
+
+  .errorInput {
+    border-color: var(--danger-color);
+  }
+
+  .error {
+    color: var(--danger-color);
+    font-size: rem.px2flexible(8);
+    position: absolute;
+    bottom: rem.px2flexible(-14);
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(2);
+
+    img {
+      width: min(16px, #{rem.px2flexible(9)});
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(15);
+    margin-top: rem.px2flexible(36);
+
+    .button {
+      width: rem.px2flexible(46);
+      height: rem.px2flexible(25);
+      font-size: rem.px2flexible(8);
+    }
+  }
+}

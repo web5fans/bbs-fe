@@ -1,6 +1,7 @@
 import type { Attrs, Node } from "@tiptap/pm/model"
 import type { Editor } from "@tiptap/react"
 import getPDSClient from "@/lib/pdsClient";
+import { JSONContent } from "@tiptap/core";
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
@@ -137,7 +138,6 @@ export function findNodePosition(props: {
  */
 export const handleImageUpload = async (
   file: File,
-  abortSignal?: AbortSignal,
   did: string
 ): Promise<string> => {
   // Validate file
@@ -284,4 +284,16 @@ export function sanitizeUrl(
     // If URL creation fails, it's considered invalid
   }
   return "#"
+}
+
+export function checkEditorContent(json: JSONContent, text: string) {
+  const { content } = json
+  if (!content) return false
+  const hasImageUploadErr = content.filter(e => e.type === "imageUpload")[0]
+  if (hasImageUploadErr) {
+    return false;
+  }
+
+  const hasUploadedImg = json.content?.find(e => e.type === 'image');
+  return !!text || !!hasUploadedImg
 }

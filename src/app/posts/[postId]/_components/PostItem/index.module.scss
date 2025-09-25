@@ -28,6 +28,7 @@
     .avatarWrap {
       position: relative;
       margin-bottom: rem.px2flexible(10);
+      width: 100%;
 
       &.normal {
         margin-bottom: rem.px2flexible(6);
@@ -49,12 +50,17 @@
       width: rem.px2flexible(36);
       height: rem.px2flexible(36);
       font-size: rem.px2flexible(12);
+      margin: 0 auto;
     }
 
     .title {
       font-size: rem.px2flexible(9);
       font-weight: 500;
       text-transform: capitalize;
+      text-align: center;
+      width: 0;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 
@@ -82,22 +88,45 @@
   background: #FFF;
   padding: rem.px2flexible(15);
   flex: 1;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
+
+  .contentInner {
+    flex: 1;
+  }
+
+  .mainPostData {
+    display: flex;
+    align-items: center;
+    margin: rem.px2flexible(5) 0;
+    justify-content: space-between;
+    color: #6C6C6C;
+    gap: rem.px2flexible(5);
+    flex-wrap: wrap;
+
+    .date {
+      font-size: rem.px2flexible(6);
+      color: #6C6C6C;
+    }
+
+    .statis {
+      display: flex;
+      align-items: center;
+      font-size: rem.px2flexible(6);
+      gap: rem.px2flexible(10);
+    }
+  }
 
   .title {
     font-size: rem.px2flexible(10);
     font-weight: 500;
-  }
-  .statis {
     display: flex;
-    align-items: center;
-    margin: rem.px2flexible(5) 0;
-    font-size: rem.px2flexible(6);
-    color: #6C6C6C;
-    gap: rem.px2flexible(10);
+    align-items: baseline;
+    gap: rem.px2flexible(5);
+    .titleInner {
+      flex: 1;
+    }
   }
 
   .richText {
@@ -116,6 +145,20 @@
     color: #6C6C6C;
     gap: rem.px2flexible(10);
     margin-top: rem.px2flexible(10);
+    position: relative;
+
+    .reply {
+      cursor: pointer;
+      color: black;
+      flex-shrink: 0;
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+
+    .opt, .reply {
+      margin-right: rem.px2flexible(8);
+    }
   }
 }
 
@@ -141,5 +184,8 @@
 
   .content {
     padding: 40px;
+    .contentInner {
+      //min-height: calc(var(--height, 100%) - 80px);
+    }
   }
 }

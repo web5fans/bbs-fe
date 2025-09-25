@@ -1,0 +1,105 @@
+@use "@/styles/rem";
+
+.wrap {
+  background: rgba(243, 243, 243, 0.8);
+  padding: rem.px2flexible(15) rem.px2flexible(12);
+  margin-top: rem.px2flexible(10);
+
+  .load {
+    color: #6C6C6C;
+    font-size: rem.px2flexible(6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: rem.px2flexible(4);
+    cursor: pointer;
+    gap: rem.px2flexible(4);
+
+    .arrow {
+      width: rem.px2flexible(6);
+      height: rem.px2flexible(3);
+    }
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+
+  .button {
+    border-top: 2px solid var(--300, #B7B7B7);
+    border-right: 1px solid var(--300, #B7B7B7);
+    border-bottom: 1px solid var(--300, #B7B7B7);
+    border-left: 2px solid var(--300, #B7B7B7);
+    background: var(--white, #FFF);
+    color: #CFCFCF;
+    font-size: rem.px2flexible(7);
+    width: 100%;
+    height: rem.px2flexible(20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: rem.px2flexible(10);
+    cursor: pointer;
+
+    &:hover {
+      color: black;
+      border-color: black;
+    }
+  }
+}
+
+.replyItem {
+  & + .replyItem {
+    margin-top: rem.px2flexible(10);
+  }
+  .title {
+    font-size: rem.px2flexible(8);
+    line-height: 2;
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+
+    .avatar {
+      padding: 0 rem.px2flexible(3);
+      margin-right: rem.px2flexible(1);
+    }
+  }
+  .content {
+    margin: rem.px2flexible(4) 0 rem.px2flexible(4) rem.px2flexible(17);
+    max-height: rem.px2flexible(69);
+    overflow: hidden;
+  }
+  .showDetail {
+    font-size: rem.px2flexible(6);
+    font-weight: 500;
+    cursor: pointer;
+    text-align: right;
+    margin-bottom: rem.px2flexible(18);
+    margin-top: rem.px2flexible(-4);
+
+    .packup {
+      color: var(--primary-color);
+    }
+
+    &:hover {
+      color: var(--primary-color);
+    }
+
+  }
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    font-size: rem.px2flexible(6);
+    color: #6C6C6C;
+    gap: rem.px2flexible(10);
+
+    .reply {
+      color: black;
+      cursor: pointer;
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+}

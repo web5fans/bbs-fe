@@ -12,6 +12,8 @@ type Props = Omit<JSX.IntrinsicElements['input'], 'onChange'> & {
   wrapClassName?: string
   showCount?: boolean
   onChange?: (value: string) => void;
+  initialValue?: string
+  inputValue?: string
 }
 
 const TEM_SPAN_ID = 'input_mirror'
@@ -23,12 +25,23 @@ const Input = (props: Props) => {
     children,
     wrapClassName,
     showCount,
+    initialValue,
+    inputValue,
     ...rest
   } = props;
   const [value, setValue] = useState<string | undefined>();
   const [passValidate, setPassValidate] = useState<boolean | undefined>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
   const caretRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!initialValue) return
+    setValue(initialValue)
+  }, [initialValue]);
+
+  useEffect(() => {
+    setValue(inputValue)
+  }, [inputValue]);
 
   const getCursorPosition = (e) => {
     const {selectionStart = 0, selectionEnd = 0} = e.target;
@@ -58,6 +71,7 @@ const Input = (props: Props) => {
       const left = paddingLeftValue + cursorLeft - input.scrollLeft
 
       caretRef.current.style.left = left + 'px'
+      caretRef.current.style.display = 'block'
 
       // setHiddenSpanWidth(left);
     }
@@ -82,7 +96,8 @@ const Input = (props: Props) => {
 
     const newValue = e.target.value
     if (showCount) {
-      const pass = !(newValue.length < (rest.minLength || 0)) && !(newValue.length > (rest.maxLength || 0));
+      const showValue = newValue.trim()
+      const pass = !(showValue.length < (rest.minLength || 0)) && !(showValue.length > (rest.maxLength || 0));
       setPassValidate(pass)
       if (!pass) {
         rest.onChange?.('')
@@ -102,7 +117,6 @@ const Input = (props: Props) => {
     )}
   >
     <input
-      {...rest}
       ref={inputRef}
       type="text"
       name="username"
@@ -111,11 +125,18 @@ const Input = (props: Props) => {
       autoCorrect="off"
       spellCheck="false"
       inputMode="text"
+      {...rest}
       onKeyDownCapture={getCursorPosition}
       onKeyUpCapture={getCursorPosition}
       onClick={getCursorPosition}
       onChange={inputChange}
       className={rest.className}
+      onBlur={() => {
+        if (caretRef.current) {
+          caretRef.current.style.removeProperty('display');
+        }
+      }}
+      value={value || ''}
     />
     {props.checkedPass && <span className={S.icon}>
       <SuccessIcon className={S.icon} />
@@ -123,7 +144,7 @@ const Input = (props: Props) => {
 
     {showCount && value !== undefined && <span
       className={S.lengthLimit}
-    >{value?.length || 0}/{rest.maxLength}</span>}
+    >{value?.trim().length || 0}/{rest.maxLength}</span>}
 
     {children}
 

@@ -1,13 +1,16 @@
 'use client'
 
 import S from './index.module.scss'
-import { useRef } from "react";
+import { HTMLAttributes, useRef } from "react";
+import cx from "classnames";
 
 const MouseToolTip = (props: {
   children?: React.ReactNode;
   open?: boolean
   message?: string
-}) => {
+  tipClassName?: string
+} & HTMLAttributes<HTMLDivElement>) => {
+  const { open = true, children, message, tipClassName, ...rest } = props;
   const tipsRef = useRef<HTMLDivElement>(null)
 
   const handleMouseMove = (e) => {
@@ -18,7 +21,7 @@ const MouseToolTip = (props: {
   };
 
   const mouseEnter = (e) => {
-    if (!tipsRef.current || !props.open) return
+    if (!tipsRef.current || !open) return
     if (tipsRef.current) {
       tipsRef.current.style.left = e.nativeEvent.x + 'px';
       tipsRef.current.style.top = e.nativeEvent.y + 'px';
@@ -32,6 +35,7 @@ const MouseToolTip = (props: {
   }
 
   return <div
+    {...rest}
     className={S.wrap}
     onMouseEnter={mouseEnter}
     onMouseLeave={mouseLeave}
@@ -39,7 +43,7 @@ const MouseToolTip = (props: {
   >
     {props.children}
 
-    <div className={S.tips} ref={tipsRef}>
+    <div className={cx(S.tips, tipClassName)} ref={tipsRef}>
       {props.message || '有 Web5 did 账号才可发帖，请先创建账号～'}
     </div>
   </div>

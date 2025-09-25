@@ -11,12 +11,18 @@ import NickNameStep from "./(components)/Steps/NickName";
 import OnChain from "@/app/register-login/(components)/Steps/OnChain";
 import IntroStep from "@/app/register-login/(components)/Steps/Intro";
 import CompleteStep from './(components)/Steps/Complete';
-import MultiDid from "@/app/register-login/(components)/MultiDid";
-import Authorize from "@/app/register-login/(components)/Authorize";
 import AppHeader from "@/app/@header/default";
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
-import cx from "classnames";
 import { LayoutCenter } from "@/components/Layout";
+import ImportDid from "@/app/register-login/(components)/ImportDid";
+import { ExportWebDidWindow } from "@/components/ExportWeb5DidModal";
+
+type WindowTypeInfoType = {
+  type: 'register' | 'export'
+} | {
+  type: 'import'
+  importType: 'file' | 'scan'
+}
 
 export default function RegisterLogin() {
   const { visible, closeRegisterPop } = useRegisterPopUp()
@@ -26,6 +32,10 @@ export default function RegisterLogin() {
 
   const sensors = useSensors(mouseSensor, touchSensor)
 
+  const [windowTypeInfo, setWindowTypeInfo] = useState<WindowTypeInfoType>({
+    type: 'register',
+  })
+
 
   const goPrev = () => {
     setCurSep(v => v - 1)
@@ -34,13 +44,19 @@ export default function RegisterLogin() {
   useEffect(() => {
     if (!visible) {
       setCurSep(CREATE_ACCOUNT_STEP.INTRO)
+      setWindowTypeInfo({
+        type: 'register'
+      })
     }
   }, [visible]);
 
   const stepRender = useMemo(() => {
     switch (curStep) {
       case CREATE_ACCOUNT_STEP.INTRO: {
-        return <IntroStep goNext={() => setCurSep(CREATE_ACCOUNT_STEP.NICKNAME)} />
+        return <IntroStep
+          goNext={() => setCurSep(CREATE_ACCOUNT_STEP.NICKNAME)}
+          showImport={type => setWindowTypeInfo({ type: 'import', importType: type })}
+        />
       }
       case CREATE_ACCOUNT_STEP.NICKNAME: {
         return <>
@@ -51,43 +67,73 @@ export default function RegisterLogin() {
         return <OnChain goNext={() => setCurSep(CREATE_ACCOUNT_STEP.DONE)} />
       }
       case CREATE_ACCOUNT_STEP.DONE: {
-        return <CompleteStep />
+        return <CompleteStep showExport={() => setWindowTypeInfo({ type: 'export' })} />
       }
     }
   }, [curStep])
 
+
+
   if (!visible) return null;
+
+
+
 
   const windowTitle = curStep === CREATE_ACCOUNT_STEP.INTRO ? '注册账号' : '创建账号'
 
+  if (windowTypeInfo.type === 'import') {
+    return <PageWrap>
+      <ImportDid
+        windowClassName={S.window}
+        windowTitleClassName={S.windowHeader}
+        importType={windowTypeInfo.importType}
+      />
+    </PageWrap>
+  }
+
+  if (windowTypeInfo.type === 'export') {
+    return <PageWrap>
+      <ExportWebDidWindow
+        wrapClassName={S.window}
+        headerTitleClassName={S.windowHeader}
+        onClose={closeRegisterPop}
+        onCancel={() => {
+          setWindowTypeInfo({ type: 'register' })
+        }}
+      />
+    </PageWrap>
+  }
+
+  return <PageWrap>
+    <CardWindow
+      header={windowTitle}
+      wrapClassName={S.window}
+      headerClassName={S.windowHeader}
+      showCloseButton
+      onClose={closeRegisterPop}
+    >
+      <SetNickNameProvider>
+        <DndContext sensors={sensors}>
+          <div className={S.content}>
+            {stepRender}
+          </div>
+          <DraggableOverlay />
+        </DndContext>
+      </SetNickNameProvider>
+    </CardWindow>
+  </PageWrap>
+}
+
+function PageWrap(props: {
+  children: React.ReactNode
+}) {
   return <div className={S.container}>
-    <div className={'w-full min-w-fit'}>
-      <AppHeader isPopUp />
-      <div className={S.layout}>
-        <div className={S.bgWrap} />
-        <LayoutCenter style={{ overflow: 'initial' }}>
-          <CardWindow
-            header={windowTitle}
-            wrapClassName={S.window}
-            headerClassName={S.windowHeader}
-            showCloseButton
-            onClose={closeRegisterPop}
-          >
-            <SetNickNameProvider>
-              <DndContext sensors={sensors}>
-                <div className={S.content}>
-                  {stepRender}
-                </div>
-                <DraggableOverlay />
-              </DndContext>
-            </SetNickNameProvider>
-          </CardWindow>
-        </LayoutCenter>
-
-        {/*<MultiDid />*/}
-
-        {/*<Authorize />*/}
-      </div>
+    <AppHeader isPopUp />
+    <div className={S.layout}>
+      <div className={S.bgWrap} />
+      <LayoutCenter style={{ overflow: 'initial' }}>
+        {props.children}
+      </LayoutCenter>
     </div>
   </div>
 }

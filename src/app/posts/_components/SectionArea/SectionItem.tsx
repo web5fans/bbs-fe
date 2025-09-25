@@ -2,7 +2,7 @@ import { useRouter } from "next/navigation";
 import S from "./index.module.scss";
 import SectionEarth from "@/assets/posts/section.svg";
 import ReadIcon from "@/assets/posts/read.svg";
-import ReplyIcon from "@/assets/posts/reply.svg";
+import CommentIcon from "@/assets/posts/comment.svg";
 import type { SectionItem } from "@/app/posts/utils";
 
 export default function SectionItem(props: {
@@ -29,8 +29,8 @@ export default function SectionItem(props: {
           {section.post_count}
         </p>
         <p className={S.infoItem}>
-          <ReplyIcon />
-          {section.reply_count}
+          <CommentIcon />
+          {section.comment_count}
         </p>
         {/*<p className={S.infoItem}>*/}
         {/*  <MoneyIcon />*/}

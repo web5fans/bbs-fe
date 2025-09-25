@@ -45,6 +45,18 @@ const RootLayout = async (props: any) => {
         as="image"
         type="image/png"
       />
+      <link
+        rel="preload"
+        href="/assets/export-computer.png"
+        as="image"
+        type="image/png"
+      />
+      <link
+        rel="preload"
+        href="/assets/import-did/loading-wrap.png"
+        as="image"
+        type="image/png"
+      />
     </head>
     <body
       className={fontVariables}

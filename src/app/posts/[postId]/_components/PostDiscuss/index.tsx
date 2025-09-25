@@ -7,11 +7,12 @@ import FaceIcon from '@/assets/login/multiDid/face.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import PublishPostCancelButton from "@/components/PublishPostCancelButton";
 import { useRef, useState } from "react";
-import { writesPDSOperation } from "@/app/posts/utils";
+import { postsWritesPDSOperation } from "@/app/posts/utils";
 import { useToast } from "@/provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Link from "next/link";
 import { APPLY_WHITE_LIST_URL } from "@/constant/constant";
+import { checkEditorContent } from "@/lib/tiptap-utils";
 
 const PostDiscuss = (props: {
   postUri: string
@@ -31,29 +32,21 @@ const PostDiscuss = (props: {
   const editorUpdate = ({ json, html, text }: EditorUpdateData) => {
     const { content } = json
     if (!content) return
-    const hasImageUploadErr = content.filter(e => e.type === "imageUpload")[0]
-    if (hasImageUploadErr) {
-      setPublishDis(true);
-      return;
-    }
-
-    const hasUploadedImg = json.content?.find(e => e.type === 'image');
-
-    setPublishDis(!text && !hasUploadedImg);
+    const checkResult = checkEditorContent(json, text)
+    setPublishDis(!checkResult)
 
     setRichText(html)
   }
 
-  const publishReply = async () => {
+  const publishComment = async () => {
     setPublishing(true)
     try {
       await updateProfile()
-      await writesPDSOperation({
+      await postsWritesPDSOperation({
         record: {
-          $type: 'app.bbs.reply',
+          $type: 'app.bbs.comment',
           text: richText,
-          root: props.postUri,
-          parent: props.postUri,
+          post: props.postUri,
           section_id: props.sectionId,
         },
         did: userProfile?.did!
@@ -99,7 +92,7 @@ const PostDiscuss = (props: {
             type={'primary'}
             className={S.publish}
             disabled={publishDis || !richText}
-            onClick={publishReply}
+            onClick={publishComment}
           >发布</Button>
       }
       <PublishPostCancelButton className={S.publish} disabled={publishDis || !richText} />
