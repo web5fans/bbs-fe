@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useCallback, useState } from "react";
+import React, { createContext, CSSProperties, useCallback, useState } from "react";
 
 export type ModalInfoType = {
   postUri: string // 主帖
@@ -9,6 +9,7 @@ export type ModalInfoType = {
   toUserName?: string // 回复用户的名称
   sectionId: string
   refresh?: () => void
+  rect?: CSSProperties
 } & ({
   type: 'quote'
   quoteContent: string

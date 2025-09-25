@@ -93,11 +93,29 @@
   flex-direction: column;
 
   .contentInner {
-    //min-height: calc(var(--height, 100%) - #{rem.px2flexible(15)} - #{rem.px2flexible(15)});
     flex: 1;
+  }
+
+  .mainPostData {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    margin: rem.px2flexible(5) 0;
     justify-content: space-between;
+    color: #6C6C6C;
+    gap: rem.px2flexible(5);
+    flex-wrap: wrap;
+
+    .date {
+      font-size: rem.px2flexible(6);
+      color: #6C6C6C;
+    }
+
+    .statis {
+      display: flex;
+      align-items: center;
+      font-size: rem.px2flexible(6);
+      gap: rem.px2flexible(10);
+    }
   }
 
   .title {
@@ -109,14 +127,6 @@
     .titleInner {
       flex: 1;
     }
-  }
-  .statis {
-    display: flex;
-    align-items: center;
-    margin: rem.px2flexible(5) 0;
-    font-size: rem.px2flexible(6);
-    color: #6C6C6C;
-    gap: rem.px2flexible(10);
   }
 
   .richText {

@@ -134,7 +134,7 @@ const ReplyModal = () => {
   if (!visible) return null
 
   return <>
-    <div className={cx(S.wrap, packUp && S.wrapPack)}>
+    <div className={cx(S.wrap, packUp && S.wrapPack)} style={modalInfo?.rect}>
       <CardWindow
         header={title}
         wrapClassName={S.window}

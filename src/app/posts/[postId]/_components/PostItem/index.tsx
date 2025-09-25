@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import PostItemContent from "./PostItemContent";
 import { useEffect, useRef } from "react";
 import remResponsive from "@/lib/rem-responsive";
+import PostItemFooter from "./PostItemFooter";
 
 type PostItemProps = {
   isOriginPoster?: boolean
@@ -68,11 +69,19 @@ const PostItem = (props: PostItemProps) => {
     </div>
 
     <div className={S.content} ref={contentRef}>
-      <PostItemContent
+      <div className={S.contentInner}>
+        <PostItemContent
+          postInfo={postInfo}
+          sectionId={sectionId}
+          isAuthor={isAuthor}
+          rootUri={props.rootUri}
+          refresh={props.refresh}
+        />
+      </div>
+      <PostItemFooter
         postInfo={postInfo}
         sectionId={sectionId}
         floor={floor}
-        isAuthor={isAuthor}
         rootUri={props.rootUri}
         refresh={props.refresh}
       />

@@ -7,9 +7,11 @@ import utcToLocal from "@/lib/utcToLocal";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
 import SmallAvatar from "@/components/Avatar/SmallAvatar";
-import { useEffect, useRef, useState } from "react";
+import { Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
 import cx from "classnames";
 import ArrowIcon from '@/assets/arrow-s.svg';
+
+export type ReplyListRefProps = { reload: () => void }
 
 const ReplyList = (props: {
   uri: string
@@ -17,6 +19,8 @@ const ReplyList = (props: {
   sectionId: string
   total: string
   changeTotal: (total: string) => void
+  replyComment: () => void
+  componentRef?: Ref<ReplyListRefProps>
 }) => {
   const { userProfile } = useCurrentUser()
 
@@ -43,6 +47,12 @@ const ReplyList = (props: {
     isNoMore: d => !d?.nextCursor,
     reloadDeps: [userProfile?.did]
   });
+
+  useImperativeHandle(props.componentRef, () => {
+    return {
+      reload
+    }
+  })
 
   const reply = (info: any) => {
     openModal({
@@ -75,6 +85,7 @@ const ReplyList = (props: {
       className={S.load}
       onClick={loadMore}
     ><ArrowIcon />加载更多</div>}
+    <div className={S.button} onClick={props.replyComment}>我也说一句</div>
   </div>
 }
 
