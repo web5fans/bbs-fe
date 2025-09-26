@@ -1,15 +1,15 @@
 import S from './index.module.scss'
-import { useBoolean, useInfiniteScroll } from "ahooks";
+import { useInfiniteScroll } from "ahooks";
 import server from "@/server";
-import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
-import utcToLocal from "@/lib/utcToLocal";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
 import SmallAvatar from "@/components/Avatar/SmallAvatar";
-import { Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
-import cx from "classnames";
+import { Ref, useImperativeHandle } from "react";
 import ArrowIcon from '@/assets/arrow-s.svg';
+import ShowCreateTime from "./ShowCreateTime";
+import HtmlContent from "./HTMLContent";
+import Avatar from "@/components/Avatar";
 
 export type ReplyListRefProps = { reload: () => void }
 
@@ -100,13 +100,14 @@ function ReplyItem(props: {
 
   return <div className={S.replyItem}>
     <div className={S.title}>
-      <div className={S.avatar}>
-        <SmallAvatar nickname={replyItem.author.displayName} />
+      <div className={S.avatarWrap}>
+        <Avatar nickname={replyItem.author.displayName} className={S.avatar} />
       </div>
       <span className={'font-medium'}>{replyItem.author.displayName}</span>
       {
         !!replyItem.to?.displayName &&  <>&nbsp;回复&nbsp;<span className={'font-medium'}>{replyItem.to?.displayName}</span></>
       }
+      <ShowCreateTime created={replyItem.created} />
     </div>
     <HtmlContent html={replyItem.text} />
     <div className={S.footer}>
@@ -117,48 +118,6 @@ function ReplyItem(props: {
         sectionId={sectionId}
       />
       <span className={S.reply} onClick={props.toReply}>回复</span>
-      <span>{utcToLocal(replyItem.created, 'YYYY/MM/DD HH:mm:ss')}</span>
     </div>
   </div>
-}
-
-function HtmlContent(props: {html: string}) {
-  const [showDetailVis, setShowDetailVis] = useState(false)
-  const [expand, { toggle }] = useBoolean(false)
-
-  const htmlRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!htmlRef.current) return
-
-    const observer = new ResizeObserver(() => {
-      requestAnimationFrame(() => {
-        if (!htmlRef.current) return
-        const scrollHeight = htmlRef.current.scrollHeight
-        const clientHeight = htmlRef.current.clientHeight
-        if (scrollHeight > clientHeight) {
-          setShowDetailVis(true)
-        }
-      })
-    })
-    observer.observe(htmlRef.current)
-
-    return () => {
-      if (!htmlRef.current) return
-      observer.unobserve(htmlRef.current)
-    }
-  }, []);
-
-  return <>
-    <div
-      className={cx(S.content, expand ? '!max-h-none' : '')}
-      ref={htmlRef}
-    >
-      <JSONToHtml html={props.html} />
-    </div>
-    {showDetailVis && <p
-      className={S.showDetail}
-      onClick={toggle}
-    >{expand ? <span className={S.packup}>收起</span> : '展开详情'}</p>}
-  </>
 }

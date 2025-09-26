@@ -1,24 +1,27 @@
 import S from './index.module.scss'
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import LikeList, { LikeListRef } from "@/app/posts/[postId]/_components/PostItem/_components/LikeList";
+import LikeList, { LikeListRef } from "../LikeList";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
-import TabWrap from "@/app/posts/[postId]/_components/PostItem/_components/TabWrap";
-import ReplyList, { ReplyListRefProps } from "@/app/posts/[postId]/_components/PostItem/_components/ReplyList";
+import TabWrap from "../TabWrap";
+import ReplyList, { ReplyListRefProps } from "../ReplyList";
 import utcToLocal from "@/lib/utcToLocal";
+import Donate from "../Donate";
+import { PostItemType } from "@/app/posts/[postId]/_components/PostItem/index";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
 }
 
 const PostItemFooter = (props: {
-  postInfo: any
-  sectionId: string
+  postInfo: PostItemType
   floor: number
   rootUri: string
   refresh?: () => void
 }) => {
-  const { postInfo, sectionId, floor, rootUri } = props
+  const { postInfo, floor, rootUri } = props
+  const sectionId = postInfo.section_id
+
   const [ showType, setShowType ] = useState<'like' | 'reply' | undefined>(undefined)
   const [replyTotal, setReplyTotal] = useState('0')
 
@@ -77,6 +80,12 @@ const PostItemFooter = (props: {
     setShowType("like")
   }
 
+  const reloadLikeList = () => {
+    if (showType === 'like') {
+      likeListRef.current?.reloadLikeList()
+    }
+  }
+
   useEffect(() => {
     setReplyTotal(postInfo.reply_count || '0')
   }, [postInfo.reply_count]);
@@ -96,26 +105,19 @@ const PostItemFooter = (props: {
       }}
     >
       {/*<Donate />*/}
-      <PostLike
-        liked={postInfo.liked}
-        likeCount={postInfo.like_count}
-        uri={postInfo.uri}
-        sectionId={sectionId}
+      {noMainPost ? <FooterOptions
+        postInfo={postInfo}
+        floor={floor}
         showLikeList={showLikeList}
-        reloadLikeList={() => {
-          if (showType === 'like') {
-            likeListRef.current?.reloadLikeList()
-          }
-        }}
-      />
-
-      {noMainPost && <span
-        className={S.reply}
-        onClick={reply}
-      >回复&nbsp;({replyTotal})</span>}
-
-      {noMainPost && <span className={S.opt}>{formatDate(postInfo.created)}</span>}
-      <span className={'shrink-0'}>{floor}楼</span>
+        reloadLikeList={reloadLikeList}
+        reply={reply}
+        replyTotal={replyTotal}
+      /> :  <MainPostFooterOpts
+        postInfo={postInfo}
+        floor={floor}
+        showLikeList={showLikeList}
+        reloadLikeList={reloadLikeList}
+      />}
     </div>
     {showType === 'like' && <TabWrap arrowPos={arrowPos}>
       <LikeList uri={postInfo.uri} componentRef={likeListRef} />
@@ -136,3 +138,58 @@ const PostItemFooter = (props: {
 }
 
 export default PostItemFooter;
+
+function MainPostFooterOpts(props: {
+  postInfo: PostItemType
+  floor: number
+  showLikeList: () => void
+  reloadLikeList: () => void
+}) {
+  const { postInfo, floor } = props;
+
+  return <div className={S.rightPart}>
+    <PostLike
+      liked={postInfo.liked}
+      likeCount={postInfo.like_count}
+      uri={postInfo.uri}
+      sectionId={postInfo.section_id}
+      showLikeList={props.showLikeList}
+      reloadLikeList={props.reloadLikeList}
+    />
+    <span className={'shrink-0'}>{floor}楼</span>
+  </div>
+}
+
+
+function FooterOptions(props: {
+  postInfo: PostItemType
+  floor: number
+  showLikeList: () => void
+  reloadLikeList: () => void
+  reply: () => void
+  replyTotal: string
+}) {
+  const { postInfo, floor, reply, replyTotal } = props;
+
+  return <div className={`${S.rightPart} ${S.otherPost}`}>
+    <div className={S.item}>
+      <PostLike
+        liked={postInfo.liked}
+        likeCount={postInfo.like_count}
+        uri={postInfo.uri}
+        sectionId={postInfo.section_id}
+        showLikeList={props.showLikeList}
+        reloadLikeList={props.reloadLikeList}
+      />
+      <span
+        className={S.reply}
+        onClick={reply}
+      >回复&nbsp;({replyTotal})</span>
+    </div>
+
+    <div className={S.item}>
+      <span className={S.opt}>{formatDate(postInfo.created)}</span>
+      <span className={'shrink-0'}>{floor}楼</span>
+    </div>
+  </div>
+}

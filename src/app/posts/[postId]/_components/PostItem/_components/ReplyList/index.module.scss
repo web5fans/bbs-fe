@@ -59,9 +59,21 @@
     display: flex;
     align-items: center;
 
-    .avatar {
+    .avatarWrap {
       padding: 0 rem.px2flexible(3);
       margin-right: rem.px2flexible(1);
+
+      .avatar {
+        width: rem.px2flexible(11);
+        height: rem.px2flexible(11);
+        font-size: rem.px2flexible(5);
+      }
+    }
+
+    .time {
+      color: #9F9F9F;
+      font-size: rem.px2flexible(6);
+      margin-left: rem.px2flexible(4);
     }
   }
   .content {

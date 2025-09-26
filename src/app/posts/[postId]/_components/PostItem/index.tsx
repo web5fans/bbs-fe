@@ -7,12 +7,33 @@ import { useRouter } from "next/navigation";
 import PostItemContent from "./PostItemContent";
 import { useEffect, useRef } from "react";
 import remResponsive from "@/lib/rem-responsive";
-import PostItemFooter from "./PostItemFooter";
+import PostItemFooter from "./_components/PostItemFooter";
+
+export type PostItemType = {
+  cid: string
+  uri: string
+  comment_count: string
+  like_count: string
+  reply_count?: string
+  section_id: string // 版区id
+  section?: string // 版区名称
+  text: string
+  title?: string
+  created: string
+  edited?: string
+  liked?: boolean
+  author: {
+    did: string
+    displayName: string
+    handle: string
+    [key: string]: any
+  }
+  [key: string]: any
+}
 
 type PostItemProps = {
   isOriginPoster?: boolean
-  postInfo: any
-  sectionId: string
+  postInfo: PostItemType
   floor: number
   isAuthor?: boolean
   rootUri: string
@@ -20,7 +41,7 @@ type PostItemProps = {
 }
 
 const PostItem = (props: PostItemProps) => {
-  const { postInfo = {}, floor, isOriginPoster, sectionId, isAuthor } = props;
+  const { postInfo = {} as PostItemType, floor, isOriginPoster, isAuthor } = props;
 
   const router = useRouter()
 
@@ -72,7 +93,6 @@ const PostItem = (props: PostItemProps) => {
       <div className={S.contentInner}>
         <PostItemContent
           postInfo={postInfo}
-          sectionId={sectionId}
           isAuthor={isAuthor}
           rootUri={props.rootUri}
           refresh={props.refresh}
@@ -80,7 +100,6 @@ const PostItem = (props: PostItemProps) => {
       </div>
       <PostItemFooter
         postInfo={postInfo}
-        sectionId={sectionId}
         floor={floor}
         rootUri={props.rootUri}
         refresh={props.refresh}

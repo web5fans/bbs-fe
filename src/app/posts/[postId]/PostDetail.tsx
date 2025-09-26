@@ -85,18 +85,17 @@ const PostDetail = (props: PostDetailProps) => {
         postInfo={originPosterInfo}
         isAuthor={originPosterInfo?.author.did === userProfile?.did}
         floor={1}
-        sectionId={originPosterInfo?.section_id}
         refresh={reloadList}
       />}
 
       {commentList?.comments.map((p, idx) => {
         const floor = ((commentList?.page || 1) - 1) * PAGE_SIZE + idx + 2;
+        const info = {...p, section_id: originPosterInfo?.section_id}
         return <PostItem
           key={p.uri}
-          postInfo={p}
+          postInfo={info}
           floor={floor}
           isOriginPoster={p.author.did === originPosterInfo?.author?.did}
-          sectionId={originPosterInfo?.section_id}
           rootUri={originPosterInfo?.uri}
           refresh={reloadList}
         />

@@ -5,19 +5,20 @@ import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONTo
 import utcToLocal from "@/lib/utcToLocal";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
 import QuotePopUp from "./_components/QuotePopUp";
+import { PostItemType } from "@/app/posts/[postId]/_components/PostItem/index";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
 }
 
 const PostItemContent = (props: {
-  postInfo: any
-  sectionId: string
+  postInfo: PostItemType
   isAuthor?: boolean
   rootUri: string
   refresh?: () => void
 }) => {
-  const { postInfo, sectionId, rootUri } = props
+  const { postInfo, rootUri } = props
+  const sectionId = postInfo.section_id
 
   const { openModal } = usePostCommentReply()
 

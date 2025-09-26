@@ -6,11 +6,15 @@ import useDeviceFlex from "@/hooks/useDeviceFlex";
 
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from "dayjs";
+import 'dayjs/locale/zh-cn';
 import "./index.scss";
 
 dayjs.extend(duration)
+dayjs.extend(relativeTime)
 dayjs.extend(utc);
+dayjs.locale('zh-cn'); // 设置为中文
 
 const MainContent = (props: {
   children: React.ReactNode;
