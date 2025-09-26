@@ -28,7 +28,7 @@ const PostLike = (props: {
   }, [props.liked]);
 
   const handleLike = async () => {
-    if (!userProfile || hasLiked) return
+    if (!userProfile || hasLiked || clickActive) return
     setClickActive(true)
     await postsWritesPDSOperation({
       record: {

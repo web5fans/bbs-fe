@@ -5,6 +5,7 @@ import TabArrowDown from "@/assets/posts/tab-arrow.svg";
 export default function TabWrap(props: {
   children?: React.ReactNode;
   arrowPos: {left: string} | undefined
+  arrowColor?: string
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const arrowRef= useRef<HTMLDivElement>(null);
@@ -40,7 +41,9 @@ export default function TabWrap(props: {
       ref={arrowRef}
       className={S.tabArrow}
       style={{ display: 'none' }}
-    ><TabArrowDown className={S.arrow} /></div>
-    {props.children}
+    ><TabArrowDown className={S.arrow} style={props.arrowColor ? { color: props.arrowColor } : {}} /></div>
+    <div className={S.content}>
+      {props.children}
+    </div>
   </div>
 }

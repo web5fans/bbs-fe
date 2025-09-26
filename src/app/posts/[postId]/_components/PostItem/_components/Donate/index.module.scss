@@ -156,6 +156,31 @@
   }
 }
 
+.connectWallet {
+  padding: rem.px2flexible(30);
+  width: rem.px2flexible(309);
+
+  .infoWrap {
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(10);
+    margin-bottom: rem.px2flexible(20);
+    font-size: rem.px2flexible(10);
+
+    .warning {
+      width: rem.px2flexible(22.5);
+      height: rem.px2flexible(22.5);
+    }
+  }
+
+  .connect {
+    width: rem.px2flexible(80);
+    height: rem.px2flexible(25);
+    font-size: rem.px2flexible(9);
+    margin: 0 auto;
+  }
+}
+
 .showDonate {
   display: flex;
   align-items: center;

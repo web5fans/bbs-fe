@@ -8,10 +8,13 @@ import ReplyList, { ReplyListRefProps } from "../ReplyList";
 import utcToLocal from "@/lib/utcToLocal";
 import Donate from "../Donate";
 import { PostItemType } from "@/app/posts/[postId]/_components/PostItem/index";
+import DonateDetailList from "@/app/posts/[postId]/_components/PostItem/_components/DonateDetailList";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
 }
+
+type ShowTypeType = 'like' | 'reply' | 'donate' | undefined
 
 const PostItemFooter = (props: {
   postInfo: PostItemType
@@ -22,7 +25,7 @@ const PostItemFooter = (props: {
   const { postInfo, floor, rootUri } = props
   const sectionId = postInfo.section_id
 
-  const [ showType, setShowType ] = useState<'like' | 'reply' | undefined>(undefined)
+  const [ showType, setShowType ] = useState<ShowTypeType>(undefined)
   const [replyTotal, setReplyTotal] = useState('0')
 
   const likeListRef = useRef<LikeListRef>(null)
@@ -33,6 +36,14 @@ const PostItemFooter = (props: {
   const [arrowPos, setArrowPos] = useState<{ left: string } | undefined>(undefined)
 
   const { openModal } = usePostCommentReply()
+
+  const changeShowType = (type: ShowTypeType) => {
+    if (showType === type) {
+      setShowType(undefined);
+      return
+    }
+    setShowType(type)
+  }
 
   const reply = () => {
     // const clientWidth = parentRef.current.clientWidth
@@ -50,11 +61,7 @@ const PostItemFooter = (props: {
       openReplyModal()
       return;
     }
-    if (showType === 'reply') {
-      setShowType(undefined);
-      return
-    }
-    setShowType('reply')
+    changeShowType('reply')
   }
 
   const openReplyModal = (obj?: CSSProperties) => {
@@ -73,11 +80,7 @@ const PostItemFooter = (props: {
   }
 
   const showLikeList = () => {
-    if (showType === 'like') {
-      setShowType(undefined);
-      return
-    }
-    setShowType("like")
+    changeShowType('like')
   }
 
   const reloadLikeList = () => {
@@ -104,7 +107,7 @@ const PostItemFooter = (props: {
         setArrowPos({ left: (target.offsetLeft + width - 1) + 'px' })
       }}
     >
-      {/*<Donate />*/}
+      <Donate showList={() => changeShowType('donate')} />
       {noMainPost ? <FooterOptions
         postInfo={postInfo}
         floor={floor}
@@ -134,6 +137,9 @@ const PostItemFooter = (props: {
         componentRef={replyListRef}
       />
     </TabWrap>}
+    {showType === 'donate' && <TabWrap arrowPos={arrowPos} arrowColor={'#E7E7E7'}>
+      <DonateDetailList />
+    </TabWrap> }
   </>
 }
 

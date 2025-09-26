@@ -11,6 +11,7 @@ import Avatar from "@/components/Avatar";
 import ellipsis from "@/lib/ellipsis";
 import CopyText from "@/components/CopyText";
 import InfoSVG from '@/assets/info.svg'
+import WarningIcon from '@/assets/warning-black.svg'
 
 const DonateModal = (props: {
   visible: boolean;
@@ -32,7 +33,13 @@ const DonateModal = (props: {
 
   if (!signer) {
     return <Modal visible={visible}>
-      <Button onClick={openSigner}>连接钱包</Button>
+      <div className={S.connectWallet}>
+        <div className={S.infoWrap}>
+          <WarningIcon className={S.warning} />
+          <span>请连接钱包后再打赏</span>
+        </div>
+        <Button onClick={openSigner} type={'primary'} className={S.connect}>连接钱包</Button>
+      </div>
     </Modal>
   }
 

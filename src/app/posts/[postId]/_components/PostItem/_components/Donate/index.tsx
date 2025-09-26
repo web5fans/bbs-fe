@@ -6,10 +6,12 @@ import { useEffect, useRef, useState } from "react";
 import cx from "classnames";
 import numeral from "numeral";
 
-const Donate = () => {
+const Donate = (props: {
+  showList: () => void
+}) => {
   const [visible, { toggle }] = useBoolean(false)
   return <div className={S.wrap}>
-    <ShowDonate />
+    <ShowDonate showList={props.showList} />
     <span onClick={toggle} className={S.text}>打赏此贴</span>
 
     <DonateModal visible={visible} />
@@ -18,7 +20,9 @@ const Donate = () => {
 
 export default Donate;
 
-function ShowDonate() {
+function ShowDonate(props: {
+  showList: () => void
+}) {
   const [donate, setDonate] = useState(237)
 
   const [isAnimating, setIsAnimating] = useState(false)
@@ -36,7 +40,14 @@ function ShowDonate() {
   return <>
     {/*<span onClick={mockUpdate}>update</span>*/}
 
-    <div className={cx(S.showDonate, isAnimating && S.animating)}>
+    <div
+      className={cx(S.showDonate, isAnimating && S.animating)}
+      onClick={() => {
+        if (!isAnimating) {
+          props.showList()
+        }
+      }}
+    >
       <DonateIcon className={S.icon} />
       {isAnimating ? <PasswordLock value={donate} /> : num}
       &nbsp;CKB
