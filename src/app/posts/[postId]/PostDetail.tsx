@@ -1,30 +1,26 @@
 'use client'
 
-import S from "@/app/posts/[postId]/index.module.scss";
-import PostItem from "@/app/posts/[postId]/_components/PostItem";
-import PostDiscuss from "@/app/posts/[postId]/_components/PostDiscuss";
-import CardWindow from "@/components/CardWindow";
+import S from "./index.module.scss";
 import { useRequest } from "ahooks";
 import server from "@/server";
-import { useEffect, useImperativeHandle } from "react";
-import { PostFeedItemType } from "@/app/posts/utils";
-import BBSPagination from "@/components/BBSPagination";
+import { useRef } from "react";
 import useCurrentUser from "@/hooks/useCurrentUser";
-
-const PAGE_SIZE = 20
+import { usePostCommentReply } from "@/provider/PostReplyProvider";
+import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark";
+import Button from "@/components/Button";
+import cx from "classnames";
+import Permission from "@/app/posts/[postId]/_components/Permission";
+import PostsContent from "@/app/posts/[postId]/_components/PostsContent";
 
 type PostDetailProps = {
   breadCrumb?: React.ReactNode;
   postId: string
-  componentRef?: React.Ref<{
-    commentRootPostRecord: any
-  }>;
 }
 
 const PostDetail = (props: PostDetailProps) => {
   const { breadCrumb, postId } = props;
 
-  const { userProfile } = useCurrentUser()
+  const { userProfile, isWhiteUser } = useCurrentUser()
 
   const { data: originPosterInfo, refresh: refreshOrigin } = useRequest(async () => {
     const result = await server('/post/detail', 'GET', {
@@ -36,86 +32,63 @@ const PostDetail = (props: PostDetailProps) => {
     refreshDeps: [postId, userProfile?.did]
   })
 
-  const { data: commentList, run: reLoadComment, refresh: refreshComment } = useRequest(async (page: number = 1) => {
-    const result = await server<{
-      comments: PostFeedItemType[],
-      total: number,
-      page:number,
-    }>('/comment/list', 'POST', {
-      post: postId,
-      page,
-      per_page: PAGE_SIZE,
-      viewer: userProfile?.did
-    })
-    return result
-  }, {
-    manual: true,
-    refreshDeps: [postId, userProfile?.did]
-  })
+  const { rootRef, stickyRef } = useFloatingMarkDistance()
 
-  useImperativeHandle(props.componentRef, () => {
-    return {
-      commentRootPostRecord: {
-        type: "comment",
-        postUri: originPosterInfo?.uri,
-        sectionId: originPosterInfo?.section_id,
-        refresh: reloadList
-      }
-    }
-  })
+  const detailRef = useRef<{ commentRootPostRecord: any } | null>(null)
 
-  useEffect(() => {
-    reLoadComment()
-  }, [userProfile?.did]);
-
-  const reloadList = () => {
-    refreshOrigin()
-    refreshComment()
-  }
-
-  return <CardWindow
-    noInnerWrap
-    wrapClassName={S.window}
-    headerExtra={breadCrumb}
+  return <div
+    className={S.container}
+    ref={rootRef}
   >
-    <div className={S.wrap}>
-      {commentList?.page === 1 && <PostItem
-        isOriginPoster
-        rootUri={originPosterInfo?.uri}
-        postInfo={originPosterInfo}
-        isAuthor={originPosterInfo?.author.did === userProfile?.did}
-        floor={1}
-        refresh={reloadList}
-      />}
-
-      {commentList?.comments.map((p, idx) => {
-        const floor = ((commentList?.page || 1) - 1) * PAGE_SIZE + idx + 2;
-        const info = {...p, section_id: originPosterInfo?.section_id}
-        return <PostItem
-          key={p.uri}
-          postInfo={info}
-          floor={floor}
-          isOriginPoster={p.author.did === originPosterInfo?.author?.did}
-          rootUri={originPosterInfo?.uri}
-          refresh={reloadList}
-        />
-      })}
-
-      <BBSPagination
-        hideOnSinglePage
-        pageSize={20}
-        total={commentList?.total || 0}
-        onChange={(page) => reLoadComment(page)}
-        align={'center'}
-      />
-
-      <PostDiscuss
-        sectionId={originPosterInfo?.section_id}
-        postUri={postId}
-        refresh={reloadList}
-      />
-    </div>
-  </CardWindow>
+    <Permission rootRef={rootRef} />
+    <PostsContent
+      componentRef={detailRef}
+      postId={postId}
+      breadCrumb={breadCrumb}
+      originPost={originPosterInfo}
+      refreshOrigin={refreshOrigin}
+    />
+    <PostsFixedMark
+      detailRef={detailRef}
+      stickyRef={stickyRef}
+      isWhiteUser={isWhiteUser}
+    />
+  </div>
 }
 
 export default PostDetail;
+
+function PostsFixedMark(props: {
+  stickyRef: React.RefObject<HTMLDivElement | null>,
+  isWhiteUser?: boolean
+  detailRef: React.RefObject<{ commentRootPostRecord: any } | null>
+}) {
+  const { stickyRef, isWhiteUser, detailRef } = props;
+  const { openModal } = usePostCommentReply()
+
+  return <FloatingMark ref={stickyRef}>
+    <Button
+      type={'primary'}
+      className={cx(S.comment, !isWhiteUser && '!hidden')}
+      onClick={() => {
+        openModal(detailRef.current?.commentRootPostRecord)
+        document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
+      }}
+    ><CommentIcon /></Button>
+  </FloatingMark>
+}
+
+export function CommentIcon() {
+  return <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    <path
+      d="M20 20H18.1818V18.1818H16.3636V16.3636H18.1818V3.63636H20V20ZM16.3636 16.3636H3.63636V14.5455H16.3636V16.3636ZM3.63636 14.5455H1.81818V12.7273H3.63636V14.5455ZM1.81818 12.7273H0V3.63636H1.81818V12.7273ZM12.7273 10.9091H3.63636V9.09091H12.7273V10.9091ZM16.3636 7.27273H3.63636V5.45455H16.3636V7.27273ZM3.63636 3.63636H1.81818V1.81818H3.63636V3.63636ZM18.1818 3.63636H16.3636V1.81818H18.1818V3.63636ZM16.3636 1.81818H10H3.63636V0H16.3636V1.81818Z"
+      fill="white"
+    />
+  </svg>
+}

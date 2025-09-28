@@ -2,6 +2,7 @@ import S from './index.module.scss'
 import cx from "classnames";
 import { useEffect, useRef, useState } from "react";
 import Button from "@/components/Button";
+import remResponsive from "@/lib/rem-responsive";
 
 type FloatingMarkProps = {
   children?: React.ReactNode;
@@ -52,31 +53,14 @@ export function useFloatingMarkDistance() {
     const instance = rootRef.current;
     if (!instance || !stickyRef.current) return
 
-    const stickyWidth = stickyRef.current.clientWidth
-
     const f = () => {
       if (!stickyRef.current) return
 
       if (firstScroll.current) return
 
       firstScroll.current = true
-      let left = instance.getBoundingClientRect().right
-      const windowWidth = document.documentElement.clientWidth;
-      const instanceOffsetRight = windowWidth - left
 
-      const rightBoundary = (instanceOffsetRight - stickyWidth) / 2;
-
-      if (rightBoundary < 0) {
-        stickyRef.current.style.right = `calc(5 / var(--flexible-design-size) * var(--flexible-size-unit))`;
-        return;
-      }
-      if (rightBoundary > DEFAULT_DIS) {
-        left += DEFAULT_DIS;
-      } else {
-        left += rightBoundary;
-      }
-
-      stickyRef.current.style.left = left + 'px'
+      calculateFixedDis(instance, stickyRef.current)
     }
     window.addEventListener('scroll', f)
 
@@ -89,6 +73,28 @@ export function useFloatingMarkDistance() {
     rootRef,
     stickyRef,
   }
+}
+
+export function calculateFixedDis(root: HTMLElement, target: HTMLElement) {
+  const stickyWidth = target.clientWidth
+  let left = root.getBoundingClientRect().right
+  const windowWidth = document.documentElement.clientWidth;
+  const instanceOffsetRight = windowWidth - left
+
+  const rightBoundary = (instanceOffsetRight - stickyWidth) / 2;
+
+  if (rightBoundary < 0) {
+    target.style.right = remResponsive(3);
+    target.style.removeProperty('left');
+    return;
+  }
+  if (rightBoundary > DEFAULT_DIS) {
+    left += DEFAULT_DIS;
+  } else {
+    left += rightBoundary;
+  }
+
+  target.style.left = left + 'px'
 }
 
 function TopIcon() {

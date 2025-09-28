@@ -1,25 +1,9 @@
 @use "@/styles/rem";
 
-.container {
-  max-width: 1054px;
-  margin: rem.px2flexible(15) auto rem.px2flexible(40);
-  font-family: var(--font-CLFN);
-
-  .window {
-    --card-window-line-gap: #{rem.px2flexible(1)};
-  }
-}
-
 .breadCrumb {
   padding: 0 rem.px2flexible(5);
   position: absolute;
   left: rem.px2flexible(20);
   height: 100%;
   background: #EAEAEA;
-}
-
-.comment {
-  width: 36px;
-  height: 36px;
-  margin-bottom: 8px;
 }

@@ -1,0 +1,35 @@
+@use "@/styles/rem";
+
+.wrap {
+  position: fixed;
+
+  .button {
+    width: rem.px2flexible(18);
+    height: rem.px2flexible(18);
+
+    --button-box-shaow: 2px;
+    --button-move-dis-top: 2px;
+    --button-move-dis-left: 2px;
+  }
+}
+
+.textAreaWrap {
+  margin: rem.px2flexible(23) 0;
+}
+
+.popOver {
+  right: 0;
+  width: rem.px2flexible(125);
+}
+
+.popItem {
+  display: flex;
+  align-items: center;
+  gap: rem.px2flexible(4);
+  font-size: rem.px2flexible(9);
+
+  > svg {
+    width: rem.px2flexible(16);
+    height: rem.px2flexible(16);
+  }
+}

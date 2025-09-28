@@ -7,6 +7,7 @@ import useDeviceFlex from "@/hooks/useDeviceFlex";
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import updateLocale from 'dayjs/plugin/updateLocale'
 import dayjs from "dayjs";
 import 'dayjs/locale/zh-cn';
 import "./index.scss";

@@ -80,7 +80,7 @@ export default function Modal(props: CenterModalProps) {
                 animate="visible"
                 exit="hidden"
               >
-                <FloatingFocusManager context={context}>
+                <FloatingFocusManager context={context} disabled>
                   {!!props.onlyMask ? <>{props.children}</> : <motion.div
                     ref={refs.setFloating}
                     {...getFloatingProps()}

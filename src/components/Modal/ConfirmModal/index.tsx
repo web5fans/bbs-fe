@@ -8,21 +8,22 @@ type ConfirmModalProps = {
   onVisibleChange?: (visible: boolean) => void;
   message: string;
   lockScroll?: boolean
-  footer: {
-    confirm: {
+  footer?: {
+    confirm?: {
       text: string;
       onClick: () => void;
     },
-    cancel: {
+    cancel?: {
       text: string;
       onClick: () => void;
     }
   }
+  children?: React.ReactNode;
 }
 
 const ConfirmModal = (props: ConfirmModalProps) => {
   const { visible, onVisibleChange, message, footer } = props;
-  const { confirm, cancel } = footer
+  const { confirm, cancel } = footer || {};
 
   return <Modal visible={visible} onVisibleChange={onVisibleChange} lockScroll={props.lockScroll}>
     <div className={S.modal}>
@@ -30,9 +31,13 @@ const ConfirmModal = (props: ConfirmModalProps) => {
         <WarningIcon className={S.warningIcon} />
         {message}
       </div>
+      {props.children}
       <div className={S.modalFooter}>
-        <Button type='primary' onClick={() => confirm.onClick()}>{confirm.text}</Button>
-        <Button onClick={() => cancel.onClick()}>{cancel.text}</Button>
+        {confirm && <Button
+          type='primary'
+          onClick={() => confirm.onClick()}
+        >{confirm.text}</Button>}
+        {cancel && <Button onClick={() => cancel.onClick()}>{cancel.text}</Button>}
       </div>
     </div>
   </Modal>
