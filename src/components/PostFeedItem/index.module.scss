@@ -25,18 +25,32 @@
     --avatar-outer-color: var(--primary-color);
     --post-statistic-font-color: var(--primary-color);
 
-    > * {
+     > * {
       color: var(--primary-color);
+    }
+
+    .header .opts {
+      display: block;
     }
   }
 
   .header {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-weight: 500;
+    display: flex;
+    align-items: center;
     font-size: min(18px, #{rem.px2flexible(10)});
     margin-bottom: rem.px2flexible(4);
+
+    .title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .opts {
+      display: none;
+    }
   }
 
   .feedInfo {

@@ -11,6 +11,13 @@ import cx from "classnames";
 import { EmptyPostsList } from "@/components/Empty";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { LayoutCenter } from "@/components/Layout";
+import { useCallback } from "react";
+import Permission from "@/app/posts/[postId]/_components/Permission";
+import { useRequest } from "ahooks";
+import server from "@/server";
+import { SectionItem } from "@/app/posts/utils";
+import SettingIcon from "@/assets/posts/setting.svg";
+
 
 const SectionDetailPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>()
@@ -21,9 +28,28 @@ const SectionDetailPage = () => {
 
   const { rootRef, stickyRef } = useFloatingMarkDistance()
 
+  const { data: sectionInfo } = useRequest(async () => {
+    return await server<SectionItem>('/section/detail', 'GET', {
+      id: sectionId
+    })
+  }, {
+    ready: !!sectionId,
+    refreshDeps: [sectionId]
+  })
+
   const goToPublish = () => {
     router.push('/posts/publish?section=' + sectionId)
   }
+
+  const feedItemHeaderOpts = useCallback((postItem: any, reload) => {
+    const admins = sectionInfo?.administrators.map(i => i.did)
+    return <Permission
+      admins={admins}
+      originPost={postItem}
+      trigger={<SettingIcon className={S.setting} />}
+      refreshData={reload}
+    />
+  }, [sectionInfo])
 
   return <LayoutCenter>
       <div
@@ -32,13 +58,14 @@ const SectionDetailPage = () => {
       >
         <SectionDetailCard
           goToPublish={goToPublish}
-          sectionId={sectionId}
+          sectionInfo={sectionInfo}
         />
 
         <Recommend sectionId={sectionId} />
         <PostsList
           sectionId={sectionId}
           listEmptyRender={<EmptyPostsList goPublish={goToPublish} />}
+          feedItemHeaderOpts={feedItemHeaderOpts}
         />
       </div>
       <FloatingMark ref={stickyRef}>

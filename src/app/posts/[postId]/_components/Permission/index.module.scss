@@ -2,6 +2,7 @@
 
 .wrap {
   position: fixed;
+  z-index: 2;
 
   .button {
     width: rem.px2flexible(18);
@@ -11,10 +12,6 @@
     --button-move-dis-top: 2px;
     --button-move-dis-left: 2px;
   }
-}
-
-.textAreaWrap {
-  margin: rem.px2flexible(23) 0;
 }
 
 .popOver {

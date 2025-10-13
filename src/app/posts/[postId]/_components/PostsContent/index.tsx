@@ -73,7 +73,7 @@ const PostsContent = (props: PostContentProps) => {
         isOriginPoster
         rootUri={originPost?.uri}
         postInfo={originPost}
-        isAuthor={originPost?.author.did === userProfile?.did}
+        isAuthor={originPost?.author?.did === userProfile?.did}
         floor={1}
         refresh={reloadList}
       />}

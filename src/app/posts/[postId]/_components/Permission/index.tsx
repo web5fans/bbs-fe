@@ -1,26 +1,96 @@
 import S from './index.module.scss'
 import DropDown from "@/components/DropDown";
-import { RefObject, useEffect, useMemo, useRef, useState } from "react";
+import { RefObject, useEffect, useMemo, useRef } from "react";
 import SettingIcon from "@/assets/posts/setting.svg";
 import Button from "@/components/Button";
 import LockIcon from '@/assets/posts/op/lock.svg';
+import UnLockIcon from '@/assets/posts/op/unlock.svg';
 import StickyIcon from '@/assets/posts/op/sticky.svg';
+import UnStickyIcon from '@/assets/posts/op/unshelf.svg';
 import TopIcon from '@/assets/posts/op/top.svg';
-import Modal from "@/components/Modal";
-import WarningIcon from '@/assets/posts/warning.svg';
+import UnTopIcon from '@/assets/posts/op/un-top.svg';
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import { calculateFixedDis } from "@/components/FloatingMark";
-import TextArea from "@/components/TextArea";
+import HidePostOrCommentModal from "../HidePostOrCommentModal";
+import { useBoolean } from "ahooks";
+import { PostOptParamsType, updatePostByAdmin } from "@/app/posts/utils";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import cx from "classnames";
 
 const PostPermission = (props: {
-  rootRef: RefObject<HTMLDivElement | null>,
+  rootRef?: RefObject<HTMLDivElement | null>,
+  originPost: {
+    uri: string
+    is_top?: boolean
+    is_announcement?: boolean
+    is_disabled?: boolean
+  }
+  admins?: string[]
+  refreshData?: () => void
+  trigger?: React.ReactNode
+  className?: string
 }) => {
-  const { rootRef } = props;
+  const { rootRef, originPost } = props;
+
+  const [hideModalVis, { toggle: toggleHideModalVis, setFalse: closeHideModal }] = useBoolean(false)
 
   const ref = useRef<HTMLDivElement | null>(null);
 
+  const { userProfile } = useCurrentUser()
+
+  const changePostStatus = async (type: 'visible' | 'announcement' | 'top', hideReason?: string) => {
+    if (type === 'visible' && !originPost.is_disabled && !hideReason) {
+      toggleHideModalVis()
+      return
+    }
+
+    const obj: PostOptParamsType = {
+      uri: originPost.uri
+    }
+    switch (type) {
+      case 'visible':
+        obj['is_disabled'] = !originPost.is_disabled;
+        obj['reasons_for_disabled'] = hideReason;
+        break;
+      case 'announcement':
+        obj['is_announcement'] = !originPost.is_announcement;
+        break;
+      case 'top':
+        obj['is_top'] = !originPost.is_top;
+        break;
+    }
+    await updatePostByAdmin(obj)
+    props.refreshData?.()
+  }
+
+  const popItems = useMemo(() => {
+    if (!originPost) return []
+    return [
+      { name: <PopItem
+          flag={originPost.is_disabled}
+          name={['公开帖子', '隐藏帖子']}
+          icon={[<UnLockIcon />, <LockIcon />]} />, onClick: () => changePostStatus('visible') },
+      { name: <PopItem
+          flag={originPost.is_announcement}
+          name={['下架公告', '将帖子设为公告']}
+          icon={[<UnStickyIcon />, <StickyIcon />]} />, onClick: () => changePostStatus('announcement') },
+      { name: <PopItem
+          flag={originPost.is_top}
+          name={['取消置顶', '置顶帖子']}
+          icon={[<UnTopIcon />, <TopIcon />]} />, onClick: () => changePostStatus('top') },
+    ]
+  }, [originPost])
+
+  const needShow = useMemo(() => {
+    if (!props.admins || !userProfile) return false;
+    return props.admins.includes(userProfile.did)
+
+  }, [props.admins, userProfile])
+
   useEffect(() => {
-    if (!ref.current) return
+    if (!needShow) return;
+
+    if (!ref.current || !rootRef || !rootRef.current) return;
 
     const observer = new ResizeObserver(() => {
       requestAnimationFrame(() => {
@@ -33,30 +103,24 @@ const PostPermission = (props: {
     observer.observe(rootRef.current)
 
     return () => {
-      if (!rootRef.current) return
+      if (!rootRef || !rootRef.current) return
       observer.unobserve(rootRef.current)
     }
 
-  }, []);
+  }, [needShow]);
 
-  const popItems = useMemo(() => {
-    return [
-      { name: <PopItem name={'隐藏帖子'} icon={<LockIcon />} />, onClick: () => {} },
-      { name: <PopItem name={'将帖子设为公告'} icon={<StickyIcon />} />, onClick: () => {} },
-      { name: <PopItem name={'置顶帖子'} icon={<TopIcon />} />, onClick: () => {} },
-    ]
-  }, [])
+  if (!needShow) return null
 
   return <>
     <div
-      className={S.wrap}
+      className={cx(!props.trigger && S.wrap, props.className)}
       ref={ref}
     >
       <DropDown
         classNames={{ popOver: S.popOver }}
         popItems={popItems}
       >
-        <Button className={S.button}><SettingIcon /></Button>
+        {props.trigger || <Button className={S.button}><SettingIcon /></Button>}
       </DropDown>
     </div>
     <ConfirmModal
@@ -70,39 +134,26 @@ const PostPermission = (props: {
       }}
     />
 
-    <HidePostModal />
+    <HidePostOrCommentModal
+      visible={hideModalVis}
+      onClose={closeHideModal}
+      onConfirm={(reason) => {
+        changePostStatus('visible', reason)
+        closeHideModal()
+      }}
+    />
   </>
 }
 
 export default PostPermission;
 
-function PopItem({ icon, name }: {
-  icon: React.ReactNode;
-  name: string
+function PopItem({ icon, name, flag }: {
+  icon: [React.ReactNode, React.ReactNode];
+  name: [string, string]
+  flag?: boolean
 }) {
   return <div className={S.popItem}>
-    {icon}
-    {name}
+    {flag ? icon[0] : icon[1]}
+    {flag ? name[0] : name[1]}
   </div>
-}
-
-function HidePostModal() {
-  return  <ConfirmModal
-    visible={false}
-    message={'确定隐藏帖子？请输入隐藏理由，待超级管理员审核后，即可隐藏成功'}
-    footer={{
-      confirm: {
-        text: '确定',
-        onClick: () => {}
-      },
-      cancel: {
-        text: '再想想',
-        onClick: () => {}
-      }
-    }}
-  >
-    <div className={S.textAreaWrap}>
-      <TextArea />
-    </div>
-  </ConfirmModal>
 }

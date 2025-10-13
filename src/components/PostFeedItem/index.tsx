@@ -8,14 +8,17 @@ import Avatar from "@/components/Avatar";
 import FeedStatistic, { FeedLikes } from "@/components/FeedStatistic";
 import utcToLocal from "@/lib/utcToLocal";
 
-export default function PostFeedItem({ feed, onClick, onHover }: {
+export default function PostFeedItem({ feed, onClick, onHover, headerOpts }: {
   feed: PostFeedItemType;
   onClick?: () => void
-  onHover?: () => void
+  onHover?: () => void;
+  headerOpts?: (post: PostFeedItemType) => React.ReactNode;
 }) {
   const { author } = feed;
 
   const [innerRichText, setInnerRichText] = useState('')
+
+  const [isHover, setIsHover] = useState(false)
 
   const nickname = handleToNickName(author.displayName);
 
@@ -33,11 +36,18 @@ export default function PostFeedItem({ feed, onClick, onHover }: {
   return <div
     className={S.feed}
     onClick={onClick}
-    onMouseEnter={onHover}
+    onMouseEnter={() => {
+      onHover?.()
+      setIsHover(true)
+    }}
+    onMouseLeave={() => setIsHover(false)}
   >
-    <p className={S.header}>
-      {title}
-    </p>
+    <div className={S.header}>
+      <p className={S.title}>{title}</p>
+      <div onClick={e => e.stopPropagation()} className={S.opts}>
+        {isHover && headerOpts?.(feed)}
+      </div>
+    </div>
 
     <p className={S.feedInfo}>{innerRichText}</p>
 

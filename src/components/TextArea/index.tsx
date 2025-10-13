@@ -15,7 +15,7 @@ type Props = Omit<JSX.IntrinsicElements['input'], 'onChange'> & {
   inputValue?: string
 }
 
-const TEM_SPAN_ID = 'input_mirror'
+const TEM_SPAN_ID = 'textarea_mirror'
 
 const Input = (props: Props) => {
   const {
@@ -58,7 +58,7 @@ const Input = (props: Props) => {
         position: absolute;
         display: inline-block;
         visibility: hidden;
-        white-space: pre-inline;
+        white-space: pre-wrap;
         font-family: ${styles.fontFamily};
         font-size: ${styles.fontSize};
         max-width: ${styles.width};
@@ -112,7 +112,7 @@ const Input = (props: Props) => {
   const inputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value)
     getCursorPosition(e)
-    rest.onChange?.(e.target.value)
+    rest.onChange?.(e.target.value.trim())
   }
 
   return <div

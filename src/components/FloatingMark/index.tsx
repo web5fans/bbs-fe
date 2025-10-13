@@ -47,7 +47,6 @@ const DEFAULT_DIS = 12;
 export function useFloatingMarkDistance() {
   const rootRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
-  const firstScroll = useRef(false);
 
   useEffect(() => {
     const instance = rootRef.current;
@@ -56,14 +55,9 @@ export function useFloatingMarkDistance() {
     const f = () => {
       if (!stickyRef.current) return
 
-      if (firstScroll.current) return
-
-      firstScroll.current = true
-
       calculateFixedDis(instance, stickyRef.current)
     }
     window.addEventListener('scroll', f)
-
     return () => {
       window.removeEventListener('scroll', f)
     }

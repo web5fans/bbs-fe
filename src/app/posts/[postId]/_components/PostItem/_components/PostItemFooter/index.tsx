@@ -107,7 +107,8 @@ const PostItemFooter = (props: {
         setArrowPos({ left: (target.offsetLeft + width - 1) + 'px' })
       }}
     >
-      <Donate showList={() => changeShowType('donate')} />
+      {/*<Donate showList={() => changeShowType('donate')} />*/}
+      <span></span>
       {noMainPost ? <FooterOptions
         postInfo={postInfo}
         floor={floor}

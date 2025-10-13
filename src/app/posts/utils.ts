@@ -9,6 +9,7 @@ import * as cbor from '@ipld/dag-cbor'
 import { TID } from '@atproto/common-web'
 import dayjs from "dayjs";
 import { showGlobalToast } from "@/provider/toast";
+import { Secp256k1Keypair } from "@atproto/crypto";
 
 export type PostFeedItemType = {
   uri: string,
@@ -32,7 +33,7 @@ export type SectionItem = {
   name: string
   owner?: { did: string; displayName?: string } // 版主
   description?: string // 描述
-  administrators?: any[]  // 管理员列表
+  administrators: {did: string; [key: string]: any}[]  // 管理员列表
 }
 
 /* 获取版区列表 */
@@ -193,4 +194,32 @@ async function sessionWrapApi(callback: () => Promise<any>): Promise<void> {
     }
     throw error
   }
+}
+
+export type PostOptParamsType = {
+  uri: string
+  is_top?: boolean
+  is_announcement?: boolean
+} & ({ is_disabled: true; reasons_for_disabled: string } | { is_disabled?: boolean })
+
+export async function updatePostByAdmin(params: PostOptParamsType): Promise<void> {
+  const storageInfo = storage.getToken()
+
+  if (!storageInfo?.signKey) return
+
+  const { signKey, did } = storageInfo
+
+  const keyPair = await Secp256k1Keypair.import(signKey?.slice(2))
+
+  const signingKey = keyPair.did()
+
+  const encoded = cbor.encode(params)
+  const sig = await keyPair.sign(encoded)
+
+  await server('/post/update_by_admin', 'POST', {
+    did,
+    signing_key_did: signingKey,
+    params,
+    signed_bytes: uint8ArrayToHex(sig),
+  })
 }

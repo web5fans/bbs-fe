@@ -11,9 +11,12 @@ import { postUriToHref } from "@/lib/postUriHref";
 
 const Recommend = ({ sectionId }: { sectionId: string }) => {
   const { data: list } = useRequest(async () => {
-    const result = await server<{ posts: PostFeedItemType[] }>('/post/top', 'POST', {
+    const result = await server<{ posts: PostFeedItemType[] }>('/post/list', 'POST', {
+      limit: 10,
       section_id: sectionId,
+      is_announcement: true,
     })
+
     return result.posts || []
   }, {
     ready: !!sectionId,

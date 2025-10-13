@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <path d="M20.7992 24H11.1992V25.6H20.7992V24Z" fill="black"/>
-  <path d="M22.4008 22.3984H20.8008V23.9984H22.4008V22.3984Z" fill="black"/>
-  <path d="M24.0004 16H22.4004V22.4H24.0004V16Z" fill="black"/>
-  <path d="M9.6 16H8V22.4H9.6V16Z" fill="black"/>
-  <path d="M11.1996 22.3984H9.59961V23.9984H11.1996V22.3984Z" fill="black"/>
-  <path d="M11.1996 14.3984H9.59961V15.9984H11.1996V14.3984Z" fill="black"/>
-  <path d="M22.4008 14.3984H20.8008V15.9984H22.4008V14.3984Z" fill="black"/>
-  <path d="M12.7992 12.8V8H11.1992V12.8V14.4H12.7992H20.7992V12.8H12.7992Z" fill="black"/>
-  <path d="M19.2008 6.39844H12.8008V7.99844H19.2008V6.39844Z" fill="black"/>
-  <path d="M16.8004 19.2V16H15.2004V19.2H14.4004V22.4H17.6004V19.2H16.8004Z" fill="black"/>
+  <path d="M20.7992 24H11.1992V25.6H20.7992V24Z" fill="currentColor"/>
+  <path d="M22.4008 22.3984H20.8008V23.9984H22.4008V22.3984Z" fill="currentColor"/>
+  <path d="M24.0004 16H22.4004V22.4H24.0004V16Z" fill="currentColor"/>
+  <path d="M9.6 16H8V22.4H9.6V16Z" fill="currentColor"/>
+  <path d="M11.1996 22.3984H9.59961V23.9984H11.1996V22.3984Z" fill="currentColor"/>
+  <path d="M11.1996 14.3984H9.59961V15.9984H11.1996V14.3984Z" fill="currentColor"/>
+  <path d="M22.4008 14.3984H20.8008V15.9984H22.4008V14.3984Z" fill="currentColor"/>
+  <path d="M12.7992 12.8V8H11.1992V12.8V14.4H12.7992H20.7992V12.8H12.7992Z" fill="currentColor"/>
+  <path d="M19.2008 6.39844H12.8008V7.99844H19.2008V6.39844Z" fill="currentColor"/>
+  <path d="M16.8004 19.2V16H15.2004V19.2H14.4004V22.4H17.6004V19.2H16.8004Z" fill="currentColor"/>
 </svg>

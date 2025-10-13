@@ -12,10 +12,12 @@ type ConfirmModalProps = {
     confirm?: {
       text: string;
       onClick: () => void;
+      disabled?: boolean;
     },
     cancel?: {
       text: string;
       onClick: () => void;
+      disabled?: boolean;
     }
   }
   children?: React.ReactNode;
@@ -36,8 +38,9 @@ const ConfirmModal = (props: ConfirmModalProps) => {
         {confirm && <Button
           type='primary'
           onClick={() => confirm.onClick()}
+          disabled={confirm.disabled}
         >{confirm.text}</Button>}
-        {cancel && <Button onClick={() => cancel.onClick()}>{cancel.text}</Button>}
+        {cancel && <Button onClick={() => cancel.onClick()} disabled={cancel.disabled}>{cancel.text}</Button>}
       </div>
     </div>
   </Modal>

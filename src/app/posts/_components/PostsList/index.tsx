@@ -24,11 +24,12 @@ export type PostFeedType = {
   posts: PostFeedItemType[]
 }
 
-const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra }: {
+const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra, feedItemHeaderOpts }: {
   sectionId?: string
   minLimit?: number
   listEmptyRender?: React.ReactNode
   headerExtra?: React.ReactNode
+  feedItemHeaderOpts?: (post: PostFeedItemType, reload: () => void) => React.ReactNode;
 }) => {
   const router = useRouter()
 
@@ -85,6 +86,7 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra }: {
           key={item.uri}
           onClick={() => router.push(href)}
           onHover={() => router.prefetch(href)}
+          headerOpts={(post) => feedItemHeaderOpts?.(post, reload)}
         />
       })}
 

@@ -1,0 +1,20 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: flex;
+  align-items: center;
+  font-size: rem.px2flexible(6);
+  color: #000;
+  gap: rem.px2flexible(2);
+  margin-right: rem.px2flexible(8);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--primary-color);
+  }
+
+  > svg {
+    width: rem.px2flexible(8);
+    height: rem.px2flexible(8);
+  }
+}

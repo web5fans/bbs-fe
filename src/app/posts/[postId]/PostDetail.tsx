@@ -11,10 +11,12 @@ import Button from "@/components/Button";
 import cx from "classnames";
 import Permission from "@/app/posts/[postId]/_components/Permission";
 import PostsContent from "@/app/posts/[postId]/_components/PostsContent";
+import { SectionItem } from "@/app/posts/utils";
 
 type PostDetailProps = {
   breadCrumb?: React.ReactNode;
   postId: string
+  sectionAdmins?: string[]
 }
 
 const PostDetail = (props: PostDetailProps) => {
@@ -22,7 +24,7 @@ const PostDetail = (props: PostDetailProps) => {
 
   const { userProfile, isWhiteUser } = useCurrentUser()
 
-  const { data: originPosterInfo, refresh: refreshOrigin } = useRequest(async () => {
+  const { data: originPosterInfo = {} as any, refresh: refreshOrigin } = useRequest(async () => {
     const result = await server('/post/detail', 'GET', {
       uri: postId,
       viewer: userProfile?.did
@@ -30,6 +32,15 @@ const PostDetail = (props: PostDetailProps) => {
     return result
   }, {
     refreshDeps: [postId, userProfile?.did]
+  })
+
+  const { data: sectionAdmins } = useRequest(async () => {
+    const result = await server<SectionItem>('/section/detail', 'GET', {
+      id: originPosterInfo.section_id
+    })
+    return result.administrators?.map(item => item.did as string) || []
+  }, {
+    ready: !props.sectionAdmins && !!originPosterInfo.section_id
   })
 
   const { rootRef, stickyRef } = useFloatingMarkDistance()
@@ -40,7 +51,12 @@ const PostDetail = (props: PostDetailProps) => {
     className={S.container}
     ref={rootRef}
   >
-    <Permission rootRef={rootRef} />
+    <Permission
+      rootRef={rootRef}
+      originPost={originPosterInfo}
+      admins={props.sectionAdmins || sectionAdmins}
+      refreshData={refreshOrigin}
+    />
     <PostsContent
       componentRef={detailRef}
       postId={postId}

@@ -18,20 +18,12 @@ const SPLIT_NUMBER = 145
 
 const SectionDetailCard = (props: {
   goToPublish: () => void
-  sectionId: string
+  sectionInfo?: SectionItem
 }) => {
+  const { sectionInfo } = props;
   const { hasLoggedIn, isWhiteUser } = useCurrentUser()
   const [expand, setExpand] = useState(false)
   const infoRef = useRef<HTMLDivElement>(null);
-
-  const { data: sectionInfo } = useRequest(async () => {
-    return await server<SectionItem>('/section/detail', 'GET', {
-      id: props.sectionId
-    })
-  }, {
-    ready: !!props.sectionId,
-    refreshDeps: [props.sectionId]
-  })
 
   const needSplit = (sectionInfo?.description?.length || 0) > SPLIT_NUMBER
 

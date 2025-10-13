@@ -4,12 +4,13 @@ import server from "@/server";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
-import SmallAvatar from "@/components/Avatar/SmallAvatar";
 import { Ref, useImperativeHandle } from "react";
 import ArrowIcon from '@/assets/arrow-s.svg';
 import ShowCreateTime from "./ShowCreateTime";
 import HtmlContent from "./HTMLContent";
 import Avatar from "@/components/Avatar";
+import LockIcon from '@/assets/posts/op/lock.svg'
+import SwitchPostHideOrOpen from "@/app/posts/[postId]/_components/PostItem/_components/SwitchPostHideOrOpen";
 
 export type ReplyListRefProps = { reload: () => void }
 
@@ -99,15 +100,27 @@ function ReplyItem(props: {
   const { replyItem, sectionId } = props;
 
   return <div className={S.replyItem}>
+    <div className={S.mask} />
     <div className={S.title}>
-      <div className={S.avatarWrap}>
-        <Avatar nickname={replyItem.author.displayName} className={S.avatar} />
+      <div className={S.left}>
+        <div className={S.avatarWrap}>
+          <Avatar
+            nickname={replyItem.author.displayName}
+            className={S.avatar}
+          />
+        </div>
+        <span className={'font-medium'}>{replyItem.author.displayName}</span>
+        {
+          !!replyItem.to?.displayName && <span>&nbsp;回复&nbsp;
+            <span className={'font-medium'}>{replyItem.to?.displayName}</span></span>
+        }
+        <ShowCreateTime created={replyItem.created} />
       </div>
-      <span className={'font-medium'}>{replyItem.author.displayName}</span>
-      {
-        !!replyItem.to?.displayName &&  <>&nbsp;回复&nbsp;<span className={'font-medium'}>{replyItem.to?.displayName}</span></>
-      }
-      <ShowCreateTime created={replyItem.created} />
+
+      <div className={S.right}>
+        {/*<SwitchPostHideOrOpen status={'open'} className={S.hideComment} />*/}
+        <span>打赏</span>
+      </div>
     </div>
     <HtmlContent html={replyItem.text} />
     <div className={S.footer}>
@@ -117,6 +130,7 @@ function ReplyItem(props: {
         uri={replyItem.uri}
         sectionId={sectionId}
       />
+      <SwitchPostHideOrOpen status={'hide'} />
       <span className={S.reply} onClick={props.toReply}>回复</span>
     </div>
   </div>
