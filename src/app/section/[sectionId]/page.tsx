@@ -11,7 +11,7 @@ import cx from "classnames";
 import { EmptyPostsList } from "@/components/Empty";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { LayoutCenter } from "@/components/Layout";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import Permission from "@/app/posts/[postId]/_components/Permission";
 import { useRequest } from "ahooks";
 import server from "@/server";
@@ -28,7 +28,9 @@ const SectionDetailPage = () => {
 
   const { rootRef, stickyRef } = useFloatingMarkDistance()
 
-  const { data: sectionInfo } = useRequest(async () => {
+  const recommendRef = useRef<{ reload: () => void }>(null)
+
+  const { data: sectionInfo, refresh: refreshSection } = useRequest(async () => {
     return await server<SectionItem>('/section/detail', 'GET', {
       id: sectionId
     })
@@ -41,13 +43,17 @@ const SectionDetailPage = () => {
     router.push('/posts/publish?section=' + sectionId)
   }
 
-  const feedItemHeaderOpts = useCallback((postItem: any, reload) => {
-    const admins = sectionInfo?.administrators.map(i => i.did)
+  const feedItemHeaderOpts = useCallback((postItem: any, hover: boolean, reload) => {
     return <Permission
-      admins={admins}
+      sectionInfo={sectionInfo}
       originPost={postItem}
+      closeDropDown={!hover}
       trigger={<SettingIcon className={S.setting} />}
-      refreshData={reload}
+      refreshData={(type) => {
+        if (type === 'announcement') recommendRef.current?.reload()
+        refreshSection();
+        reload()
+      }}
     />
   }, [sectionInfo])
 
@@ -61,7 +67,7 @@ const SectionDetailPage = () => {
           sectionInfo={sectionInfo}
         />
 
-        <Recommend sectionId={sectionId} />
+        <Recommend sectionId={sectionId} ref={recommendRef} />
         <PostsList
           sectionId={sectionId}
           listEmptyRender={<EmptyPostsList goPublish={goToPublish} />}

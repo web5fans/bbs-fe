@@ -9,7 +9,6 @@ import { useParams } from "next/navigation";
 import { useRequest } from "ahooks";
 import { getPostUriHref } from "@/lib/postUriHref";
 import { LayoutCenter } from "@/components/Layout";
-import { useMemo } from "react";
 
 export default function SectionPostPage(){
   const { postId, sectionId } = useParams<{ postId: string; sectionId: string }>()
@@ -24,15 +23,9 @@ export default function SectionPostPage(){
 
   const decodeId = getPostUriHref(postId)
 
-  const sectionAdmins = useMemo(() => {
-    if (!sectionInfo) return []
-
-    return sectionInfo.administrators.map(t => t.did)
-  }, [sectionInfo])
-
   return <LayoutCenter>
     <PostDetail
-      sectionAdmins={sectionAdmins}
+      sectionInfo={sectionInfo}
       postId={decodeId}
       breadCrumb={<BreadCrumbs
         className={S.breadCrumb}

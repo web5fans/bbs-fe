@@ -4,14 +4,14 @@
   margin: rem.px2flexible(15) auto 80px;
   max-width: 1054px;
 
-  .sticky {
-    width: 36px;
-    height: 36px;
-    margin-bottom: 6px;
-  }
-
   .setting {
     width: rem.px2flexible(8);
     height: rem.px2flexible(8);
   }
+}
+
+.sticky {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 6px;
 }

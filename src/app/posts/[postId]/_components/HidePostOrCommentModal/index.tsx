@@ -18,7 +18,7 @@ import { useEffect, useRef, useState } from "react";
   return  <ConfirmModal
     lockScroll={false}
     visible={visible}
-    message={'确定隐藏帖子？请输入隐藏理由，待超级管理员审核后，即可隐藏成功'}
+    message={'确定隐藏帖子？请输入隐藏理由'}
     footer={{
       confirm: {
         text: '确定',

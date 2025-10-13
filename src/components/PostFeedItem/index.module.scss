@@ -40,6 +40,12 @@
     font-size: min(18px, #{rem.px2flexible(10)});
     margin-bottom: rem.px2flexible(4);
 
+    .top {
+      width: rem.px2flexible(26);
+      height: rem.px2flexible(9);
+      margin-right: rem.px2flexible(3);
+    }
+
     .title {
       overflow: hidden;
       white-space: nowrap;

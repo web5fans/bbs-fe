@@ -24,11 +24,17 @@ export type PostFeedItemType = {
   updated: string, // 时间
   created: string, // 时间
   section: string,       // 版区名称
+  is_top: boolean
+  is_announcement: boolean
+  is_disabled: boolean
+  reasons_for_disabled?: string
 }
 
 export type SectionItem = {
   post_count: string
   comment_count: string
+  announcement_count: string
+  top_count: string
   id: string;
   name: string
   owner?: { did: string; displayName?: string } // 版主
@@ -197,6 +203,7 @@ async function sessionWrapApi(callback: () => Promise<any>): Promise<void> {
 }
 
 export type PostOptParamsType = {
+  nsid: 'app.bbs.post' | 'app.bbs.comment' | 'app.bbs.reply'
   uri: string
   is_top?: boolean
   is_announcement?: boolean
@@ -213,10 +220,16 @@ export async function updatePostByAdmin(params: PostOptParamsType): Promise<void
 
   const signingKey = keyPair.did()
 
-  const encoded = cbor.encode(params)
+  const encoded = cbor.encode({
+    is_top: null,
+    is_announcement: null,
+    is_disabled: null,
+    reasons_for_disabled: null,
+    ...params,
+  })
   const sig = await keyPair.sign(encoded)
 
-  await server('/post/update_by_admin', 'POST', {
+  await server('/admin/update_tag', 'POST', {
     did,
     signing_key_did: signingKey,
     params,

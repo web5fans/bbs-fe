@@ -12,11 +12,12 @@ import cx from "classnames";
 import Permission from "@/app/posts/[postId]/_components/Permission";
 import PostsContent from "@/app/posts/[postId]/_components/PostsContent";
 import { SectionItem } from "@/app/posts/utils";
+import Post404 from "@/app/posts/[postId]/_components/Post404";
 
 type PostDetailProps = {
   breadCrumb?: React.ReactNode;
   postId: string
-  sectionAdmins?: string[]
+  sectionInfo?: SectionItem
 }
 
 const PostDetail = (props: PostDetailProps) => {
@@ -34,42 +35,49 @@ const PostDetail = (props: PostDetailProps) => {
     refreshDeps: [postId, userProfile?.did]
   })
 
-  const { data: sectionAdmins } = useRequest(async () => {
+  const { data: sectionInfo } = useRequest(async () => {
     const result = await server<SectionItem>('/section/detail', 'GET', {
       id: originPosterInfo.section_id
     })
-    return result.administrators?.map(item => item.did as string) || []
+    return result
   }, {
-    ready: !props.sectionAdmins && !!originPosterInfo.section_id
+    ready: !props.sectionInfo && !!originPosterInfo.section_id
   })
 
   const { rootRef, stickyRef } = useFloatingMarkDistance()
 
   const detailRef = useRef<{ commentRootPostRecord: any } | null>(null)
 
-  return <div
-    className={S.container}
-    ref={rootRef}
+  const sectionDetail = props.sectionInfo || sectionInfo
+
+  return <Post404
+    originPost={originPosterInfo}
+    sectionInfo={sectionDetail}
   >
-    <Permission
-      rootRef={rootRef}
-      originPost={originPosterInfo}
-      admins={props.sectionAdmins || sectionAdmins}
-      refreshData={refreshOrigin}
-    />
-    <PostsContent
-      componentRef={detailRef}
-      postId={postId}
-      breadCrumb={breadCrumb}
-      originPost={originPosterInfo}
-      refreshOrigin={refreshOrigin}
-    />
-    <PostsFixedMark
-      detailRef={detailRef}
-      stickyRef={stickyRef}
-      isWhiteUser={isWhiteUser}
-    />
-  </div>
+    <div
+      className={S.container}
+      ref={rootRef}
+    >
+      <Permission
+        rootRef={rootRef}
+        originPost={originPosterInfo}
+        sectionInfo={sectionDetail}
+        refreshData={refreshOrigin}
+      />
+      <PostsContent
+        componentRef={detailRef}
+        postId={postId}
+        breadCrumb={breadCrumb}
+        originPost={originPosterInfo}
+        refreshOrigin={refreshOrigin}
+      />
+      <PostsFixedMark
+        detailRef={detailRef}
+        stickyRef={stickyRef}
+        isWhiteUser={isWhiteUser}
+      />
+    </div>
+  </Post404>
 }
 
 export default PostDetail;

@@ -1,6 +1,8 @@
-import { cloneElement, JSX, useEffect, useRef, useState } from "react";
+import { cloneElement, JSX, Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
 import S from "./index.module.scss";
 import cx from "classnames";
+
+export type DropDownRefType = { close: () => void }
 
 const ExistDidPopUp = (props: {
   children: JSX.Element;
@@ -8,12 +10,21 @@ const ExistDidPopUp = (props: {
   classNames?: {
     popOver?: string;
     popItem?: string
-  }
+  },
+  eleRef?: Ref<DropDownRefType>
 }) => {
   const { classNames } = props;
   const [popUpVis, setPopUpVis] = useState(false);
 
   const ref= useRef<HTMLDivElement>(null)
+
+  useImperativeHandle(props.eleRef, () => {
+    return {
+      close: () => {
+        setPopUpVis(false);
+      }
+    }
+  })
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

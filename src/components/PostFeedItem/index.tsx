@@ -7,12 +7,13 @@ import S from "./index.module.scss";
 import Avatar from "@/components/Avatar";
 import FeedStatistic, { FeedLikes } from "@/components/FeedStatistic";
 import utcToLocal from "@/lib/utcToLocal";
+import TopPIcon from '@/assets/posts/top-p.svg';
 
 export default function PostFeedItem({ feed, onClick, onHover, headerOpts }: {
   feed: PostFeedItemType;
   onClick?: () => void
   onHover?: () => void;
-  headerOpts?: (post: PostFeedItemType) => React.ReactNode;
+  headerOpts?: (post: PostFeedItemType, itemHover: boolean) => React.ReactNode;
 }) {
   const { author } = feed;
 
@@ -43,9 +44,12 @@ export default function PostFeedItem({ feed, onClick, onHover, headerOpts }: {
     onMouseLeave={() => setIsHover(false)}
   >
     <div className={S.header}>
-      <p className={S.title}>{title}</p>
+      {feed.is_top && <TopPIcon className={S.top} />}
+      <p className={S.title}>
+        {title}
+      </p>
       <div onClick={e => e.stopPropagation()} className={S.opts}>
-        {isHover && headerOpts?.(feed)}
+        {headerOpts?.(feed, isHover)}
       </div>
     </div>
 
