@@ -18,7 +18,8 @@ import { useEffect, useRef, useState } from "react";
   return  <ConfirmModal
     lockScroll={false}
     visible={visible}
-    message={'确定隐藏帖子？请输入隐藏理由'}
+    message={'确定隐藏？请输入隐藏理由'}
+    modalClassName={S.wrap}
     footer={{
       confirm: {
         text: '确定',

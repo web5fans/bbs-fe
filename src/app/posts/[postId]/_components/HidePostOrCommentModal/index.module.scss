@@ -1,5 +1,9 @@
 @use "@/styles/rem";
 
+.wrap {
+  width: rem.px2flexible(300);
+}
+
 .textAreaWrap {
   margin: rem.px2flexible(23) 0;
 }

@@ -36,13 +36,15 @@ export default function TabWrap(props: {
 
   }, []);
 
-  return <div ref={wrapRef} className={'relative'}>
+  return <div className={S.wrap}>
     <div
       ref={arrowRef}
       className={S.tabArrow}
       style={{ display: 'none' }}
-    ><TabArrowDown className={S.arrow} style={props.arrowColor ? { color: props.arrowColor } : {}} /></div>
-    <div className={S.content}>
+    >
+      <TabArrowDown className={S.arrow} style={props.arrowColor ? { color: props.arrowColor } : {}} />
+    </div>
+    <div ref={wrapRef}>
       {props.children}
     </div>
   </div>

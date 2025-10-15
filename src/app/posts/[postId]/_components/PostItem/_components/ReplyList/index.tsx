@@ -4,7 +4,7 @@ import server from "@/server";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
-import { Ref, useImperativeHandle } from "react";
+import { Ref, useEffect, useImperativeHandle, useState } from "react";
 import ArrowIcon from '@/assets/arrow-s.svg';
 import ShowCreateTime from "./ShowCreateTime";
 import HtmlContent from "./HTMLContent";
@@ -27,7 +27,7 @@ const ReplyList = (props: {
 
   const { openModal } = usePostCommentReply()
 
-  const { data: replyListInfo, loading, loadingMore, loadMore, noMore, reload } = useInfiniteScroll(async (prevData) => {
+  const { data: replyListInfo, loading, loadingMore, loadMore, noMore, reload, mutate } = useInfiniteScroll(async (prevData) => {
 
     const { nextCursor } = prevData || {};
 
@@ -98,9 +98,18 @@ function ReplyItem(props: {
   toReply: () => void
 }) {
   const { replyItem, sectionId } = props;
+  const [disabled, setDisabled] = useState(false)
+
+  useEffect(() => {
+    setDisabled(replyItem.is_disabled)
+  }, [replyItem]);
+
+  const changeReplyVisible = () => {
+    setDisabled(!disabled)
+  }
 
   return <div className={S.replyItem}>
-    <div className={S.mask} />
+    {disabled && <div className={S.mask} />}
     <div className={S.title}>
       <div className={S.left}>
         <div className={S.avatarWrap}>
@@ -117,9 +126,16 @@ function ReplyItem(props: {
         <ShowCreateTime created={replyItem.created} />
       </div>
 
+      {/* 窗口小于1024px时，布局变化 */}
       <div className={S.right}>
-        {/*<SwitchPostHideOrOpen status={'open'} className={S.hideComment} />*/}
-        <span>打赏</span>
+        <SwitchPostHideOrOpen
+          status={disabled ? 'open' : 'hide'}
+          uri={replyItem.uri}
+          onConfirm={changeReplyVisible}
+          className={S.hideReply}
+          nsid={'reply'}
+        />
+        {/*<span>打赏</span>*/}
       </div>
     </div>
     <HtmlContent html={replyItem.text} />
@@ -130,7 +146,13 @@ function ReplyItem(props: {
         uri={replyItem.uri}
         sectionId={sectionId}
       />
-      <SwitchPostHideOrOpen status={'hide'} />
+      <SwitchPostHideOrOpen
+        status={disabled ? 'open' : 'hide'}
+        uri={replyItem.uri}
+        onConfirm={changeReplyVisible}
+        className={S.hideReply}
+        nsid={'reply'}
+      />
       <span className={S.reply} onClick={props.toReply}>回复</span>
     </div>
   </div>

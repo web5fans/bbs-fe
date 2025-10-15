@@ -8,7 +8,8 @@ import ReplyList, { ReplyListRefProps } from "../ReplyList";
 import utcToLocal from "@/lib/utcToLocal";
 import Donate from "../Donate";
 import { PostItemType } from "@/app/posts/[postId]/_components/PostItem/index";
-import DonateDetailList from "@/app/posts/[postId]/_components/PostItem/_components/DonateDetailList";
+import DonateDetailList from "../DonateDetailList";
+import SwitchPostHideOrOpen from "../SwitchPostHideOrOpen";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
@@ -21,6 +22,7 @@ const PostItemFooter = (props: {
   floor: number
   rootUri: string
   refresh?: () => void
+  switchPostVisibility: () => void
 }) => {
   const { postInfo, floor, rootUri } = props
   const sectionId = postInfo.section_id
@@ -93,7 +95,7 @@ const PostItemFooter = (props: {
     setReplyTotal(postInfo.reply_count || '0')
   }, [postInfo.reply_count]);
 
-  const noMainPost = rootUri !== postInfo.uri
+  const isNotMainPost = rootUri !== postInfo.uri
 
   return <>
     <div
@@ -109,13 +111,14 @@ const PostItemFooter = (props: {
     >
       {/*<Donate showList={() => changeShowType('donate')} />*/}
       <span></span>
-      {noMainPost ? <FooterOptions
+      {isNotMainPost ? <FooterOptions
         postInfo={postInfo}
         floor={floor}
         showLikeList={showLikeList}
         reloadLikeList={reloadLikeList}
         reply={reply}
         replyTotal={replyTotal}
+        switchPostVisibility={props.switchPostVisibility}
       /> :  <MainPostFooterOpts
         postInfo={postInfo}
         floor={floor}
@@ -173,10 +176,11 @@ function FooterOptions(props: {
   floor: number
   showLikeList: () => void
   reloadLikeList: () => void
+  switchPostVisibility: () => void
   reply: () => void
   replyTotal: string
 }) {
-  const { postInfo, floor, reply, replyTotal } = props;
+  const { postInfo, floor, reply, replyTotal, switchPostVisibility } = props;
 
   return <div className={`${S.rightPart} ${S.otherPost}`}>
     <div className={S.item}>
@@ -187,6 +191,12 @@ function FooterOptions(props: {
         sectionId={postInfo.section_id}
         showLikeList={props.showLikeList}
         reloadLikeList={props.reloadLikeList}
+      />
+      <SwitchPostHideOrOpen
+        status={postInfo.is_disabled ? 'open' : 'hide'}
+        uri={postInfo.uri}
+        onConfirm={switchPostVisibility}
+        nsid={'comment'}
       />
       <span
         className={S.reply}

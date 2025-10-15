@@ -5,7 +5,7 @@ import Avatar from "@/components/Avatar";
 import cx from "classnames";
 import { useRouter } from "next/navigation";
 import PostItemContent from "./PostItemContent";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import remResponsive from "@/lib/rem-responsive";
 import PostItemFooter from "./_components/PostItemFooter";
 
@@ -29,6 +29,8 @@ export type PostItemType = {
     [key: string]: any
   }
   [key: string]: any
+  is_disabled: boolean
+  reasons_for_disabled: string | null
 }
 
 type PostItemProps = {
@@ -41,7 +43,7 @@ type PostItemProps = {
 }
 
 const PostItem = (props: PostItemProps) => {
-  const { postInfo = {} as PostItemType, floor, isOriginPoster, isAuthor } = props;
+  const { postInfo = {} as PostItemType, floor, isOriginPoster, isAuthor, rootUri } = props;
 
   const router = useRouter()
 
@@ -51,6 +53,16 @@ const PostItem = (props: PostItemProps) => {
 
   const ref = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+
+  const [postDisabled, setPostDisabled] = useState(false)
+
+  useEffect(() => {
+    setPostDisabled(postInfo.is_disabled)
+  }, [postInfo]);
+
+  const switchPostVisibility = () => {
+    setPostDisabled(!postDisabled)
+  }
 
   // useEffect(() => {
   //   const observer = new ResizeObserver(() => {
@@ -90,19 +102,21 @@ const PostItem = (props: PostItemProps) => {
     </div>
 
     <div className={S.content} ref={contentRef}>
+      {rootUri !== postInfo.uri && postDisabled && <div className={S.mask} />}
       <div className={S.contentInner}>
         <PostItemContent
           postInfo={postInfo}
           isAuthor={isAuthor}
-          rootUri={props.rootUri}
+          rootUri={rootUri}
           refresh={props.refresh}
         />
       </div>
       <PostItemFooter
-        postInfo={postInfo}
+        postInfo={{...postInfo, is_disabled: postDisabled}}
         floor={floor}
-        rootUri={props.rootUri}
+        rootUri={rootUri}
         refresh={props.refresh}
+        switchPostVisibility={switchPostVisibility}
       />
     </div>
   </div>

@@ -12,6 +12,7 @@
   }
 }
 
-.content {
-  margin-top: rem.px2flexible(10);
+.wrap {
+  padding-top: rem.px2flexible(10);
+  position: relative;
 }

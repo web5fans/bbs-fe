@@ -224,8 +224,8 @@ export async function updatePostByAdmin(params: PostOptParamsType): Promise<void
     is_top: null,
     is_announcement: null,
     is_disabled: null,
-    reasons_for_disabled: null,
     ...params,
+    reasons_for_disabled: params.reasons_for_disabled || null,
   })
   const sig = await keyPair.sign(encoded)
 

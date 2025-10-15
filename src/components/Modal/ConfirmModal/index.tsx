@@ -2,6 +2,7 @@ import S from "./index.module.scss";
 import WarningIcon from "@/assets/posts/warning.svg";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
+import cx from "classnames";
 
 type ConfirmModalProps = {
   visible: boolean;
@@ -21,6 +22,7 @@ type ConfirmModalProps = {
     }
   }
   children?: React.ReactNode;
+  modalClassName?: string;
 }
 
 const ConfirmModal = (props: ConfirmModalProps) => {
@@ -28,7 +30,7 @@ const ConfirmModal = (props: ConfirmModalProps) => {
   const { confirm, cancel } = footer || {};
 
   return <Modal visible={visible} onVisibleChange={onVisibleChange} lockScroll={props.lockScroll}>
-    <div className={S.modal}>
+    <div className={cx(S.modal, props.modalClassName)}>
       <div className={S.info}>
         <WarningIcon className={S.warningIcon} />
         {message}

@@ -91,6 +91,18 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
+
+  .mask {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0.75;
+    background: #F3F3F3;
+    z-index: 1;
+  }
 
   .contentInner {
     flex: 1;
