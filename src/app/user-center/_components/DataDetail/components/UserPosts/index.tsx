@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { postUriToHref } from "@/lib/postUriHref";
 import S from './index.module.scss'
+import MouseToolTip from "@/components/MouseToolTip";
 
 type UserPostsPropsType = {
   did: string
@@ -38,7 +39,8 @@ const UserPosts = (props: UserPostsPropsType) => {
     const pagedData = await server<PostFeedType>('/post/list', 'POST', {
       limit: 20,
       cursor: nextCursor,
-      repo: did
+      repo: did,
+      viewer: userProfile?.did
     })
 
     const { posts, cursor } = pagedData || {};
@@ -48,7 +50,7 @@ const UserPosts = (props: UserPostsPropsType) => {
       nextCursor: cursor
     };
   }, {
-    reloadDeps: [did],
+    reloadDeps: [did, userProfile?.did],
     isNoMore: d => !d?.nextCursor,
   });
 
@@ -73,12 +75,18 @@ const UserPosts = (props: UserPostsPropsType) => {
     {dataSource?.list.map((item, index) => {
       const uri = postUriToHref(item.uri)
       const href = `/posts/${uri}`
-      return <PostFeedItem
-        feed={item}
-        key={item.uri}
-        onClick={() => router.push(href)}
-        onHover={() => router.prefetch(href)}
-      />
+      return <MouseToolTip
+        open={!!item.is_disabled}
+        message={'该帖子已被管理员或版主取消公开，原因：'+item.reasons_for_disabled}
+        className={S.feedItem}>
+        <PostFeedItem
+          disabled={item.is_disabled}
+          feed={item}
+          key={item.uri}
+          onClick={() => router.push(href)}
+          onHover={() => router.prefetch(href)}
+        />
+      </MouseToolTip>
     })}
     {!loading && !noMore && <LoadMoreView onLoadMore={loadMore} />}
   </div>

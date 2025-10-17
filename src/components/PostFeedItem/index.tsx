@@ -8,12 +8,14 @@ import Avatar from "@/components/Avatar";
 import FeedStatistic, { FeedLikes } from "@/components/FeedStatistic";
 import utcToLocal from "@/lib/utcToLocal";
 import TopPIcon from '@/assets/posts/top-p.svg';
+import cx from "classnames";
 
-export default function PostFeedItem({ feed, onClick, onHover, headerOpts }: {
+export default function PostFeedItem({ feed, onClick, onHover, headerOpts, disabled }: {
   feed: PostFeedItemType;
   onClick?: () => void
   onHover?: () => void;
   headerOpts?: (post: PostFeedItemType, itemHover: boolean) => React.ReactNode;
+  disabled?: boolean
 }) {
   const { author } = feed;
 
@@ -35,9 +37,13 @@ export default function PostFeedItem({ feed, onClick, onHover, headerOpts }: {
   }, [html]);
 
   return <div
-    className={S.feed}
-    onClick={onClick}
+    className={cx(S.feed, disabled && S.disabled)}
+    onClick={() => {
+      if (disabled) return
+      onClick?.()
+    }}
     onMouseEnter={() => {
+      if (disabled) return
       onHover?.()
       setIsHover(true)
     }}

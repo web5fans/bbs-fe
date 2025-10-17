@@ -6,12 +6,14 @@ import S from "./index.module.scss";
 import Avatar from "@/components/Avatar";
 import FeedStatistic, { FeedLikes } from "@/components/FeedStatistic";
 import utcToLocal from "@/lib/utcToLocal";
+import cx from "classnames";
 
-export default function CommentPostItem({ feed, onClick, onHover, nickname }: {
+export default function CommentPostItem({ feed, onClick, onHover, nickname, disabled }: {
   feed: PostFeedItemType;
   onClick?: () => void
   onHover?: () => void
   nickname: string
+  disabled?: boolean
 }) {
   const [innerRichText, setInnerRichText] = useState('')
 
@@ -27,8 +29,11 @@ export default function CommentPostItem({ feed, onClick, onHover, nickname }: {
   }, [html]);
 
   return <div
-    className={S.feed}
-    onClick={onClick}
+    className={cx(S.feed, disabled && S.disabled)}
+    onClick={() => {
+      if (disabled) return
+      onClick?.()
+    }}
     onMouseEnter={onHover}
   >
     <div className={S.nickname}>

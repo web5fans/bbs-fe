@@ -36,7 +36,6 @@ const MouseToolTip = (props: {
 
   return <div
     {...rest}
-    className={S.wrap}
     onMouseEnter={mouseEnter}
     onMouseLeave={mouseLeave}
     onMouseMove={handleMouseMove}

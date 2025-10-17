@@ -3,3 +3,19 @@
 .empty {
   height: rem.px2flexible(220) !important;
 }
+
+.feedItem {
+  position: relative;
+  & + .feedItem {
+    &::before {
+      content: '';
+      display: block;
+      height: 1px;
+      border-bottom: 1px dashed #F3F3F3;
+      position: absolute;
+      left: rem.px2flexible(10);
+      right: rem.px2flexible(10);
+      top: 0;
+    }
+  }
+}
