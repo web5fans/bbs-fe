@@ -3,7 +3,7 @@
 import S from "./index.module.scss";
 import { useRequest } from "ahooks";
 import server from "@/server";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
 import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark";
@@ -12,7 +12,7 @@ import cx from "classnames";
 import Permission from "@/app/posts/[postId]/_components/Permission";
 import PostsContent from "@/app/posts/[postId]/_components/PostsContent";
 import { SectionItem } from "@/app/posts/utils";
-import Post404 from "@/app/posts/[postId]/_components/Post404";
+import Post404Auth from "./_components/Post404Auth";
 
 type PostDetailProps = {
   breadCrumb?: React.ReactNode;
@@ -61,7 +61,7 @@ const PostDetail = (props: PostDetailProps) => {
 
   const sectionDetail = props.sectionInfo || sectionInfo
 
-  return <Post404
+  return <Post404Auth
     originPost={originPosterInfo}
     sectionInfo={sectionDetail}
   >
@@ -88,7 +88,7 @@ const PostDetail = (props: PostDetailProps) => {
         isWhiteUser={isWhiteUser}
       />
     </div>
-  </Post404>
+  </Post404Auth>
 }
 
 export default PostDetail;

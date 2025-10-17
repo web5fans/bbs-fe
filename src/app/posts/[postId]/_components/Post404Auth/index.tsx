@@ -4,8 +4,12 @@ import S from './index.module.scss'
 import FaceIcon from '@/assets/login/multiDid/face.svg'
 import { useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { useMemo } from "react";
+import React, { createContext, useMemo } from "react";
 import { SectionItem } from "@/app/posts/utils";
+
+const SectionAdminContext = createContext({
+  isSectionAdmin: false
+})
 
 const Post404 = ({ originPost, sectionInfo, children }: {
   originPost: { reasons_for_disabled?: string; [key: string]: any }
@@ -15,7 +19,7 @@ const Post404 = ({ originPost, sectionInfo, children }: {
   const router = useRouter();
   const { userProfile } = useCurrentUser()
 
-  const isAdmin = useMemo(() => {
+  const isSectionAdmin = useMemo(() => {
     if (!sectionInfo || !userProfile) return false;
     const admins = sectionInfo.administrators.map(i => i.did)
     return admins?.includes(userProfile.did)
@@ -23,7 +27,7 @@ const Post404 = ({ originPost, sectionInfo, children }: {
 
   if (!originPost || !sectionInfo) return null;
 
-  if (originPost.reasons_for_disabled && !isAdmin) {
+  if (originPost.is_disabled && !isSectionAdmin) {
     return <CardWindow wrapClassName={S.wrap}>
       <div className={S.content}>
         <FaceIcon className={S.faceIcon} />
@@ -33,7 +37,15 @@ const Post404 = ({ originPost, sectionInfo, children }: {
     </CardWindow>
   }
 
-  return children
+  return <SectionAdminContext.Provider value={{ isSectionAdmin }}>
+    {children}
+  </SectionAdminContext.Provider>
 }
 
 export default Post404;
+
+export function useSectionAdmin() {
+  const context = React.useContext(SectionAdminContext);
+
+  return context;
+}
