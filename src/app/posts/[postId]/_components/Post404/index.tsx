@@ -21,6 +21,8 @@ const Post404 = ({ originPost, sectionInfo, children }: {
     return admins?.includes(userProfile.did)
   }, [sectionInfo, userProfile])
 
+  if (!originPost.uri) return null;
+
   if (originPost.reasons_for_disabled && !isAdmin) {
     return <CardWindow wrapClassName={S.wrap}>
       <div className={S.content}>

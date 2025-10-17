@@ -63,12 +63,12 @@ const UserComments = (props: UserCommentsPropsType) => {
       const uri = postUriToHref(item.uri)
       const href = `/posts/${uri}`
       return <MouseToolTip
-        open={!!item.is_disabled}
-        message={'该帖子已被管理员或版主取消公开，原因：'+item.reasons_for_disabled}
+        open={!!item.comment_disabled}
+        message={'该帖子已被管理员或版主取消公开，原因：'+item.comment_reasons_for_disabled}
         className={S.commentItem}
       >
         <CommentPostItem
-          disabled={item.is_disabled}
+          disabled={item.comment_disabled}
           feed={item}
           key={item.uri}
           onClick={() => router.push(href)}

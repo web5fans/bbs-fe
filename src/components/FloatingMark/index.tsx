@@ -49,11 +49,9 @@ export function useFloatingMarkDistance() {
   const stickyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const instance = rootRef.current;
-    if (!instance || !stickyRef.current) return
-
     const f = () => {
-      if (!stickyRef.current) return
+      const instance = rootRef.current;
+      if (!instance || !stickyRef.current) return
 
       calculateFixedDis(instance, stickyRef.current)
     }

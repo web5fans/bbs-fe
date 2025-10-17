@@ -87,6 +87,7 @@ const PostsContent = (props: PostContentProps) => {
           floor={floor}
           isOriginPoster={p.author.did === originPost?.author?.did}
           rootUri={originPost?.uri}
+          rootDisabled={originPost.is_disabled}
           refresh={reloadList}
         />
       })}

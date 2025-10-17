@@ -18,7 +18,7 @@ function formatDate(date: string) {
 type ShowTypeType = 'like' | 'reply' | 'donate' | undefined
 
 const PostItemFooter = (props: {
-  postInfo: PostItemType
+  postInfo: PostItemType & { root_disabled?: boolean }
   floor: number
   rootUri: string
   refresh?: () => void

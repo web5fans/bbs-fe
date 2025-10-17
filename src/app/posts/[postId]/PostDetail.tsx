@@ -26,11 +26,22 @@ const PostDetail = (props: PostDetailProps) => {
   const { userProfile, isWhiteUser } = useCurrentUser()
 
   const { data: originPosterInfo = {} as any, refresh: refreshOrigin } = useRequest(async () => {
-    const result = await server('/post/detail', 'GET', {
-      uri: postId,
-      viewer: userProfile?.did
-    })
-    return result
+    try {
+      const result = await server('/post/detail', 'GET', {
+        uri: postId,
+        viewer: userProfile?.did
+      })
+      return result
+    } catch (err) {
+      const { error: errInfo, message } = err.response.data
+      if (errInfo === "IsDisabled") {
+        return {
+          uri: postId,
+          is_disabled: true,
+          reasons_for_disabled: message
+        }
+      }
+    }
   }, {
     refreshDeps: [postId, userProfile?.did]
   })

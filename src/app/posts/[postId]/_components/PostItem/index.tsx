@@ -40,10 +40,11 @@ type PostItemProps = {
   isAuthor?: boolean
   rootUri: string
   refresh?: () => void
+  rootDisabled?: boolean
 }
 
 const PostItem = (props: PostItemProps) => {
-  const { postInfo = {} as PostItemType, floor, isOriginPoster, isAuthor, rootUri } = props;
+  const { postInfo = {} as PostItemType, floor, isOriginPoster, isAuthor, rootUri, rootDisabled } = props;
 
   const router = useRouter()
 
@@ -86,6 +87,8 @@ const PostItem = (props: PostItemProps) => {
     router.push(href)
   }
 
+  const disabled = rootDisabled || postDisabled
+
   return <div className={S.wrap}>
     <div
       ref={ref}
@@ -102,7 +105,7 @@ const PostItem = (props: PostItemProps) => {
     </div>
 
     <div className={S.content} ref={contentRef}>
-      {rootUri !== postInfo.uri && postDisabled && <div className={S.mask} />}
+      {disabled && <div className={cx(S.mask, rootDisabled && '!z-5')} />}
       <div className={S.contentInner}>
         <PostItemContent
           postInfo={postInfo}
