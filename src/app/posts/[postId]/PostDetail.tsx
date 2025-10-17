@@ -25,7 +25,7 @@ const PostDetail = (props: PostDetailProps) => {
 
   const { userProfile, isWhiteUser } = useCurrentUser()
 
-  const { data: originPosterInfo = {} as any, refresh: refreshOrigin } = useRequest(async () => {
+  const { data: originPosterInfo, refresh: refreshOrigin } = useRequest(async () => {
     try {
       const result = await server('/post/detail', 'GET', {
         uri: postId,
@@ -48,11 +48,11 @@ const PostDetail = (props: PostDetailProps) => {
 
   const { data: sectionInfo } = useRequest(async () => {
     const result = await server<SectionItem>('/section/detail', 'GET', {
-      id: originPosterInfo.section_id
+      id: originPosterInfo?.section_id
     })
     return result
   }, {
-    ready: !props.sectionInfo && !!originPosterInfo.section_id
+    ready: !props.sectionInfo && !!originPosterInfo?.section_id
   })
 
   const { rootRef, stickyRef } = useFloatingMarkDistance()
