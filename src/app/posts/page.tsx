@@ -11,7 +11,6 @@ import { LayoutCenter } from "@/components/Layout";
 import SectionAreaMobile from "@/app/posts/_components/SectionArea/mobile";
 import useDeviceFlex from "@/hooks/useDeviceFlex";
 import PublishPostMobile from "./_components/PublishPost/mobile";
-import KeyQRCodeModal from "@/app/user-center/_components/KeyQRCodeModal";
 
 const BREAKPOINT_WIDTH = 1024;
 
