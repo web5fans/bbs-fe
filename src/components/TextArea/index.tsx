@@ -17,7 +17,7 @@ type Props = Omit<JSX.IntrinsicElements['input'], 'onChange'> & {
 
 const TEM_SPAN_ID = 'textarea_mirror'
 
-const Input = (props: Props) => {
+const TextArea = (props: Props) => {
   const {
     checkedPass,
     error,
@@ -152,4 +152,4 @@ const Input = (props: Props) => {
   </div>
 }
 
-export default Input;
+export default TextArea;
