@@ -86,7 +86,7 @@ const PublishPostPage = () => {
       const encodeUri = postUriToHref(uri)
       let href = '/posts/'+ encodeUri
       if (defaultSection) {
-        href = `/section/${defaultSection}` + encodeUri
+        href = `/section/${sectionId}/` + encodeUri
       }
 
       router.replace(href)
