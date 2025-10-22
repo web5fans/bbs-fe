@@ -2,16 +2,13 @@
 
 import S from './index.module.scss'
 import { JSX, useEffect, useRef, useState } from "react";
-import SuccessIcon from '@/assets/login/success.svg';
 import cx from "classnames";
 
-type Props = Omit<JSX.IntrinsicElements['input'], 'onChange'> & {
-  checkedPass?: boolean
+type Props = Omit<JSX.IntrinsicElements['input'], 'onChange' | 'value'> & {
   error?: boolean
   children?: React.ReactNode
   wrapClassName?: string
   onChange?: (value: string) => void;
-  initialValue?: string
   inputValue?: string
 }
 
@@ -19,23 +16,15 @@ const TEM_SPAN_ID = 'textarea_mirror'
 
 const TextArea = (props: Props) => {
   const {
-    checkedPass,
     error,
     children,
     wrapClassName,
-    initialValue,
     inputValue,
     ...rest
   } = props;
   const [value, setValue] = useState<string | undefined>();
-  const [passValidate, setPassValidate] = useState<boolean | undefined>(undefined);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const caretRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (!initialValue) return
-    setValue(initialValue)
-  }, [initialValue]);
 
   useEffect(() => {
     setValue(inputValue)

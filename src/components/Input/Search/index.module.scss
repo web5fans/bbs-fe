@@ -1,0 +1,66 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid #B7B7B7;
+  box-shadow: 1px 1px 0 0 var(--input-default-shadow-color, #B7B7B7) inset;
+  padding: rem.px2flexible(5);
+  gap: rem.px2flexible(4);
+  position: relative;
+  overflow: hidden;
+
+  &:focus-within {
+    border: 1px solid var(--primary-color);
+    box-shadow: 1px 1px 0 0 var(--primary-color) inset;
+
+    .icon {
+      color: var(--primary-color);
+    }
+  }
+
+
+
+  .icon {
+    width: rem.px2flexible(8);
+    height: rem.px2flexible(8);
+    color: #B7B7B7;
+  }
+
+  .input {
+    flex: 1;
+    min-width: 0; // 修复safari flex:1不生效
+    font-family: var(--font-CLFN);
+    outline: none;
+    font-size: min(14px, #{rem.px2flexible(9)});
+    caret-color: transparent;
+
+    &:focus-visible {
+      &::placeholder {
+        opacity: 0;
+      }
+    }
+
+    &::placeholder {
+      color: #CFCFCF;
+    }
+  }
+
+  .caret {
+    display: none;
+    position: absolute;
+    bottom: var(--caret-bottom, #{rem.px2flexible(5)});
+    transform: translateY(rem.px2flexible(1));
+    left: rem.px2flexible(17);
+    height: rem.px2flexible(1);
+    width: rem.px2flexible(6);
+    background-color: var(--primary-color);
+    will-change: left;
+    animation: blink 1s infinite;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

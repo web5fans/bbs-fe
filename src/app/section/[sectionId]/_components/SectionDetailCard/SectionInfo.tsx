@@ -1,12 +1,12 @@
-import S from './index.module.scss'
+import S from './sectionInfo.module.scss'
 import FeedStatistic from "@/components/FeedStatistic";
 import type { SectionItem } from "@/app/posts/utils";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import ExpandIcon from '@/assets/arrow.svg'
 
 export default function SectionInfo(props: {
   sectionInfo?: SectionItem
-  children?: React.ReactNode
 }){
   const { sectionInfo } = props;
   const imageRef = useRef<HTMLDivElement>(null)
@@ -37,9 +37,9 @@ export default function SectionInfo(props: {
   }, []);
 
   return <>
-    <div className={S.inner}>
+    <div className={S.wrap}>
       <div className={S.sectionImage} ref={imageRef} />
-      <div className={S.innerContent} ref={contentRef}>
+      <div className={S.content} ref={contentRef}>
         <p className={S.title}>{sectionInfo?.name}</p>
         <div className={S.statis}>
           {sectionInfo?.owner?.displayName && <p>
@@ -50,9 +50,53 @@ export default function SectionInfo(props: {
             visitedCount={sectionInfo?.visited_count}
           />
         </div>
-        {!isMobile && props.children}
+        {!isMobile && <DesInfo description={sectionInfo?.description} />}
       </div>
     </div>
-    {isMobile && props.children}
+    {isMobile && <DesInfo description={sectionInfo?.description} />}
   </>
 };
+
+const SPLIT_NUMBER = 145
+
+function DesInfo({ description = '' }: { description?: string }) {
+  const [expand, setExpand] = useState(false)
+
+  const infoRef = useRef<HTMLDivElement>(null);
+
+  const needSplit = (description?.length || 0) > SPLIT_NUMBER
+
+  const renderInfo = () => {
+    if (!needSplit) return description
+
+    if (expand) {
+      return <>
+        {description}
+        <p
+          className={S.packUp}
+          onClick={() => setExpand(false)}
+        >
+          收起<ExpandIcon className={S.icon} />
+        </p>
+      </>
+    }
+
+    const showDes = (description || '').slice(0, SPLIT_NUMBER)
+    return <>
+      {showDes}...
+      <p
+        className={S.expand}
+        onClick={() => setExpand(true)}
+      >
+        展开<ExpandIcon className={S.icon} />
+      </p>
+    </>
+  }
+
+  return <div
+    className={S.des}
+    ref={infoRef}
+  >
+    {renderInfo()}
+  </div>
+}

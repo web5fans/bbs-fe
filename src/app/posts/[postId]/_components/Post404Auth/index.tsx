@@ -1,11 +1,8 @@
-import CardWindow from "@/components/CardWindow";
-import Button from "@/components/Button";
-import S from './index.module.scss'
-import FaceIcon from '@/assets/login/multiDid/face.svg'
 import { useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import React, { createContext, useMemo } from "react";
 import { SectionItem } from "@/app/posts/utils";
+import PageNoAuth from "@/components/PageNoAuth";
 
 const SectionAdminContext = createContext({
   isSectionAdmin: false
@@ -21,20 +18,19 @@ const Post404 = ({ originPost, sectionInfo, children }: {
 
   const isSectionAdmin = useMemo(() => {
     if (!sectionInfo || !userProfile) return false;
-    const admins = sectionInfo.administrators.map(i => i.did)
-    return admins?.includes(userProfile.did)
+    return sectionInfo.owner?.did === userProfile.did
   }, [sectionInfo, userProfile])
 
   if (!originPost || !sectionInfo) return null;
 
   if (originPost.is_disabled && !isSectionAdmin) {
-    return <CardWindow wrapClassName={S.wrap}>
-      <div className={S.content}>
-        <FaceIcon className={S.faceIcon} />
-        <p className={S.tips}>Ops,该帖子已被管理员或版主取消公开，原因：{originPost.reasons_for_disabled}</p>
-        <Button type={'primary'} className={S.button} onClick={() => router.replace('/posts')}>进主站看看</Button>
-      </div>
-    </CardWindow>
+    return <PageNoAuth
+      title={`Ops,该帖子已被管理员或版主取消公开，原因：${originPost.reasons_for_disabled}`}
+      buttonProps={{
+        text: '进主站看看',
+        onClick: () => router.replace('/posts')
+      }}
+    />
   }
 
   return <SectionAdminContext.Provider value={{ isSectionAdmin }}>

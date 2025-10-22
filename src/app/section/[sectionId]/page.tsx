@@ -17,12 +17,16 @@ import { useRequest } from "ahooks";
 import server from "@/server";
 import { SectionItem } from "@/app/posts/utils";
 import SettingIcon from "@/assets/posts/setting.svg";
+import GoPublishPost from "@/app/section/[sectionId]/_components/GoPublishPost";
+import useDeviceFlex from "@/hooks/useDeviceFlex";
+import GoPublishPostMobile from "@/app/section/[sectionId]/_components/GoPublishPost/mobile";
 
+const BREAKPOINT_WIDTH = 1024;
 
 const SectionDetailPage = () => {
   const { sectionId } = useParams<{ sectionId: string }>()
 
-  const { hasLoggedIn, isWhiteUser } = useCurrentUser()
+  const { isWhiteUser } = useCurrentUser()
 
   const router = useRouter()
 
@@ -57,22 +61,29 @@ const SectionDetailPage = () => {
     />
   }, [sectionInfo])
 
+  const { clientWidth } = useDeviceFlex()
+
+  const isUnderBreakPoint = clientWidth < BREAKPOINT_WIDTH
+
   return <LayoutCenter>
       <div
         className={S.container}
         ref={rootRef}
       >
-        <SectionDetailCard
-          goToPublish={goToPublish}
-          sectionInfo={sectionInfo}
-        />
+        <div className={S.left}>
+          <SectionDetailCard sectionInfo={sectionInfo} />
 
-        <Recommend sectionId={sectionId} ref={recommendRef} />
-        <PostsList
-          sectionId={sectionId}
-          listEmptyRender={<EmptyPostsList goPublish={goToPublish} />}
-          feedItemHeaderOpts={feedItemHeaderOpts}
-        />
+          <Recommend sectionId={sectionId} ref={recommendRef} />
+          <PostsList
+            headerExtra={isUnderBreakPoint && <GoPublishPostMobile goPublish={goToPublish} />}
+            sectionId={sectionId}
+            listEmptyRender={<EmptyPostsList goPublish={goToPublish} />}
+            feedItemHeaderOpts={feedItemHeaderOpts}
+          />
+        </div>
+        <div className={S.right}>
+          <GoPublishPost goPublish={goToPublish} />
+        </div>
       </div>
       <FloatingMark ref={stickyRef}>
         <Button

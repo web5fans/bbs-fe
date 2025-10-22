@@ -157,8 +157,7 @@ const PostPermission = (props: {
   const needShow = useMemo(() => {
     if (!props.sectionInfo || !userProfile) return false;
 
-    const admins = props.sectionInfo.administrators.map(i => i.did)
-    return admins.includes(userProfile.did)
+    return props.sectionInfo.owner?.did === userProfile.did
 
   }, [props.sectionInfo, userProfile])
 

@@ -102,7 +102,7 @@ const EditPost = () => {
     <div className={S.wrap}>
       <p className={S.title}>编辑帖子</p>
       <Input
-        initialValue={postInfo?.title}
+        inputValue={postInfo?.title}
         className={S.input}
         wrapClassName={S.inputWrap}
         placeholder={'一句话标题（不少于6个字）'}

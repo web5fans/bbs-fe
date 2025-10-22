@@ -1,0 +1,37 @@
+@use "@/styles/rem";
+
+.wrap {
+  max-width: 1100px;
+  width: var(--center-content-width);
+  border: rem.px2flexible(1) solid #000;
+  background: #EAEAEA;
+  box-shadow: rem.px2flexible(2) rem.px2flexible(2) 0 0 #000;
+  font-family: var(--font-CLFN);
+
+  .header {
+    font-size: rem.px2flexible(12);
+    font-weight: 500;
+    padding: rem.px2flexible(11) rem.px2flexible(19);
+    border-bottom: rem.px2flexible(1) solid #000;
+  }
+
+  .content {
+    padding-top: rem.px2flexible(10);
+    padding-inline: rem.px2flexible(19);
+    padding-bottom: rem.px2flexible(28);
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: rem.px2flexible(20);
+      margin-top: rem.px2flexible(20);
+
+      .button {
+        width: rem.px2flexible(80);
+        height: rem.px2flexible(25);
+        font-size: rem.px2flexible(9);
+      }
+    }
+  }
+}

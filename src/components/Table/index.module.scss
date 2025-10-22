@@ -1,0 +1,53 @@
+@use "@/styles/rem";
+
+.table {
+  width: 100%;
+  thead {
+    background: #F3F3F3;
+    tr th {
+      padding: rem.px2flexible(6) rem.px2flexible(10);
+      text-align: left;
+      font-size: rem.px2flexible(8);
+      font-weight: 500;
+      line-height: 1;
+    }
+  }
+
+  tbody {
+    tr {
+
+      & + tr {
+        td {
+          &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 1px;
+            border-top: 1px dashed #F3F3F3;
+          }
+
+          &:first-child::after {
+            left: rem.px2flexible(10);
+          }
+          &:last-child::after {
+            right: rem.px2flexible(10);
+          }
+        }
+      }
+
+      &:hover {
+        td {
+          background: #FAFAFA;
+          color: var(--primary-color);
+        }
+      }
+
+      td {
+        padding: rem.px2flexible(15) rem.px2flexible(10);
+        position: relative;
+      }
+    }
+  }
+}
