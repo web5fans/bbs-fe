@@ -42,6 +42,14 @@ $inputWidth: rem.px2flexible(247);
     cursor: not-allowed;
   }
 
+  &.formInput {
+    max-width: 100%;
+    height: rem.px2flexible(30);
+
+    --input-shadow-num: #{rem.px2flexible(1)};
+    --input-padding-left: #{rem.px2flexible(10)};
+  }
+
   &:focus-within,
   &.checkedPass {
     border: 1px solid var(--primary-color);

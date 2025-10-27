@@ -6,20 +6,11 @@
 
   .left {
     flex: 1;
-    margin-top: rem.px2flexible(5);
   }
 
   .right {
-
+    margin-top: rem.px2flexible(-5);
   }
-}
-
-.input {
-  max-width: 100% !important;
-  height: rem.px2flexible(30) !important;
-
-  --input-shadow-num: #{rem.px2flexible(1)};
-  --input-padding-left: #{rem.px2flexible(10)};
 }
 
 .desc {
@@ -27,20 +18,6 @@
 
   .textarea {
     height: rem.px2flexible(138) !important;
-  }
-}
-
-.formItem {
-  .label {
-    font-size: rem.px2flexible(10);
-    font-weight: 500;
-    line-height: 150%;
-    margin-bottom: rem.px2flexible(2.5);
-    margin-left: rem.px2flexible(1.5);
-  }
-
-  & + .formItem {
-    margin-top: rem.px2flexible(20);
   }
 }
 
@@ -101,23 +78,15 @@
   .container {
     flex-direction: column-reverse;
     gap: 0;
-
-    .left {
-      margin-top: 0;
-    }
   }
 
   .desc {
     margin-top: rem.px2flexible(10);
   }
 
-  .formItem {
-    .label {
-      margin-bottom: rem.px2flexible(10);
-    }
-    & + .formItem {
-      margin-top: rem.px2flexible(10);
-    }
+  .formItem, .desc {
+    --form-label-mb: #{rem.px2flexible(10)};
+    --bw-item-mt: #{rem.px2flexible(10)};
   }
 
   .uploadWrap {

@@ -11,10 +11,13 @@ type Props = Omit<JSX.IntrinsicElements['input'], 'onChange' | 'value'> & {
   error?: boolean
   children?: React.ReactNode
   wrapClassName?: string
-  showCount?: boolean
   onChange?: (value: string) => void;
   inputValue?: string
-}
+  type?: 'form'
+} & ({
+  showCount: true;
+  onCountCheck: (passed: boolean) => void
+} | { showCount: false | undefined; onCountCheck: undefined })
 
 const TEM_SPAN_ID = 'input_mirror'
 
@@ -26,6 +29,8 @@ const Input = (props: Props) => {
     wrapClassName,
     showCount,
     inputValue,
+    type,
+    onCountCheck,
     ...rest
   } = props;
   const [value, setValue] = useState<string | undefined>();
@@ -45,10 +50,7 @@ const Input = (props: Props) => {
       const showValue = newValue.trim()
       const pass = !(showValue.length < (rest.minLength || 0)) && !(showValue.length > (rest.maxLength || 0));
       setPassValidate(pass)
-      if (!pass) {
-        rest.onChange?.('')
-        return
-      }
+      onCountCheck?.(pass)
     }
     rest.onChange?.(e.target.value)
   }
@@ -59,8 +61,9 @@ const Input = (props: Props) => {
       props.error && S.err,
       props.checkedPass ? S.checkedPass : '',
       showCount && passValidate !== undefined && (passValidate ? S.lengthSuccess : S.err),
+      type === 'form' && S.formInput,
       wrapClassName,
-      props.disabled && S.disabled
+      props.disabled && S.disabled,
     )}
   >
     <input

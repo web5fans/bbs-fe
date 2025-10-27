@@ -47,3 +47,14 @@ const ManageModal = (props: {
 }
 
 export default ManageModal;
+
+export function FormItem(props: {
+  title: string
+  children: React.ReactNode
+  className?: string
+}) {
+  return <div className={`${S.formItem} ${props.className}`}>
+    <p className={S.label}>{props.title}</p>
+    {props.children}
+  </div>
+}

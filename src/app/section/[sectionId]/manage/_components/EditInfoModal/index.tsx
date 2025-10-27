@@ -1,4 +1,4 @@
-import ManageModal from "@/components/Modal/ManageModal";
+import ManageModal, { FormItem } from "@/components/Modal/ManageModal";
 import S from './index.module.scss'
 import Input from "@/components/Input";
 import UploadAvatar from "./UploadAvatar";
@@ -49,19 +49,19 @@ const EditInfoModal = (props: {
   >
     <div className={S.container}>
       <div className={S.left}>
-        <FormItem title={'版区名称'}>
+        <FormItem title={'版区名称'} className={S.formItem}>
           <Input
-            wrapClassName={S.input}
+            type={'form'}
             inputValue={secInfo.name}
             onChange={v => changeSecInfo({ name: v })}
           />
         </FormItem>
-        <FormItem title={'版主Web5 DID'}>
-          <Input wrapClassName={S.input} disabled inputValue={sectionInfo?.owner?.did} />
+        <FormItem title={'版主Web5 DID'} className={S.formItem}>
+          <Input type={'form'} disabled inputValue={sectionInfo?.owner?.did} />
         </FormItem>
       </div>
       <div className={S.right}>
-        <FormItem title={'版区头像'}>
+        <FormItem title={'版区头像'} className={S.formItem}>
           <UploadAvatar changeLogo={logo => setSecInfo({ logo })} />
         </FormItem>
       </div>
@@ -77,14 +77,3 @@ const EditInfoModal = (props: {
 }
 
 export default EditInfoModal;
-
-function FormItem(props: {
-  title: string
-  children: React.ReactNode
-  className?: string
-}) {
-  return <div className={`${S.formItem} ${props.className}`}>
-    <p className={S.label}>{props.title}</p>
-    {props.children}
-  </div>
-}

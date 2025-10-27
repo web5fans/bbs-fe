@@ -11,13 +11,14 @@
   .header {
     font-size: rem.px2flexible(12);
     font-weight: 500;
-    padding: rem.px2flexible(11) rem.px2flexible(19);
+    padding: rem.px2flexible(10) rem.px2flexible(18);
     border-bottom: rem.px2flexible(1) solid #000;
+    line-height: 1;
   }
 
   .content {
-    padding-top: rem.px2flexible(10);
-    padding-inline: rem.px2flexible(19);
+    padding-top: rem.px2flexible(15);
+    padding-inline: rem.px2flexible(18);
     padding-bottom: rem.px2flexible(28);
 
     .footer {
@@ -33,5 +34,19 @@
         font-size: rem.px2flexible(9);
       }
     }
+  }
+}
+
+.formItem {
+  .label {
+    font-size: rem.px2flexible(10);
+    font-weight: 500;
+    line-height: 150%;
+    margin-bottom: var(--form-label-mb, #{rem.px2flexible(2.5)});
+    margin-left: rem.px2flexible(1.5);
+  }
+
+  & + .formItem {
+    margin-top: var(--bw-item-mt, #{rem.px2flexible(20)});
   }
 }

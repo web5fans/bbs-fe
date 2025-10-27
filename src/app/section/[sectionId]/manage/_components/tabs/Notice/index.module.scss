@@ -18,4 +18,15 @@
   .search {
     width: rem.px2flexible(150);
   }
+
+  .options {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: rem.px2flexible(15);
+    > a {
+      text-decoration: underline;
+      font-size: rem.px2flexible(8);
+    }
+  }
 }
