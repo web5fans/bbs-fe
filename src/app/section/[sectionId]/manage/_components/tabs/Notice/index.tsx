@@ -4,10 +4,11 @@ import Button from "@/components/Button";
 import Table from "@/components/Table";
 import { useBoolean, usePagination } from "ahooks";
 import NoticeModal from "./NoticeModal";
+import UnShelfConfirm from "./UnShelfConfirm";
 
 const TabNotice = () => {
 
-  const [modalVis, setModalVis] = useBoolean(false)
+  const [noticeModalVis, setNoticeModal] = useBoolean(false)
 
   const columns = [{
     title: '公告内容',
@@ -24,7 +25,7 @@ const TabNotice = () => {
     render: () => {
       return <div className={S.options}>
         <a href="">编辑</a>
-        <a href="">下架</a>
+        <UnShelfConfirm />
       </div>
     }
   }]
@@ -32,7 +33,7 @@ const TabNotice = () => {
   return <div className={S.wrap}>
     <div className={S.header}>
       <Search className={S.search} />
-      <Button className={S.newNotice} onClick={() => setModalVis.setTrue()}>发布新公告</Button>
+      <Button className={S.newNotice} onClick={() => setNoticeModal.setTrue()}>发布新公告</Button>
     </div>
     <div>
       <Table
@@ -44,8 +45,8 @@ const TabNotice = () => {
     </div>
 
     <NoticeModal
-      visible={modalVis}
-      onClose={setModalVis.setFalse}
+      visible={noticeModalVis}
+      onClose={setNoticeModal.setFalse}
       refresh={() => {}}
     />
   </div>
