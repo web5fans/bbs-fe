@@ -66,7 +66,7 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
       const res = await getPDSClient().com.atproto.web5.preCreateAccount({
         handle: name + `.${USER_DOMAIN}`,
         signingKey,
-        did: 'did:plc:n5d3aggygtfxs56gbjkcajxw',
+        did: 'did:web5:n5d3aggygtfxs56gbjkcajxw',
       })
       setValidate((prev) => {
         if (!prev?.valid) return prev;
