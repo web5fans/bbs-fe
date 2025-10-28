@@ -32,14 +32,14 @@ const SectionDetailCard = (props: {
     <div className={S.innerWrap}>
       <SectionInfo sectionInfo={sectionInfo} />
 
-      <div className={S.buttonWrap}>
-        <Button
-          className={S.button}
-          onClick={() => router.push(location.pathname + '/manage')}
-        >
-          版区管理
-        </Button>
-      </div>
+      {/*<div className={S.buttonWrap}>*/}
+      {/*  <Button*/}
+      {/*    className={S.button}*/}
+      {/*    onClick={() => router.push(location.pathname + '/manage')}*/}
+      {/*  >*/}
+      {/*    版区管理*/}
+      {/*  </Button>*/}
+      {/*</div>*/}
     </div>
 
 
