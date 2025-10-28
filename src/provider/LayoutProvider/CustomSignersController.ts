@@ -1,5 +1,4 @@
 import { ccc } from "@ckb-ccc/connector-react"
-import logo from './SupeRISE-logo.png'
 import { CkbSigner } from '@superise/ckb'
 
 export class SuperiseSignersController extends ccc.SignersController {
@@ -7,7 +6,7 @@ export class SuperiseSignersController extends ccc.SignersController {
     const { appName, appIcon, client, preferredNetworks } = context;
     await this.addSigners(
       "SupeRISE Wallet",
-      logo,
+      '/superise/logo.png',
       [
         new CkbSigner(
           window.superise,
