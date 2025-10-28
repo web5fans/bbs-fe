@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["@superise/bridge-api-types"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "target": "ES2017",

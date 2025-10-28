@@ -17,6 +17,7 @@
     "@floating-ui/react": "^0.27.13",
     "@ipld/dag-cbor": "^9.2.4",
     "@scure/base": "^1.2.6",
+    "@superise/ckb": "^0.0.5",
     "@tiptap/extension-code-block-lowlight": "^2.25.0",
     "@tiptap/extension-highlight": "^2.25.0",
     "@tiptap/extension-image": "^2.25.0",
@@ -60,6 +61,7 @@
     "zustand": "^5.0.7"
   },
   "devDependencies": {
+    "@superise/bridge-api-types": "^0.0.4",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
