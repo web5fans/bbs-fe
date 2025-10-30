@@ -51,7 +51,7 @@ const EditInfoModal = (props: {
       <div className={S.left}>
         <FormItem title={'版区名称'} className={S.formItem}>
           <Input
-            type={'form'}
+            isFormChild
             inputValue={secInfo.name}
             onChange={v => changeSecInfo({ name: v })}
           />

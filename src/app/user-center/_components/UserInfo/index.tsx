@@ -1,11 +1,11 @@
 import S from './index.module.scss'
-import CopyText from "@/components/CopyText";
 import cx from "classnames";
 import Avatar from "@/components/Avatar";
 import { UserProfileType } from "@/store/userInfo";
 import utcToLocal from "@/lib/utcToLocal";
 import { useEffect, useRef } from "react";
 import FlatBottomedCard from "@/components/FlatBottomedCard";
+import Copy from "@/components/CopyText/Copy";
 
 const UserInfo = ({ userProfile, isMe, className }: {
   userProfile?: UserProfileType
@@ -101,7 +101,7 @@ function CardItem(props: {
         <p className={S.title}>{title}</p>
         <p className={S.content}>{content}</p>
       </div>
-      {showCopy && <CopyText
+      {showCopy && <Copy
         text={content}
         className={S.copy}
       />}

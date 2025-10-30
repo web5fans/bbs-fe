@@ -1,6 +1,7 @@
 import S from './index.module.scss'
 import cx from "classnames";
 import CloseIcon from '@/assets/window-close.svg'
+import BreadCrumbs, { BreadCrumbsItemType } from "@/components/BreadCrumbs";
 
 const CardWindow = (props: {
   children?: React.ReactNode;
@@ -11,6 +12,7 @@ const CardWindow = (props: {
   onClose?: () => void
   noInnerWrap?: boolean
   headerExtra?: React.ReactNode;
+  breadCrumbs?: BreadCrumbsItemType[]
 }) => {
   const { showCloseButton, headerClassName, noInnerWrap = false } = props;
 
@@ -35,6 +37,10 @@ const CardWindow = (props: {
         </div>}
 
         {props.headerExtra}
+        {props.breadCrumbs && <BreadCrumbs
+          className={S.breadCrumb}
+          breads={props.breadCrumbs}
+        />}
       </div>
 
     {noInnerWrap ? props.children :<div className={S.content}>

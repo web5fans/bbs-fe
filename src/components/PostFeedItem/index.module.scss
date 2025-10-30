@@ -114,3 +114,10 @@
     }
   }
 }
+
+/* 移动端禁用 hover 效果 */
+@media (hover: none) and (pointer: coarse) {
+  .feed:hover .opts {
+    display: none !important; /* 在移动端禁用 hover 显示 */
+  }
+}

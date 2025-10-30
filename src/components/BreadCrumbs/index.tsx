@@ -4,8 +4,10 @@ import S from "./index.module.scss";
 import cx from "classnames";
 import { useRouter } from "next/navigation";
 
+export type BreadCrumbsItemType = { title: string; route?: string, onClick?: () => void }
+
 type Props = {
-  breads: { title: string; route?: string, onClick?: () => void }[]
+  breads: BreadCrumbsItemType[]
   className?: string
 }
 

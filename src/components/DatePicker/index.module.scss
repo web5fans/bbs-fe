@@ -1,0 +1,37 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: inline-block;
+  position: relative;
+
+  &.disabled {
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background: #EAEAEA;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+}
+
+.date {
+  font-size: min(12px, #{rem.px2flexible(8)});
+  letter-spacing: normal;
+  outline: none;
+  padding: rem.px2flexible(5);
+  border-top: rem.px2flexible(1) solid #000;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-left: rem.px2flexible(1) solid #000;
+  background: #ffffff;
+  color: #666666;
+  &::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+}

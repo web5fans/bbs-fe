@@ -1,7 +1,7 @@
 import S from './index.module.scss'
 import { useNickName } from "@/provider/RegisterNickNameProvider";
-import CopyText from "@/components/CopyText";
 import useUserInfoStore from "@/store/userInfo";
+import Copy from "@/components/CopyText/Copy";
 
 export const CompleteRight = () => {
   const { userInfo } = useUserInfoStore();
@@ -31,7 +31,7 @@ export const CompleteRight = () => {
         <p className={S.name}>{userHandle}</p>
         <p className={S.did}>
           {userInfo?.did}
-          <CopyText text={userInfo?.did!} className={S.icon} />
+          <Copy text={userInfo?.did!} className={S.icon} />
         </p>
       </div>
     </div>

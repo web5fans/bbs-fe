@@ -5,7 +5,6 @@ $inputFontSize: min(18px, #{rem.px2flexible(12)});
 $inputPaddingLeft: var(--input-padding-left, #{min(20px, #{rem.px2flexible(13)})});
 $inputPaddingBottom: min(20px, #{rem.px2flexible(14.5)});
 $inputPaddingTop: min(26px, #{rem.px2flexible(17.5)});
-$inputWidth: rem.px2flexible(247);
 
 @mixin err-style {
   color: var(--input-danger-text-color, var(--danger-color));
@@ -28,11 +27,8 @@ $inputWidth: rem.px2flexible(247);
   padding-right: min(15px, #{rem.px2flexible(10)});
   padding-left: $inputPaddingLeft;
   padding-top: $shadow;
-  //padding-block: rem.px2flexible(11);
   transition: all .1s;
 
-  //width: $inputWidth;
-  max-width: 500px;
   width: 100%;
   height: min(66px, #{rem.px2flexible(44)});
 
@@ -43,39 +39,14 @@ $inputWidth: rem.px2flexible(247);
   }
 
   &.formInput {
-    max-width: 100%;
-    height: rem.px2flexible(31.5);
 
     --input-shadow-num: #{rem.px2flexible(1)};
     --input-padding-left: #{rem.px2flexible(10)};
   }
 
-  &:focus-within,
-  &.checkedPass {
+  &:focus-within {
     border: 1px solid var(--primary-color);
     box-shadow: $shadow $shadow 0 0 var(--primary-color) inset;
-  }
-
-  &.checkedPass {
-    color: var(--primary-color);
-  }
-
-  &:focus-within {
-    .caret {
-      //display: block;
-    }
-
-    .lengthLimit {
-      display: block;
-    }
-
-    &.lengthSuccess {
-      border-color: var(--primary-color);
-
-      .lengthLimit {
-        color: var(--primary-color);
-      }
-    }
   }
 
   &.err {
@@ -83,10 +54,6 @@ $inputWidth: rem.px2flexible(247);
 
     &:focus-within {
       @include err-style;
-    }
-
-    .lengthLimit {
-      color: var(--danger-color);
     }
   }
 
@@ -117,11 +84,6 @@ $inputWidth: rem.px2flexible(247);
     }
   }
 
-  .icon {
-    width: rem.px2flexible(14);
-    height: rem.px2flexible(14);
-  }
-
   .caret {
     display: none;
     position: absolute;
@@ -135,17 +97,6 @@ $inputWidth: rem.px2flexible(247);
     will-change: left;
     animation: blink 1s infinite;
   }
-
-  .hiddenSpan {
-    font-size: $inputFontSize;
-  }
-}
-
-.lengthLimit {
-  display: none;
-  font-size: rem.px2flexible(10);
-  font-family: var(--font-CLFN);
-  margin-left: rem.px2flexible(4);
 }
 
 @keyframes blink {

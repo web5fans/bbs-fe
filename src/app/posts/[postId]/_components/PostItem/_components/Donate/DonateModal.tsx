@@ -9,9 +9,9 @@ import Input from "@/components/Input";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Avatar from "@/components/Avatar";
 import ellipsis from "@/lib/ellipsis";
-import CopyText from "@/components/CopyText";
 import InfoSVG from '@/assets/info.svg'
 import WarningIcon from '@/assets/warning-black.svg'
+import Copy from "@/components/CopyText/Copy";
 
 const DonateModal = (props: {
   visible: boolean;
@@ -52,7 +52,7 @@ const DonateModal = (props: {
             <p className={S.name}>{userProfile?.displayName}</p>
             <p className={S.address}>
               <span>{ellipsis(address)}</span>
-              <CopyText text={address} />
+              <Copy text={address} />
             </p>
           </div>
         </div>

@@ -1,0 +1,102 @@
+@use "@/styles/rem";
+
+.cardWindow {
+  --card-window-line-gap: #{rem.px2flexible(1)}
+}
+
+.wrap {
+  background: #E7E7E7;
+
+  /* 内阴影 */
+  box-shadow: 0 0 rem.px2flexible(7.5) 0 rgba(0, 0, 0, 0.25) inset;
+  padding: rem.px2flexible(19);
+
+  .title {
+    font-size: rem.px2flexible(10);
+    line-height: rem.px2flexible(10);
+    margin-bottom: rem.px2flexible(10);
+  }
+
+  .total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+    flex-wrap: wrap;
+    gap: rem.px2flexible(10);
+
+    .num {
+      span:first-child {
+        font-size: rem.px2flexible(24);
+        margin-right: rem.px2flexible(2);
+      }
+      span:last-child {
+        font-size: rem.px2flexible(10);
+      }
+    }
+
+    .donate {
+      width: rem.px2flexible(50);
+      height: rem.px2flexible(16);
+      font-size: rem.px2flexible(7);
+      font-weight: 400;
+    }
+  }
+
+  .address {
+    height: rem.px2flexible(18);
+    margin: rem.px2flexible(20) 0;
+
+    .info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: rem.px2flexible(3) rem.px2flexible(7);
+      font-size: rem.px2flexible(8);
+
+      .go {
+        width: rem.px2flexible(9);
+        height: rem.px2flexible(9);
+        cursor: pointer;
+        &:hover {
+          color: var(--primary-color);
+        }
+      }
+
+      .coffers {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .receiptPay {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: rem.px2flexible(10);
+
+    .itemInfo {
+      padding: rem.px2flexible(10);
+      .label {
+        color: #6C6C6C;
+        font-size: rem.px2flexible(8);
+        line-height: rem.px2flexible(7);
+        margin-bottom: rem.px2flexible(5);
+      }
+
+      .value {
+        font-size: rem.px2flexible(10);
+        word-break: break-all;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .wrap {
+    .receiptPay {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}

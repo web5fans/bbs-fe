@@ -1,8 +1,8 @@
 'use client'
 
 import S from './index.module.scss'
-import SectionDetailCard from "@/app/section/[sectionId]/_components/SectionDetailCard";
-import Recommend from "@/app/section/[sectionId]/_components/Recommend";
+import SectionDetailCard from "./_components/SectionDetailCard";
+import Recommend from "./_components/Recommend";
 import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark";
 import Button from "@/components/Button";
 import { useParams, useRouter } from "next/navigation";
@@ -17,9 +17,10 @@ import { useRequest } from "ahooks";
 import server from "@/server";
 import { SectionItem } from "@/app/posts/utils";
 import SettingIcon from "@/assets/posts/setting.svg";
-import GoPublishPost from "@/app/section/[sectionId]/_components/GoPublishPost";
+import GoPublishPost from "./_components/GoPublishPost";
 import useDeviceFlex from "@/hooks/useDeviceFlex";
-import GoPublishPostMobile from "@/app/section/[sectionId]/_components/GoPublishPost/mobile";
+import GoPublishPostMobile from "./_components/GoPublishPost/mobile";
+import FundEntrance from "./_components/FundEntrance";
 
 const BREAKPOINT_WIDTH = 1024;
 
@@ -72,6 +73,7 @@ const SectionDetailPage = () => {
       >
         <div className={S.left}>
           <SectionDetailCard sectionInfo={sectionInfo} />
+          {isUnderBreakPoint && <FundEntrance sectionId={sectionId} />}
 
           <Recommend sectionId={sectionId} ref={recommendRef} />
           <PostsList
@@ -83,6 +85,7 @@ const SectionDetailPage = () => {
         </div>
         <div className={S.right}>
           <GoPublishPost goPublish={goToPublish} />
+          <FundEntrance sectionId={sectionId} />
         </div>
       </div>
       <FloatingMark ref={stickyRef}>
