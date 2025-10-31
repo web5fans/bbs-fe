@@ -1,15 +1,39 @@
 @use "@/styles/rem";
+@use "@/styles/scroll-bar";
+
+.wrap {
+  overflow-x: auto;
+  @include scroll-bar.component-x-scroll;
+
+  .infoWrap {
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(4);
+
+    .icon {
+      width: rem.px2flexible(8);
+      height: rem.px2flexible(8);
+      color: #6C6C6C;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+}
 
 .table {
   width: 100%;
+  //min-width: rem.px2flexible(431);
   thead {
     background: #F3F3F3;
     tr th {
-      padding: rem.px2flexible(6) rem.px2flexible(10);
+      padding: rem.px2flexible(6) rem.px2flexible(5);
       text-align: left;
       font-size: rem.px2flexible(8);
       font-weight: 500;
       line-height: 1;
+      white-space: nowrap;
     }
   }
 
@@ -45,9 +69,18 @@
       }
 
       td {
-        padding: rem.px2flexible(15) rem.px2flexible(10);
+        padding: rem.px2flexible(15) rem.px2flexible(5);
         position: relative;
       }
+    }
+  }
+
+  thead tr th, tbody tr td {
+    &:first-child {
+      padding-left: rem.px2flexible(10);
+    }
+    &:last-child {
+      padding-right: rem.px2flexible(10);
     }
   }
 }

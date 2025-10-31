@@ -1,9 +1,7 @@
 @use "@/styles/rem";
 
 .wrap {
-  .dateRange {
-    display: flex;
-    align-items: center;
-    gap: rem.px2flexible(4);
+  .table {
+    margin-top: rem.px2flexible(10);
   }
 }

@@ -3,5 +3,8 @@
 .wrap {
   display: flex;
   align-items: center;
-  gap: rem.px2flexible(4);
+
+  .divide {
+    margin: 0 rem.px2flexible(4);
+  }
 }

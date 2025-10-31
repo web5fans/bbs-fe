@@ -7,7 +7,7 @@ import cx from "classnames";
 const MouseToolTip = (props: {
   children?: React.ReactNode;
   open?: boolean
-  message?: string
+  message?: string | React.ReactNode;
   tipClassName?: string
 } & HTMLAttributes<HTMLDivElement>) => {
   const { open = true, children, message, tipClassName, ...rest } = props;

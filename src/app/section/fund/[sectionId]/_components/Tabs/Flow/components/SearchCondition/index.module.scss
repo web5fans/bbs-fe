@@ -1,0 +1,64 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: flex;
+  justify-content: space-between;
+
+  .select {
+    width: auto;
+    --select-height: min(40px, #{rem.px2flexible(25)});
+    --border-top: #{rem.px2flexible(1)};
+
+    --selectValue-font-size: min(14px, #{rem.px2flexible(10)});
+    --popover-font-size: min(14px, #{rem.px2flexible(10)});
+    --select-padding-inline: #{rem.px2flexible(5)};
+    --caret-size: #{rem.px2flexible(10)};
+  }
+
+  .dateFilter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: rem.px2flexible(4);
+
+    .dateType {
+      display: flex;
+      align-items: center;
+      gap: rem.px2flexible(5);
+
+      > span:not(:last-child) {
+        padding: rem.px2flexible(5) rem.px2flexible(6.5);
+        padding-left: 0;
+      }
+
+      > span {
+        cursor: pointer;
+        color: #666;
+        font-size: min(14px, #{rem.px2flexible(10)});
+
+        &:hover {
+          color: var(--primary-color);
+        }
+
+        &.active {
+          color: #000;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .wrap {
+    .dateFilter {
+      display: block;
+
+      .dateType {
+        justify-content: flex-end;
+        margin-bottom: rem.px2flexible(4);
+      }
+    }
+  }
+}

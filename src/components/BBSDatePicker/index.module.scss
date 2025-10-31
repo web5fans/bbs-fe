@@ -1,0 +1,60 @@
+@use "@/styles/rem";
+
+.wrap {
+  letter-spacing: normal;
+  outline: none;
+  padding: rem.px2flexible(5);
+  border-top: rem.px2flexible(1) solid #000;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-left: rem.px2flexible(1) solid #000;
+  background: #ffffff;
+  color: #666666;
+  max-width: 160px;
+  width: rem.px2flexible(88);
+
+  &:focus {
+    border-color: var(--primary-color);
+  }
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 rem.px2flexible(10);
+  font-size: min(14px, #{rem.px2flexible(10)});
+  width: 100%;
+
+  .arrowLeft, .arrowRight {
+    width: rem.px2flexible(8);
+    height: rem.px2flexible(8);
+  }
+
+  .arrowLeft {
+    transform: rotate(90deg);
+  }
+  .arrowRight {
+    transform: rotate(-90deg);
+  }
+}
+
+.calender {
+  font-size: min(14px, #{rem.px2flexible(10)});
+
+  :global {
+    .react-datepicker__header {
+      padding: 0;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .react-datepicker-time__header {
+      font-size: min(14px, #{rem.px2flexible(10)});
+    }
+    .react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name {
+      width: rem.px2flexible(18) !important;
+      line-height: rem.px2flexible(18) !important;
+    }
+  }
+}

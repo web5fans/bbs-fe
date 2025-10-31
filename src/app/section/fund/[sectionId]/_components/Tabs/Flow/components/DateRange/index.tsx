@@ -1,7 +1,7 @@
-import DatePicker from "@/components/DatePicker";
 import S from './index.module.scss'
 import { useState } from "react";
 import dayjs from "dayjs";
+import BBSDatePicker from "@/components/BBSDatePicker";
 
 const DateRange = (props: {
   onSearch: (data: {start: string; end: string}) => void
@@ -10,6 +10,11 @@ const DateRange = (props: {
     start: dayjs().format('YYYY-MM-DD HH:mm'),
     end: dayjs().format('YYYY-MM-DD HH:mm')
   })
+
+  const [selectedDate, setStartDate] = useState<Date | null>(
+    new Date("2014/02/08"),
+  );
+  const [endDate, setEndDate] = useState<Date | null>(new Date("2014/02/10"));
 
   const dateChange = (type: 'start' | 'end', value: string) => {
     const range = {
@@ -25,9 +30,33 @@ const DateRange = (props: {
   }
 
   return <div className={S.wrap}>
-    <DatePicker onChange={(v) => dateChange('start', v)} />
-    -
-    <DatePicker onChange={(v) => dateChange('end', v)} />
+    <BBSDatePicker />
+    <span className={S.divide}>-</span>
+    <BBSDatePicker />
+    {/*<DatePicker*/}
+    {/*  withPortal*/}
+    {/*  showPopperArrow={false}*/}
+    {/*  showMonthDropdown*/}
+    {/*  showYearDropdown*/}
+    {/*  locale={'zh-CN'}*/}
+    {/*  selectsStart*/}
+    {/*  dateFormat={'yyyy/MM/dd hh:mm'}*/}
+    {/*  showTimeInput*/}
+    {/*  selected={selectedDate}*/}
+    {/*  onChange={(date: Date | null) => setStartDate(date)}*/}
+    {/*  startDate={selectedDate}*/}
+    {/*  endDate={endDate}*/}
+    {/*/>*/}
+    {/*<DatePicker*/}
+    {/*  dateFormat={'yyyy/MM/dd hh:mm'}*/}
+    {/*  selected={endDate}*/}
+    {/*  selectsEnd*/}
+    {/*  showTimeInput*/}
+    {/*  onChange={(date: Date | null) => setEndDate(date)}*/}
+    {/*  startDate={selectedDate}*/}
+    {/*  endDate={endDate}*/}
+    {/*  minDate={selectedDate}*/}
+    {/*/>*/}
   </div>
 }
 

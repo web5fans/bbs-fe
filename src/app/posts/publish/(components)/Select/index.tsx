@@ -7,14 +7,15 @@ import cx from "classnames";
 
 type SelectProps = {
   options: { value: string, label: string, [key: string]: any }[]
-  renderItem: (item: any) => React.ReactNode
+  renderItem?: (item: any) => React.ReactNode
   onChange: (value: string) => void
   selectedValue?: string
   className?: string
+  placeholder?: string
 }
 
 const StyledSelect = (props: SelectProps) => {
-  const { selectedValue, options } = props;
+  const { selectedValue, options, placeholder } = props;
   const [value, setValue] = useState('')
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -34,7 +35,7 @@ const StyledSelect = (props: SelectProps) => {
   }, []);
 
   // 获取当前选中项的标签
-  const selectedLabel = options.find(opt => opt.value === selectedValue)?.label || '选择版区';
+  const selectedLabel = options.find(opt => opt.value === selectedValue)?.label || placeholder || '选择版区';
 
   const handleSelect = (optionValue: string) => {
     props.onChange(optionValue);
@@ -68,7 +69,7 @@ const StyledSelect = (props: SelectProps) => {
                 className={`${S.popoverItem} ${selectedValue === option.value ? S.selected : ''}`}
                 onClick={() => handleSelect(option.value)}
               >
-                {props.renderItem(option)}
+                {props.renderItem?.(option) || option.label}
               </div>
             ))}
           </div>
