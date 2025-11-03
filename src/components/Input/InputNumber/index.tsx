@@ -82,6 +82,8 @@ const InputNumber = (props: Props) => {
       value={value || ''}
     />
 
+    {children}
+
     <span
       ref={caretRef}
       className={S.caret}

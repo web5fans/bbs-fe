@@ -14,7 +14,7 @@ const Donate = (props: {
     <ShowDonate showList={props.showList} />
     <span onClick={toggle} className={S.text}>打赏此贴</span>
 
-    <DonateModal visible={visible} />
+    <DonateModal visible={visible} onClose={toggle} />
   </div>
 }
 
