@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { handleToNickName } from "@/lib/handleToNickName";
 import { LayoutCenter } from "@/components/Layout";
+import SelfOverview from "./_components/SelfOverview";
 
 const Page = () => {
   const { userProfile, hasLoggedIn, writeProfile, getUserProfile } = useCurrentUser()
@@ -69,6 +70,7 @@ const Page = () => {
               commentCount={userInfo?.comment_count}
             />
           </div>
+          <SelfOverview />
         </div>
       </CardWindow>
 
