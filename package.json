@@ -11,7 +11,7 @@
   "dependencies": {
     "@atproto/crypto": "^0.4.4",
     "@atproto/repo": "^0.8.5",
-    "@ckb-ccc/connector-react": "^1.0.19",
+    "@ckb-ccc/connector-react": "^1.0.29",
     "@ckb-lumos/codec": "^0.23.0",
     "@dnd-kit/core": "^6.3.1",
     "@floating-ui/react": "^0.27.13",
