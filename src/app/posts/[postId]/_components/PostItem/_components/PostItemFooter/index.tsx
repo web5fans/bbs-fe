@@ -102,6 +102,7 @@ const PostItemFooter = (props: {
       }}
     >
       <Donate
+        count={postInfo.tip_count}
         showList={() => changeShowType('donate')}
         author={{
           displayName: postInfo.author.displayName,

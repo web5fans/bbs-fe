@@ -32,7 +32,7 @@ const BBSPopOverMenu = ({ menus, children }: {
     })}
 
 
-    <div className={cx(S.popup, !popUpVis && S.close)}>
+    {popUpVis && <div className={cx(S.popup, !popUpVis && S.close)}>
       {menus.map(m => {
         return <div
           className={S.menuItem}
@@ -45,7 +45,7 @@ const BBSPopOverMenu = ({ menus, children }: {
         </div>
       })}
 
-    </div>
+    </div>}
   </div>
 }
 

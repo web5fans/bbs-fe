@@ -2,7 +2,7 @@ import { useBoolean } from "ahooks";
 import DonateModal, { AuthorType } from "./DonateModal";
 import S from './index.module.scss'
 import DonateIcon from '@/assets/posts/donate.svg'
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useImperativeHandle, useRef, useState } from "react";
 import cx from "classnames";
 import numeral from "numeral";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -12,14 +12,25 @@ const Donate = (props: {
   author: AuthorType
   uri: string
   nsid?: 'app.bbs.post' | 'app.bbs.comment'
+  count: string
 }) => {
   const { nsid = 'app.bbs.comment' } = props;
-  const [visible, { toggle }] = useBoolean(false)
+  const [visible, { toggle, setFalse }] = useBoolean(false)
   const { hasLoggedIn } = useCurrentUser()
 
+  const [donate, setDonate] = useState(0)
+
+  const ref = useRef<ShowDonateRefType>(null)
+
+  useEffect(() => {
+    setDonate(Number(props.count))
+  }, [props.count]);
+
+  const num = (donate / Math.pow(10, 8)).toFixed(2)
+
   return <div className={S.wrap}>
-    <ShowDonate showList={props.showList} />
-    {hasLoggedIn && <span
+    <ShowDonate showList={props.showList} donate={num} ref={ref} />
+    {<span
       onClick={toggle}
       className={S.text}
     >打赏此贴</span>}
@@ -30,33 +41,41 @@ const Donate = (props: {
       author={props.author}
       uri={props.uri}
       nsid={nsid}
+      onConfirm={(ckbAmount) => {
+        setDonate(v => v + Number(ckbAmount))
+        ref.current?.showAnimate()
+        setFalse()
+      }}
     />
   </div>
 }
 
-export default Donate;
+export default Donate
+
+type ShowDonateRefType = {
+  showAnimate: () => void
+}
 
 function ShowDonate(props: {
   showList: () => void
+  donate: number | string
+  ref?: React.Ref<ShowDonateRefType>
 }) {
-  const [donate, setDonate] = useState(237)
-
+  const { donate } = props;
   const [isAnimating, setIsAnimating] = useState(false)
 
-  const mockUpdate = () => {
-    setIsAnimating(true)
-    setDonate(v => v + 32)
-    setTimeout(() => {
-      setIsAnimating(false)
-    }, 3000)
-  }
+  useImperativeHandle(props.ref, () => {
+    return {
+      showAnimate: () => {
+        setIsAnimating(true)
+        setTimeout(() => {
+          setIsAnimating(false)
+        }, 3000)
+      }
+    }
+  })
 
-  const num = donate.toString().length > 3 ? numeral(donate).format('0.0a') : donate
-
-  return <>
-    {/*<span onClick={mockUpdate}>update</span>*/}
-
-    <div
+  return  <div
       className={cx(S.showDonate, isAnimating && S.animating)}
       onClick={() => {
         if (!isAnimating) {
@@ -65,10 +84,9 @@ function ShowDonate(props: {
       }}
     >
       <DonateIcon className={S.icon} />
-      {isAnimating ? <PasswordLock value={donate} /> : num}
+      {isAnimating ? <PasswordLock value={donate} /> : donate}
       &nbsp;CKB
     </div>
-  </>
 }
 
 function PasswordLock({ value }: { value: string | number }) {
