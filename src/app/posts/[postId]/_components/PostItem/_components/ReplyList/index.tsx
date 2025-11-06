@@ -1,5 +1,5 @@
 import S from './index.module.scss'
-import { useInfiniteScroll } from "ahooks";
+import { useBoolean, useInfiniteScroll } from "ahooks";
 import server from "@/server";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -11,6 +11,8 @@ import HtmlContent from "./HTMLContent";
 import Avatar from "@/components/Avatar";
 import LockIcon from '@/assets/posts/op/lock.svg'
 import SwitchPostHideOrOpen from "@/app/posts/[postId]/_components/PostItem/_components/SwitchPostHideOrOpen";
+import { eventBus } from "@/lib/EventBus";
+import DonateModal, { AuthorType } from "@/app/posts/[postId]/_components/PostItem/_components/Donate/DonateModal";
 
 export type ReplyListRefProps = { reload: () => void }
 
@@ -54,6 +56,14 @@ const ReplyList = (props: {
       reload
     }
   })
+
+  useEffect(() => {
+    eventBus.subscribe('post-comment-reply-list-refresh', reload)
+
+    return () => {
+      eventBus.unsubscribe('post-comment-reply-list-refresh')
+    }
+  }, []);
 
   const reply = (info: any) => {
     openModal({
@@ -135,25 +145,55 @@ function ReplyItem(props: {
           className={S.hideReply}
           nsid={'reply'}
         />
-        {/*<span>打赏</span>*/}
+        <Donate uri={replyItem.uri} author={replyItem.author} />
       </div>
     </div>
-    <HtmlContent html={replyItem.text} />
-    <div className={S.footer}>
-      <PostLike
-        liked={replyItem.liked}
-        likeCount={replyItem.like_count}
-        uri={replyItem.uri}
-        sectionId={sectionId}
-      />
-      <SwitchPostHideOrOpen
-        status={disabled ? 'open' : 'hide'}
-        uri={replyItem.uri}
-        onConfirm={changeReplyVisible}
-        className={S.hideReply}
-        nsid={'reply'}
-      />
-      <span className={S.reply} onClick={props.toReply}>回复</span>
+    <div className={S.contentWrap}>
+      <HtmlContent html={replyItem.text} />
+      <div className={S.footer}>
+        <div className={S.leftOpts}>
+          <span>xxx CKB</span>
+          <Donate uri={replyItem.uri} author={replyItem.author} />
+        </div>
+        <div className={S.rightOpts}>
+          <PostLike
+            liked={replyItem.liked}
+            likeCount={replyItem.like_count}
+            uri={replyItem.uri}
+            sectionId={sectionId}
+          />
+          <SwitchPostHideOrOpen
+            status={disabled ? 'open' : 'hide'}
+            uri={replyItem.uri}
+            onConfirm={changeReplyVisible}
+            className={S.hideReply}
+            nsid={'reply'}
+          />
+          <span className={S.reply} onClick={props.toReply}>回复</span>
+        </div>
+      </div>
     </div>
   </div>
+}
+
+function Donate(props: {
+  author: AuthorType
+  uri: string
+}) {
+  const [visible, { toggle, setTrue }] = useBoolean(false)
+  const { hasLoggedIn } = useCurrentUser()
+  return <>
+    {hasLoggedIn && <span
+      className={S.donate}
+      onClick={setTrue}
+    >打赏</span>}
+
+    <DonateModal
+      visible={visible}
+      onClose={toggle}
+      author={props.author}
+      uri={props.uri}
+      nsid={'app.bbs.reply'}
+    />
+  </>
 }

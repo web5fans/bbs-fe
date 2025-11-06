@@ -33,7 +33,7 @@ export default function HtmlContent(props: {html: string}) {
 
   return <>
     <div
-      className={cx(S.content, expand ? '!max-h-none' : '')}
+      className={cx(S.htmlContent, expand ? '!max-h-none' : '')}
       ref={htmlRef}
     >
       <JSONToHtml html={props.html} />

@@ -99,6 +99,7 @@
         display: flex;
         align-items: center;
         gap: rem.px2flexible(3);
+        font-size: rem.px2flexible(6);
 
         .copy {
           width: rem.px2flexible(6);

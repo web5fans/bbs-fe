@@ -1,15 +1,16 @@
 import S from './index.module.scss'
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import LikeList, { LikeListRef } from "../LikeList";
+import LikeList from "../LikeList";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
-import TabWrap from "../TabWrap";
-import ReplyList, { ReplyListRefProps } from "../ReplyList";
+import TabContentWrap from "../TabContentWrap";
+import ReplyList from "../ReplyList";
 import utcToLocal from "@/lib/utcToLocal";
 import Donate from "../Donate";
 import { PostItemType } from "@/app/posts/[postId]/_components/PostItem/index";
 import DonateDetailList from "../DonateDetailList";
 import SwitchPostHideOrOpen from "../SwitchPostHideOrOpen";
+import { eventBus } from "@/lib/EventBus";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
@@ -29,9 +30,6 @@ const PostItemFooter = (props: {
 
   const [ showType, setShowType ] = useState<ShowTypeType>(undefined)
   const [replyTotal, setReplyTotal] = useState('0')
-
-  const likeListRef = useRef<LikeListRef>(null)
-  const replyListRef = useRef<ReplyListRefProps>(null)
 
   const parentRef = useRef<HTMLDivElement>(null)
 
@@ -75,7 +73,7 @@ const PostItemFooter = (props: {
       sectionId,
       refresh: () => {
         props.refresh?.()
-        replyListRef.current?.reload()
+        eventBus.publish('post-comment-reply-list-refresh')
       },
       rect: obj
     })
@@ -83,12 +81,6 @@ const PostItemFooter = (props: {
 
   const showLikeList = () => {
     changeShowType('like')
-  }
-
-  const reloadLikeList = () => {
-    if (showType === 'like') {
-      likeListRef.current?.reloadLikeList()
-    }
   }
 
   useEffect(() => {
@@ -109,13 +101,19 @@ const PostItemFooter = (props: {
         setArrowPos({ left: (target.offsetLeft + width - 1) + 'px' })
       }}
     >
-      <Donate showList={() => changeShowType('donate')} />
-      {/*<span></span>*/}
+      <Donate
+        showList={() => changeShowType('donate')}
+        author={{
+          displayName: postInfo.author.displayName,
+          did: postInfo.author.did,
+        }}
+        uri={postInfo.uri}
+        nsid={isNotMainPost ? 'app.bbs.comment' : 'app.bbs.post'}
+      />
       {isNotMainPost ? <FooterOptions
         postInfo={postInfo}
         floor={floor}
         showLikeList={showLikeList}
-        reloadLikeList={reloadLikeList}
         reply={reply}
         replyTotal={replyTotal}
         switchPostVisibility={props.switchPostVisibility}
@@ -123,14 +121,13 @@ const PostItemFooter = (props: {
         postInfo={postInfo}
         floor={floor}
         showLikeList={showLikeList}
-        reloadLikeList={reloadLikeList}
       />}
     </div>
-    {showType === 'like' && <TabWrap arrowPos={arrowPos}>
-      <LikeList uri={postInfo.uri} componentRef={likeListRef} />
-    </TabWrap>}
+    {showType === 'like' && <TabContentWrap arrowPos={arrowPos}>
+      <LikeList uri={postInfo.uri} />
+    </TabContentWrap>}
 
-    {showType === 'reply' && <TabWrap arrowPos={arrowPos}>
+    {showType === 'reply' && <TabContentWrap arrowPos={arrowPos}>
       <ReplyList
         total={replyTotal}
         changeTotal={setReplyTotal}
@@ -138,12 +135,11 @@ const PostItemFooter = (props: {
         uri={postInfo.uri}
         sectionId={sectionId}
         replyComment={openReplyModal}
-        componentRef={replyListRef}
       />
-    </TabWrap>}
-    {showType === 'donate' && <TabWrap arrowPos={arrowPos} arrowColor={'#E7E7E7'}>
+    </TabContentWrap>}
+    {showType === 'donate' && <TabContentWrap arrowPos={arrowPos} arrowColor={'#E7E7E7'}>
       <DonateDetailList />
-    </TabWrap> }
+    </TabContentWrap> }
   </>
 }
 
@@ -153,7 +149,6 @@ function MainPostFooterOpts(props: {
   postInfo: PostItemType
   floor: number
   showLikeList: () => void
-  reloadLikeList: () => void
 }) {
   const { postInfo, floor } = props;
 
@@ -164,7 +159,6 @@ function MainPostFooterOpts(props: {
       uri={postInfo.uri}
       sectionId={postInfo.section_id}
       showLikeList={props.showLikeList}
-      reloadLikeList={props.reloadLikeList}
     />
     <span className={'shrink-0'}>{floor}楼</span>
   </div>
@@ -175,7 +169,6 @@ function FooterOptions(props: {
   postInfo: PostItemType
   floor: number
   showLikeList: () => void
-  reloadLikeList: () => void
   switchPostVisibility: () => void
   reply: () => void
   replyTotal: string
@@ -190,7 +183,6 @@ function FooterOptions(props: {
         uri={postInfo.uri}
         sectionId={postInfo.section_id}
         showLikeList={props.showLikeList}
-        reloadLikeList={props.reloadLikeList}
       />
       <SwitchPostHideOrOpen
         status={postInfo.is_disabled ? 'open' : 'hide'}

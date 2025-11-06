@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import S from "./index.module.scss";
 import TabArrowDown from "@/assets/posts/tab-arrow.svg";
 
-export default function TabWrap(props: {
+export default function TabContentWrap(props: {
   children?: React.ReactNode;
   arrowPos: {left: string} | undefined
   arrowColor?: string

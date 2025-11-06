@@ -1,20 +1,36 @@
 import { useBoolean } from "ahooks";
-import DonateModal from "./DonateModal";
+import DonateModal, { AuthorType } from "./DonateModal";
 import S from './index.module.scss'
 import DonateIcon from '@/assets/posts/donate.svg'
 import { useEffect, useRef, useState } from "react";
 import cx from "classnames";
 import numeral from "numeral";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const Donate = (props: {
   showList: () => void
+  author: AuthorType
+  uri: string
+  nsid?: 'app.bbs.post' | 'app.bbs.comment'
 }) => {
+  const { nsid = 'app.bbs.comment' } = props;
   const [visible, { toggle }] = useBoolean(false)
+  const { hasLoggedIn } = useCurrentUser()
+
   return <div className={S.wrap}>
     <ShowDonate showList={props.showList} />
-    <span onClick={toggle} className={S.text}>打赏此贴</span>
+    {hasLoggedIn && <span
+      onClick={toggle}
+      className={S.text}
+    >打赏此贴</span>}
 
-    <DonateModal visible={visible} onClose={toggle} />
+    <DonateModal
+      visible={visible}
+      onClose={toggle}
+      author={props.author}
+      uri={props.uri}
+      nsid={nsid}
+    />
   </div>
 }
 

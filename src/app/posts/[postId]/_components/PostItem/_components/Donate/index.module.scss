@@ -126,6 +126,10 @@
     font-size: rem.px2flexible(9);
     gap: rem.px2flexible(4);
 
+    & + .message {
+      margin-top: 0;
+    }
+
     .icon {
       width: rem.px2flexible(8);
       height: rem.px2flexible(8);

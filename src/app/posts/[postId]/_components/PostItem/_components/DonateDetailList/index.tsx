@@ -20,10 +20,7 @@ const DonateDetailList = () => {
               <Avatar nickname={'nick'} className={S.avatar} />
               <div className={S.info}>
                 <p className={S.name}>semmx</p>
-                <div className={S.address}>
-                  qckt1qr...dd6m
-                  <CopyText text={'address'} className={S.copy} />
-                </div>
+                <CopyText text={'qckt1qr345dd6m'} ellipsis className={{ icon: S.copy, wrap: S.address }} />
               </div>
             </div>
           </td>

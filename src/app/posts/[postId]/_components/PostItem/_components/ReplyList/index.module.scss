@@ -118,8 +118,12 @@
       margin-left: rem.px2flexible(4);
     }
   }
-  .content {
-    margin: rem.px2flexible(4) 0 rem.px2flexible(4) rem.px2flexible(17);
+
+  .contentWrap {
+    margin-left: rem.px2flexible(17);
+  }
+  .htmlContent {
+    margin: rem.px2flexible(4) 0;
     max-height: rem.px2flexible(69);
     overflow: hidden;
   }
@@ -143,10 +147,21 @@
   .footer {
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: space-between;
     font-size: rem.px2flexible(6);
     color: #6C6C6C;
-    gap: rem.px2flexible(10);
+
+    .leftOpts {
+      display: flex;
+      align-items: center;
+      gap: rem.px2flexible(5);
+    }
+
+    .rightOpts {
+      display: flex;
+      align-items: center;
+      gap: rem.px2flexible(10);
+    }
 
     .reply {
       color: black;
@@ -155,6 +170,11 @@
         color: var(--primary-color);
       }
     }
+  }
+
+  .donate {
+    color: #999631;
+    cursor: pointer;
   }
 }
 
@@ -167,6 +187,9 @@
     }
 
     .footer {
+      .donate {
+        display: none;
+      }
       .hideReply {
         display: none;
       }

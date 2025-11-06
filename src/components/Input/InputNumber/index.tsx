@@ -4,13 +4,15 @@ import cx from "classnames";
 import setInputCursorPos from "@/components/Input/setInputCursorPos";
 import S from './index.module.scss'
 
-type Props = Omit<JSX.IntrinsicElements['input'], 'onChange' | 'value'> & {
+type Props = Omit<JSX.IntrinsicElements['input'], 'onChange' | 'value' | 'pattern' | 'onError'> & {
   children?: React.ReactNode
   wrapClassName?: string
   onChange?: (value: string) => void;
   inputValue?: string
   isFormChild?: boolean
   error?: boolean
+  pattern?: RegExp
+  onError?: () => void
 }
 
 const TEM_SPAN_ID = 'input_number_mirror'
@@ -24,6 +26,7 @@ const InputNumber = (props: Props) => {
     inputValue,
     isFormChild,
     error,
+    pattern,
     ...rest
   } = props;
   const [value, setValue] = useState<string | undefined>();
@@ -35,7 +38,16 @@ const InputNumber = (props: Props) => {
 
   const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value
-    const passed = strictDecimalRegex.test(value)
+
+    if (!value) {
+      setCursorPos(e)
+      setValue(value)
+      rest.onChange?.(value)
+      rest.onError?.()
+    }
+
+    const reg = pattern || strictDecimalRegex
+    const passed = reg.test(value)
 
     if (!passed) return
 
