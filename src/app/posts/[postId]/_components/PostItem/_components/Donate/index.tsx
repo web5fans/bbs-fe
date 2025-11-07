@@ -30,10 +30,10 @@ const Donate = (props: {
 
   return <div className={S.wrap}>
     <ShowDonate showList={props.showList} donate={num} ref={ref} />
-    {<span
+    <span
       onClick={toggle}
       className={S.text}
-    >打赏此贴</span>}
+    >打赏此贴</span>
 
     <DonateModal
       visible={visible}
@@ -94,9 +94,10 @@ function PasswordLock({ value }: { value: string | number }) {
 
   return (
     <div className={S.passwordLock}>
-      {digits.map((digit, index) => (
-        <PasswordLockNumber key={index} digit={digit} duration={1200 + index * 80} />
-      ))}
+      {digits.map((digit, index) => {
+        if (Number.isNaN(digit)) return '.'
+        return <PasswordLockNumber key={index} digit={digit} duration={1200 + index * 80} />
+      })}
     </div>
   );
 };

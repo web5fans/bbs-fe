@@ -72,7 +72,7 @@ const CKBInput = (props: CKBInputProps) => {
     <div className={S.top}>
       <span className={S.title}>打赏金额</span>
       <div className={S.balance}>CKB余额:&nbsp;
-        {balanceLoading ? <p>获取中<DotLoading /></p> : <span>{balance} CKB</span>}
+        {balanceLoading ? <div>获取中<DotLoading /></div> : <span>{balance} CKB</span>}
       </div>
     </div>
 

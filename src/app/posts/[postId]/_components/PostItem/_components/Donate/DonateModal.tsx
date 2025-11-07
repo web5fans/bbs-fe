@@ -95,6 +95,7 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
   const [_, formattedRes] = useCountDown({
     leftTime,
     onEnd: () => {
+      setLeftTime(undefined)
       setLoading.setFalse()
     }
   });
@@ -118,7 +119,7 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
 
     const signingKey = keyPair.did()
 
-    const ckbAmount = money * 10e8 + ''
+    const ckbAmount = money * Math.pow(10, 8) + ''
 
     const params = {
       nsid,
@@ -149,6 +150,8 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
 
     }
 
+    setLeftTime(undefined)
+
     if (!result) {
       setLoading.setFalse()
       toast({
@@ -160,7 +163,7 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
 
     try {
       await server('/tip/transfer', 'POST', {
-        payment_id: payment.paymentId,
+        paymentId: payment.paymentId,
         signed_tx: ccc.stringify(result)
       })
       setLoading.setFalse()
@@ -198,7 +201,7 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
 
       <CKBInput onChange={changeMoney} onValueError={() => setCKBValueErr(true)} >
         {!!formattedRes.seconds && <div className={S.error}>
-          交易将在{formattedRes.seconds}s后取消，请尽快签名
+          此次打赏操作将在{formattedRes.seconds}s后超时
         </div>}
       </CKBInput>
 
