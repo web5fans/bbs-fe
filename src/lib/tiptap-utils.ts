@@ -2,6 +2,7 @@ import type { Attrs, Node } from "@tiptap/pm/model"
 import type { Editor } from "@tiptap/react"
 import getPDSClient from "@/lib/pdsClient";
 import { JSONContent } from "@tiptap/core";
+import { DID_PREFIX } from "@/constant/Network";
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
@@ -152,10 +153,10 @@ export const handleImageUpload = async (
   }
 
   const agent = getPDSClient()
-  const result = await agent.com.atproto.web5.uploadBlob(file, { encoding: file.type })
+  const result = await agent.fans.web5.ckb.uploadBlob(file, { encoding: file.type })
   const blobRefStr = result.data.blob.ref.toString()
   const server = result.data.blobServer
-  const didSlice = did.replace('did:web5:', '')
+  const didSlice = did.replace(DID_PREFIX, '')
 
   // Uncomment for production use:
   // return convertFileToBase64(file, abortSignal);

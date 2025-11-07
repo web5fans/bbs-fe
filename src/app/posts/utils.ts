@@ -85,7 +85,7 @@ type CreatePostResponse = {
     rev: string
   },
   results: {
-    $type: "com.atproto.web5.directWrites#createResult"
+    $type: "fans.web5.ckb.directWrites#createResult"
     cid: string
     uri: string
   }[]
@@ -109,11 +109,11 @@ export async function postsWritesPDSOperation(params: {
   }
 
   const $typeMap = {
-    create: "com.atproto.web5.preDirectWrites#create",
-    update: "com.atproto.web5.preDirectWrites#update",
+    create: "fans.web5.ckb.preDirectWrites#create",
+    update: "fans.web5.ckb.preDirectWrites#update",
   }
 
-  const writeRes = await sessionWrapApi(() => pdsClient.com.atproto.web5.preDirectWrites({
+  const writeRes = await sessionWrapApi(() => pdsClient.fans.web5.ckb.preDirectWrites({
     repo: params.did,
     writes: [{
       $type: $typeMap[operateType],

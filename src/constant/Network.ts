@@ -19,4 +19,4 @@ export const PDS_API_URL = env("NEXT_PUBLIC_PDS_SERVICE") as string
 
 export const USER_DOMAIN = env("NEXT_PUBLIC_USER_DOMAIN") as string
 
-export const DID_PREFIX = env("NEXT_PUBLIC_DID_PREFIX") as string || 'did:web5:'
+export const DID_PREFIX = env("NEXT_PUBLIC_DID_PREFIX") as string || 'did:ckb:'

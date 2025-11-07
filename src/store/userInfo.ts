@@ -3,7 +3,7 @@ import createSelectors from './helper/createSelector';
 import { ccc } from "@ckb-ccc/core";
 import getPDSClient from "@/lib/pdsClient";
 import storage, { TokenStorageType } from "@/lib/storage";
-import { ComAtprotoWeb5CreateAccount, ComAtprotoServerCreateSession } from "web5-api";
+import { FansWeb5CkbCreateAccount, ComAtprotoServerCreateSession } from "web5-api";
 import { postsWritesPDSOperation } from "@/app/posts/utils";
 import { handleToNickName } from "@/lib/handleToNickName";
 import { fetchUserProfile, userLogin } from "@/lib/user-account";
@@ -32,7 +32,7 @@ const STORAGE_VISITOR = '@bbs:visitor'
 type UserInfoStore = UserInfoStoreValue & {
 
   setStoreData: (storeData: UserInfoStoreValue) => void
-  createUser: (obj: ComAtprotoWeb5CreateAccount.InputSchema) => Promise<void>
+  createUser: (obj: FansWeb5CkbCreateAccount.InputSchema) => Promise<void>
   web5Login: () => Promise<void>
   getUserProfile: () => Promise<UserProfileType | undefined>;
   logout: () => void

@@ -2,6 +2,7 @@ import { base32 } from "@scure/base";
 import { hexToUint8Array } from "@/lib/dag-cbor";
 import { randomBytes } from "crypto";
 import { BigNumber } from "bignumber.js";
+import { DID_PREFIX } from "@/constant/Network";
 
 export function getCenterContentWidth(gridItemWidth: number = 88) {
   const docEl = document.documentElement;
@@ -22,7 +23,7 @@ export function generateDid(args: `0x${string}`) {
     .encode(hexToUint8Array(args.slice(2, 42)))
     .toLowerCase()
 
-  return `did:web5:${did}`
+  return `${DID_PREFIX}${did}`
 }
 
 type Web3LoginMessage = {

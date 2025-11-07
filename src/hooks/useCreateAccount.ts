@@ -13,6 +13,7 @@ import { hexToUint8Array, uint8ArrayToHex } from "@/lib/dag-cbor";
 import { UnsignedCommit } from "@atproto/repo";
 import { CID } from "multiformats";
 import { deleteErrUser } from "@/lib/user-account";
+import { DID_PREFIX } from "@/constant/Network";
 
 export enum CREATE_STATUS {
   INIT,
@@ -147,7 +148,7 @@ export default function useCreateAccount({ createSuccess }: {
 
     changeParams({
       createdTx: tx,
-      did: `did:web5:${preDid}`,
+      did: `${DID_PREFIX}${preDid}`,
       createdSignKeyPriv: strSignKeyPriv
     })
     return true
@@ -179,7 +180,7 @@ export default function useCreateAccount({ createSuccess }: {
 
     const signingKey = keyPair.did()
 
-    const res = await getPDSClient().com.atproto.web5.preCreateAccount({
+    const res = await getPDSClient().fans.web5.ckb.preCreateAccount({
       handle: userHandle!,
       signingKey,
       did: createUserParamsRef.current.did!,
