@@ -136,6 +136,12 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
       signing_key_did: signingKey,
       params,
       signed_bytes: uint8ArrayToHex(sig),
+    }).catch(e => {
+      toast({
+        title: '失败',
+        message: e.response.data.message,
+        icon: 'error'
+      })
     })
     const { payment } = response
     const rawTx = JSON.parse(payment.rawTx)
@@ -146,9 +152,7 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
     let result
     try {
       result = await signer?.signTransaction(tx)
-    } catch (error) {
-
-    }
+    } catch (error) {}
 
     setLeftTime(undefined)
 
@@ -161,21 +165,30 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
       return
     }
 
+    /* 第二步 */
+    let secondResultRes
+
     try {
-      await server('/tip/transfer', 'POST', {
+      secondResultRes = await server('/tip/transfer', 'POST', {
         paymentId: payment.paymentId,
-        signed_tx: ccc.stringify(result)
+        signedTx: ccc.stringify(result)
       })
-      setLoading.setFalse()
+    } catch (e) {
+
+    }
+
+    setLoading.setFalse()
+
+    if (secondResultRes?.status === 'completed') {
       toast({
         title: '打赏成功',
         icon: 'success'
       })
       onConfirm(ckbAmount)
-    } catch (e) {
-      setLoading.setFalse()
+    } else {
       toast({
         title: '打赏失败',
+        message: secondResultRes?.error,
         icon: 'error'
       })
     }
