@@ -30,10 +30,10 @@ const Donate = (props: {
 
   return <div className={S.wrap}>
     <ShowDonate showList={props.showList} donate={num} ref={ref} />
-    <span
+    {hasLoggedIn && <span
       onClick={toggle}
       className={S.text}
-    >打赏此贴</span>
+    >打赏此贴</span>}
 
     <DonateModal
       visible={visible}

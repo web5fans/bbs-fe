@@ -137,11 +137,14 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
       params,
       signed_bytes: uint8ArrayToHex(sig),
     }).catch(e => {
+      const { data } = e.response
+      const mes = data.error === 'MicroPayIncomplete' ? '存在未完成的交易' : data.message
       toast({
         title: '失败',
-        message: e.response.data.message,
+        message: mes,
         icon: 'error'
       })
+      setLoading.setFalse()
     })
     const { payment } = response
     const rawTx = JSON.parse(payment.rawTx)
@@ -173,9 +176,7 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
         paymentId: payment.paymentId,
         signedTx: ccc.stringify(result)
       })
-    } catch (e) {
-
-    }
+    } catch (e) {}
 
     setLoading.setFalse()
 

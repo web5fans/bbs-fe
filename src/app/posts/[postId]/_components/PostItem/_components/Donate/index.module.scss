@@ -105,6 +105,7 @@
   align-items: center;
   font-size: rem.px2flexible(6);
   transition: all 0.2s;
+  letter-spacing: normal;
 
   &.animating {
     color: #999631;

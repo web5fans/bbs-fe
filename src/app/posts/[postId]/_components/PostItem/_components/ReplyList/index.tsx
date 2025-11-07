@@ -9,10 +9,10 @@ import ArrowIcon from '@/assets/arrow-s.svg';
 import ShowCreateTime from "./ShowCreateTime";
 import HtmlContent from "./HTMLContent";
 import Avatar from "@/components/Avatar";
-import LockIcon from '@/assets/posts/op/lock.svg'
 import SwitchPostHideOrOpen from "@/app/posts/[postId]/_components/PostItem/_components/SwitchPostHideOrOpen";
 import { eventBus } from "@/lib/EventBus";
 import DonateModal, { AuthorType } from "@/app/posts/[postId]/_components/PostItem/_components/Donate/DonateModal";
+import DonateIcon from '@/assets/posts/donate.svg'
 
 export type ReplyListRefProps = { reload: () => void }
 
@@ -110,13 +110,22 @@ function ReplyItem(props: {
   const { replyItem, sectionId } = props;
   const [disabled, setDisabled] = useState(false)
 
+  const [donate, setDonate] = useState(0)
+
   useEffect(() => {
     setDisabled(replyItem.is_disabled)
+    setDonate(Number(replyItem.tip_count))
   }, [replyItem]);
 
   const changeReplyVisible = () => {
     setDisabled(!disabled)
   }
+
+  const changeDonate = (ckb: string) => {
+    setDonate(v => v + Number(ckb))
+  }
+
+  const totalDonate = (donate / Math.pow(10, 8)).toFixed(2)
 
   return <div className={S.replyItem}>
     {disabled && <div className={S.mask} />}
@@ -145,15 +154,20 @@ function ReplyItem(props: {
           className={S.hideReply}
           nsid={'reply'}
         />
-        <Donate uri={replyItem.uri} author={replyItem.author} />
+        <Donate uri={replyItem.uri} author={replyItem.author} changeDonate={changeDonate} />
       </div>
     </div>
     <div className={S.contentWrap}>
       <HtmlContent html={replyItem.text} />
       <div className={S.footer}>
         <div className={S.leftOpts}>
-          <span>xxx CKB</span>
-          <Donate uri={replyItem.uri} author={replyItem.author} />
+          <DonateIcon className={S.icon} />
+          <span className={'tracking-normal'}>{totalDonate} CKB</span>
+          <Donate
+            uri={replyItem.uri}
+            author={replyItem.author}
+            changeDonate={changeDonate}
+          />
         </div>
         <div className={S.rightOpts}>
           <PostLike
@@ -179,8 +193,10 @@ function ReplyItem(props: {
 function Donate(props: {
   author: AuthorType
   uri: string
+  changeDonate: (ckb: string) => void
 }) {
-  const [visible, { toggle, setTrue }] = useBoolean(false)
+  const { changeDonate } = props;
+  const [visible, { toggle, setTrue, setFalse }] = useBoolean(false)
   const { hasLoggedIn } = useCurrentUser()
   return <>
     {hasLoggedIn && <span
@@ -194,6 +210,10 @@ function Donate(props: {
       author={props.author}
       uri={props.uri}
       nsid={'app.bbs.reply'}
+      onConfirm={(ckb) => {
+        changeDonate(ckb)
+        setFalse()
+      }}
     />
   </>
 }
