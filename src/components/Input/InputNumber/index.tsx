@@ -58,6 +58,9 @@ const InputNumber = (props: Props) => {
     if (value < minNum) {
       value = minNum.toString()
     }
+    if (props.max && value > props.max) {
+      value = props.max.toString()
+    }
     setValue(value)
     rest.onChange?.(value)
   }

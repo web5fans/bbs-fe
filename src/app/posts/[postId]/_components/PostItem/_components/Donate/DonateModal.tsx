@@ -138,7 +138,7 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
       signed_bytes: uint8ArrayToHex(sig),
     }).catch(e => {
       const { data } = e.response
-      const mes = data.error === 'MicroPayIncomplete' ? '存在未完成的交易' : data.message
+      const mes = data.message === 'INSUFFICIENT_BALANCE' ? '余额不足' : data.message
       toast({
         title: '失败',
         message: mes,

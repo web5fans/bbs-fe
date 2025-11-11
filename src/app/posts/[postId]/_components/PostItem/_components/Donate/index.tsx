@@ -78,7 +78,7 @@ function ShowDonate(props: {
   return  <div
       className={cx(S.showDonate, isAnimating && S.animating)}
       onClick={() => {
-        if (!isAnimating) {
+        if (!isAnimating && donate > 0) {
           props.showList()
         }
       }}

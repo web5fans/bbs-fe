@@ -39,7 +39,7 @@ const PostLike = (props: {
       did: userProfile.did
     })
     setCount(v => v + 1)
-    eventBus.publish('post-like-list-refresh')
+    eventBus.publish('post-like-list-refresh', props.uri)
   }
 
   const disabled = !userProfile || hasLiked

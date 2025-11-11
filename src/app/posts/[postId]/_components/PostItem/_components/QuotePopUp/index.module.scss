@@ -1,7 +1,8 @@
 @use "@/styles/rem";
 
 .popup {
-  position: absolute;
+  position: fixed;
+  //position: absolute;
   display: none;
   align-items: center;
   border: 1px solid #000;

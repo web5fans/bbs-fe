@@ -106,6 +106,7 @@
   font-size: rem.px2flexible(6);
   transition: all 0.2s;
   letter-spacing: normal;
+  cursor: pointer;
 
   &.animating {
     color: #999631;

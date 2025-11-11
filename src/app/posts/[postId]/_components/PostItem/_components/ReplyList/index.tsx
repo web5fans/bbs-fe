@@ -58,10 +58,14 @@ const ReplyList = (props: {
   })
 
   useEffect(() => {
-    eventBus.subscribe('post-comment-reply-list-refresh', reload)
+    const f = (uri: string) => {
+      if (uri !== props.uri) return
+      reload()
+    }
+    eventBus.subscribe('post-comment-reply-list-refresh', f)
 
     return () => {
-      eventBus.unsubscribe('post-comment-reply-list-refresh')
+      eventBus.unsubscribe('post-comment-reply-list-refresh', f)
     }
   }, []);
 

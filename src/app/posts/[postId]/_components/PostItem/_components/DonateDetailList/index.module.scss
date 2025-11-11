@@ -2,11 +2,32 @@
 
 .wrap {
   background: #F5F5F5;
+  padding-bottom: rem.px2flexible(10);
 
   .header {
     color: #9F9F9F;
     font-size: rem.px2flexible(5);
     background: #E7E7E7;
+  }
+
+  .tableWrap {
+    position: relative;
+
+    .loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .icon {
+        width: rem.px2flexible(17);
+        height: rem.px2flexible(17);
+      }
+    }
   }
 
   .table {
@@ -16,6 +37,7 @@
     .ckb {
       color: var(--primary-color);
       font-weight: 500;
+      white-space: nowrap;
     }
 
     .time {
@@ -65,18 +87,19 @@
     tbody {
       tr {
         position: relative;
-        & + tr {
+        //& + tr {
           &::after {
             position: absolute;
             content: '';
             display: block;
             left: 0;
             right: 0;
+            bottom: 0;
             height: 1px;
             border-bottom: 1px dashed #DBDBDB;
             margin: 0 rem.px2flexible(12);
           }
-        }
+        //}
       }
     }
   }
@@ -112,5 +135,19 @@
   .avatar {
     width: rem.px2flexible(14);
     height: rem.px2flexible(14);
+  }
+
+  .pagination {
+    margin-top: rem.px2flexible(3);
+    margin-bottom: 0;
+    justify-content: center;
+  }
+
+  .empty {
+    width: 100%;
+    height: rem.px2flexible(102);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

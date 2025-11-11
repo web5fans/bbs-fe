@@ -59,14 +59,17 @@ const LikeList = (props: {
   })
 
   useEffect(() => {
-    eventBus.subscribe('post-like-list-refresh', () => {
-      if (showAvatars.length === (likeList?.list?.length || 0)) {
+    const f = (uri: string) => {
+      console.log('uri', uri)
+      console.log('props.uri', props.uri)
+      if (showAvatars.length === (likeList?.list?.length || 0) && uri === props.uri) {
         reload()
       }
-    })
+    }
+    eventBus.subscribe('post-like-list-refresh', f)
 
     return () => {
-      eventBus.unsubscribe('post-like-list-refresh')
+      eventBus.unsubscribe('post-like-list-refresh', f)
     }
   }, []);
 

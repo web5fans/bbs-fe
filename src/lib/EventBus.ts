@@ -1,8 +1,9 @@
 import PubSub from "./PubSub";
 
 type EventMap = {
-  "post-like-list-refresh": [];
-  "post-comment-reply-list-refresh": [];
+  "post-like-list-refresh": [uri: string];
+  "post-comment-reply-list-refresh": [uri: string];
+  "post-donate-list-refresh": [uri: string];
 };
 
 

@@ -2,39 +2,96 @@ import S from './index.module.scss'
 import Avatar from "@/components/Avatar";
 import CopyText from "@/components/CopyText";
 import TxIcon from "@/assets/tx.svg";
+import { usePagination } from "ahooks";
+import server from "@/server";
+import { shannonToCkb } from "@/lib/utils";
+import utcToLocal from "@/lib/utcToLocal";
+import BBSPagination from "@/components/BBSPagination";
+import { CircleLoading } from "@/components/Loading";
+import { CKB_EXPLORER } from "@/constant/explorer";
+import Link from "next/link";
 
-const DonateDetailList = () => {
+const DonateDetailList = (props: {
+  uri: string
+}) => {
+  const {data, loading, pagination, refresh} = usePagination(async ({ current, pageSize }) => {
+    const result = await server<{ total: number; tips: any[] }>('/tip/list', 'POST', {
+      for_uri: props.uri,
+      page: current,
+      per_page: pageSize
+    })
+
+      return {
+        total: result.total,
+        list: result.tips
+    }
+  }, {
+    defaultPageSize: 5
+  })
+
   return <div className={S.wrap}>
+    <div className={S.tableWrap}>
+      {loading && <div className={S.loading}>
+        <CircleLoading className={S.icon} />
+      </div>}
       <table className={S.table}>
         <thead className={S.header}>
         <tr>
-          <th>打赏人（31）</th>
+          <th>打赏人（{data?.total || 0}）</th>
           <th>金额</th>
           <th>时间/交易详情</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>
-            <div className={S.userInfo}>
-              <Avatar nickname={'nick'} className={S.avatar} />
-              <div className={S.info}>
-                <p className={S.name}>semmx</p>
-                <CopyText text={'qckt1qr345dd6m'} ellipsis className={{ icon: S.copy, wrap: S.address }} />
-              </div>
-            </div>
-          </td>
-          <td className={S.ckb}>23 ckb</td>
-          <td>
-            <div className={S.time}>
-              <span>2025/02/22 23:23:22</span>
-              <TxIcon className={S.icon} />
-            </div>
-          </td>
-        </tr>
+          {
+            data?.list ? data?.list.map(row => {
+              const author = row.sender_author
+              const href = `/user-center/${encodeURIComponent(row.sender_did)}`
+              return <tr>
+                <td>
+                  <div className={S.userInfo}>
+                    <Link href={href}>
+                      <Avatar
+                        nickname={author.displayName}
+                        className={S.avatar}
+                      />
+                    </Link>
+                    <div className={S.info}>
+                      <p className={S.name}>{author.displayName}</p>
+                      <CopyText
+                        text={row.sender}
+                        ellipsis
+                        className={{ icon: S.copy, wrap: S.address }}
+                      />
+                    </div>
+                  </div>
+                </td>
+                <td className={S.ckb}>{shannonToCkb(row.amount)} CKB</td>
+                <td>
+                  <div className={S.time}>
+                    <span>{utcToLocal(row.created, 'YYYY/MM/DD HH:mm:ss')}</span>
+                    <a href={`${CKB_EXPLORER}/transaction/${row['tx_hash']}`} target={'_blank'}><TxIcon className={S.icon} /></a>
+                  </div>
+                </td>
+              </tr>
+            }) : <Empty />
+          }
         </tbody>
       </table>
+    </div>
+    <BBSPagination {...pagination} hideOnSinglePage className={S.pagination} />
   </div>
 }
 
 export default DonateDetailList;
+
+
+function Empty() {
+  return <tr>
+    <td colSpan={3}>
+      <div className={S.empty}>
+        暂无数据
+      </div>
+    </td>
+  </tr>
+}

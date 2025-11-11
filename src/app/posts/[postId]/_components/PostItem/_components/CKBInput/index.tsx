@@ -80,6 +80,7 @@ const CKBInput = (props: CKBInputProps) => {
       wrapClassName={S.inputWrap}
       placeholder={'请输入打赏金额，最多两位小数'}
       min={1}
+      max={Math.floor(balance * 100) / 100}
       pattern={/^\d+(\.\d{0,2})?$/}
       onChange={changeMoney}
       error={inputErr}

@@ -73,7 +73,7 @@ const PostItemFooter = (props: {
       sectionId,
       refresh: () => {
         props.refresh?.()
-        eventBus.publish('post-comment-reply-list-refresh')
+        eventBus.publish('post-comment-reply-list-refresh', postInfo.uri)
       },
       rect: obj
     })
@@ -139,7 +139,7 @@ const PostItemFooter = (props: {
       />
     </TabContentWrap>}
     {showType === 'donate' && <TabContentWrap arrowPos={arrowPos} arrowColor={'#E7E7E7'}>
-      <DonateDetailList />
+      <DonateDetailList uri={postInfo.uri} />
     </TabContentWrap> }
   </>
 }
