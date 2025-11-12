@@ -3,7 +3,7 @@ import { JSX } from "react";
 import InfoSVG from '@/assets/info.svg'
 import MouseToolTip from "@/components/MouseToolTip";
 
-type TableProps<T> = {
+export type TableProps<T> = {
   columns: {
     title: string | JSX.Element;
     dataIndex: string;
@@ -12,13 +12,13 @@ type TableProps<T> = {
     info?: string | JSX.Element
     align?: "left" | "center" | 'right'
   }[];
-  data: T[]
+  data: T[];
   scroll?: {
     x: number | string
   }
 }
 
-export default function Table<T extends {[key: string]: any}>(props: TableProps<T>): JSX.Element {
+export default function Table<T>(props: TableProps<T>): JSX.Element {
   const { columns, data, scroll } = props;
 
   return <div className={S.wrap}>
@@ -50,7 +50,7 @@ export default function Table<T extends {[key: string]: any}>(props: TableProps<
       </tr>
       </thead>
       <tbody>
-      {data.map((d, idx) => <tr>
+      {data.length > 0 ? data.map((d, idx) => <tr>
         {columns.map((col, cdx) => {
           const value = col.render?.(d, idx) || d[col.dataIndex]
           return <td
@@ -58,8 +58,18 @@ export default function Table<T extends {[key: string]: any}>(props: TableProps<
             key={`r${idx}-c${cdx}`}
           >{value}</td>
         })}
-      </tr>)}
+      </tr>) : <Empty colsNum={columns.length} />}
       </tbody>
     </table>
   </div>
+}
+
+function Empty({ colsNum }: { colsNum: number }) {
+  return <tr>
+    <td colSpan={colsNum}>
+      <div className={S.empty}>
+        暂无数据
+      </div>
+    </td>
+  </tr>
 }

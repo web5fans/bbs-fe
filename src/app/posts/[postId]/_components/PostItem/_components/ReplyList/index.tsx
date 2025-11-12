@@ -11,7 +11,7 @@ import HtmlContent from "./HTMLContent";
 import Avatar from "@/components/Avatar";
 import SwitchPostHideOrOpen from "@/app/posts/[postId]/_components/PostItem/_components/SwitchPostHideOrOpen";
 import { eventBus } from "@/lib/EventBus";
-import DonateModal, { AuthorType } from "@/app/posts/[postId]/_components/PostItem/_components/Donate/DonateModal";
+import TipModal, { AuthorType } from "@/app/posts/[postId]/_components/PostItem/_components/Donate/TipModal";
 import DonateIcon from '@/assets/posts/donate.svg'
 
 export type ReplyListRefProps = { reload: () => void }
@@ -208,7 +208,7 @@ function Donate(props: {
       onClick={setTrue}
     >打赏</span>}
 
-    <DonateModal
+    <TipModal
       visible={visible}
       onClose={toggle}
       author={props.author}

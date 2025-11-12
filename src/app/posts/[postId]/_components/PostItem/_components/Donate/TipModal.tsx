@@ -31,7 +31,7 @@ type ModalContentProps = {
   onConfirm: (ckbAmount: string) => void
 }
 
-const DonateModal = (props: {
+const TipModal = (props: {
   visible: boolean;
 } & ModalContentProps) => {
   const { visible, onClose, ...rest } = props;
@@ -60,7 +60,7 @@ const DonateModal = (props: {
   </Modal>
 }
 
-export default DonateModal;
+export default TipModal;
 
 type TipPrepareResponseType = {
   payment: {

@@ -3,7 +3,9 @@ import { useEffect, useRef } from "react";
 import remResponsive from "@/lib/rem-responsive";
 import Border from '@/assets/fund/type-border.svg'
 
-const FlowTypeIcon = () => {
+const FlowTypeIcon = ({ text }: {
+  text: string
+}) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const FlowTypeIcon = () => {
 
   return <div className={S.wrap} ref={ref}>
     <Border className={S.border} />
-    分
+    {text}
   </div>
 }
 

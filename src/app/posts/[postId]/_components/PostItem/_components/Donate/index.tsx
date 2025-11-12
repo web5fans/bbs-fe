@@ -1,5 +1,5 @@
 import { useBoolean } from "ahooks";
-import DonateModal, { AuthorType } from "./DonateModal";
+import TipModal, { AuthorType } from "./TipModal";
 import S from './index.module.scss'
 import DonateIcon from '@/assets/posts/donate.svg'
 import { useEffect, useImperativeHandle, useRef, useState } from "react";
@@ -35,7 +35,7 @@ const Donate = (props: {
       className={S.text}
     >打赏此贴</span>}
 
-    <DonateModal
+    <TipModal
       visible={visible}
       onClose={toggle}
       author={props.author}

@@ -1,17 +1,16 @@
 import S from './index.module.scss'
 import Avatar from "@/components/Avatar";
 import CopyText from "@/components/CopyText";
-import TxIcon from "@/assets/tx.svg";
 import { usePagination } from "ahooks";
 import server from "@/server";
 import { shannonToCkb } from "@/lib/utils";
 import utcToLocal from "@/lib/utcToLocal";
 import BBSPagination from "@/components/BBSPagination";
 import { CircleLoading } from "@/components/Loading";
-import { CKB_EXPLORER } from "@/constant/explorer";
 import Link from "next/link";
+import GoExplorer from "@/components/GoExplorer";
 
-const DonateDetailList = (props: {
+const TipDetailList = (props: {
   uri: string
 }) => {
   const {data, loading, pagination, refresh} = usePagination(async ({ current, pageSize }) => {
@@ -70,7 +69,7 @@ const DonateDetailList = (props: {
                 <td>
                   <div className={S.time}>
                     <span>{utcToLocal(row.created, 'YYYY/MM/DD HH:mm:ss')}</span>
-                    <a href={`${CKB_EXPLORER}/transaction/${row['tx_hash']}`} target={'_blank'}><TxIcon className={S.icon} /></a>
+                    <GoExplorer hash={row['tx_hash']} className={S.icon} />
                   </div>
                 </td>
               </tr>
@@ -83,7 +82,7 @@ const DonateDetailList = (props: {
   </div>
 }
 
-export default DonateDetailList;
+export default TipDetailList;
 
 
 function Empty() {

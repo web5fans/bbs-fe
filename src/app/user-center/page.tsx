@@ -5,16 +5,14 @@ import S from "./index.module.scss";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import UserInfo from "@/app/user-center/_components/UserInfo";
 import BBSDataSelf from "@/app/user-center/_components/BBSDataSelf";
-import DataDetail from "@/app/user-center/_components/DataDetail";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useRequest } from "ahooks";
-import server from "@/server";
-import { UserProfileType } from "@/store/userInfo";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { handleToNickName } from "@/lib/handleToNickName";
 import { LayoutCenter } from "@/components/Layout";
 import SelfOverview from "./_components/SelfOverview";
+import SelfDataDetail from "@/app/user-center/_components/DataDetail/SelfDataDetail";
 
 const Page = () => {
   const { userProfile, hasLoggedIn, writeProfile, getUserProfile } = useCurrentUser()
@@ -74,7 +72,7 @@ const Page = () => {
         </div>
       </CardWindow>
 
-      <DataDetail
+      <SelfDataDetail
         did={userProfile?.did}
         profile={userInfo}
       />

@@ -8,7 +8,7 @@ import ReplyList from "../ReplyList";
 import utcToLocal from "@/lib/utcToLocal";
 import Donate from "../Donate";
 import { PostItemType } from "@/app/posts/[postId]/_components/PostItem/index";
-import DonateDetailList from "../DonateDetailList";
+import TipDetailList from "../TipDetailList";
 import SwitchPostHideOrOpen from "../SwitchPostHideOrOpen";
 import { eventBus } from "@/lib/EventBus";
 
@@ -139,7 +139,7 @@ const PostItemFooter = (props: {
       />
     </TabContentWrap>}
     {showType === 'donate' && <TabContentWrap arrowPos={arrowPos} arrowColor={'#E7E7E7'}>
-      <DonateDetailList uri={postInfo.uri} />
+      <TipDetailList uri={postInfo.uri} />
     </TabContentWrap> }
   </>
 }

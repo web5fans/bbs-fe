@@ -1,0 +1,22 @@
+@use "@/styles/rem";
+
+.wrap {
+  position: relative;
+
+  .loading {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+
+    .icon {
+      width: rem.px2flexible(17);
+      height: rem.px2flexible(17);
+    }
+  }
+}

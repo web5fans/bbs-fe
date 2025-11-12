@@ -61,10 +61,13 @@
         }
       }
 
-      &:hover {
+      &:not(:has( .empty)):hover {
         td {
           background: #FAFAFA;
           color: var(--primary-color);
+          * {
+            color: var(--primary-color);
+          }
         }
       }
 
@@ -83,4 +86,12 @@
       padding-right: rem.px2flexible(10);
     }
   }
+}
+
+.empty {
+  width: 100%;
+  height: rem.px2flexible(102);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

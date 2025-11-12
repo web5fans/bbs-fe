@@ -5,15 +5,21 @@ import { useEffect, useRef, useState } from "react";
 import UserPosts from "./components/UserPosts";
 import UserComments from "./components/UserComments";
 import { UserProfileType } from "@/store/userInfo";
+import IncomeTab from "@/app/user-center/_components/DataDetail/components/IncomeTab";
+import SpendingTab from "@/app/user-center/_components/DataDetail/components/SpendingTab";
 
 const tabs = [{
   title: '发帖'
 },{
   title: '回帖'
+}, {
+  title: '收入明细'
+}, {
+  title: '支出明细'
 }
 ]
 
-const SelfDataDetail = (props: { did?: string; profile: UserProfileType }) => {
+const SelfDataDetail = (props: { did: string; profile: UserProfileType }) => {
   const { did, profile } = props;
   const [activeTab, setActiveTab] = useState(0)
 
@@ -44,6 +50,8 @@ const SelfDataDetail = (props: { did?: string; profile: UserProfileType }) => {
     <div className={S.content}>
       {activeTab === 0 && <UserPosts did={did} scrollToTop={scrollToTop} />}
       {activeTab === 1 && <UserComments did={did} commentName={profile.displayName} scrollToTop={scrollToTop} />}
+      {activeTab === 2 && <IncomeTab />}
+      {activeTab === 3 && <SpendingTab did={did} />}
     </div>
   </div>
 }
