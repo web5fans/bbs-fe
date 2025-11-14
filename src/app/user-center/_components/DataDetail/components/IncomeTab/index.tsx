@@ -9,7 +9,7 @@ import DistributeStatus from "@/components/DistributeStatus";
 import FlowTypeIcon from "@/app/section/fund/[sectionId]/_components/Tabs/Flow/components/FlowTypeIcon";
 import UserAvatarInfo from "@/components/UserAvatarInfo";
 import { StreamlineText } from "../SpendingTab";
-import { NSID_TYPE_ENUM } from "@/constant/types";
+import { INCOME_STATUS_ENUM, incomeStatusMap, NSID_TYPE_ENUM } from "@/constant/types";
 
 const IncomeTab = (props: {
   did: string
@@ -33,6 +33,7 @@ const IncomeTab = (props: {
     width: '20%',
     render: (record) => {
       const source = record.source;
+      if (!source) return null;
       const nsid = source.nsid;
 
       if (nsid === NSID_TYPE_ENUM.POST) return <StreamlineText title={source.title} uri={source.uri} />
@@ -62,9 +63,9 @@ const IncomeTab = (props: {
       <p className={S.title}>待发放状态说明：</p>
       <p className={'whitespace-normal'}>当金额少于 61CKB 时，由 BBS 平台暂时保管，等攒够数额再分发。</p>
     </div>,
-    render: () => {
-      return '-'
-      // return <DistributeStatus status={'pending'} />
+    render: (record) => {
+      const status = record.status as INCOME_STATUS_ENUM
+      return <DistributeStatus status={incomeStatusMap[status]} />
     }
   },{
     title: '支出人',
@@ -79,15 +80,14 @@ const IncomeTab = (props: {
         }}
       />
     },
-    align: "center"
   }, {
     title: '时间',
-    dataIndex: 'created',
+    dataIndex: 'createdAt',
     width: '18%',
     render: (record) => {
       return <div className={S.time}>
-        {utcToLocal(record.created, 'YYYY/MM/DD HH:mm')}
-        <GoExplorer hash={record.tx_hash} />
+        {utcToLocal(record.createdAt, 'YYYY/MM/DD HH:mm')}
+        {record.txHash && <GoExplorer hash={record.txHash} />}
       </div>
     }
   }]
@@ -106,7 +106,6 @@ const IncomeTab = (props: {
         list: result.tips
       }
     }}
-    defaultPageSize={10}
     scroll={{ x: remResponsive(500) }}
     afterLoading={props.scrollToTop}
   />

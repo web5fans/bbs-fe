@@ -4,19 +4,18 @@ import { usePagination } from "ahooks";
 import BBSPagination from "@/components/BBSPagination";
 import { CircleLoading } from "@/components/Loading";
 import { useEffect } from "react";
+import { PaginationOptions, Data, Params } from "ahooks/lib/usePagination/types";
 
 type RequestTableProps<T> = {
   request: (params: { current: number; pageSize: number }) => Promise<{ total: number; list: T[] }>
-  defaultPageSize?: number
-  refreshDeps?: React.DependencyList
+  requestOptions?: PaginationOptions<Data, Params>
   afterLoading?: () => void
 } & Omit<TableProps<T>, 'data'>
 
 export default function RequestTable<T = any>(props: RequestTableProps<T>){
-  const { request, defaultPageSize, refreshDeps, ...rest } = props;
+  const { request, requestOptions, afterLoading, ...rest } = props;
   const { data, loading, pagination } = usePagination(request, {
-    defaultPageSize,
-    refreshDeps,
+    ...(requestOptions || {})
   })
 
   useEffect(() => {

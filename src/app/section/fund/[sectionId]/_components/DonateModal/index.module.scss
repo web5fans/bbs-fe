@@ -1,0 +1,88 @@
+@use "@/styles/rem";
+
+.modal {
+  width: rem.px2flexible(352);
+  box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0 0 #000;
+  border: rem.px2flexible(1) solid;
+
+  --card-window-title-letter-spacing: normal;
+  --card-window-header-padding-block: #{rem.px2flexible(4)};
+  --close-right: #{rem.px2flexible(9)};
+  --close-padding-left: #{rem.px2flexible(9)};
+
+  .container {
+    padding: 0 rem.px2flexible(10);
+    font-family: var(--font-CLFN);
+
+    .info {
+      display: flex;
+      align-items: center;
+      margin: rem.px2flexible(19) 0 rem.px2flexible(19) rem.px2flexible(11);
+
+      .fundIcon {
+        width: rem.px2flexible(34);
+        height: rem.px2flexible(34);
+        margin-right: rem.px2flexible(10);
+      }
+
+      .name {
+        font-size: rem.px2flexible(12);
+        font-weight: 500;
+        text-transform: capitalize;
+      }
+
+      .address {
+        font-size: rem.px2flexible(10);
+        color: #6C6C6C;
+      }
+    }
+  }
+
+  .error {
+    color: #CE0D36;
+    font-size: rem.px2flexible(9);
+    margin-top: rem.px2flexible(8);
+  }
+
+  .message {
+    display: flex;
+    align-items: center;
+    margin-top: rem.px2flexible(12);
+    color: #6C6C6C;
+    font-size: rem.px2flexible(9);
+    gap: rem.px2flexible(4);
+
+    & + .message {
+      margin-top: 0;
+    }
+
+    .icon {
+      width: rem.px2flexible(8);
+      height: rem.px2flexible(8);
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin: rem.px2flexible(25) rem.px2flexible(13) rem.px2flexible(25) 0;
+
+    .cancel {
+      width: rem.px2flexible(46);
+      height: rem.px2flexible(25);
+      margin-right: rem.px2flexible(23);
+      font-size: rem.px2flexible(8);
+    }
+
+    .submit {
+      width: rem.px2flexible(62);
+      height: rem.px2flexible(25);
+      font-size: rem.px2flexible(8);
+    }
+  }
+}
+
+.connectWallet {
+  width: rem.px2flexible(309);
+}

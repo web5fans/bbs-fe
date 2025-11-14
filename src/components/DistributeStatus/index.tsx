@@ -7,7 +7,7 @@ import cx from "classnames";
 const statusMap = {
   wait: {
     icon: <WaitIcon />,
-    name: '待完成',
+    name: '待发放',
     className: S.wait
   },
   pending: {
@@ -17,20 +17,21 @@ const statusMap = {
   },
   success: {
     icon: <SuccessIcon />,
-    name: '已完成',
+    name: '已发放',
     className: S.success
   }
 }
 
-const DistributeStatus = ({ status }: {
+const DistributeStatus = ({ status, label }: {
   status: 'wait' | 'pending' | 'success'
+  label?: string
 }) => {
   
   const { icon, name, className } = statusMap[status]
   
   return <div className={cx(S.wrap, className)}>
     {icon}
-    {name}
+    {label || name}
   </div>
 }
 

@@ -36,6 +36,10 @@
       font-size: rem.px2flexible(10);
       word-break: break-all;
       font-weight: 500;
+
+      &.primary {
+        color: var(--primary-color);
+      }
     }
   }
 }

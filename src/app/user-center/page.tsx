@@ -68,7 +68,7 @@ const Page = () => {
               commentCount={userInfo?.comment_count}
             />
           </div>
-          <SelfOverview />
+          <SelfOverview did={userProfile?.did} />
         </div>
       </CardWindow>
 

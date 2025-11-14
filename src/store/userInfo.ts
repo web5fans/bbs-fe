@@ -16,6 +16,7 @@ export type UserProfileType = {
   comment_count?: string
   created?: string
   handle?: string
+  ckb_addr: string
 }
 
 type UserInfoStoreValue = {

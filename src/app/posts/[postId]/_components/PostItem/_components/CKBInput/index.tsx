@@ -10,13 +10,17 @@ import { useBoolean } from "ahooks";
 import { DotLoading } from "@/components/Loading";
 
 type CKBInputProps = {
+  inputLabel?: string
   onValueError?: () => void
   onChange: (value: string) => void
   getBalance?: (balance: string) => void
   children?: React.ReactNode
+  placeholder?: string
 }
 
 const CKBInput = (props: CKBInputProps) => {
+  const { inputLabel, placeholder } = props;
+
   const { signer, address, disconnect } = useWallet()
 
   const [balance, setBalance] = useState<string | undefined>(undefined)
@@ -70,7 +74,7 @@ const CKBInput = (props: CKBInputProps) => {
 
   return <div className={S.wrap}>
     <div className={S.top}>
-      <span className={S.title}>打赏金额</span>
+      <span className={S.title}>{inputLabel || '打赏金额'}</span>
       <div className={S.balance}>CKB余额:&nbsp;
         {balanceLoading ? <div>获取中<DotLoading /></div> : <span>{balance} CKB</span>}
       </div>
@@ -78,7 +82,7 @@ const CKBInput = (props: CKBInputProps) => {
 
     <InputNumber
       wrapClassName={S.inputWrap}
-      placeholder={'请输入打赏金额，最多两位小数'}
+      placeholder={placeholder || '请输入打赏金额，最多两位小数'}
       min={1}
       max={Math.floor(balance * 100) / 100}
       pattern={/^\d+(\.\d{0,2})?$/}

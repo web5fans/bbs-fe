@@ -1,7 +1,8 @@
 @use "@/styles/rem";
 
 .cardWindow {
-  --card-window-line-gap: #{rem.px2flexible(1)}
+  --card-window-line-gap: #{rem.px2flexible(1)};
+  --card-window-title-size: #{rem.px2flexible(9)};
 }
 
 .wrap {
@@ -15,6 +16,7 @@
     font-size: rem.px2flexible(10);
     line-height: rem.px2flexible(10);
     margin-bottom: rem.px2flexible(10);
+    font-weight: 500;
   }
 
   .total {

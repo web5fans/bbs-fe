@@ -9,10 +9,10 @@ import CopyText from "@/components/CopyText";
 import { SectionItem } from "@/app/posts/utils";
 import GoExplorer from "@/components/GoExplorer";
 import { shannonToCkb } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ccc } from "@ckb-ccc/core";
-import { useBoolean, useRequest } from "ahooks";
 import { useWallet } from "@/provider/WalletProvider";
+import { useBoolean, useRequest } from "ahooks";
 import { DotLoading } from "@/components/Loading";
 import server from "@/server";
 
@@ -49,14 +49,10 @@ const Balance = (props: {
 
   return <CardWindow
     wrapClassName={S.cardWindow}
-    breadCrumbs={[
-      {title: '首页', route: '/posts'},
-      {title: '版区详情', route: `/section/${section.id}`},
-      { title: '版区基金' },
-    ]}
+    header={'BBS社区基金'}
   >
     <div className={S.wrap}>
-      <p className={S.title}>【{section.name}】<span className={'font-medium'}>基金金额</span></p>
+      <p className={S.title}>BBS社区基金金额</p>
       <div className={S.total}>
         {loading ? <div className={S.loading}>
           获取中<DotLoading />
@@ -64,13 +60,17 @@ const Balance = (props: {
           <span>{numeral(balance).format('0,0.[00000000]')}</span>
           <span>CKB</span>
         </p>}
-        <Button className={S.donate} onClick={openDonateModal}>捐赠</Button>
+
+        <Button
+          className={S.donate}
+          onClick={openDonateModal}
+        >捐赠</Button>
       </div>
 
       <FlatBottomedCard className={S.address}>
         <div className={S.info}>
           <div className={S.coffers}>
-            金库多签地址：
+            社区金库多签地址：
             <CopyText text={ckbAddr} ellipsis />
           </div>
 

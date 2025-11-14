@@ -73,7 +73,7 @@ const SectionDetailPage = () => {
       >
         <div className={S.left}>
           <SectionDetailCard sectionInfo={sectionInfo} />
-          {isUnderBreakPoint && <FundEntrance sectionId={sectionId} />}
+          {isUnderBreakPoint && <FundEntrance sectionId={sectionId} ckbAddr={sectionInfo?.ckb_addr} />}
 
           <Recommend sectionId={sectionId} ref={recommendRef} />
           <PostsList
@@ -85,7 +85,7 @@ const SectionDetailPage = () => {
         </div>
         <div className={S.right}>
           <GoPublishPost goPublish={goToPublish} />
-          <FundEntrance sectionId={sectionId} />
+          <FundEntrance sectionId={sectionId} ckbAddr={sectionInfo?.ckb_addr} />
         </div>
       </div>
       <FloatingMark ref={stickyRef}>

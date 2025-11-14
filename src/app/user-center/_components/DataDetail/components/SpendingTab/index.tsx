@@ -45,6 +45,7 @@ const SpendingTab = (props: {
     width: '20%',
     render: (record) => {
       const source = record.source;
+      if (!source) return '-';
       const nsid = source.nsid;
 
       if (nsid === NSID_TYPE_ENUM.POST) return <StreamlineText title={source.title} uri={source.uri} />
@@ -69,13 +70,18 @@ const SpendingTab = (props: {
     title: '状态',
     dataIndex: 'status',
     width: '12%',
-    info: <div className={S.tips}>
-      <p className={S.title}>待发放状态说明：</p>
-      <p className={'whitespace-normal'}>当金额少于 61CKB 时，由 BBS 平台暂时保管，等攒够数额再分发。</p>
-    </div>,
-    render: () => {
-      return '-'
-      // return <DistributeStatus status={'pending'} />
+    render: (record) => {
+      const statusMap = {
+        1: {
+          status: 'pending',
+          label: '上链中'
+        },
+        2: {
+          status: 'success',
+          label: '已完成'
+        }
+      }
+      return <DistributeStatus {...statusMap[record.status]} />
     }
   },{
     title: '支出钱包地址',
@@ -97,14 +103,13 @@ const SpendingTab = (props: {
         }}
       />
     },
-    align: "center"
   }, {
     title: '时间',
-    dataIndex: 'created',
+    dataIndex: 'createdAt',
     width: '18%',
     render: (record) => {
       return <div className={S.time}>
-        {utcToLocal(record.created, 'YYYY/MM/DD HH:mm')}
+        {utcToLocal(record.createdAt, 'YYYY/MM/DD HH:mm')}
         <GoExplorer hash={record.tx_hash} />
       </div>
     }
@@ -124,7 +129,6 @@ const SpendingTab = (props: {
         list: result.tips
       }
     }}
-    defaultPageSize={10}
     scroll={{ x: remResponsive(500) }}
     afterLoading={props.scrollToTop}
   />

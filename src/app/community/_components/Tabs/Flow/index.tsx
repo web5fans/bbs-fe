@@ -57,12 +57,11 @@ const Flow = ({ ckbAddr }: {
     },
   },{
     title: '来源',
-    dataIndex: 'src',
+    dataIndex: 'source',
     width: '20%',
     render: (record) => {
       const category = record.category
-      const source = record.source;
-      if (category === 1 || !source) {
+      if (category === 1) {
         return <UserAvatarInfo
           author={{
             avatar: record.sender_author?.displayName,
@@ -71,6 +70,7 @@ const Flow = ({ ckbAddr }: {
           }}
         />
       }
+      const source = record.source;
       const { nsid } = record.source;
 
       if (nsid === NSID_TYPE_ENUM.POST) return <StreamlineText title={source.title} uri={source.uri} />
@@ -95,8 +95,7 @@ const Flow = ({ ckbAddr }: {
     dataIndex: 'sender',
     width: '18%',
     render: (record) => {
-
-      if (record.category === 1 || !record.sender_author) return '-'
+      if (record.category === 1) return '-'
       return <UserAvatarInfo
         author={{
           avatar: record.sender_author?.displayName,
