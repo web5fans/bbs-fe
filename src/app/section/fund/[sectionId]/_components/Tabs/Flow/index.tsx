@@ -1,45 +1,147 @@
 import S from './index.module.scss'
 import SearchCondition from "./components/SearchCondition";
-import Table from "@/components/Table";
 import FlowTypeIcon from "./components/FlowTypeIcon";
+import { useSetState } from "ahooks";
+import dayjs from "dayjs";
+import RequestTable from "@/components/Table/RequestTable";
+import server from "@/server";
+import { shannonToCkb } from "@/lib/utils";
+import UserAvatarInfo from "@/components/UserAvatarInfo";
+import { NSID_TYPE_ENUM } from "@/constant/types";
+import remResponsive from "@/lib/rem-responsive";
+import utcToLocal from "@/lib/utcToLocal";
+import GoExplorer from "@/components/GoExplorer";
+import { StreamlineText } from "@/app/user-center/_components/DataDetail/components/SpendingTab";
 
-const Flow = () => {
+export type SearchParamsType = {
+  category: number | undefined
+  start: string
+  end: string
+}
+
+const Flow = ({ ckbAddr }: {
+  ckbAddr: string
+}) => {
+  const [searchParams, setSearchParams] = useSetState<SearchParamsType>({
+    category: undefined,
+    start: dayjs().startOf('month').format('YYYY/MM/DD') + ' 00:00',
+    end: dayjs().add(1, 'month').startOf('month').format('YYYY/MM/DD') + ' 00:00',
+  })
+
   const columns = [{
     title: '类型',
-    dataIndex: 'name',
-    render: () => {
-      return <div>
-        <FlowTypeIcon />
+    dataIndex: 'category',
+    width: '12%',
+    render: (record) => {
+      const { category } = record;
+      const categoryMap = [{
+        short: '分',
+        name: '分成收入'
+      }, {
+        short: '捐',
+        name: '捐赠收入'
+      }]
+      const typeObj = categoryMap[category]
+      return <div className={S.flowType}>
+        <FlowTypeIcon text={typeObj.short} />
+        {typeObj.name}
       </div>
     }
   },{
     title: '金额',
-    dataIndex: 'name',
-    render: () => {
-      return <span className={'whitespacenowrap'}>+12.12345678 CKB</span>
+    dataIndex: 'amount',
+    width: '18%',
+    render: (record) => {
+      return <span className={'font-medium text-[#319999]'}>+{shannonToCkb(record.amount)} CKB</span>
     },
-    info: '22'
   },{
     title: '来源',
-    dataIndex: 'name',
-    render: () => {
-      return <div className={'whitespacenowrap'}>Web5 技术是什么呀可以和我说说吗？</div>
+    dataIndex: 'source',
+    width: '20%',
+    render: (record) => {
+      const category = record.category
+      if (category === 1) {
+        return <UserAvatarInfo
+          author={{
+            avatar: record.sender_author?.displayName,
+            name: record.sender_author?.displayName,
+            address: record.sender,
+          }}
+        />
+      }
+      const source = record.source;
+      const { nsid } = record.source;
+
+      if (nsid === NSID_TYPE_ENUM.POST) return <StreamlineText title={source.title} uri={source.uri} />
+      if ([NSID_TYPE_ENUM.POST_COMMENT, NSID_TYPE_ENUM.POST_REPLY].includes(nsid)) {
+        return <StreamlineText text={source.text} uri={source.post} />
+      }
     }
   },{
-    title: '时间',
-    dataIndex: 'name',
+    title: '状态',
+    dataIndex: 'status',
+    width: '12%',
+    info: <div className={S.tips}>
+      <p className={S.title}>待发放状态说明：</p>
+      <p className={'whitespace-normal'}>当金额少于 61CKB 时，由 BBS 平台暂时保管，等攒够数额再分发。</p>
+    </div>,
     render: () => {
-      return <div>
-        2023/12/11 12:11
+      return '-'
+      // return <DistributeStatus status={'pending'} />
+    }
+  }, {
+    title: '打赏人',
+    dataIndex: 'sender',
+    width: '18%',
+    render: (record) => {
+
+      if (record.category === 1) return '-'
+      return <UserAvatarInfo
+        author={{
+          avatar: record.sender_author?.displayName,
+          name: record.sender_author?.displayName,
+          address: record.sender,
+        }}
+      />
+    },
+    align: "center"
+  }, {
+    title: '时间',
+    dataIndex: 'created',
+    width: '18%',
+    render: (record) => {
+      return <div className={S.time}>
+        {utcToLocal(record.created, 'YYYY/MM/DD HH:mm')}
+        <GoExplorer hash={record.txHash} />
       </div>
     }
   }]
 
   return <div className={S.wrap}>
-    <SearchCondition />
+    <SearchCondition
+      searchParams={searchParams}
+      setSearchParams={setSearchParams}
+    />
 
     <div className={S.table}>
-      <Table columns={columns} data={[{}, {}, {}]} />
+      <RequestTable
+        columns={columns}
+        refreshDeps={[searchParams]}
+        request={async ({ current, pageSize }) => {
+          const result = await server('/tip/income_details', 'POST', {
+            did: ckbAddr,
+            page: current,
+            per_page: pageSize,
+            ...searchParams
+          })
+
+          return {
+            total: result.total,
+            list: result.tips
+          }
+        }}
+        scroll={{ x: remResponsive(500) }}
+      />
     </div>
   </div>
 }

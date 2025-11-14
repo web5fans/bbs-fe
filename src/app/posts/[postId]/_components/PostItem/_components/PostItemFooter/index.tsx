@@ -139,7 +139,7 @@ const PostItemFooter = (props: {
       />
     </TabContentWrap>}
     {showType === 'donate' && <TabContentWrap arrowPos={arrowPos} arrowColor={'#E7E7E7'}>
-      <TipDetailList uri={postInfo.uri} />
+      <TipDetailList uri={postInfo.uri} nsid={isNotMainPost ? 'comment' : 'post'} />
     </TabContentWrap> }
   </>
 }

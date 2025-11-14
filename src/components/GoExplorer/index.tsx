@@ -3,9 +3,9 @@ import TxIcon from "@/assets/tx.svg";
 import S from "./index.module.scss";
 import cx from "classnames";
 
-const GoExplorer = ({hash, className}: { hash: string; className?: string }) => {
+const GoExplorer = ({hash, className, subPath = 'transaction'}: { hash: string; className?: string; subPath?: string }) => {
   return <a
-    href={`${CKB_EXPLORER}/transaction/${hash}`}
+    href={`${CKB_EXPLORER}/${subPath}/${hash}`}
     target={'_blank'}
   ><TxIcon className={cx(S.icon, className)} /></a>
 }

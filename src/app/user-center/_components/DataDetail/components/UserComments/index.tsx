@@ -26,7 +26,7 @@ const UserComments = (props: UserCommentsPropsType) => {
   const router = useRouter();
   const { userProfile } = useCurrentUser()
 
-  const { data: dataSource, loading, loadingMore, loadMore, noMore, reload } = useInfiniteScroll<ISPageData>(async (prevData) => {
+  const { data: dataSource, loading, loadingMore, loadMore, noMore, reload } = useInfiniteScroll(async (prevData) => {
 
     const { nextCursor } = prevData || {};
 

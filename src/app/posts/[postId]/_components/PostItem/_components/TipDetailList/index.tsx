@@ -9,15 +9,23 @@ import BBSPagination from "@/components/BBSPagination";
 import { CircleLoading } from "@/components/Loading";
 import Link from "next/link";
 import GoExplorer from "@/components/GoExplorer";
+import { NSID_TYPE_ENUM } from "@/constant/types";
+
+const nsidMap = {
+  post: NSID_TYPE_ENUM.POST,
+  comment: NSID_TYPE_ENUM.POST_COMMENT,
+}
 
 const TipDetailList = (props: {
   uri: string
+  nsid: 'post' | 'comment'
 }) => {
   const {data, loading, pagination, refresh} = usePagination(async ({ current, pageSize }) => {
     const result = await server<{ total: number; tips: any[] }>('/tip/list', 'POST', {
-      for_uri: props.uri,
+      uri: props.uri,
       page: current,
-      per_page: pageSize
+      per_page: pageSize,
+      nsid: nsidMap[props.nsid]
     })
 
       return {
@@ -43,7 +51,7 @@ const TipDetailList = (props: {
         </thead>
         <tbody>
           {
-            data?.list ? data?.list.map(row => {
+            data?.list && data.list.length !== 0 ? data?.list.map(row => {
               const author = row.sender_author
               const href = `/user-center/${encodeURIComponent(row.sender_did)}`
               return <tr>

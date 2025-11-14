@@ -29,6 +29,7 @@ const SelfDataDetail = (props: { did: string; profile: UserProfileType }) => {
 
   const scrollToTop = () => {
     if(!ref.current || !startChangeTab.current) return
+    startChangeTab.current = false;
     const top = ref.current.offsetTop;
     window.scrollTo({top, behavior: 'smooth'} )
   }
@@ -50,7 +51,7 @@ const SelfDataDetail = (props: { did: string; profile: UserProfileType }) => {
     <div className={S.content}>
       {activeTab === 0 && <UserPosts did={did} scrollToTop={scrollToTop} />}
       {activeTab === 1 && <UserComments did={did} commentName={profile.displayName} scrollToTop={scrollToTop} />}
-      {activeTab === 2 && <IncomeTab />}
+      {activeTab === 2 && <IncomeTab did={did}/>}
       {activeTab === 3 && <SpendingTab did={did} />}
     </div>
   </div>

@@ -23,6 +23,7 @@ const DataDetail = (props: { did?: string; profile: UserProfileType }) => {
 
   const scrollToTop = () => {
     if(!ref.current || !startChangeTab.current) return
+    startChangeTab.current = false;
     const top = ref.current.offsetTop;
     window.scrollTo({top, behavior: 'smooth'} )
   }

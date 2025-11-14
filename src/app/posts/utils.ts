@@ -35,6 +35,7 @@ export type SectionItem = {
   comment_count: string
   announcement_count: string
   top_count: string
+  ckb_addr: string
   id: string;
   name: string
   owner?: { did: string; displayName?: string } // 版主

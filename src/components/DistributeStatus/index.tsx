@@ -7,7 +7,7 @@ import cx from "classnames";
 const statusMap = {
   wait: {
     icon: <WaitIcon />,
-    name: '待发放',
+    name: '待完成',
     className: S.wait
   },
   pending: {

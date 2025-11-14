@@ -5,11 +5,13 @@ import CaretIcon from '@/assets/caret.svg';
 import S from './index.module.scss'
 import cx from "classnames";
 
+type OptionValueType = string | number;
+
 type SelectProps = {
-  options: { value: string, label: string, [key: string]: any }[]
+  options: { value: OptionValueType, label: string, [key: string]: any }[]
   renderItem?: (item: any) => React.ReactNode
-  onChange: (value: string) => void
-  selectedValue?: string
+  onChange: (value: OptionValueType) => void
+  selectedValue?: OptionValueType
   className?: string
   placeholder?: string
 }

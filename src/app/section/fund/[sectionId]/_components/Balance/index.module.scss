@@ -57,10 +57,6 @@
       .go {
         width: rem.px2flexible(9);
         height: rem.px2flexible(9);
-        cursor: pointer;
-        &:hover {
-          color: var(--primary-color);
-        }
       }
 
       .coffers {
@@ -88,6 +84,7 @@
         font-size: rem.px2flexible(10);
         word-break: break-all;
         font-weight: 500;
+        color: var(--primary-color);
       }
     }
   }

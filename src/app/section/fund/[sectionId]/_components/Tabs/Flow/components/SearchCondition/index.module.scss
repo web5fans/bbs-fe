@@ -48,6 +48,22 @@
       }
     }
   }
+
+  .range {
+    display: flex;
+    align-items: center;
+
+    .divide {
+      margin: 0 rem.px2flexible(4);
+    }
+
+    .search {
+      min-width: rem.px2flexible(20);
+      height: rem.px2flexible(18);
+      font-size: rem.px2flexible(7);
+      margin-left: rem.px2flexible(5);
+    }
+  }
 }
 
 @media screen and (max-width: 1023px) {
@@ -57,6 +73,24 @@
 
       .dateType {
         justify-content: flex-end;
+        margin-bottom: rem.px2flexible(4);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 805px) {
+  .wrap {
+    display: block;
+
+    .select {
+      width: 50%;
+      margin-bottom: rem.px2flexible(4);
+    }
+    .dateFilter {
+
+      .dateType {
+        justify-content: start;
         margin-bottom: rem.px2flexible(4);
       }
     }

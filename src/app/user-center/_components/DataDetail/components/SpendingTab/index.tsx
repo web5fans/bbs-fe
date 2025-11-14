@@ -9,31 +9,34 @@ import { postUriToHref } from "@/lib/postUriHref";
 import CopyText from "@/components/CopyText";
 import utcToLocal from "@/lib/utcToLocal";
 import GoExplorer from "@/components/GoExplorer";
-import Avatar from "@/components/Avatar";
 import DistributeStatus from "@/components/DistributeStatus";
 import FlowTypeIcon from "@/app/section/fund/[sectionId]/_components/Tabs/Flow/components/FlowTypeIcon";
-
-enum SPENDING_TYPE {
-  TIP_POST = 'app.bbs.post',
-  TIP_COMMENT = 'app.bbs.comment',
-  TIP_REPLY = 'app.bbs.reply',
-  DONATE_SECTION = 'app.bbs.section',
-  DONATE_COMMUNITY = 'app.bbs.community',
-}
+import UserAvatarInfo from "@/components/UserAvatarInfo";
+import { NSID_TYPE_ENUM } from "@/constant/types";
 
 const SpendingTab = (props: {
   did: string
+  scrollToTop?: () => void
 }) => {
   const { did } = props;
 
   const columns = [{
     title: '类型',
-    dataIndex: 'name',
+    dataIndex: 'category',
     width: '12%',
-    render: () => {
-      return <div className={'flex items-center whitespace-nowrap'}>
-        <FlowTypeIcon text={'捐'} />
-         捐赠支出
+    render: (record) => {
+      const { category } = record;
+      const categoryMap = [{
+        short: '支',
+        name: '打赏支出'
+      }, {
+        short: '捐',
+        name: '捐赠支出'
+      }]
+      const typeObj = categoryMap[category]
+      return <div className={S.flowType}>
+        <FlowTypeIcon text={typeObj.short} />
+        {typeObj.name}
       </div>
     }
   }, {
@@ -44,8 +47,8 @@ const SpendingTab = (props: {
       const source = record.source;
       const nsid = source.nsid;
 
-      if (nsid === SPENDING_TYPE.TIP_POST) return <StreamlineText title={source.title} uri={source.uri} />
-      if ([SPENDING_TYPE.TIP_COMMENT, SPENDING_TYPE.TIP_REPLY].includes(nsid)) {
+      if (nsid === NSID_TYPE_ENUM.POST) return <StreamlineText title={source.title} uri={source.uri} />
+      if ([NSID_TYPE_ENUM.POST_COMMENT, NSID_TYPE_ENUM.POST_REPLY].includes(nsid)) {
         return <StreamlineText text={source.text} uri={source.post} />
       }
       // if (nsid === SPENDING_TYPE.DONATE_SECTION) {
@@ -64,14 +67,15 @@ const SpendingTab = (props: {
     }
   },{
     title: '状态',
-    dataIndex: 'profileType',
+    dataIndex: 'status',
     width: '12%',
     info: <div className={S.tips}>
       <p className={S.title}>待发放状态说明：</p>
       <p className={'whitespace-normal'}>当金额少于 61CKB 时，由 BBS 平台暂时保管，等攒够数额再分发。</p>
     </div>,
     render: () => {
-      return <DistributeStatus status={'pending'} />
+      return '-'
+      // return <DistributeStatus status={'pending'} />
     }
   },{
     title: '支出钱包地址',
@@ -84,10 +88,14 @@ const SpendingTab = (props: {
     dataIndex: 'receiver',
     width: '18%',
     render: (record) => {
-      const { nsid } = record.source;
-      if (![SPENDING_TYPE.TIP_POST, SPENDING_TYPE.TIP_COMMENT, SPENDING_TYPE.TIP_REPLY].includes(nsid)) return '-'
-      if (!record.receiver_author) return '-'
-      return <Receiver author={{...record.receiver_author, address: record.receiver}} />
+      if (record.category === 1) return '-'
+      return <UserAvatarInfo
+        author={{
+          avatar: record.receiver_author?.displayName,
+          name: record.receiver_author?.displayName,
+          address: record.receiver,
+        }}
+      />
     },
     align: "center"
   }, {
@@ -96,7 +104,7 @@ const SpendingTab = (props: {
     width: '18%',
     render: (record) => {
       return <div className={S.time}>
-        {utcToLocal(record.created, 'YYYY-MM-DD HH:mm')}
+        {utcToLocal(record.created, 'YYYY/MM/DD HH:mm')}
         <GoExplorer hash={record.tx_hash} />
       </div>
     }
@@ -108,7 +116,7 @@ const SpendingTab = (props: {
       const result = await server('/tip/expense_details', 'POST', {
         page: current,
         per_page: pageSize,
-        sender_did: did,
+        did: did,
       })
 
       return {
@@ -118,13 +126,14 @@ const SpendingTab = (props: {
     }}
     defaultPageSize={10}
     scroll={{ x: remResponsive(500) }}
+    afterLoading={props.scrollToTop}
   />
 }
 
 export default SpendingTab;
 
 
-function StreamlineText({ text, uri, title }: { text?: string; uri: string; title?: string }) {
+export function StreamlineText({ text, uri, title }: { text?: string; uri: string; title?: string }) {
   const [innerRichText, setInnerRichText] = useState('')
 
   useEffect(() => {
@@ -145,23 +154,4 @@ function StreamlineText({ text, uri, title }: { text?: string; uri: string; titl
   return <Link href={href}>
     <div className={S.text}>{innerRichText}</div>
   </Link>
-}
-
-function Receiver({ author }: {
-  author: any
-}) {
-  return <div className={S.userInfo}>
-    <Avatar
-      nickname={author.displayName}
-      className={S.avatar}
-    />
-    <div className={S.info}>
-      <p className={S.name}>{author.displayName}</p>
-      <CopyText
-        text={author.address}
-        ellipsis
-        className={{ icon: S.copy, wrap: S.address }}
-      />
-    </div>
-  </div>
 }

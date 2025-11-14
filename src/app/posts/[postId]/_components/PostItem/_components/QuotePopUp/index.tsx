@@ -9,6 +9,8 @@ type QuotePopupProps = {
   quoteComment: (quote: string) => void
 }
 
+let timeout: NodeJS.Timeout
+
 const QuotePopUp = (props: QuotePopupProps) => {
   const contentHtmlRef = useRef<HTMLDivElement>(null)
   const popupRef = useRef<HTMLDivElement>(null)
@@ -84,18 +86,26 @@ const QuotePopUp = (props: QuotePopupProps) => {
 
   useEffect(() => {
     const f = () => {
+      console.log('fff')
       const selection = window.getSelection();
       if (!selection) return;
       if (contentHtmlRef.current && !contentHtmlRef.current.contains(selection.anchorNode)) {
         popupRef.current.style.display = 'none';
       }
     }
-    document.addEventListener("mouseup", f)
-    document.addEventListener("touchend", f)
+    const listener = () => {
+      if (timeout) {
+        clearTimeout(timeout)
+      }
+      timeout = setTimeout(f, 0)
+    }
+
+    document.addEventListener("mouseup", listener)
+    document.addEventListener("touchend", listener)
 
     return () => {
-      document.removeEventListener("mouseup", f)
-      document.removeEventListener("touchend", f)
+      document.removeEventListener("mouseup", listener)
+      document.removeEventListener("touchend", listener)
     }
   }, []);
 

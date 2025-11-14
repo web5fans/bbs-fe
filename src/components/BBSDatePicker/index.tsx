@@ -1,32 +1,28 @@
 import DatePicker, { DatePickerProps, ReactDatePickerCustomHeaderProps } from "react-datepicker";
-import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import S from './index.module.scss'
 import ArrowIcon from '@/assets/arrow.svg';
 
 type Props = Omit<DatePickerProps, 'onChange'> & {
-  defaultValue?: Date;
   onChange?: (value: string) => void;
 }
 
 const BBSDatePicker = (props: Props) => {
-  const { defaultValue, onChange } = props;
-  const [selectedDate, setSelectedDate] = useState<Date | undefined | null>(defaultValue || new Date());
+  const { onChange, ...rest } = props;
 
   return <DatePicker
+    {...rest}
     className={S.wrap}
     calendarClassName={S.calender}
     renderCustomHeader={CustomHeader}
     showPopperArrow={true}
-    dateFormat={'yyyy/MM/dd hh:mm'}
+    dateFormat={'yyyy/MM/dd HH:mm'}
     timeFormat={'HH:mm'}
     timeCaption={'时间'}
     showTimeSelect
-    selected={selectedDate}
-    onChange={(date: Date | null) => setSelectedDate(date)}
-    startDate={selectedDate}
-    onCalendarClose={() => onChange?.(selectedDate)}
+    onChange={(date: Date | null) => onChange?.(dayjs(date).format('YYYY/MM/DD HH:mm'))}
+    // onCalendarClose={() => onChange?.(selectedDate)}
     popperPlacement={'bottom-end'}
   />
 }
