@@ -12,6 +12,9 @@ import { shannonToCkb } from "@/lib/utils";
 import { DotLoading } from "@/components/Loading";
 import { NSID_TYPE_ENUM } from "@/constant/types";
 import DonateModal from "@/app/section/fund/[sectionId]/_components/DonateModal";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { useRouter } from "next/navigation";
+import MouseToolTip from "@/components/MouseToolTip";
 
 const FundEntrance = (props: {
   sectionId: string
@@ -24,6 +27,12 @@ const FundEntrance = (props: {
 
   const { walletClient } = useWallet()
 
+  const { hasLoggedIn } = useCurrentUser()
+
+  const router = useRouter()
+
+  const href = `/section/fund/${props.sectionId}`
+
   const getBalance = async () => {
     const addr = await ccc.Address.fromString(ckbAddr, walletClient)
     const result = await walletClient?.getBalanceSingle(addr.script)
@@ -33,13 +42,23 @@ const FundEntrance = (props: {
   }
 
   useEffect(() => {
+    router.prefetch(href)
+  }, []);
+
+  useEffect(() => {
     if (!ckbAddr) return
     getBalance()
   }, [ckbAddr]);
 
+  const goCheckDetail = () => {
+    if (!hasLoggedIn) return
+    router.push(href)
+  }
+
   return <div className={S.wrap}>
-    <Link href={`/section/fund/${props.sectionId}`} prefetch>
-      <div className={S.top}>
+    {/*<Link href={`/section/fund/${props.sectionId}`} prefetch>*/}
+    <MouseToolTip open={!hasLoggedIn} message={'需加入BBS才能查看基金详情'}>
+      <div className={S.top} onClick={goCheckDetail}>
         <div className={S.total}>
           <Logo className={S.logo} />
           {loading ? <div className={S.loading}>
@@ -57,10 +76,12 @@ const FundEntrance = (props: {
           </div>
         </div>
       </div>
-    </Link>
+    </MouseToolTip>
+    {/*</Link>*/}
     <Button
       className={S.donate}
       onClick={setDonateVis.setTrue}
+      disabled={!hasLoggedIn}
     >捐赠</Button>
 
     <DonateModal

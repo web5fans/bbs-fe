@@ -3,6 +3,8 @@
 .wrap {
   max-width: 1054px;
   margin: 100px auto 0;
+  font-family: var(--font-CLFN);
+  width: var(--center-content-width);
 
   --card-window-header-padding-block: #{rem.px2flexible(4)};
   --card-window-header-padding-inline: #{rem.px2flexible(9)};

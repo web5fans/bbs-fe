@@ -42,7 +42,11 @@ export default function AppHeader(props: {
 
         <div className={`${S.navigator} ${(props.isPopUp || isIndex) && '!hidden'}`}>
           <NavigatorIcon icon={<HomeIcon />} href={'/posts'} tooltip={'论坛首页'} />
-          <NavigatorIcon icon={<FundIcon />} href={'/community'} tooltip={'社区金库'} />
+          {hasLoggedIn && <NavigatorIcon
+            icon={<FundIcon />}
+            href={'/community'}
+            tooltip={'社区金库'}
+          />}
           {hasLoggedIn ? <NavigatorIcon icon={<UserIcon />} href={'/user-center'} tooltip={'个人中心'} /> :
           <Button
             type={'primary'}
