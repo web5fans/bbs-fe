@@ -7,13 +7,16 @@ import DonateModal from "./_components/DonateModal";
 import { NSID_TYPE_ENUM } from "@/constant/types";
 import { SectionItem } from "@/app/posts/utils";
 import { useBoolean } from "ahooks";
+import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark";
 
 const Content = ({ section }: {
   section: SectionItem
 }) => {
   const [donateVis, setDonateVis] = useBoolean(false)
+
+  const { rootRef, stickyRef } = useFloatingMarkDistance()
   
-  return <div className={S.wrap}>
+  return <div className={S.wrap} ref={rootRef}>
     <Balance
       section={section}
       openDonateModal={setDonateVis.setTrue}
@@ -28,6 +31,8 @@ const Content = ({ section }: {
       nsid={NSID_TYPE_ENUM.SECTION}
       onConfirm={setDonateVis.setFalse}
     />
+
+    <FloatingMark ref={stickyRef} />
   </div>
 }
 
