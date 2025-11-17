@@ -57,7 +57,7 @@ const SpendingTab = (props: {
       //     <span className={S.text}>{source.name}</span>
       //   </Link>
       // }
-      return source.name
+      return <span>【{source.name}】</span>
     }
   }, {
     title: '金额',

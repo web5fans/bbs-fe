@@ -14,9 +14,9 @@ const Donate = (props: {
   nsid?: 'app.bbs.post' | 'app.bbs.comment'
   count: string
 }) => {
-  const { nsid = 'app.bbs.comment' } = props;
+  const { nsid = 'app.bbs.comment', author } = props;
   const [visible, { toggle, setFalse }] = useBoolean(false)
-  const { hasLoggedIn } = useCurrentUser()
+  const { hasLoggedIn, userProfile } = useCurrentUser()
 
   const [donate, setDonate] = useState(0)
 
@@ -30,7 +30,7 @@ const Donate = (props: {
 
   return <div className={S.wrap}>
     <ShowDonate showList={props.showList} donate={num} ref={ref} />
-    {hasLoggedIn && <span
+    {hasLoggedIn && userProfile?.did !== author.did && <span
       onClick={toggle}
       className={S.text}
     >打赏此贴</span>}

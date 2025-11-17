@@ -201,9 +201,9 @@ function Donate(props: {
 }) {
   const { changeDonate } = props;
   const [visible, { toggle, setTrue, setFalse }] = useBoolean(false)
-  const { hasLoggedIn } = useCurrentUser()
+  const { hasLoggedIn, userProfile } = useCurrentUser()
   return <>
-    {hasLoggedIn && <span
+    {hasLoggedIn && userProfile?.did !== props.author.did && <span
       className={S.donate}
       onClick={setTrue}
     >打赏</span>}
