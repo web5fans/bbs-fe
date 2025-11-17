@@ -12,6 +12,7 @@ type QuotePopupProps = {
 let timeout: NodeJS.Timeout
 
 const QuotePopUp = (props: QuotePopupProps) => {
+  const parentRef = useRef<HTMLDivElement>(null);
   const contentHtmlRef = useRef<HTMLDivElement>(null)
   const popupRef = useRef<HTMLDivElement>(null)
   const selectionRange = useRef<Range[]>([])
@@ -65,15 +66,18 @@ const QuotePopUp = (props: QuotePopupProps) => {
 
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
+        const parentNode = parentRef.current.getBoundingClientRect();
 
         popupRef.current.style.display = 'flex';
-        popupRef.current.style.left = `${rect.left}px`
+        popupRef.current.style.left = `${rect.left - parentNode.left}px`
 
         if (action === 'mouse') {
-          popupRef.current.style.top = `${rect.top + window.scrollY}px`
+          const top = rect.top - parentNode.top
+          popupRef.current.style.top = `${top}px`
         } else {
           popupRef.current.style.transform = 'none';
-          popupRef.current.style.top = `${rect.bottom + window.scrollY + 4}px`
+          const bottom = parentNode.bottom - rect.bottom
+          popupRef.current.style.top = `${bottom + 4}px`
         }
 
 
@@ -86,7 +90,6 @@ const QuotePopUp = (props: QuotePopupProps) => {
 
   useEffect(() => {
     const f = () => {
-      console.log('fff')
       const selection = window.getSelection();
       if (!selection) return;
       if (contentHtmlRef.current && !contentHtmlRef.current.contains(selection.anchorNode)) {
@@ -109,7 +112,7 @@ const QuotePopUp = (props: QuotePopupProps) => {
     }
   }, []);
 
-  return <>
+  return <div className={'relative'} ref={parentRef}>
     <div
       ref={contentHtmlRef}
       onMouseDown={() => {
@@ -143,7 +146,7 @@ const QuotePopUp = (props: QuotePopupProps) => {
         复制内容
       </div>
     </div>
-  </>
+  </div>
 }
 
 export default QuotePopUp;
