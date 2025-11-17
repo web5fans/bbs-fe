@@ -77,7 +77,7 @@ const TipDetailList = (props: {
                 <td>
                   <div className={S.time}>
                     <span>{utcToLocal(row.created, 'YYYY/MM/DD HH:mm:ss')}</span>
-                    <GoExplorer hash={row['tx_hash']} className={S.icon} />
+                    <GoExplorer hash={row.txHash} className={S.icon} />
                   </div>
                 </td>
               </tr>

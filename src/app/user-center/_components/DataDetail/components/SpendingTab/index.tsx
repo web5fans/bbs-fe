@@ -110,7 +110,7 @@ const SpendingTab = (props: {
     render: (record) => {
       return <div className={S.time}>
         {utcToLocal(record.createdAt, 'YYYY/MM/DD HH:mm')}
-        <GoExplorer hash={record.tx_hash} />
+        <GoExplorer hash={record.txHash} />
       </div>
     }
   }]
