@@ -53,7 +53,7 @@ const TipDetailList = (props: {
           {
             data?.list && data.list.length !== 0 ? data?.list.map(row => {
               const author = row.sender_author
-              const href = `/user-center/${encodeURIComponent(row.sender_did)}`
+              const href = `/user-center/${encodeURIComponent(row.senderDid)}`
               return <tr>
                 <td>
                   <div className={S.userInfo}>
@@ -76,7 +76,7 @@ const TipDetailList = (props: {
                 <td className={S.ckb}>{shannonToCkb(row.amount)} CKB</td>
                 <td>
                   <div className={S.time}>
-                    <span>{utcToLocal(row.created, 'YYYY/MM/DD HH:mm:ss')}</span>
+                    <span>{utcToLocal(row.createdAt, 'YYYY/MM/DD HH:mm:ss')}</span>
                     <GoExplorer hash={row.txHash} className={S.icon} />
                   </div>
                 </td>
