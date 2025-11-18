@@ -40,7 +40,7 @@ const Post404 = ({ originPost, sectionInfo, children }: {
 
 export default Post404;
 
-export function useSectionAdmin() {
+export function useSection() {
   const context = React.useContext(SectionAdminContext);
 
   return context;
