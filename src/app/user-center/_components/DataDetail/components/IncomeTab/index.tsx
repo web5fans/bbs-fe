@@ -8,8 +8,10 @@ import GoExplorer from "@/components/GoExplorer";
 import DistributeStatus from "@/components/DistributeStatus";
 import FlowTypeIcon from "@/app/section/fund/[sectionId]/_components/Tabs/Flow/components/FlowTypeIcon";
 import UserAvatarInfo from "@/components/UserAvatarInfo";
-import { StreamlineText } from "../SpendingTab";
 import { INCOME_STATUS_ENUM, incomeStatusMap, NSID_TYPE_ENUM } from "@/constant/types";
+import { postUriToHref } from "@/lib/postUriHref";
+import Link from "next/link";
+import StreamLineRichText from "@/components/StreamLineRichText";
 
 const IncomeTab = (props: {
   did: string
@@ -36,9 +38,14 @@ const IncomeTab = (props: {
       if (!source) return null;
       const nsid = source.nsid;
 
-      if (nsid === NSID_TYPE_ENUM.POST) return <StreamlineText title={source.title} uri={source.uri} />
+      if (nsid === NSID_TYPE_ENUM.POST) {
+        const href = '/posts/' + postUriToHref(source.uri)
+        return <Link href={href}>
+          <div className={S.text}>{source.title}</div>
+        </Link>
+      }
       if ([NSID_TYPE_ENUM.POST_COMMENT, NSID_TYPE_ENUM.POST_REPLY].includes(nsid)) {
-        return <StreamlineText text={source.text} uri={source.post} />
+        return <StreamLineRichText className={S.text} richText={source.text} postUri={source.post} />
       }
       return '-'
     }

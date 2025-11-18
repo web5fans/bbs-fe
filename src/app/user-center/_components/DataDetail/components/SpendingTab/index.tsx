@@ -13,6 +13,7 @@ import DistributeStatus from "@/components/DistributeStatus";
 import FlowTypeIcon from "@/app/section/fund/[sectionId]/_components/Tabs/Flow/components/FlowTypeIcon";
 import UserAvatarInfo from "@/components/UserAvatarInfo";
 import { NSID_TYPE_ENUM } from "@/constant/types";
+import StreamLineRichText from "@/components/StreamLineRichText";
 
 const SpendingTab = (props: {
   did: string
@@ -48,9 +49,14 @@ const SpendingTab = (props: {
       if (!source) return '-';
       const nsid = source.nsid;
 
-      if (nsid === NSID_TYPE_ENUM.POST) return <StreamlineText title={source.title} uri={source.uri} />
+      if (nsid === NSID_TYPE_ENUM.POST) {
+        const href = '/posts/' + postUriToHref(source.uri)
+        return <Link href={href}>
+          <div className={S.text}>{source.title}</div>
+        </Link>
+      }
       if ([NSID_TYPE_ENUM.POST_COMMENT, NSID_TYPE_ENUM.POST_REPLY].includes(nsid)) {
-        return <StreamlineText text={source.text} uri={source.post} />
+        return <StreamLineRichText className={S.text} richText={source.text} postUri={source.post} />
       }
       // if (nsid === SPENDING_TYPE.DONATE_SECTION) {
       //   return <Link href={`/section/${source.id}`}>
@@ -135,27 +141,3 @@ const SpendingTab = (props: {
 }
 
 export default SpendingTab;
-
-
-export function StreamlineText({ text, uri, title }: { text?: string; uri: string; title?: string }) {
-  const [innerRichText, setInnerRichText] = useState('')
-
-  useEffect(() => {
-    if (!text) return
-    const div = document.createElement("div");
-    div.innerHTML = text;
-    setInnerRichText(div.innerText)
-  }, [text]);
-
-  const href = '/posts/' + postUriToHref(uri || '')
-
-  if (title) {
-    return <Link href={href}>
-      <div className={S.text}>{title}</div>
-    </Link>
-  }
-
-  return <Link href={href}>
-    <div className={S.text}>{innerRichText}</div>
-  </Link>
-}

@@ -11,8 +11,10 @@ import { INCOME_STATUS_ENUM, incomeStatusMap, NSID_TYPE_ENUM } from "@/constant/
 import remResponsive from "@/lib/rem-responsive";
 import utcToLocal, { localToUTC } from "@/lib/utcToLocal";
 import GoExplorer from "@/components/GoExplorer";
-import { StreamlineText } from "@/app/user-center/_components/DataDetail/components/SpendingTab";
 import DistributeStatus from "@/components/DistributeStatus";
+import { postUriToHref } from "@/lib/postUriHref";
+import Link from "next/link";
+import StreamLineRichText from "@/components/StreamLineRichText";
 
 export type SearchParamsType = {
   category: number | undefined
@@ -73,9 +75,14 @@ const Flow = ({ ckbAddr }: {
       const source = record.source;
       const { nsid } = record.source;
 
-      if (nsid === NSID_TYPE_ENUM.POST) return <StreamlineText title={source.title} uri={source.uri} />
+      if (nsid === NSID_TYPE_ENUM.POST) {
+        const href = '/posts/' + postUriToHref(source.uri)
+        return <Link href={href}>
+          <div className={S.ellipsis}>{source.title}</div>
+        </Link>
+      }
       if ([NSID_TYPE_ENUM.POST_COMMENT, NSID_TYPE_ENUM.POST_REPLY].includes(nsid)) {
-        return <StreamlineText text={source.text} uri={source.post} />
+        return <StreamLineRichText className={S.ellipsis} richText={source.text} postUri={source.post} />
       }
     }
   },{

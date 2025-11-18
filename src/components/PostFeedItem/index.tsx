@@ -1,7 +1,7 @@
 'use client'
 
 import { PostFeedItemType } from "@/app/posts/utils";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { handleToNickName } from "@/lib/handleToNickName";
 import S from "./index.module.scss";
 import Avatar from "@/components/Avatar";
@@ -9,6 +9,7 @@ import FeedStatistic, { FeedLikes } from "@/components/FeedStatistic";
 import utcToLocal from "@/lib/utcToLocal";
 import TopPIcon from '@/assets/posts/top-p.svg';
 import cx from "classnames";
+import StreamLineRichText from "@/components/StreamLineRichText";
 
 export default function PostFeedItem({ feed, onClick, onHover, headerOpts, disabled }: {
   feed: PostFeedItemType;
@@ -18,9 +19,6 @@ export default function PostFeedItem({ feed, onClick, onHover, headerOpts, disab
   disabled?: boolean
 }) {
   const { author } = feed;
-
-  const [innerRichText, setInnerRichText] = useState('')
-
   const [isHover, setIsHover] = useState(false)
 
   const nickname = handleToNickName(author.displayName);
@@ -28,13 +26,6 @@ export default function PostFeedItem({ feed, onClick, onHover, headerOpts, disab
   const title = feed.title
 
   const html = feed.text
-
-  useEffect(() => {
-    if (!html) return
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    setInnerRichText(div.innerText)
-  }, [html]);
 
   return <div
     className={cx(S.feed, disabled && S.disabled)}
@@ -59,7 +50,7 @@ export default function PostFeedItem({ feed, onClick, onHover, headerOpts, disab
       </div>
     </div>
 
-    <p className={S.feedInfo}>{innerRichText}</p>
+    <StreamLineRichText richText={html} className={S.feedInfo} />
 
     <div className={S.footer}>
       <div className={S.left}>

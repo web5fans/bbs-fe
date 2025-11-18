@@ -1,12 +1,12 @@
 'use client'
 
 import { PostFeedItemType } from "@/app/posts/utils";
-import { useEffect, useState } from "react";
 import S from "./index.module.scss";
 import Avatar from "@/components/Avatar";
 import FeedStatistic, { FeedLikes } from "@/components/FeedStatistic";
 import utcToLocal from "@/lib/utcToLocal";
 import cx from "classnames";
+import StreamLineRichText from "@/components/StreamLineRichText";
 
 export default function CommentPostItem({ feed, onClick, onHover, nickname, disabled }: {
   feed: PostFeedItemType;
@@ -15,18 +15,9 @@ export default function CommentPostItem({ feed, onClick, onHover, nickname, disa
   nickname: string
   disabled?: boolean
 }) {
-  const [innerRichText, setInnerRichText] = useState('')
-
   const title = feed.title
 
   const html = feed.comment_text
-
-  useEffect(() => {
-    if (!html) return
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    setInnerRichText(div.innerText)
-  }, [html]);
 
   return <div
     className={cx(S.feed, disabled && S.disabled)}
@@ -48,7 +39,7 @@ export default function CommentPostItem({ feed, onClick, onHover, nickname, disa
       {title}
     </p>
 
-    <p className={S.feedInfo}>{innerRichText}</p>
+    <StreamLineRichText richText={html} className={S.feedInfo} />
 
     <div className={S.footer}>
       <div className={S.left}>
