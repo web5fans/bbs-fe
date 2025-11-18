@@ -76,7 +76,7 @@ const QuotePopUp = (props: QuotePopupProps) => {
           popupRef.current.style.top = `${top}px`
         } else {
           popupRef.current.style.transform = 'none';
-          const bottom = parentNode.bottom - rect.bottom
+          const bottom = rect.bottom - parentNode.bottom
           popupRef.current.style.top = `${bottom + 4}px`
         }
 

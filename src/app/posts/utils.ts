@@ -192,10 +192,10 @@ async function sessionWrapApi(callback: () => Promise<any>): Promise<void> {
     return result
   } catch (error) {
     if (error.message.includes('Token has expired')) {
-      showGlobalToast({
-        title: '登录信息已过期，请重新刷新页面',
-        icon: 'error'
-      })
+      // showGlobalToast({
+      //   title: '登录信息已过期，请重新刷新页面',
+      //   icon: 'error'
+      // })
       await getPDSClient().sessionManager.refreshSession()
       return await callback()
     }
