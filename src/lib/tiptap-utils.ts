@@ -3,6 +3,7 @@ import type { Editor } from "@tiptap/react"
 import getPDSClient from "@/lib/pdsClient";
 import { JSONContent } from "@tiptap/core";
 import { DID_PREFIX } from "@/constant/Network";
+import { showGlobalToast } from "@/provider/toast";
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
@@ -147,6 +148,10 @@ export const handleImageUpload = async (
   }
 
   if (file.size > MAX_FILE_SIZE) {
+    showGlobalToast({
+      title: '文件上传最大为5MB',
+      icon: 'error',
+    })
     throw new Error(
       `File size exceeds maximum allowed (${MAX_FILE_SIZE / (1024 * 1024)}MB)`
     )

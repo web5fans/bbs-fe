@@ -6,6 +6,7 @@ import { NodeViewWrapper } from "@tiptap/react"
 import { CloseIcon } from "@/components/TipTapEditor/components/tiptap-icons/close-icon"
 import "@/components/TipTapEditor/components/tiptap-node/image-upload-node/image-upload-node.scss"
 import Uploading from "./uploading";
+import { useToast } from "@/provider/toast";
 
 export interface FileItem {
   id: string
@@ -29,8 +30,13 @@ interface UploadOptions {
 
 function useFileUpload(options: UploadOptions) {
   const [fileItem, setFileItem] = React.useState<FileItem | null>(null)
+  const toast = useToast()
   const uploadFile = async (file: File): Promise<string | null> => {
     if (file.size > options.maxSize) {
+      toast({
+        title: '文件上传最大为5MB',
+        icon: 'error',
+      })
       const error = new Error(
         `File size exceeds maximum allowed (${options.maxSize / 1024 / 1024}MB)`
       )

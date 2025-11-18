@@ -160,9 +160,11 @@ const showGlobalToast = (options: ToastOptions) => {
     toastRoot = createRoot(container);
   }
 
+  const toastId = options.id || `toast-${Date.now()}`;
+
   toastRoot.render(
     <FloatingPortal>
-      <ToastItem {...options} />
+      <ToastItem {...options} key={toastId} />
     </FloatingPortal>
   );
 };
