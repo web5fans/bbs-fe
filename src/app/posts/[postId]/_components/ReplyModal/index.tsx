@@ -136,15 +136,22 @@ const ReplyModal = () => {
   return <>
     <div className={cx(S.wrap, packUp && S.wrapPack)} style={modalInfo?.rect}>
       <CardWindow
+        headerClick={togglePackUp}
         header={title}
         wrapClassName={S.window}
         headerClassName={S.windowHeader}
         showCloseButton
         noInnerWrap
-        onClose={() => closeWindow()}
+        onClose={(e) => {
+          e.stopPropagation()
+          closeWindow()
+        }}
         headerExtra={<div
           className={S.packup}
-          onClick={togglePackUp}
+          onClick={e => {
+            e.stopPropagation()
+            togglePackUp()
+          }}
         ><PackUpIcon className={S.packIcon} /></div>}
       >
         <div className={S.content}>

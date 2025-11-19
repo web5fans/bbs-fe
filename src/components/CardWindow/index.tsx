@@ -6,10 +6,11 @@ import BreadCrumbs, { BreadCrumbsItemType } from "@/components/BreadCrumbs";
 const CardWindow = (props: {
   children?: React.ReactNode;
   header?: string
+  headerClick?: () => void
   wrapClassName?: string
   headerClassName?: string
   showCloseButton?: boolean
-  onClose?: () => void
+  onClose?: React.MouseEventHandler<HTMLDivElement>
   noInnerWrap?: boolean
   headerExtra?: React.ReactNode;
   breadCrumbs?: BreadCrumbsItemType[]
@@ -18,7 +19,7 @@ const CardWindow = (props: {
 
   return <div className={cx(S.container, props.wrapClassName)}>
     {/*<div style={{position: 'relative'}}>*/}
-      <div className={S.header}>
+      <div className={S.header} onClick={props.headerClick}>
         <div style={{width: '100%'}}>
           {new Array(6).fill(0).map((_, i) => (<div
             key={i}

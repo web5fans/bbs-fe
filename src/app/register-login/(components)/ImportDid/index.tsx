@@ -26,7 +26,7 @@ const ImportDid = (props: {
   }
 
   return <CardWindow
-    header={importType === 'scan' ? '扫一扫登录' : '导入Web5 dID信息'}
+    header={importType === 'scan' ? '扫一扫登录' : '导入Web5 DID信息'}
     wrapClassName={`${windowClassName} ${S.window}`}
     headerClassName={windowTitleClassName}
     onClose={closeRegisterPop}

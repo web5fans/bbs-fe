@@ -95,7 +95,7 @@ function StepPassWord(props: {
   return <div className={S.container}>
     <p className={S.title}>为保障安全</p>
     <p className={S.title}>导出前请设置你的密码</p>
-    <p className={S.message}>此密码在导入web5 dID信息登录时使用，请妥善保存</p>
+    <p className={S.message}>此密码在导入web5 DID信息登录时使用，请妥善保存</p>
     <div className={'relative'}>
       <Input
         error={validateStatus === false}
@@ -165,7 +165,7 @@ function StepExport({ password, cancel }: {
         alt={'computer'}
       />
       <div>
-        <p className={S.title}>Web5 dID等登录密钥信息</p>
+        <p className={S.title}>Web5 DID等登录密钥信息</p>
         <p className={S.info}>
           导出保存文件即可未来在多设备登录或
           穿梭其他web5技术网站使用。请妥善保存，若密钥泄漏，账号有被盗风险!

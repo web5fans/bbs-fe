@@ -78,7 +78,7 @@ const PostsContent = (props: PostContentProps) => {
         refresh={reloadList}
       />}
 
-      {commentList?.comments.map((p, idx) => {
+      {commentList?.comments?.map((p, idx) => {
         const floor = ((commentList?.page || 1) - 1) * PAGE_SIZE + idx + 2;
         const info = {...p, section_id: originPost?.section_id}
         return <PostItem
