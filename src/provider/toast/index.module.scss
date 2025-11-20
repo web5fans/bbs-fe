@@ -1,6 +1,15 @@
 @use "@/styles/rem";
 
+.wrap {
+  position: fixed;
+  top: 1em;
+  right: 0;
+  z-index: 9999;
+}
+
 .toast {
+  position: relative;
+
   border-top: rem.px2flexible(1) solid #000;
   border-right: rem.px2flexible(2) solid #000;
   border-bottom: rem.px2flexible(2) solid #000;
@@ -8,6 +17,7 @@
   background: #FFF;
   padding: rem.px2flexible(12);
   max-width: min(386px, #{rem.px2flexible(210)});
+  margin-bottom: rem.px2flexible(5);
   .inner {
     display: flex;
     gap: rem.px2flexible(12);
