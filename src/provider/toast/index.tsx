@@ -138,7 +138,9 @@ const showGlobalToast = (options: ToastOptions) => {
 
   toastRoot.render(
     <FloatingPortal>
-      <ToastItem {...options} key={toastId} />
+      <div className={S.wrap}>
+        <ToastItem {...options} key={toastId} />
+      </div>
     </FloatingPortal>
   );
 };
