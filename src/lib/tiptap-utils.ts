@@ -147,6 +147,14 @@ export const handleImageUpload = async (
     throw new Error("No file provided")
   }
 
+  if (file.size === 0) {
+    showGlobalToast({
+      title: '文件不能为空',
+      icon: 'error',
+    })
+    throw new Error("File size is zero")
+  }
+
   if (file.size > MAX_FILE_SIZE) {
     showGlobalToast({
       title: '文件上传最大为5MB',

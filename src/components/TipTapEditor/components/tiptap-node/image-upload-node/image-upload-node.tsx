@@ -32,6 +32,13 @@ function useFileUpload(options: UploadOptions) {
   const [fileItem, setFileItem] = React.useState<FileItem | null>(null)
   const toast = useToast()
   const uploadFile = async (file: File): Promise<string | null> => {
+    if (file.size === 0) {
+      toast({
+        title: '文件不能为空',
+        icon: 'error',
+      })
+      return null
+    }
     if (file.size > options.maxSize) {
       toast({
         title: '文件上传最大为5MB',
