@@ -237,7 +237,7 @@ export default function TipTapEditor(props: TipTapEditorProps) {
 
       Selection,
       ImageUploadNode.configure({
-        accept: "image/*",
+        accept: "image/png,image/jpg,image/jpeg,image/webp,image/gif",
         maxSize: MAX_FILE_SIZE,
         limit: 3,
         upload: (file, abortSignal) => {
