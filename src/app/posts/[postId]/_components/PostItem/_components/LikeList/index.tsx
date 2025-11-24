@@ -5,8 +5,8 @@ import server from "@/server";
 import { Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import remResponsive from "@/lib/rem-responsive";
 import MouseToolTip from "@/components/MouseToolTip";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { eventBus } from "@/lib/EventBus";
 
 export type LikeListRef = { reloadLikeList: () => void }
 
@@ -57,6 +57,21 @@ const LikeList = (props: {
       }
     }
   })
+
+  useEffect(() => {
+    const f = (uri: string) => {
+      console.log('uri', uri)
+      console.log('props.uri', props.uri)
+      if (showAvatars.length === (likeList?.list?.length || 0) && uri === props.uri) {
+        reload()
+      }
+    }
+    eventBus.subscribe('post-like-list-refresh', f)
+
+    return () => {
+      eventBus.unsubscribe('post-like-list-refresh', f)
+    }
+  }, []);
 
   const calculateCols = () => {
     if (!ref.current) return

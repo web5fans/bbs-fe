@@ -1,0 +1,97 @@
+@use "@/styles/rem";
+@use "@/styles/scroll-bar";
+
+.wrap {
+  overflow-x: auto;
+  @include scroll-bar.component-x-scroll;
+
+  .infoWrap {
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(4);
+
+    .icon {
+      width: rem.px2flexible(8);
+      height: rem.px2flexible(8);
+      color: #6C6C6C;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+}
+
+.table {
+  width: 100%;
+  //min-width: rem.px2flexible(431);
+  thead {
+    background: #F3F3F3;
+    tr th {
+      padding: rem.px2flexible(6) rem.px2flexible(5);
+      text-align: left;
+      font-size: rem.px2flexible(8);
+      font-weight: 500;
+      line-height: 1;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr {
+
+      & + tr {
+        td {
+          &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 1px;
+            border-top: 1px dashed #F3F3F3;
+          }
+
+          &:first-child::after {
+            left: rem.px2flexible(10);
+          }
+          &:last-child::after {
+            right: rem.px2flexible(10);
+          }
+        }
+      }
+
+      &:not(:has( .empty)):hover {
+        td {
+          background: #FAFAFA;
+          color: var(--primary-color);
+          * {
+            color: var(--primary-color);
+          }
+        }
+      }
+
+      td {
+        padding: rem.px2flexible(15) rem.px2flexible(5);
+        position: relative;
+      }
+    }
+  }
+
+  thead tr th, tbody tr td {
+    &:first-child {
+      padding-left: rem.px2flexible(10);
+    }
+    &:last-child {
+      padding-right: rem.px2flexible(10);
+    }
+  }
+}
+
+.empty {
+  width: 100%;
+  height: rem.px2flexible(102);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -93,15 +93,12 @@
     align-items: center;
     gap: rem.px2flexible(15);
     margin: rem.px2flexible(32) 0;
+    justify-content: center;
 
     .button, .confirm {
-      width: rem.px2flexible(46);
+      width: rem.px2flexible(68);
       height: rem.px2flexible(25);
       font-size: rem.px2flexible(8);
-    }
-
-    .confirm {
-      width: rem.px2flexible(68);
     }
   }
 }

@@ -1,0 +1,36 @@
+@use "@/styles/rem";
+
+.wrap {
+  position: relative;
+  display: inline-block;
+
+  .popup {
+    position: absolute;
+    padding: rem.px2flexible(9);
+    border: 1px solid var(--text-hover-800, #363636);
+    background: var(--white, #FFF);
+    box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0 0 #000;
+    overflow: hidden;
+    transition: all .15s;
+
+    &.close {
+      height: 0;
+      box-shadow: none;
+      padding-block: 0;
+      border: none;
+    }
+
+    .menuItem {
+      padding: rem.px2flexible(5);
+      font-size: rem.px2flexible(9);
+      cursor: pointer;
+      white-space: nowrap;
+      color: #000;
+
+      &:hover {
+        background: #F3F3F3;
+        color: var(--primary-color);
+      }
+    }
+  }
+}

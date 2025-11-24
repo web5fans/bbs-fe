@@ -1,15 +1,18 @@
 import S from './index.module.scss'
 import { useBoolean, useInfiniteScroll } from "ahooks";
 import server from "@/server";
-import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
-import utcToLocal from "@/lib/utcToLocal";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
-import SmallAvatar from "@/components/Avatar/SmallAvatar";
-import { Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
-import cx from "classnames";
+import { Ref, useEffect, useImperativeHandle, useState } from "react";
 import ArrowIcon from '@/assets/arrow-s.svg';
+import ShowCreateTime from "./ShowCreateTime";
+import HtmlContent from "./HTMLContent";
+import Avatar from "@/components/Avatar";
+import SwitchPostHideOrOpen from "@/app/posts/[postId]/_components/PostItem/_components/SwitchPostHideOrOpen";
+import { eventBus } from "@/lib/EventBus";
+import TipModal, { AuthorType } from "@/app/posts/[postId]/_components/PostItem/_components/Donate/TipModal";
+import DonateIcon from '@/assets/posts/donate.svg'
 
 export type ReplyListRefProps = { reload: () => void }
 
@@ -26,7 +29,7 @@ const ReplyList = (props: {
 
   const { openModal } = usePostCommentReply()
 
-  const { data: replyListInfo, loading, loadingMore, loadMore, noMore, reload } = useInfiniteScroll(async (prevData) => {
+  const { data: replyListInfo, loading, loadingMore, loadMore, noMore, reload, mutate } = useInfiniteScroll(async (prevData) => {
 
     const { nextCursor } = prevData || {};
 
@@ -53,6 +56,18 @@ const ReplyList = (props: {
       reload
     }
   })
+
+  useEffect(() => {
+    const f = (uri: string) => {
+      if (uri !== props.uri) return
+      reload()
+    }
+    eventBus.subscribe('post-comment-reply-list-refresh', f)
+
+    return () => {
+      eventBus.unsubscribe('post-comment-reply-list-refresh', f)
+    }
+  }, []);
 
   const reply = (info: any) => {
     openModal({
@@ -97,68 +112,112 @@ function ReplyItem(props: {
   toReply: () => void
 }) {
   const { replyItem, sectionId } = props;
+  const [disabled, setDisabled] = useState(false)
+
+  const [donate, setDonate] = useState(0)
+
+  useEffect(() => {
+    setDisabled(replyItem.is_disabled)
+    setDonate(Number(replyItem.tip_count))
+  }, [replyItem]);
+
+  const changeReplyVisible = () => {
+    setDisabled(!disabled)
+  }
+
+  const changeDonate = (ckb: string) => {
+    setDonate(v => v + Number(ckb))
+  }
+
+  const totalDonate = (donate / Math.pow(10, 8)).toFixed(2)
 
   return <div className={S.replyItem}>
+    {disabled && <div className={S.mask} />}
     <div className={S.title}>
-      <div className={S.avatar}>
-        <SmallAvatar nickname={replyItem.author.displayName} />
+      <div className={S.left}>
+        <div className={S.avatarWrap}>
+          <Avatar
+            nickname={replyItem.author.displayName}
+            className={S.avatar}
+          />
+        </div>
+        <span className={'font-medium'}>{replyItem.author.displayName}</span>
+        {
+          !!replyItem.to?.displayName && <span>&nbsp;回复&nbsp;
+            <span className={'font-medium'}>{replyItem.to?.displayName}</span></span>
+        }
+        <ShowCreateTime created={replyItem.created} />
       </div>
-      <span className={'font-medium'}>{replyItem.author.displayName}</span>
-      {
-        !!replyItem.to?.displayName &&  <>&nbsp;回复&nbsp;<span className={'font-medium'}>{replyItem.to?.displayName}</span></>
-      }
+
+      {/* 窗口小于1024px时，布局变化 */}
+      <div className={S.right}>
+        <SwitchPostHideOrOpen
+          status={disabled ? 'open' : 'hide'}
+          uri={replyItem.uri}
+          onConfirm={changeReplyVisible}
+          className={S.hideReply}
+          nsid={'reply'}
+        />
+        <Donate uri={replyItem.uri} author={replyItem.author} changeDonate={changeDonate} />
+      </div>
     </div>
-    <HtmlContent html={replyItem.text} />
-    <div className={S.footer}>
-      <PostLike
-        liked={replyItem.liked}
-        likeCount={replyItem.like_count}
-        uri={replyItem.uri}
-        sectionId={sectionId}
-      />
-      <span className={S.reply} onClick={props.toReply}>回复</span>
-      <span>{utcToLocal(replyItem.created, 'YYYY/MM/DD HH:mm:ss')}</span>
+    <div className={S.contentWrap}>
+      <HtmlContent html={replyItem.text} />
+      <div className={S.footer}>
+        <div className={S.leftOpts}>
+          <DonateIcon className={S.icon} />
+          <span className={'tracking-normal'}>{totalDonate} CKB</span>
+          <Donate
+            uri={replyItem.uri}
+            author={replyItem.author}
+            changeDonate={changeDonate}
+          />
+        </div>
+        <div className={S.rightOpts}>
+          <PostLike
+            liked={replyItem.liked}
+            likeCount={replyItem.like_count}
+            uri={replyItem.uri}
+            sectionId={sectionId}
+          />
+          <SwitchPostHideOrOpen
+            status={disabled ? 'open' : 'hide'}
+            uri={replyItem.uri}
+            onConfirm={changeReplyVisible}
+            className={S.hideReply}
+            nsid={'reply'}
+          />
+          <span className={S.reply} onClick={props.toReply}>回复</span>
+        </div>
+      </div>
     </div>
   </div>
 }
 
-function HtmlContent(props: {html: string}) {
-  const [showDetailVis, setShowDetailVis] = useState(false)
-  const [expand, { toggle }] = useBoolean(false)
-
-  const htmlRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!htmlRef.current) return
-
-    const observer = new ResizeObserver(() => {
-      requestAnimationFrame(() => {
-        if (!htmlRef.current) return
-        const scrollHeight = htmlRef.current.scrollHeight
-        const clientHeight = htmlRef.current.clientHeight
-        if (scrollHeight > clientHeight) {
-          setShowDetailVis(true)
-        }
-      })
-    })
-    observer.observe(htmlRef.current)
-
-    return () => {
-      if (!htmlRef.current) return
-      observer.unobserve(htmlRef.current)
-    }
-  }, []);
-
+function Donate(props: {
+  author: AuthorType
+  uri: string
+  changeDonate: (ckb: string) => void
+}) {
+  const { changeDonate } = props;
+  const [visible, { toggle, setTrue, setFalse }] = useBoolean(false)
+  const { hasLoggedIn, userProfile } = useCurrentUser()
   return <>
-    <div
-      className={cx(S.content, expand ? '!max-h-none' : '')}
-      ref={htmlRef}
-    >
-      <JSONToHtml html={props.html} />
-    </div>
-    {showDetailVis && <p
-      className={S.showDetail}
-      onClick={toggle}
-    >{expand ? <span className={S.packup}>收起</span> : '展开详情'}</p>}
+    {hasLoggedIn && userProfile?.did !== props.author.did && <span
+      className={S.donate}
+      onClick={setTrue}
+    >打赏</span>}
+
+    <TipModal
+      visible={visible}
+      onClose={toggle}
+      author={props.author}
+      uri={props.uri}
+      nsid={'app.bbs.reply'}
+      onConfirm={(ckb) => {
+        changeDonate(ckb)
+        setFalse()
+      }}
+    />
   </>
 }

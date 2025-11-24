@@ -31,17 +31,19 @@ const EditPost = () => {
   const editorRef = useRef<EditorRefType>(null);
   const [publishing, setPublishing] = useState(false)
   const [textNumber, setTextNumber] = useState(0)
-  const [publishDis, setPublishDis] = useState(false)
-  const [richText, setRichText] = useState('')
-  const [postTitle, setPostTitle] = useState('')
+  const [richTextDis, setRichTextDis] = useState(false)
+  const [postTitleDis, setPostTitleDis] = useState(false)
+
+  const richTextRef = useRef('')
+  const postTitleRef = useRef('')
 
 
   const { data: postInfo } = useRequest(async () => {
     const result = await server<PostFeedItemType>('/post/detail', 'GET', {
       uri: postUri
     })
-    setPostTitle(result?.title)
-    setRichText(result?.text)
+    postTitleRef.current = result.title
+    richTextRef.current = result?.text
     return result
   }, {
     ready: !!postUri,
@@ -63,8 +65,8 @@ const EditPost = () => {
     setTextNumber(textNumber)
 
     const checkResult = checkEditorContent(json, text)
-    setPublishDis(!checkResult)
-    setRichText(html)
+    setRichTextDis(!checkResult)
+    richTextRef.current = html
   }
 
   const submitEdit = async () => {
@@ -78,8 +80,8 @@ const EditPost = () => {
         record: {
           $type: 'app.bbs.post',
           section_id: postInfo.section_id,
-          title: postTitle,
-          text: richText,
+          title: postTitleRef.current,
+          text: richTextRef.current,
           edited: dayjs.utc().format(),
           created: postInfo.created
         },
@@ -102,14 +104,15 @@ const EditPost = () => {
     <div className={S.wrap}>
       <p className={S.title}>编辑帖子</p>
       <Input
-        initialValue={postInfo?.title}
+        inputValue={postInfo?.title}
         className={S.input}
         wrapClassName={S.inputWrap}
         placeholder={'一句话标题（不少于6个字）'}
-        showCount
+        showCount={true}
         minLength={6}
         maxLength={100}
-        onChange={setPostTitle}
+        onChange={v => postTitleRef.current = v}
+        onCountCheck={pass => setPostTitleDis(!pass)}
       />
       <div className={S.editor}>
         <TipTapEditor ref={editorRef} onUpdate={editorUpdate} />
@@ -126,7 +129,7 @@ const EditPost = () => {
               : <Button
                 type="primary"
                 className={S.publish}
-                disabled={!postTitle.trim() || publishDis || !isAuthor}
+                disabled={postTitleDis || richTextDis || !isAuthor}
                 onClick={submitEdit}
               >发布</Button>
           }

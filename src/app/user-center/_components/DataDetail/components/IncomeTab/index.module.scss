@@ -1,0 +1,41 @@
+@use "@/styles/rem";
+
+.text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: underline;
+}
+
+.flowType {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  gap: rem.px2flexible(2);
+}
+
+.copyTextIcon {
+  width: rem.px2flexible(6);
+  height: rem.px2flexible(6);
+}
+
+.time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tips {
+  color: #ffffff;
+  font-size: rem.px2flexible(7);
+  font-weight: normal;
+  letter-spacing: normal;
+  p {
+    line-height: 1.5;
+  }
+  .title {
+    font-weight: 500;
+  }
+}

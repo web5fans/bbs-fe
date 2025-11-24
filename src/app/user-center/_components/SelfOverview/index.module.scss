@@ -1,0 +1,53 @@
+@use "@/styles/rem";
+
+.wrap {
+  width: 100%;
+  border: rem.px2flexible(1) solid #000;
+  background: #E7E7E7;
+
+  /* 内阴影 */
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25) inset;
+  padding: rem.px2flexible(19) rem.px2flexible(9) rem.px2flexible(16) rem.px2flexible(15);
+
+  .title {
+    font-size: rem.px2flexible(14);
+    font-weight: 500;
+    line-height: rem.px2flexible(14);
+    margin-bottom: rem.px2flexible(15);
+  }
+
+  .overview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: rem.px2flexible(10);
+  }
+
+  .itemInfo {
+    padding: rem.px2flexible(6);
+
+    .label {
+      color: #6C6C6C;
+      font-size: rem.px2flexible(9);
+      line-height: rem.px2flexible(13);
+      margin-bottom: rem.px2flexible(5);
+    }
+
+    .value {
+      font-size: rem.px2flexible(10);
+      word-break: break-all;
+      font-weight: 500;
+
+      &.primary {
+        color: var(--primary-color);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .wrap {
+    .overview {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}

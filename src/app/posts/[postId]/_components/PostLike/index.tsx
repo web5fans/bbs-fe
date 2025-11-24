@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { postsWritesPDSOperation } from "@/app/posts/utils";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { eventBus } from "@/lib/EventBus";
 
 const PostLike = (props: {
   likeCount: string
@@ -11,7 +12,6 @@ const PostLike = (props: {
   sectionId: string
   liked?: boolean
   showLikeList?: () => void
-  reloadLikeList?: () => void
 }) => {
   const { userProfile } = useCurrentUser();
   const [count, setCount] = useState(Number(props.likeCount) || 0)
@@ -28,7 +28,7 @@ const PostLike = (props: {
   }, [props.liked]);
 
   const handleLike = async () => {
-    if (!userProfile || hasLiked) return
+    if (!userProfile || hasLiked || clickActive) return
     setClickActive(true)
     await postsWritesPDSOperation({
       record: {
@@ -39,7 +39,7 @@ const PostLike = (props: {
       did: userProfile.did
     })
     setCount(v => v + 1)
-    props.reloadLikeList?.()
+    eventBus.publish('post-like-list-refresh', props.uri)
   }
 
   const disabled = !userProfile || hasLiked

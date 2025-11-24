@@ -1,0 +1,57 @@
+@use "@/styles/rem";
+
+.wrap {
+  margin: rem.px2flexible(15) auto 80px;
+
+  .content {
+    margin-top: rem.px2flexible(20);
+    border-top: rem.px2flexible(1) solid #000;
+    border-right: rem.px2flexible(2) solid #000;
+    border-bottom: rem.px2flexible(2) solid #000;
+    border-left: rem.px2flexible(1) solid #000;
+    background: #EAEAEA;
+    padding: rem.px2flexible(10);
+  }
+
+  .tabsWrap {
+    .tabs {
+      margin-left: rem.px2flexible(1);
+      display: flex;
+      > p {
+        padding: rem.px2flexible(7.5) rem.px2flexible(20);
+        background: #ffffff;
+        font-size: rem.px2flexible(9);
+        border: rem.px2flexible(1) solid #000;
+        border-bottom: none;
+        margin-left: rem.px2flexible(-1);
+        cursor: pointer;
+        line-height: 1;
+
+        &.active {
+          font-weight: 500;
+          color: #ffffff;
+          background: var(--primary-color);
+        }
+      }
+    }
+
+    .tabsContent {
+      border: rem.px2flexible(1) solid #000;
+      background: #FFF;
+      box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) rem.px2flexible(3) 0 #DBDBDB inset;
+      padding: rem.px2flexible(10);
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .wrap {
+    .tabsWrap {
+      .tabs {
+        > p {
+          padding-inline: rem.px2flexible(10);
+        }
+      }
+    }
+  }
+}

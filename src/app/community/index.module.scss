@@ -1,0 +1,9 @@
+@use "@/styles/rem";
+
+.wrap {
+  margin: rem.px2flexible(15) auto 80px;
+
+  .gap {
+    height: rem.px2flexible(20);
+  }
+}

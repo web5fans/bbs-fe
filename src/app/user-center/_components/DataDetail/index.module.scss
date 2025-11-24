@@ -16,26 +16,23 @@
   }
 
   .tabs {
-    display: inline-flex;
-    gap: rem.px2flexible(8);
-    border-bottom: rem.px2flexible(1) solid var(--black, #000);
-    position: relative;
-    bottom: rem.px2flexible(-1);
+    display: flex;
+    margin-left: rem.px2flexible(1);
     > span {
+      display: flex;
+      align-items: center;
+      height: rem.px2flexible(24);
       border: rem.px2flexible(1) solid var(--black, #000);
+      border-bottom: none;
       background: var(--white, #FFF);
-      padding: rem.px2flexible(5) rem.px2flexible(15) rem.px2flexible(4);
+      padding: 0 rem.px2flexible(19);
       font-size: rem.px2flexible(9);
-      position: relative;
-      bottom: rem.px2flexible(-1);
       cursor: pointer;
-      transition: padding 0.15s;
+      margin-left: rem.px2flexible(-1);
 
       &.active {
-        padding-inline: rem.px2flexible(25);
         background: var(--primary-color);
         color: #FFFFFF;
-        border-bottom: none;
         font-weight: 500;
       }
     }

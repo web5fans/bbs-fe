@@ -1,0 +1,18 @@
+@use "@/styles/rem";
+
+.wrap {
+  //min-width: rem.px2flexible(431);
+}
+
+.tips {
+  color: #ffffff;
+  font-size: rem.px2flexible(7);
+  font-weight: normal;
+  letter-spacing: normal;
+  p {
+    line-height: 1.5;
+  }
+  .title {
+    font-weight: 500;
+  }
+}

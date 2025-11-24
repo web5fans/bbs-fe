@@ -5,7 +5,7 @@ export default function hastToHtml(nodes) {
 
   return nodes.map(node => {
     if (node.type === 'text') {
-      return node.value;
+      return node.value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     if (node.type === 'element') {

@@ -30,7 +30,6 @@ export const EventHandler = Extension.create({
               return false;
             }
             const file = item.getAsFile()
-            console.log('file>>>', file)
             if (file) {
               handleImageUpload(file, self.options.userDid).then(url => {
                 self.editor.commands.setImage({src: url})

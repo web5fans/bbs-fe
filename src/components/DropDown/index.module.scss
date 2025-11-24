@@ -1,0 +1,33 @@
+@use "@/styles/rem";
+
+.popup {
+  position: absolute;
+  margin-top: rem.px2flexible(4);
+  padding: rem.px2flexible(5);
+  border: 1px solid #000000;
+  background: var(--white, #FFF);
+  box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) 0 0 #000;
+  overflow: hidden;
+  transition: all .15s;
+  z-index: 99;
+
+  &.close {
+    height: 0;
+    box-shadow: none;
+    padding-block: 0;
+    border: none;
+  }
+
+  .menuItem {
+    padding: rem.px2flexible(5);
+    font-size: rem.px2flexible(8);
+    cursor: pointer;
+    white-space: nowrap;
+    color: #000000;
+
+    &:hover {
+      background: #F3F3F3;
+      color: var(--primary-color);
+    }
+  }
+}

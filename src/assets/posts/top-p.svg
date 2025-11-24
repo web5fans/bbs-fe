@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="52" height="18" viewBox="0 0 52 18" fill="none">
+  <path d="M48 18H4V16H48V18ZM4 16H2V14H4V16ZM50 16H48V14H50V16ZM2 14H0V4H2V14ZM52 14H50V4H52V14ZM4 4H2V2H4V4ZM50 4H48V2H50V4ZM48 2H4V0H48V2Z" fill="#319999"/>
+  <rect x="18" y="4" width="8" height="2" fill="#319999"/>
+  <rect x="21" y="6" width="2" height="8" fill="#319999"/>
+  <rect x="28" y="6" width="2" height="6" fill="#319999"/>
+  <rect x="34" y="6" width="2" height="6" fill="#319999"/>
+  <rect x="38" y="4" width="2" height="10" fill="#319999"/>
+  <rect x="40" y="4" width="4" height="2" fill="#319999"/>
+  <rect x="40" y="10" width="4" height="2" fill="#319999"/>
+  <rect x="44" y="6" width="2" height="4" fill="#319999"/>
+  <rect x="30" y="4" width="4" height="2" fill="#319999"/>
+  <rect x="30" y="12" width="4" height="2" fill="#319999"/>
+  <path d="M12 6H14V8H12V14H10V8H8V6H10V4H12V6ZM8 10H6V8H8V10ZM16 10H14V8H16V10Z" fill="#319999"/>
+</svg>

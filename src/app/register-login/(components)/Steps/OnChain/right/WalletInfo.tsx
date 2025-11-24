@@ -6,7 +6,7 @@ import ellipsis from "@/lib/ellipsis";
 import { useWallet } from "@/provider/WalletProvider";
 import Button from "@/components/Button";
 import FlatButton from "@/components/FlatButton";
-import CopyText from "@/components/CopyText";
+import Copy from "@/components/CopyText/Copy";
 
 const WalletInfo = () => {
   const [popUpVis, setPopUpVis] = useState(false);
@@ -35,7 +35,7 @@ const WalletInfo = () => {
       active={popUpVis}
     >
       {ellipsis(address)}
-      <CopyText text={address} className={S.copyIcon} />
+      <Copy text={address} className={S.copyIcon} />
     </FlatButton> : <Button className={S.connect} onClick={openSigner}>
       <WalletIcon className={S.icon} />
       连接钱包

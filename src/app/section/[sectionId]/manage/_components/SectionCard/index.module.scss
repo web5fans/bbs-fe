@@ -1,0 +1,32 @@
+@use "@/styles/rem";
+
+.wrap {
+  --card-window-line-gap: #{rem.px2flexible(1)};
+
+  .innerWrap {
+    padding: rem.px2flexible(20);
+    position: relative;
+  }
+}
+
+
+
+.buttonWrap {
+  position: absolute;
+  top: rem.px2flexible(20);
+  right: rem.px2flexible(20);
+
+  .button {
+    width: rem.px2flexible(60);
+    height: rem.px2flexible(16);
+    font-size: rem.px2flexible(7);
+  }
+}
+
+.breadCrumb {
+  padding: 0 rem.px2flexible(5);
+  position: absolute;
+  left: rem.px2flexible(20);
+  height: 100%;
+  background: #EAEAEA;
+}

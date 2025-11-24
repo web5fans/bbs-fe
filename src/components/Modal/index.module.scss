@@ -4,6 +4,8 @@
   background: rgba(0, 0, 0, 0.20);
   display: grid;
   place-items: center;
+  z-index: 99;
+  padding-block: 10vh;
 }
 
 .modal {

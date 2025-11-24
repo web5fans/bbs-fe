@@ -1,0 +1,31 @@
+@use "@/styles/rem";
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: rem.px2flexible(4);
+
+  .avatar {
+    width: rem.px2flexible(14);
+    height: rem.px2flexible(14);
+    font-size: rem.px2flexible(5);
+  }
+
+  .info {
+    margin-top: rem.px2flexible(2);
+    .name {
+      font-size: rem.px2flexible(7);
+      text-align: left;
+      text-transform: capitalize;
+    }
+    .address {
+      font-size: rem.px2flexible(6);
+      color: #6C6C6C;
+    }
+
+    .copy {
+      width: rem.px2flexible(6);
+      height: rem.px2flexible(6);
+    }
+  }
+}

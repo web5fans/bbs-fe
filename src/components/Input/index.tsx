@@ -1,20 +1,23 @@
 'use client'
 
 import S from './index.module.scss'
-import { JSX, useEffect, useRef, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import SuccessIcon from '@/assets/login/success.svg';
 import cx from "classnames";
+import setInputCursorPos from "@/components/Input/setInputCursorPos";
 
-type Props = Omit<JSX.IntrinsicElements['input'], 'onChange'> & {
+type Props = Omit<JSX.IntrinsicElements['input'], 'onChange' | 'value'> & {
   checkedPass?: boolean
   error?: boolean
   children?: React.ReactNode
   wrapClassName?: string
-  showCount?: boolean
   onChange?: (value: string) => void;
-  initialValue?: string
   inputValue?: string
-}
+  isFormChild?: boolean
+} & ({
+  showCount: true;
+  onCountCheck: (passed: boolean) => void
+} | { showCount?: false; onCountCheck?: undefined })
 
 const TEM_SPAN_ID = 'input_mirror'
 
@@ -25,84 +28,29 @@ const Input = (props: Props) => {
     children,
     wrapClassName,
     showCount,
-    initialValue,
     inputValue,
+    isFormChild,
+    onCountCheck,
     ...rest
   } = props;
   const [value, setValue] = useState<string | undefined>();
   const [passValidate, setPassValidate] = useState<boolean | undefined>(undefined);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const caretRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (!initialValue) return
-    setValue(initialValue)
-  }, [initialValue]);
+  const { inputRef, caretRef, setCursorPos } = setInputCursorPos(TEM_SPAN_ID);
 
   useEffect(() => {
     setValue(inputValue)
   }, [inputValue]);
 
-  const getCursorPosition = (e) => {
-    const {selectionStart = 0, selectionEnd = 0} = e.target;
-    if (selectionStart === selectionEnd) {
-
-      const input = inputRef.current;
-
-      // 创建临时span来计算光标位置
-      const tempSpan = document.getElementById(TEM_SPAN_ID);
-      if (!tempSpan) return
-
-      tempSpan.style.cssText = `
-        position: absolute;
-        visibility: hidden;
-        white-space: pre;
-        font-family: ${getComputedStyle(input).fontFamily};
-        font-size: ${getComputedStyle(input).fontSize};
-      `;
-
-      // 获取光标前的文本
-      const textBeforeCursor = input.value.substring(0, selectionStart);
-      tempSpan.textContent = textBeforeCursor;
-
-      const cursorLeft = tempSpan.offsetWidth;
-      const paddingLeftValue = parseFloat(input.offsetLeft);
-
-      const left = paddingLeftValue + cursorLeft - input.scrollLeft
-
-      caretRef.current.style.left = left + 'px'
-      caretRef.current.style.display = 'block'
-
-      // setHiddenSpanWidth(left);
-    }
-  }
-
-  useEffect(() => {
-    const tempSpan = document.createElement('span');
-    tempSpan.id = TEM_SPAN_ID
-    document.body.appendChild(tempSpan);
-
-    return () => {
-
-      const tempSpan = document.getElementById(TEM_SPAN_ID);
-      if (!tempSpan) return
-      document.body.removeChild(tempSpan);
-    }
-  }, []);
-
   const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
-    getCursorPosition(e)
+    setCursorPos(e)
 
     const newValue = e.target.value
     if (showCount) {
       const showValue = newValue.trim()
       const pass = !(showValue.length < (rest.minLength || 0)) && !(showValue.length > (rest.maxLength || 0));
       setPassValidate(pass)
-      if (!pass) {
-        rest.onChange?.('')
-        return
-      }
+      onCountCheck?.(pass)
     }
     rest.onChange?.(e.target.value)
   }
@@ -113,7 +61,9 @@ const Input = (props: Props) => {
       props.error && S.err,
       props.checkedPass ? S.checkedPass : '',
       showCount && passValidate !== undefined && (passValidate ? S.lengthSuccess : S.err),
+      isFormChild && S.formInput,
       wrapClassName,
+      props.disabled && S.disabled,
     )}
   >
     <input
@@ -126,9 +76,9 @@ const Input = (props: Props) => {
       spellCheck="false"
       inputMode="text"
       {...rest}
-      onKeyDownCapture={getCursorPosition}
-      onKeyUpCapture={getCursorPosition}
-      onClick={getCursorPosition}
+      onKeyDownCapture={setCursorPos}
+      onKeyUpCapture={setCursorPos}
+      onClick={setCursorPos}
       onChange={inputChange}
       className={rest.className}
       onBlur={() => {

@@ -2,7 +2,7 @@ import getPDSClient from "@/lib/pdsClient";
 import storage, { TokenStorageType } from "@/lib/storage";
 import { Secp256k1Keypair } from "@atproto/crypto";
 import { bytesFrom, hexFrom } from "@ckb-ccc/core";
-import { ComAtprotoWeb5IndexAction, ComAtprotoWeb5PreIndexAction } from "web5-api";
+import { FansWeb5CkbIndexAction, FansWeb5CkbPreIndexAction } from "web5-api";
 import { showGlobalToast } from "@/provider/toast";
 import server from "@/server";
 import { UserProfileType } from "@/store/userInfo";
@@ -14,18 +14,18 @@ export async function fetchUserProfile(did: string): Promise<UserProfileType> {
   return result
 }
 
-export async function userLogin(localStorage: TokenStorageType): Promise<ComAtprotoWeb5IndexAction.CreateSessionResult | undefined> {
+export async function userLogin(localStorage: TokenStorageType): Promise<FansWeb5CkbIndexAction.CreateSessionResult | undefined> {
   const pdsClient = getPDSClient()
   const { did, signKey, walletAddress } = localStorage
 
   const preLoginIndex = {
-    $type: 'com.atproto.web5.preIndexAction#createSession',
+    $type: 'fans.web5.ckb.preIndexAction#createSession',
   }
 
-  let preLogin: ComAtprotoWeb5PreIndexAction.Response
+  let preLogin: FansWeb5CkbPreIndexAction.Response
 
   try {
-    preLogin = await pdsClient.com.atproto.web5.preIndexAction({
+    preLogin = await pdsClient.fans.web5.ckb.preIndexAction({
       did,
       ckbAddr: walletAddress,
       index: preLoginIndex,
@@ -47,7 +47,7 @@ export async function userLogin(localStorage: TokenStorageType): Promise<ComAtpr
   )
 
   const loginIndex = {
-    $type: 'com.atproto.web5.indexAction#createSession',
+    $type: 'fans.web5.ckb.indexAction#createSession',
   }
 
   const signingKey = keyPair.did()
@@ -61,7 +61,7 @@ export async function userLogin(localStorage: TokenStorageType): Promise<ComAtpr
       ckbAddr: walletAddress,
       index: loginIndex,
     })
-    return loginInfo.data.result as ComAtprotoWeb5IndexAction.CreateSessionResult
+    return loginInfo.data.result as FansWeb5CkbIndexAction.CreateSessionResult
 
   } catch (err) {
     showGlobalToast({
@@ -75,10 +75,10 @@ export async function userLogin(localStorage: TokenStorageType): Promise<ComAtpr
 
 export async function deleteErrUser(did: string, address: string, signKey: string) {
   const preDelectIndex = {
-    $type: 'com.atproto.web5.preIndexAction#deleteAccount',
+    $type: 'fans.web5.ckb.preIndexAction#deleteAccount',
   }
   const pdsClient = getPDSClient()
-  const preDelete = await pdsClient.com.atproto.web5.preIndexAction({
+  const preDelete = await pdsClient.fans.web5.ckb.preIndexAction({
     did,
     ckbAddr: address,
     index: preDelectIndex,
@@ -91,10 +91,10 @@ export async function deleteErrUser(did: string, address: string, signKey: strin
   )
 
   const deleteIndex = {
-    $type: 'com.atproto.web5.indexAction#deleteAccount',
+    $type: 'fans.web5.ckb.indexAction#deleteAccount',
   }
 
-  const deleteInfo = await pdsClient.com.atproto.web5.indexAction({
+  const deleteInfo = await pdsClient.fans.web5.ckb.indexAction({
     did,
     message: preDelete.data.message,
     signingKey,

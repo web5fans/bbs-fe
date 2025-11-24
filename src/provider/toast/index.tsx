@@ -3,11 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
-  useFloating,
-  autoUpdate,
-  FloatingPortal,
-  useDismiss,
-  useInteractions
+  FloatingPortal
 } from '@floating-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import OKIcon from '@/assets/toast/ok.svg'
@@ -49,16 +45,6 @@ const ToastItem = ({
 }: ToastItemProps) => {
   const [isOpen, setIsOpen] = useState(true);
 
-  const { refs, context, floatingStyles } = useFloating({
-    open: isOpen,
-    onOpenChange: setIsOpen,
-    whileElementsMounted: autoUpdate,
-    placement: 'right',
-  });
-
-  const dismiss = useDismiss(context);
-  const { getFloatingProps } = useInteractions([dismiss]);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOpen(false)
@@ -94,16 +80,6 @@ const ToastItem = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          ref={refs.setFloating}
-          {...getFloatingProps()}
-          style={{
-            ...floatingStyles,
-            position: 'fixed',
-            left: 'initial',
-            top: '1em',
-            right: 0,
-            zIndex: 9999,
-          }}
           variants={slideIn}
           initial="hidden"
           animate="visible"
@@ -132,18 +108,16 @@ const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     setToasts(prev => [...prev, {...options, id}]);
   };
 
-  const getTopOffset = (index: number) => {
-    return 20 + index * (56 + NOTIFICATION_MARGIN); // 56px是预估的通知高度
-  };
-
 
   return (
     <ToastContext.Provider value={showToast}>
       {children}
       <FloatingPortal>
-        {toasts.map((item) => {
-          return <ToastItem key={item.id} {...item}  />
-        })}
+        <div className={S.wrap}>
+          {toasts.map((item, idx) => {
+            return <ToastItem key={item.id} {...item} />
+          })}
+        </div>
       </FloatingPortal>
     </ToastContext.Provider>
   );
@@ -160,9 +134,13 @@ const showGlobalToast = (options: ToastOptions) => {
     toastRoot = createRoot(container);
   }
 
+  const toastId = options.id || `toast-${Date.now()}`;
+
   toastRoot.render(
     <FloatingPortal>
-      <ToastItem {...options} />
+      <div className={S.wrap}>
+        <ToastItem {...options} key={toastId} />
+      </div>
     </FloatingPortal>
   );
 };

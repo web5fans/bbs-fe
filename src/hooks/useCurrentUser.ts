@@ -6,7 +6,7 @@ export default function useCurrentUser() {
     userInfo,
     userProfile,
     visitorId,
-    isWhiteListUser
+    isWhiteListUser,
   } = useUserInfoStore()
 
   // const isWhiteListUser = true;

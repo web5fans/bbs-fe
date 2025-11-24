@@ -1,0 +1,105 @@
+@use '@/styles/rem';
+
+$shadow: var(--input-shadow-num, #{min(5px, #{rem.px2flexible(3)})});
+$inputFontSize: min(18px, #{rem.px2flexible(12)});
+$inputPaddingLeft: var(--input-padding-left, #{min(20px, #{rem.px2flexible(13)})});
+$inputPaddingBottom: min(20px, #{rem.px2flexible(14.5)});
+$inputPaddingTop: min(26px, #{rem.px2flexible(17.5)});
+
+@mixin err-style {
+  color: var(--input-danger-text-color, var(--danger-color));
+  border-color: var(--danger-color) !important;
+  box-shadow: $shadow $shadow 0 0 var(--danger-color) inset;
+}
+
+.wrap {
+  position: relative;
+  line-height: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: rem.px2flexible(5);
+
+  overflow: hidden;
+  border: 1px solid var(--input-default-border-color, #000);
+
+  box-shadow: $shadow $shadow 0 0 var(--input-default-shadow-color, #000) inset;
+  background: #FFFFFF;
+  padding-right: min(15px, #{rem.px2flexible(10)});
+  padding-left: $inputPaddingLeft;
+  padding-top: $shadow;
+  transition: all .1s;
+
+  width: 100%;
+  height: min(66px, #{rem.px2flexible(44)});
+
+  &.disabled {
+    background: #E7E7E7;
+    color: #878787;
+    cursor: not-allowed;
+  }
+
+  &.formInput {
+
+    --input-shadow-num: #{rem.px2flexible(1)};
+    --input-padding-left: #{rem.px2flexible(10)};
+  }
+
+  &:focus-within {
+    border: 1px solid var(--primary-color);
+    box-shadow: $shadow $shadow 0 0 var(--primary-color) inset;
+  }
+
+  &.err {
+    @include err-style;
+
+    &:focus-within {
+      @include err-style;
+    }
+  }
+
+  input {
+    flex: 1;
+    min-width: 0; // 修复safari flex:1不生效
+    font-family: var(--font-CLFN);
+    font-size: var(--input-font-size, $inputFontSize);
+    outline: none;
+    caret-color: transparent;
+
+    &[disabled] {
+      letter-spacing: normal;
+      cursor: not-allowed;
+    }
+
+    &:focus-visible {
+      &::placeholder {
+        opacity: 0;
+      }
+    }
+
+    &::placeholder {
+      $placeholderSize: min(18px, #{rem.px2flexible(10)});
+
+      font-size: var(--input-font-size, $placeholderSize);
+      color: #CFCFCF;
+    }
+  }
+
+  .caret {
+    display: none;
+    position: absolute;
+    bottom: var(--caret-bottom, $inputPaddingBottom);
+    transform: translateY(rem.px2flexible(2));
+    //left: calc(20px + var(--left-deviation));
+    left: $inputPaddingLeft;
+    height: rem.px2flexible(1);
+    width: rem.px2flexible(6);
+    background-color: var(--primary-color);
+    will-change: left;
+    animation: blink 1s infinite;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

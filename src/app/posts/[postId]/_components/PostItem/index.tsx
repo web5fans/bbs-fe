@@ -5,22 +5,46 @@ import Avatar from "@/components/Avatar";
 import cx from "classnames";
 import { useRouter } from "next/navigation";
 import PostItemContent from "./PostItemContent";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import remResponsive from "@/lib/rem-responsive";
-import PostItemFooter from "./PostItemFooter";
+import PostItemFooter from "./_components/PostItemFooter";
+
+export type PostItemType = {
+  cid: string
+  uri: string
+  comment_count: string
+  like_count: string
+  reply_count?: string
+  section_id: string // 版区id
+  section?: string // 版区名称
+  text: string
+  title?: string
+  created: string
+  edited?: string
+  liked?: boolean
+  author: {
+    did: string
+    displayName: string
+    handle: string
+    [key: string]: any
+  }
+  [key: string]: any
+  is_disabled: boolean
+  reasons_for_disabled: string | null
+}
 
 type PostItemProps = {
   isOriginPoster?: boolean
-  postInfo: any
-  sectionId: string
+  postInfo: PostItemType
   floor: number
   isAuthor?: boolean
   rootUri: string
   refresh?: () => void
+  rootDisabled?: boolean
 }
 
 const PostItem = (props: PostItemProps) => {
-  const { postInfo = {}, floor, isOriginPoster, sectionId, isAuthor } = props;
+  const { postInfo = {} as PostItemType, floor, isOriginPoster, isAuthor, rootUri, rootDisabled } = props;
 
   const router = useRouter()
 
@@ -30,6 +54,16 @@ const PostItem = (props: PostItemProps) => {
 
   const ref = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+
+  const [postDisabled, setPostDisabled] = useState(false)
+
+  useEffect(() => {
+    setPostDisabled(postInfo.is_disabled)
+  }, [postInfo]);
+
+  const switchPostVisibility = () => {
+    setPostDisabled(!postDisabled)
+  }
 
   // useEffect(() => {
   //   const observer = new ResizeObserver(() => {
@@ -53,6 +87,8 @@ const PostItem = (props: PostItemProps) => {
     router.push(href)
   }
 
+  const disabled = rootDisabled || postDisabled
+
   return <div className={S.wrap}>
     <div
       ref={ref}
@@ -69,21 +105,21 @@ const PostItem = (props: PostItemProps) => {
     </div>
 
     <div className={S.content} ref={contentRef}>
+      {disabled && <div className={cx(S.mask, rootDisabled && '!z-5')} />}
       <div className={S.contentInner}>
         <PostItemContent
           postInfo={postInfo}
-          sectionId={sectionId}
           isAuthor={isAuthor}
-          rootUri={props.rootUri}
+          rootUri={rootUri}
           refresh={props.refresh}
         />
       </div>
       <PostItemFooter
-        postInfo={postInfo}
-        sectionId={sectionId}
+        postInfo={{...postInfo, is_disabled: postDisabled}}
         floor={floor}
-        rootUri={props.rootUri}
+        rootUri={rootUri}
         refresh={props.refresh}
+        switchPostVisibility={switchPostVisibility}
       />
     </div>
   </div>

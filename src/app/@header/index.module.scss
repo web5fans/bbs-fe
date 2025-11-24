@@ -61,12 +61,13 @@
     cursor: pointer;
   }
 
-  .userWrap {
+  .navigator {
     padding: 0 rem.px2flexible(8);
     background: var(--fixed-header-bg);
     height: 100%;
     display: flex;
     align-items: center;
+    gap: rem.px2flexible(8);
     .button {
       width: rem.px2flexible(72);
       height: rem.px2flexible(18.75);
@@ -74,10 +75,23 @@
       margin-top: rem.px2flexible(-1.5);
     }
 
-    .userIcon {
+    .icon {
       width: rem.px2flexible(20);
       height: rem.px2flexible(20);
       cursor: pointer;
+
+      &.active, &:hover {
+        color: var(--primary-color);
+      }
+
+      > svg {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
+}
+
+.mouseTips {
+  width: auto !important;
 }

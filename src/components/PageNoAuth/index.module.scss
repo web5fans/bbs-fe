@@ -1,0 +1,36 @@
+@use "@/styles/rem";
+
+.wrap {
+  max-width: 1054px;
+  margin: 100px auto 0;
+  font-family: var(--font-CLFN);
+  width: var(--center-content-width);
+
+  --card-window-header-padding-block: #{rem.px2flexible(4)};
+  --card-window-header-padding-inline: #{rem.px2flexible(9)};
+  --card-window-content-margin: #{rem.px2flexible(9)};
+
+  .content {
+    height: rem.px2flexible(220);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .faceIcon {
+      width: rem.px2flexible(79);
+      height: rem.px2flexible(27.5);
+    }
+
+    .title {
+      font-size: rem.px2flexible(12);
+      margin: rem.px2flexible(25);
+      text-align: center;
+    }
+
+    .button {
+      width: rem.px2flexible(85);
+      height: rem.px2flexible(25);
+      font-size: rem.px2flexible(9);
+    }
+  }
+}

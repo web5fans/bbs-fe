@@ -7,17 +7,17 @@
   width: 300px;
 
   .select {
-    border-top: rem.px2flexible(1.5) solid;
+    border-top: var(--border-top, #{rem.px2flexible(1.5)}) solid;
     border-right: 1px solid;
     border-bottom: 1px solid;
-    border-left: rem.px2flexible(1.5) solid;
+    border-left: var(--border-top, #{rem.px2flexible(1.5)}) solid;
     display: flex;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    padding: 0 rem.px2flexible(10);
+    padding: 0 var(--select-padding-inline, #{rem.px2flexible(10)});
     outline: none;
-    height: rem.px2flexible(30);
+    height: var(--select-height, #{rem.px2flexible(30)});
 
     &:hover,
     &.popOverOpened
@@ -26,7 +26,7 @@
     }
 
     .selectValue {
-      font-size: rem.px2flexible(10);
+      font-size: var(--selectValue-font-size, #{rem.px2flexible(10)});
       font-family: var(--font-CLFN);
       color: #CFCFCF;
       margin-right: rem.px2flexible(5);
@@ -36,8 +36,8 @@
     }
 
     .caret {
-      width: rem.px2flexible(12);
-      height: rem.px2flexible(12);
+      width: var(--caret-size, #{rem.px2flexible(12)});
+      height: var(--caret-size, #{rem.px2flexible(12)});
       transform: rotate(180deg);
       transition: all .2s;
     }
@@ -45,7 +45,7 @@
 
   .popover {
     position: absolute;
-    width: 100%;
+    min-width: 100%;
     z-index: 10;
     border: rem.px2flexible(1) solid #000;
     background: #FFF;
@@ -62,6 +62,8 @@
 
     .popoverItem {
       padding: min(10px, #{rem.px2flexible(7.5)});
+      font-size: var(--popover-font-size);
+      white-space: nowrap;
       cursor: pointer;
 
       &:hover,

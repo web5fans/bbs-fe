@@ -1,0 +1,90 @@
+@use '@/styles/rem';
+
+$borderWidth: rem.px2flexible(1.5);
+$inputFontSize: min(16px, #{rem.px2flexible(10)});
+$inputPaddingLeft: rem.px2flexible(9);
+$inputPaddingBottom: rem.px2flexible(10);
+$inputPaddingTop: rem.px2flexible(9);
+
+@mixin err-style {
+  color: var(--input-danger-text-color, var(--danger-color));
+  border-color: var(--danger-color) !important;
+}
+
+.wrap {
+  position: relative;
+  transition: all .1s;
+  width: 100%;
+  border-top: $borderWidth solid #000;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-left: $borderWidth solid #000;
+  padding: $inputPaddingTop rem.px2flexible(10) rem.px2flexible(10) $inputPaddingLeft;
+  height: rem.px2flexible(65);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background: #FFF;
+
+  &:focus-within {
+    border-color: var(--primary-color);
+  }
+
+  &.checkedPass {
+    color: var(--primary-color);
+  }
+
+  &:focus-within {
+    .caret {
+      //display: block;
+    }
+  }
+
+  &.err {
+    @include err-style;
+
+    &:focus-within {
+      @include err-style;
+    }
+  }
+
+  textarea {
+    width: 100%;
+    min-width: 0; // 修复safari flex:1不生效
+    font-family: var(--font-CLFN);
+    font-size: var(--input-font-size, $inputFontSize);
+    outline: none;
+    caret-color: transparent;
+    resize: none;
+    overflow: hidden;
+
+    &:focus-visible {
+      &::placeholder {
+        opacity: 0;
+      }
+    }
+
+    &::placeholder {
+      $placeholderSize: min(16px, #{rem.px2flexible(10)});
+
+      font-size: var(--input-font-size, $placeholderSize);
+      color: #CFCFCF;
+    }
+  }
+
+  .caret {
+    display: none;
+    position: absolute;
+    left: $inputPaddingLeft;
+    height: rem.px2flexible(1);
+    width: rem.px2flexible(6);
+    background-color: var(--primary-color);
+    will-change: left;
+    animation: blink 1s infinite;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

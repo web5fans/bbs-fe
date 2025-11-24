@@ -6,7 +6,7 @@ import Input from "@/components/Input";
 import TipTapEditor, { EditorUpdateData } from "@/components/TipTapEditor";
 import Button from "@/components/Button";
 import numeral from 'numeral'
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import PublishPostCancelButton from "@/components/PublishPostCancelButton";
 import ReadIcon from '@/assets/posts/read.svg'
@@ -29,12 +29,15 @@ const PublishPostPage = () => {
 
   const { isWhiteUser, userProfile, updateProfile } = useCurrentUser()
   const [textNumber, setTextNumber] = useState(0)
-  const [postTitle, setPostTitle] = useState('')
-  const [richText, setRichText] = useState('')
+
   const [publishing, setPublishing] = useState(false)
   const [sectionId, setSectionId] = useState(defaultSection)
-  const [publishDis, setPublishDis] = useState(false)
 
+  const [richTextDis, setRichTextDis] = useState(true)
+  const [postTitleDis, setPostTitleDis] = useState(true)
+
+  const postTitleRef = useRef('')
+  const richTextRef = useRef('')
 
   const toast = useToast()
 
@@ -64,8 +67,8 @@ const PublishPostPage = () => {
     const { content } = json
     if (!content) return
     const checkResult = checkEditorContent(json, text)
-    setPublishDis(!checkResult)
-    setRichText(html)
+    setRichTextDis(!checkResult)
+    richTextRef.current = html
   }
 
   const publishPost = async () => {
@@ -76,8 +79,8 @@ const PublishPostPage = () => {
         record: {
           $type: 'app.bbs.post',
           section_id: sectionId!,
-          title: postTitle,
-          text: richText,
+          title: postTitleRef.current,
+          text: richTextRef.current,
         },
         did: userProfile?.did!
       })
@@ -86,7 +89,7 @@ const PublishPostPage = () => {
       const encodeUri = postUriToHref(uri)
       let href = '/posts/'+ encodeUri
       if (defaultSection) {
-        href = `/section/${defaultSection}` + encodeUri
+        href = `/section/${sectionId}/` + encodeUri
       }
 
       router.replace(href)
@@ -98,7 +101,7 @@ const PublishPostPage = () => {
     }
   }
 
-  const allowPublish = !(!richText || publishDis) && !!postTitle.trim()
+  const allowPublish = !richTextDis && !postTitleDis
 
   const noAuth = !isWhiteUser
 
@@ -126,7 +129,8 @@ const PublishPostPage = () => {
           showCount
           minLength={6}
           maxLength={100}
-          onChange={setPostTitle}
+          onChange={v => postTitleRef.current = v}
+          onCountCheck={passed => setPostTitleDis(!passed)}
         />
       </div>
 

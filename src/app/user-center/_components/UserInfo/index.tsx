@@ -1,11 +1,12 @@
 import S from './index.module.scss'
-import CopyText from "@/components/CopyText";
 import cx from "classnames";
 import Avatar from "@/components/Avatar";
 import { UserProfileType } from "@/store/userInfo";
 import utcToLocal from "@/lib/utcToLocal";
 import { useEffect, useRef } from "react";
 import FlatBottomedCard from "@/components/FlatBottomedCard";
+import Copy from "@/components/CopyText/Copy";
+import ellipsis from "@/lib/ellipsis";
 
 const UserInfo = ({ userProfile, isMe, className }: {
   userProfile?: UserProfileType
@@ -18,7 +19,7 @@ const UserInfo = ({ userProfile, isMe, className }: {
       <CardItem title={'Web5域名'} content={userProfile?.handle} showCopy={isMe} />
       <CardItem title={'Web5 did'} content={userProfile?.did} showCopy={isMe} />
       <div className={S.register}>
-        <CardItem title={'注册排名'} content={'-'} showCopy={false} className={S.item} />
+        <CardItem title={'注册钱包地址'} content={ellipsis(userProfile?.ckb_addr || '')} showCopy={isMe} className={S.item} />
         <CardItem title={'注册时间'} content={utcToLocal(userProfile?.created, 'YYYY-MM-DD')} showCopy={false} className={S.item} />
       </div>
     </div>
@@ -101,7 +102,7 @@ function CardItem(props: {
         <p className={S.title}>{title}</p>
         <p className={S.content}>{content}</p>
       </div>
-      {showCopy && <CopyText
+      {showCopy && <Copy
         text={content}
         className={S.copy}
       />}

@@ -9,7 +9,10 @@ type QuotePopupProps = {
   quoteComment: (quote: string) => void
 }
 
+let timeout: NodeJS.Timeout
+
 const QuotePopUp = (props: QuotePopupProps) => {
+  const parentRef = useRef<HTMLDivElement>(null);
   const contentHtmlRef = useRef<HTMLDivElement>(null)
   const popupRef = useRef<HTMLDivElement>(null)
   const selectionRange = useRef<Range[]>([])
@@ -63,15 +66,18 @@ const QuotePopUp = (props: QuotePopupProps) => {
 
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
+        const parentNode = parentRef.current.getBoundingClientRect();
 
         popupRef.current.style.display = 'flex';
-        popupRef.current.style.left = `${rect.left}px`
+        popupRef.current.style.left = `${rect.left - parentNode.left}px`
 
         if (action === 'mouse') {
-          popupRef.current.style.top = `${rect.top + window.scrollY}px`
+          const top = rect.top - parentNode.top
+          popupRef.current.style.top = `${top}px`
         } else {
           popupRef.current.style.transform = 'none';
-          popupRef.current.style.top = `${rect.bottom + window.scrollY + 4}px`
+          const bottom = rect.bottom - parentNode.bottom
+          popupRef.current.style.top = `${bottom + 4}px`
         }
 
 
@@ -90,16 +96,23 @@ const QuotePopUp = (props: QuotePopupProps) => {
         popupRef.current.style.display = 'none';
       }
     }
-    document.addEventListener("mouseup", f)
-    document.addEventListener("touchend", f)
+    const listener = () => {
+      if (timeout) {
+        clearTimeout(timeout)
+      }
+      timeout = setTimeout(f, 0)
+    }
+
+    document.addEventListener("mouseup", listener)
+    document.addEventListener("touchend", listener)
 
     return () => {
-      document.removeEventListener("mouseup", f)
-      document.removeEventListener("touchend", f)
+      document.removeEventListener("mouseup", listener)
+      document.removeEventListener("touchend", listener)
     }
   }, []);
 
-  return <>
+  return <div className={'relative'} ref={parentRef}>
     <div
       ref={contentHtmlRef}
       onMouseDown={() => {
@@ -133,7 +146,7 @@ const QuotePopUp = (props: QuotePopupProps) => {
         复制内容
       </div>
     </div>
-  </>
+  </div>
 }
 
 export default QuotePopUp;

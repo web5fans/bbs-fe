@@ -1,0 +1,18 @@
+@use "@/styles/rem";
+
+.tabArrow {
+  position: absolute;
+  top: rem.px2flexible(6);
+  height: 0;
+
+  .arrow {
+    width: rem.px2flexible(7);
+    height: rem.px2flexible(4);
+    color: #F5F5F5;
+  }
+}
+
+.wrap {
+  padding-top: rem.px2flexible(10);
+  position: relative;
+}

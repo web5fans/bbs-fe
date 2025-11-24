@@ -1,0 +1,23 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: rem.px2flexible(2);
+
+  > svg {
+    width: rem.px2flexible(8);
+    height: rem.px2flexible(8);
+  }
+
+  &.wait {
+    color: #666 !important;
+  }
+
+  &.pending {
+    color: #999631 !important;
+  }
+  &.success {
+    color: var(--primary-color);
+  }
+}

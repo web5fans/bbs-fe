@@ -1,0 +1,28 @@
+<svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g filter="url(#filter0_i_842_235878)">
+    <path d="M65.0456 44.3516L59.1247 56.1834L56.1716 59.1374L44.3455 65.0491H23.644L11.8288 59.1348L8.87194 56.177L2.95844 44.3569L2.95312 23.6568L8.85446 11.8533L11.7662 8.87982L23.6466 2.96094H44.3481L56.1764 8.87209L59.1328 11.8338L65.0456 23.6594V44.3516Z" fill="black"/>
+  </g>
+  <path d="M44.3478 68H23.6522V65.0435H44.3478V68ZM23.6522 65.0435H17.7391V62.087H23.6522V65.0435ZM50.2609 65.0435H44.3478V62.087H50.2609V65.0435ZM17.7391 62.087H11.8261V59.1304H17.7391V62.087ZM56.1739 62.087H50.2609V59.1304H56.1739V62.087ZM11.8261 59.1304H8.86957V56.1739H11.8261V59.1304ZM59.1304 59.1304H56.1739V56.1739H59.1304V59.1304ZM8.86957 56.1739H5.91304V50.2609H8.86957V56.1739ZM62.087 56.1739H59.1304V50.2609H62.087V56.1739ZM5.91304 50.2609H2.95652V44.3478H5.91304V50.2609ZM65.0435 50.2609H62.087V44.3478H65.0435V50.2609ZM2.95652 44.3478H0V23.6522H2.95652V44.3478ZM68 44.3478H65.0435V23.6522H68V44.3478ZM5.91304 23.6522H2.95652V17.7391H5.91304V23.6522ZM65.0435 23.6522H62.087V17.7391H65.0435V23.6522ZM8.86957 17.7391H5.91304V11.8261H8.86957V17.7391ZM62.087 17.7391H59.1304V11.8261H62.087V17.7391ZM11.8261 11.8261H8.86957V8.86957H11.8261V11.8261ZM59.1304 11.8261H56.1739V8.86957H59.1304V11.8261ZM17.7391 8.86957H11.8261V5.91304H17.7391V8.86957ZM56.1739 8.86957H50.2609V5.91304H56.1739V8.86957ZM23.6522 5.91304H17.7391V2.95652H23.6522V5.91304ZM50.2609 5.91304H44.3478V2.95652H50.2609V5.91304ZM44.3478 2.95652H23.6522V0H44.3478V2.95652Z" fill="black"/>
+  <rect x="23" y="22.6641" width="3.66679" height="22.0007" fill="white"/>
+  <rect x="26.6641" y="22.6641" width="14.6671" height="3.66679" fill="white"/>
+  <rect x="41.334" y="26.3359" width="3.66679" height="5.50018" fill="white"/>
+  <rect x="41.334" y="35.5" width="3.66679" height="5.50018" fill="white"/>
+  <rect x="26.6641" y="44.6641" width="3.66679" height="3.66679" fill="white"/>
+  <rect x="26.6641" y="19" width="3.66679" height="3.66679" fill="white"/>
+  <rect x="35.832" y="44.6641" width="3.66679" height="3.66679" fill="white"/>
+  <rect x="35.832" y="19" width="3.66679" height="3.66679" fill="white"/>
+  <rect x="26.6641" y="31.8281" width="14.6671" height="3.66679" fill="white"/>
+  <rect x="26.6641" y="41" width="14.6671" height="3.66679" fill="white"/>
+  <defs>
+    <filter id="filter0_i_842_235878" x="2.95312" y="2.96094" width="62.0918" height="62.0859" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset/>
+      <feGaussianBlur stdDeviation="5"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+      <feBlend mode="normal" in2="shape" result="effect1_innerShadow_842_235878"/>
+    </filter>
+  </defs>
+</svg>

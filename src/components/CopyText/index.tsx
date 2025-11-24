@@ -3,11 +3,18 @@
 import CopyIcon from '@/assets/copy.svg'
 import { useToast } from "../../provider/toast";
 import S from './index.module.scss'
+import ellipsis from "@/lib/ellipsis";
+import { useMemo } from "react";
 
 const CopyText = (props: {
   text: string;
-  className?: string;
+  className?: {
+    icon?: string
+    wrap?: string
+  };
+  ellipsis?: { head?:number, tail?:number } | boolean
 }) => {
+  const { className, text } = props;
   const toast = useToast()
 
   const copy = async (event) => {
@@ -22,7 +29,23 @@ const CopyText = (props: {
     })
   }
 
-  return <CopyIcon className={`${S.icon} ${props.className}`} style={{ cursor: 'pointer' }} onClick={copy} />
+  const showText = useMemo(() => {
+    const ellis = props.ellipsis
+
+    if (typeof ellis === 'object') {
+      return ellipsis(text, ellis.head, ellis.tail)
+    }
+
+    if(typeof ellis === 'boolean' && ellis) {
+      return ellipsis(text)
+    }
+    return text
+  }, [text, props.ellipsis])
+
+  return <div className={`${S.wrap} ${className?.wrap}`}>
+    {showText}
+    <CopyIcon className={`${S.icon} ${className?.icon}`} style={{ cursor: 'pointer' }} onClick={copy} />
+  </div>
 }
 
 export default CopyText;

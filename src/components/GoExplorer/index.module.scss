@@ -1,0 +1,11 @@
+@use "@/styles/rem";
+
+.icon {
+  width: rem.px2flexible(8);
+  height: rem.px2flexible(8);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--primary-color);
+  }
+}

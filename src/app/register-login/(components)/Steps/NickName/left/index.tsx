@@ -10,7 +10,7 @@ import { Secp256k1Keypair } from "@atproto/crypto";
 import { useCallback, useState } from "react";
 import debounce from "lodash.debounce"
 import getPDSClient from "@/lib/pdsClient";
-import { USER_DOMAIN } from "@/constant/Network";
+import { DID_PREFIX, USER_DOMAIN } from "@/constant/Network";
 import { CircleLoading } from "@/components/Loading";
 
 function validateInput(str: string): ValidateResult {
@@ -63,10 +63,10 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
     const signingKey = keyPair.did()
 
     try {
-      const res = await getPDSClient().com.atproto.web5.preCreateAccount({
+      const res = await getPDSClient().fans.web5.ckb.preCreateAccount({
         handle: name + `.${USER_DOMAIN}`,
         signingKey,
-        did: 'did:web5:n5d3aggygtfxs56gbjkcajxw',
+        did: DID_PREFIX + 'n5d3aggygtfxs56gbjkcajxw',
       })
       setValidate((prev) => {
         if (!prev?.valid) return prev;

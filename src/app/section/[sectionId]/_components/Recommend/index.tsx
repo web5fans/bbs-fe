@@ -8,12 +8,16 @@ import { PostFeedItemType } from "@/app/posts/utils";
 import { useRouter } from "next/navigation";
 import cx from "classnames";
 import { postUriToHref } from "@/lib/postUriHref";
+import { Ref, useImperativeHandle } from "react";
 
-const Recommend = ({ sectionId }: { sectionId: string }) => {
-  const { data: list } = useRequest(async () => {
-    const result = await server<{ posts: PostFeedItemType[] }>('/post/top', 'POST', {
+const Recommend = ({ sectionId, ref }: { sectionId: string; ref?: Ref<{ reload: () => void }> }) => {
+  const { data: list, refresh } = useRequest(async () => {
+    const result = await server<{ posts: PostFeedItemType[] }>('/post/list', 'POST', {
+      limit: 10,
       section_id: sectionId,
+      is_announcement: true,
     })
+
     return result.posts || []
   }, {
     ready: !!sectionId,
@@ -21,6 +25,12 @@ const Recommend = ({ sectionId }: { sectionId: string }) => {
   })
 
   const router = useRouter()
+
+  useImperativeHandle(ref, () => {
+    return {
+      reload: refresh
+    }
+  })
 
   if (!list || list.length === 0) {
     return null

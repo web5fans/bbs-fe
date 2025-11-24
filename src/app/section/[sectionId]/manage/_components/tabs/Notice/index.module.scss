@@ -1,0 +1,32 @@
+@use "@/styles/rem";
+
+.wrap {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: rem.px2flexible(12);
+
+    .newNotice {
+      width: rem.px2flexible(60);
+      height: rem.px2flexible(20);
+      font-size: rem.px2flexible(7);
+
+      --button-box-shaow: #{rem.px2flexible(1)};
+    }
+  }
+  .search {
+    width: rem.px2flexible(150);
+  }
+
+  .options {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: rem.px2flexible(15);
+    > a {
+      text-decoration: underline;
+      font-size: rem.px2flexible(8);
+    }
+  }
+}

@@ -18,25 +18,57 @@
     }
   }
 
-  &:hover {
+  &.disabled {
+    cursor: not-allowed;
+
+    &:hover {
+      background: #F3F3F3;
+    }
+
+    .header, .feedInfo {
+      color: #B7B7B7;
+    }
+  }
+
+  &:not(.disabled):hover {
     background: #F3F3F3;
 
     --hover-text-color: var(--primary-color);
     --avatar-outer-color: var(--primary-color);
     --post-statistic-font-color: var(--primary-color);
 
-    > * {
+     > * {
       color: var(--primary-color);
+    }
+
+    .header .opts {
+      display: block;
     }
   }
 
   .header {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-weight: 500;
+    display: flex;
+    align-items: center;
     font-size: min(18px, #{rem.px2flexible(10)});
     margin-bottom: rem.px2flexible(4);
+
+    .top {
+      width: rem.px2flexible(26);
+      height: rem.px2flexible(9);
+      margin-right: rem.px2flexible(3);
+    }
+
+    .title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .opts {
+      display: none;
+    }
   }
 
   .feedInfo {
@@ -80,5 +112,12 @@
       color: var(--hover-text-color, #6C6C6C);
       font-size: rem.px2flexible(6);
     }
+  }
+}
+
+/* 移动端禁用 hover 效果 */
+@media (hover: none) and (pointer: coarse) {
+  .feed:hover .opts {
+    display: none !important; /* 在移动端禁用 hover 显示 */
   }
 }

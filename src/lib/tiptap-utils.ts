@@ -2,6 +2,8 @@ import type { Attrs, Node } from "@tiptap/pm/model"
 import type { Editor } from "@tiptap/react"
 import getPDSClient from "@/lib/pdsClient";
 import { JSONContent } from "@tiptap/core";
+import { DID_PREFIX } from "@/constant/Network";
+import { showGlobalToast } from "@/provider/toast";
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
@@ -145,17 +147,29 @@ export const handleImageUpload = async (
     throw new Error("No file provided")
   }
 
+  if (file.size === 0) {
+    showGlobalToast({
+      title: '文件不能为空',
+      icon: 'error',
+    })
+    throw new Error("File size is zero")
+  }
+
   if (file.size > MAX_FILE_SIZE) {
+    showGlobalToast({
+      title: '文件上传最大为5MB',
+      icon: 'error',
+    })
     throw new Error(
       `File size exceeds maximum allowed (${MAX_FILE_SIZE / (1024 * 1024)}MB)`
     )
   }
 
   const agent = getPDSClient()
-  const result = await agent.com.atproto.web5.uploadBlob(file, { encoding: file.type })
+  const result = await agent.fans.web5.ckb.uploadBlob(file, { encoding: file.type })
   const blobRefStr = result.data.blob.ref.toString()
   const server = result.data.blobServer
-  const didSlice = did.replace('did:web5:', '')
+  const didSlice = did.replace(DID_PREFIX, '')
 
   // Uncomment for production use:
   // return convertFileToBase64(file, abortSignal);

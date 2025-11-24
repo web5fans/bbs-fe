@@ -1,8 +1,8 @@
 @use '@/styles/rem';
 
-$shadow: min(5px, #{rem.px2flexible(3)});
+$shadow: var(--input-shadow-num, #{min(5px, #{rem.px2flexible(3)})});
 $inputFontSize: min(18px, #{rem.px2flexible(12)});
-$inputPaddingLeft: min(20px, #{rem.px2flexible(13)});
+$inputPaddingLeft: var(--input-padding-left, #{min(20px, #{rem.px2flexible(13)})});
 $inputPaddingBottom: min(20px, #{rem.px2flexible(14.5)});
 $inputPaddingTop: min(26px, #{rem.px2flexible(17.5)});
 $inputWidth: rem.px2flexible(247);
@@ -35,6 +35,20 @@ $inputWidth: rem.px2flexible(247);
   max-width: 500px;
   width: 100%;
   height: min(66px, #{rem.px2flexible(44)});
+
+  &.disabled {
+    background: #E7E7E7;
+    color: #878787;
+    cursor: not-allowed;
+  }
+
+  &.formInput {
+    max-width: 100%;
+    height: rem.px2flexible(31.5);
+
+    --input-shadow-num: #{rem.px2flexible(1)};
+    --input-padding-left: #{rem.px2flexible(10)};
+  }
 
   &:focus-within,
   &.checkedPass {
@@ -83,6 +97,11 @@ $inputWidth: rem.px2flexible(247);
     font-size: var(--input-font-size, $inputFontSize);
     outline: none;
     caret-color: transparent;
+
+    &[disabled] {
+      letter-spacing: normal;
+      cursor: not-allowed;
+    }
 
     &:focus-visible {
       &::placeholder {

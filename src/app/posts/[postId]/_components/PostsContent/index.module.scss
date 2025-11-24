@@ -1,0 +1,9 @@
+@use "@/styles/rem";
+
+.window {
+  --card-window-line-gap: #{rem.px2flexible(1)};
+}
+
+.wrap {
+  padding: rem.px2flexible(15);
+}

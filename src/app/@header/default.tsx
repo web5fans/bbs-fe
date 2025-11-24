@@ -3,10 +3,15 @@
 import S from "./index.module.scss";
 import Button from "@/components/Button";
 import UserIcon from '@/assets/header/user.svg'
+import HomeIcon from '@/assets/header/home.svg'
+import FundIcon from '@/assets/header/community-fund.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import { usePathname, useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Link from "next/link";
+import { JSX } from "react";
+import cx from "classnames";
+import MouseToolTip from "@/components/MouseToolTip";
 
 export default function AppHeader(props: {
   isPopUp?: boolean
@@ -35,10 +40,14 @@ export default function AppHeader(props: {
           BBS
         </div>
 
-        <div className={`${S.userWrap} ${(props.isPopUp || isIndex) && '!hidden'}`}>
-          {hasLoggedIn ? <Link href={'/user-center'} prefetch>
-            <UserIcon className={S.userIcon} />
-          </Link> :
+        <div className={`${S.navigator} ${(props.isPopUp || isIndex) && '!hidden'}`}>
+          <NavigatorIcon icon={<HomeIcon />} href={'/posts'} tooltip={'论坛首页'} />
+          {hasLoggedIn && <NavigatorIcon
+            icon={<FundIcon />}
+            href={'/community'}
+            tooltip={'社区金库'}
+          />}
+          {hasLoggedIn ? <NavigatorIcon icon={<UserIcon />} href={'/user-center'} tooltip={'个人中心'} /> :
           <Button
             type={'primary'}
             className={S.button}
@@ -48,4 +57,23 @@ export default function AppHeader(props: {
       </div>
     </div>
   </header>
+}
+
+function NavigatorIcon({icon, href, tooltip}: {
+  icon: JSX.Element
+  href: string
+  tooltip: string
+}) {
+  const pathname = usePathname()
+
+  return <MouseToolTip message={tooltip} tipClassName={S.mouseTips}>
+    <Link
+      href={href}
+      prefetch
+    >
+      <div className={cx(S.icon, pathname === href && S.active)}>
+        {icon}
+      </div>
+    </Link>
+  </MouseToolTip>
 }

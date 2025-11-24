@@ -18,7 +18,19 @@
     }
   }
 
-  &:hover {
+  &.disabled {
+    cursor: not-allowed;
+
+    &:hover {
+      background: #F3F3F3;
+    }
+
+    .header, .feedInfo, .nickname, .nickname .comment {
+      color: #B7B7B7;
+    }
+  }
+
+  &:not(.disabled):hover {
     background: #F3F3F3;
 
     --hover-text-color: var(--primary-color);

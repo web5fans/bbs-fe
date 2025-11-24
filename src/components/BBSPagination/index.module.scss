@@ -4,6 +4,31 @@
   margin: rem.px2flexible(20) 0;
   font-size: rem.px2flexible(6);
 
+  .prevPage, .nextPage {
+    font-family: var(--font-CLFN);
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(2);
+    .icon {
+      width: rem.px2flexible(3);
+      height: rem.px2flexible(6);
+    }
+
+    &:not([disabled]) {
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+
+    &[disabled] {
+      color: #B7B7B7;
+    }
+  }
+
+  .prevPage .icon {
+    transform: scaleX(-1);
+  }
+
   > li {
     min-width: rem.px2flexible(11);
     line-height: rem.px2flexible(10);
@@ -49,14 +74,6 @@
       content: '...';
       font-size: rem.px2flexible(8);
     }
-    .rc-pagination-prev,
-    .rc-pagination-next{
-      button:after {
-        content: '上一页';
-        font-family: var(--font-CLFN);
-        font-size: rem.px2flexible(6);
-      }
-    }
 
     .rc-pagination-prev {
       margin-right: rem.px2flexible(8);
@@ -65,53 +82,8 @@
       margin-left: rem.px2flexible(5);
     }
 
-    .rc-pagination-prev button{
-      position: relative;
-
-      &:after {
-        padding-left: rem.px2flexible(5);
-      }
-
-      &:before {
-        content: '';
-        width: 100%;
-        height: 100%;
-        background-image: url("/assets/pagination-right-arrow.svg");
-        background-size: rem.px2flexible(3) rem.px2flexible(6);
-        background-repeat: no-repeat;
-        background-position: right center;
-        transform: scaleX(-1);
-        position: absolute;
-        left: 0;
-        top: 0;
-      }
-    }
-
-    .rc-pagination-next button:after {
-      content: '下一页';
-      background-image: url("/assets/pagination-right-arrow.svg");
-      background-repeat: no-repeat;
-      background-position: right center;
-      background-size: rem.px2flexible(3) rem.px2flexible(6);
-      padding-right: rem.px2flexible(5);
-      font-size: rem.px2flexible(6);
-    }
-
     .rc-pagination-disabled .rc-pagination-item-link, .rc-pagination-disabled:hover .rc-pagination-item-link, .rc-pagination-disabled:focus .rc-pagination-item-link {
       color: #B7B7B7;
-    }
-
-    .rc-pagination-prev.rc-pagination-disabled {
-      button:before {
-        background-image: url("/assets/pagination-right-arrow-dis.svg");
-        background-size: rem.px2flexible(3) rem.px2flexible(6);
-      }
-    }
-    .rc-pagination-next.rc-pagination-disabled {
-      button:after {
-        background-image: url("/assets/pagination-right-arrow-dis.svg");
-        background-size: rem.px2flexible(3) rem.px2flexible(6);
-      }
     }
   }
 }

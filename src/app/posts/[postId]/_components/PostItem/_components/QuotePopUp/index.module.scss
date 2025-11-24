@@ -12,6 +12,7 @@
   font-weight: 500;
   background: #fff;
   transform: translateY(calc(-100% - #{rem.px2flexible(4)}));
+  z-index: 2;
 
   .item {
     display: flex;

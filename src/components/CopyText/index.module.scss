@@ -1,4 +1,15 @@
+@use "@/styles/rem";
+
+.wrap {
+  display: flex;
+  align-items: center;
+  font-size: rem.px2flexible(8);
+  gap: rem.px2flexible(4);
+}
+
 .icon {
+  width: rem.px2flexible(8);
+  height: rem.px2flexible(8);
   &:hover {
     color: var(--primary-color);
   }

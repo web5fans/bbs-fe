@@ -7,6 +7,6 @@
 >
   <path
     d="M8 0H6V2H4V4H2V6H0V8H14V6H12V4H10V2H8V0Z"
-    fill="#F5F5F5"
+    fill="currentColor"
   />
 </svg>

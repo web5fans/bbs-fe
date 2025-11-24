@@ -4,11 +4,11 @@ import fontVariables from "@/app/fonts";
 import { userAgent } from "next/server";
 import { headers } from "next/headers";
 import MainContent from "@/components/MainContent";
-import { LayoutProvider } from "@/provider/layoutProvider";
 import { PublicEnvScript } from "next-runtime-env";
 import { RegisterPopUpProvider } from "@/provider/RegisterPopUpProvider";
 import RegisterLogin from "@/app/register-login";
 import { ToastProvider } from "../provider/toast";
+import { LayoutProvider } from "@/provider/LayoutProvider";
 
 export const viewport: Viewport = {
   width: "device-width",
