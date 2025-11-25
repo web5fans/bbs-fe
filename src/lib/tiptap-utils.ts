@@ -173,7 +173,7 @@ export const handleImageUpload = async (
 
   // Uncomment for production use:
   // return convertFileToBase64(file, abortSignal);
-  return `${server}/${didSlice}/blocks/${didSlice}/${blobRefStr}`
+  return `https://bbs-testnet.oss-cn-hongkong.aliyuncs.com/blocks/${didSlice}/${blobRefStr}`
 }
 
 /**
