@@ -19,7 +19,7 @@ const UserInfo = ({ userProfile, isMe, className }: {
       <CardItem title={'Web5域名'} content={userProfile?.handle} showCopy={isMe} />
       <CardItem title={'Web5 did'} content={userProfile?.did} showCopy={isMe} />
       <div className={S.register}>
-        <CardItem title={'注册钱包地址'} content={ellipsis(userProfile?.ckb_addr || '')} showCopy={isMe} className={S.item} />
+        <CardItem title={'注册钱包地址'} content={userProfile?.ckb_addr || ''} needEllipsis showCopy={isMe} className={S.item} />
         <CardItem title={'注册时间'} content={utcToLocal(userProfile?.created, 'YYYY-MM-DD')} showCopy={false} className={S.item} />
       </div>
     </div>
@@ -93,14 +93,15 @@ function CardItem(props: {
   title: string
   content: string
   showCopy?: boolean
+  needEllipsis?: boolean
 }) {
-  const { showCopy = false, title, content } = props;
+  const { showCopy = false, title, content, needEllipsis } = props;
 
   return <FlatBottomedCard className={cx(S.card, props.className)}>
     <div className={S.inner}>
       <div className={S.left}>
         <p className={S.title}>{title}</p>
-        <p className={S.content}>{content}</p>
+        <p className={S.content}>{needEllipsis? ellipsis(content) :content}</p>
       </div>
       {showCopy && <Copy
         text={content}
