@@ -13,6 +13,7 @@ import SwitchPostHideOrOpen from "../SwitchPostHideOrOpen";
 import { eventBus } from "@/lib/EventBus";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import remResponsive from "@/lib/rem-responsive";
+import cx from "classnames";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
@@ -180,7 +181,7 @@ function FooterOptions(props: {
   const { isWhiteUser } = useCurrentUser()
 
   return <div className={`${S.rightPart} ${S.otherPost}`}>
-    <div className={S.item} style={!isWhiteUser ? { marginRight: remResponsive(-8) } : {}}>
+    <div className={cx(S.item, !isWhiteUser && S.noWhiteUserItem)}>
       <PostLike
         liked={postInfo.liked}
         likeCount={postInfo.like_count}
