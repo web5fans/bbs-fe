@@ -8,10 +8,13 @@ export class SuperiseSignersController extends ccc.SignersController {
       "SupeRISE Wallet",
       '/superise/logo.png',
       [
-        new CkbSigner(
-          window.superise,
-          client,
-        )
+        {
+          name: 'ckb',
+          signer: new CkbSigner(
+            window.superise,
+            client,
+          )
+        }
       ],
       context,
     );
