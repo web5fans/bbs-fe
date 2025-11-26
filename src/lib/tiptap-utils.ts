@@ -168,12 +168,16 @@ export const handleImageUpload = async (
   const agent = getPDSClient()
   const result = await agent.fans.web5.ckb.uploadBlob(file, { encoding: file.type })
   const blobRefStr = result.data.blob.ref.toString()
-  const server = result.data.blobServer
+  let server = result.data.blobServer
   const didSlice = did.replace(DID_PREFIX, '')
+
+  if (!server?.endsWith('/')) {
+    server += '/'
+  }
 
   // Uncomment for production use:
   // return convertFileToBase64(file, abortSignal);
-  return `https://bbs-testnet.oss-cn-hongkong.aliyuncs.com/blocks/${didSlice}/${blobRefStr}`
+  return `${server}blocks/${didSlice}/${blobRefStr}`
 }
 
 /**
