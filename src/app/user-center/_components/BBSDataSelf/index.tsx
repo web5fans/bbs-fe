@@ -7,6 +7,7 @@ import QrCodeImg from '@/assets/user-center/qrcode.svg';
 import ExportWeb5DidModal from "@/components/ExportWeb5DidModal";
 import KeyQRCodeModal from "@/app/user-center/_components/KeyQRCodeModal";
 import FlatBottomedCard from "@/components/FlatBottomedCard";
+import { USER_DOMAIN } from "@/constant/Network";
 
 const BBSData = (props: {
   postsCount?: string
@@ -72,7 +73,7 @@ function DataStatistic(props: { postsCount: string; commentCount: string }) {
 function DataCard() {
   return <FlatBottomedCard className={S.card}>
     <p className={S.title}>数据存储位置</p>
-    <p className={S.location}>web5.bbs.fans</p>
+    <p className={S.location}>{USER_DOMAIN}</p>
     <MouseToolTip
       open
       message={'功能正在研发中，敬请期待～'}>
