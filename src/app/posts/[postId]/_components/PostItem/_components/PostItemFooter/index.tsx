@@ -11,6 +11,8 @@ import { PostItemType } from "@/app/posts/[postId]/_components/PostItem/index";
 import TipDetailList from "../TipDetailList";
 import SwitchPostHideOrOpen from "../SwitchPostHideOrOpen";
 import { eventBus } from "@/lib/EventBus";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import remResponsive from "@/lib/rem-responsive";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
@@ -175,9 +177,10 @@ function FooterOptions(props: {
   replyTotal: string
 }) {
   const { postInfo, floor, reply, replyTotal, switchPostVisibility } = props;
+  const { isWhiteUser } = useCurrentUser()
 
   return <div className={`${S.rightPart} ${S.otherPost}`}>
-    <div className={S.item}>
+    <div className={S.item} style={!isWhiteUser ? { marginRight: remResponsive(-8) } : {}}>
       <PostLike
         liked={postInfo.liked}
         likeCount={postInfo.like_count}
@@ -191,10 +194,10 @@ function FooterOptions(props: {
         onConfirm={switchPostVisibility}
         nsid={'comment'}
       />
-      <span
+      {isWhiteUser && <span
         className={S.reply}
         onClick={reply}
-      >回复&nbsp;({replyTotal})</span>
+      >回复&nbsp;({replyTotal})</span>}
     </div>
 
     <div className={S.item}>

@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import QuoteIcon from '@/assets/posts/quote.svg'
 import CopyIcon from '@/assets/copy.svg'
 import { useToast } from "@/provider/toast";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 type QuotePopupProps = {
   children: React.ReactNode
@@ -20,6 +21,8 @@ const QuotePopUp = (props: QuotePopupProps) => {
   const selectionText = useRef('')
 
   const toast = useToast()
+
+  const { isWhiteUser } = useCurrentUser()
 
   const copy = async (event) => {
     event.stopPropagation();
@@ -137,10 +140,13 @@ const QuotePopUp = (props: QuotePopupProps) => {
         e.preventDefault();
       }}
     >
-      <div className={S.item} onClick={comment}>
+      {isWhiteUser && <div
+        className={S.item}
+        onClick={comment}
+      >
         <QuoteIcon className={S.icon} />
         引用回复
-      </div>
+      </div>}
       <div className={S.item} onClick={copy}>
         <CopyIcon className={S.icon} />
         复制内容
