@@ -28,7 +28,7 @@ export const CompleteRight = () => {
           web5 DID
           <Colon />
         </div>
-        <p className={S.name}>{userHandle}</p>
+        <p className={S.name}>{userInfo?.handle}</p>
         <p className={S.did}>
           {userInfo?.did}
           <Copy text={userInfo?.did!} className={S.icon} />
