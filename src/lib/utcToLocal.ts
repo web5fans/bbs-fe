@@ -5,5 +5,5 @@ export default function utcToLocal(dateStr: string, format: string = "YYYY/MM/DD
 }
 
 export function localToUTC(dateStr?: string) {
-  return dayjs.utc(dateStr).format()
+  return dayjs(dateStr).utc()
 }
