@@ -137,7 +137,8 @@ export default function useCreateAccount({ createSuccess }: {
       setExtraIsEnough([0, true])
     } catch (error) {
       const expectedCapacity = fixedPointToString(tx.getOutputsCapacity() + numFrom(0))
-      setExtraIsEnough([expectedCapacity, false])
+      const value = Math.max(expectedCapacity, DEFAULT_CAPACITY)
+      setExtraIsEnough([value, false])
       startPolling()
       return false
     }
