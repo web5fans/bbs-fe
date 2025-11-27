@@ -8,7 +8,7 @@ import Button from "@/components/Button";
 import FlatButton from "@/components/FlatButton";
 import Copy from "@/components/CopyText/Copy";
 
-const WalletInfo = () => {
+const WalletInfo = ({disabled}: { disabled?: boolean }) => {
   const [popUpVis, setPopUpVis] = useState(false);
 
   const { address, disconnect, openSigner } = useWallet()
@@ -31,7 +31,10 @@ const WalletInfo = () => {
   return <div className={S.walletWrap} ref={ref}>
     {address ? <FlatButton
       className={S.wallet}
-      onClick={() => setPopUpVis(!popUpVis)}
+      onClick={() => {
+        if (disabled) return
+        setPopUpVis(!popUpVis)
+      }}
       active={popUpVis}
     >
       {ellipsis(address)}

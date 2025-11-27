@@ -3,6 +3,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { router } from "next/client";
+import useRegisterPageStatus from "@/store/registerPageStatus";
 
 type PopUpProviderProps = {
   visible: boolean
@@ -21,6 +22,7 @@ export const RegisterPopUpProvider = (props: {
 }) => {
   const [visible, setVisible] = useState<boolean>(false)
   const pathname = usePathname()
+  const { changeVisible } = useRegisterPageStatus()
 
   useEffect(() => {
     if (visible) {
@@ -28,7 +30,7 @@ export const RegisterPopUpProvider = (props: {
     } else {
       document.body.style.overflow = '';
     }
-
+    changeVisible(visible)
     return () => {
       document.body.style.overflow = '';
     };

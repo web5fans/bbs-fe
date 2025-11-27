@@ -1,6 +1,6 @@
 import S from "./index.module.scss";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BreadCrumbs, { CREATE_ACCOUNT_STEP } from "@/app/register-login/(components)/BreadCrumbs";
 import { OnChainRight } from "@/app/register-login/(components)/Steps/OnChain/right";
 import useCreateAccount, { CREATE_STATUS } from "@/hooks/useCreateAccount";
@@ -13,6 +13,8 @@ import ArrowRight from '@/assets/login/arrow-right.svg'
 import cx from "classnames";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { DotLoading } from "@/components/Loading";
+import { useWallet } from "@/provider/WalletProvider";
+import useRegisterPageStatus from "@/store/registerPageStatus";
 
 const OnChain = (props: {
   goNext: () => void
@@ -20,6 +22,13 @@ const OnChain = (props: {
   const { extraIsEnough, loading, createAccount, createStatus, resetCreateStatus } = useCreateAccount({
     createSuccess: props.goNext
   })
+  const { address } = useWallet()
+
+  const {setRegisterAddress} = useRegisterPageStatus()
+
+  useEffect(() => {
+    setRegisterAddress(address)
+  }, [address]);
 
   const { nickname } = useNickName()
 
@@ -88,7 +97,7 @@ const OnChain = (props: {
       {loading ? <div className={cx(S.loading, S[overInfo?.id ?? 'B'])}>
         <CardLoading name={nickname || ''} className={S.cardLoading} />
       </div> : <ArrowRight className={S.arrowRight} />}
-      <OnChainRight hasErr={createStatus.status === CREATE_STATUS.FAILURE} />
+      <OnChainRight hasErr={createStatus.status === CREATE_STATUS.FAILURE} disabled={loading} />
     </div>
   </div>
 }

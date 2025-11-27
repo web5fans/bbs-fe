@@ -5,6 +5,7 @@ import WalletInfo from "./WalletInfo";
 
 export const OnChainRight = (props: {
   hasErr?: boolean
+  disabled?: boolean
 }) => {
   return <div className={S.wrap}>
     <div className={S.chain}>
@@ -14,7 +15,7 @@ export const OnChainRight = (props: {
     <Droppable hasErr={props.hasErr} />
 
     <div className={S.walletOur}>
-      <WalletInfo />
+      <WalletInfo disabled={props.disabled} />
     </div>
   </div>
 }
