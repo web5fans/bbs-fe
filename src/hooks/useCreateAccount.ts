@@ -14,6 +14,7 @@ import { UnsignedCommit } from "@atproto/repo";
 import { CID } from "multiformats";
 import { deleteErrUser } from "@/lib/user-account";
 import { DID_PREFIX } from "@/constant/Network";
+import useRegisterPageStatus from "@/store/registerPageStatus";
 
 export enum CREATE_STATUS {
   INIT,
@@ -190,7 +191,12 @@ export default function useCreateAccount({ createSuccess }: {
     }
 
     console.log('txHash', txHash)
-    if (!txHash) return
+
+    const { visible, registerAddress } = useRegisterPageStatus.getState()
+    const flag = visible && address === registerAddress
+    console.log('flag', flag)
+
+    if (!txHash || !flag) return
 
     const signKey = createUserParamsRef.current.createdSignKeyPriv
 
