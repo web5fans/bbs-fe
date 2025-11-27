@@ -87,6 +87,7 @@ const FundEntrance = (props: {
     <DonateModal
       visible={donateVis}
       onClose={setDonateVis.setFalse}
+      onConfirm={setDonateVis.setFalse}
       receiveCKBAddr={ckbAddr}
       nsid={NSID_TYPE_ENUM.SECTION}
     />
