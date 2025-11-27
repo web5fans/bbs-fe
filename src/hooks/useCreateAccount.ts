@@ -23,7 +23,7 @@ export enum CREATE_STATUS {
 
 export type CreateAccountStatus = { status: CREATE_STATUS; reason?: string }
 
-const initialCapacity = 355
+const DEFAULT_CAPACITY = 450
 
 const SEND_TRANSACTION_ERR_MESSAGE = 'SendTransaction Error'
 
@@ -40,7 +40,7 @@ export default function useCreateAccount({ createSuccess }: {
   const { signer, walletClient, address } = useWallet()
   const { createUser, resetUserStore } = useUserInfoStore()
 
-  const [extraIsEnough, setExtraIsEnough] = useState([initialCapacity, false])
+  const [extraIsEnough, setExtraIsEnough] = useState([DEFAULT_CAPACITY, false])
 
   const [createLoading, setCreateLoading] = useState(false)
   const [createStatus, setCreateStatus] = useState<CreateAccountStatus>({
@@ -295,7 +295,7 @@ export default function useCreateAccount({ createSuccess }: {
       status: CREATE_STATUS.INIT,
       reason: undefined
     })
-    setExtraIsEnough([initialCapacity, false])
+    setExtraIsEnough([DEFAULT_CAPACITY, false])
     validateIsEnough()
   }, [signer]);
 
