@@ -38,7 +38,7 @@ export default function useCreateAccount({ createSuccess }: {
 }) {
   const { userHandle } = useNickName()
   const { signer, walletClient, address } = useWallet()
-  const { createUser, resetUserStore } = useUserInfoStore()
+  const { resetUserStore, storageUserInfo } = useUserInfoStore()
 
   const [extraIsEnough, setExtraIsEnough] = useState([DEFAULT_CAPACITY, false])
 
@@ -175,6 +175,23 @@ export default function useCreateAccount({ createSuccess }: {
   const prepareAccount = async () => {
     setCreateLoading(true)
 
+    let txHash;
+
+    const createdTx = createUserParamsRef.current.createdTx
+
+    try {
+      txHash = await signer?.sendTransaction(createdTx!)
+    } catch (error) {
+      console.log('error===', error)
+      // 用户不签名的message
+      // User Rejected
+      // Popup closed
+      throw new Error(error.message);
+    }
+
+    console.log('txHash', txHash)
+    if (!txHash) return
+
     const signKey = createUserParamsRef.current.createdSignKeyPriv
 
     const keyPair = await Secp256k1Keypair.import(signKey?.slice(2))
@@ -210,7 +227,7 @@ export default function useCreateAccount({ createSuccess }: {
       sig,
     }
 
-    await createUser({
+    const params = {
       handle: userHandle!,
       password: signKey,
       signingKey,
@@ -223,27 +240,22 @@ export default function useCreateAccount({ createSuccess }: {
         data: preCreateResult.data,
         signedBytes: uint8ArrayToHex(commit.sig),
       },
-    })
-
-    let txHash;
-
-    const createdTx = createUserParamsRef.current.createdTx
-
-    try {
-      txHash = await signer?.sendTransaction(createdTx!)
-    } catch (error) {
-      // 用户不签名的message
-      // User Rejected
-      // Popup closed
-      throw new Error(SEND_TRANSACTION_ERR_MESSAGE);
     }
 
-    console.log('txHash', txHash)
-    if (!txHash) return
+    const createRes = await getPDSClient().web5CreateAccount(params)
+    const userInfo = createRes.data
+
+    storageUserInfo({
+      signKey,
+      ckbAddr: address,
+      userInfo
+    })
+
     const txRes = await walletClient?.waitTransaction(txHash, 0, 60000 * 2)
     console.log('txRes', txRes)
-    if (txRes?.status !== 'committed') {
+    if (txRes?.status === 'rejected') {
       await deleteErrUser(preCreateResult.did, address, signKey!)
+      resetUserStore()
     }
 
     setCreateLoading(false)
@@ -256,7 +268,6 @@ export default function useCreateAccount({ createSuccess }: {
 
   const createAccount = async () => {
     stopPolling()
-
     try {
       if (createStatus.reason) {
         setCreateLoading(true)
@@ -269,13 +280,6 @@ export default function useCreateAccount({ createSuccess }: {
       await prepareAccount()
     } catch (err) {
       console.log('err.message', err.message)
-
-      if (err.message === SEND_TRANSACTION_ERR_MESSAGE) {
-        const params = createUserParamsRef.current
-        await deleteErrUser(params.did!, address, params.createdSignKeyPriv!)
-      }
-
-      resetUserStore()
 
       setCreateLoading(false)
       setCreateStatus({

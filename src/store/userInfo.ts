@@ -31,9 +31,8 @@ const STORAGE_VISITOR = '@bbs:visitor'
 
 
 type UserInfoStore = UserInfoStoreValue & {
-
   setStoreData: (storeData: UserInfoStoreValue) => void
-  createUser: (obj: FansWeb5CkbCreateAccount.InputSchema) => Promise<void>
+  storageUserInfo: (params: { signKey: string; ckbAddr: string; userInfo: FansWeb5CkbCreateAccount.OutputSchema}) => void
   web5Login: () => Promise<void>
   getUserProfile: () => Promise<UserProfileType | undefined>;
   logout: () => void
@@ -55,15 +54,11 @@ const useUserInfoStore = createSelectors(
       set(() => ({ ...params }))
     },
 
-    createUser: async (params) => {
-      const pdsClient = getPDSClient()
-      const createRes = await pdsClient.web5CreateAccount(params)
-      const userInfo = createRes.data
-
+    storageUserInfo: async ({ signKey, ckbAddr, userInfo }) => {
       storage.setToken({
         did: userInfo.did,
-        signKey: params.password,
-        walletAddress: params.ckbAddr
+        signKey,
+        walletAddress: ckbAddr
       })
 
       set(() => ({ userInfo, userProfile: { did: userInfo.did, handle: userInfo.handle } }))
