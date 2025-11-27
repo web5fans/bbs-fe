@@ -88,7 +88,7 @@ const OnChain = (props: {
       {loading ? <div className={cx(S.loading, S[overInfo?.id ?? 'B'])}>
         <CardLoading name={nickname || ''} className={S.cardLoading} />
       </div> : <ArrowRight className={S.arrowRight} />}
-      <OnChainRight hasErr={createStatus.status === CREATE_STATUS.FAILURE} />
+      <OnChainRight hasErr={createStatus.status === CREATE_STATUS.FAILURE} disabled={loading} />
     </div>
   </div>
 }
