@@ -16,6 +16,7 @@ type CKBInputProps = {
   getBalance?: (balance: string) => void
   children?: React.ReactNode
   placeholder?: string
+  tip?: string
 }
 
 const CKBInput = (props: CKBInputProps) => {
@@ -67,7 +68,7 @@ const CKBInput = (props: CKBInputProps) => {
   }
 
   const balanceNoEnough = useMemo(() => {
-    const flag = !!balance && balance < 62
+    const flag = !!balance && balance < 67
     if(flag) props.onValueError?.()
     return flag
   }, [balance])
@@ -101,7 +102,7 @@ const CKBInput = (props: CKBInputProps) => {
     {balanceNoEnough ? <p className={S.error}>
       <InfoSVG className={S.icon} />
       <BBSPopOverMenu menus={[{ title: '复制钱包地址充值CKB', onClick: copyAddress }, { title: '断开连接', onClick: disconnect }]}>
-        <span className={'cursor-pointer'}>至少需要62CKB才能打赏</span>
+        <span className={'cursor-pointer'}>钱包可用余额需大于66 CKB 才能{props.tip || '打赏'}</span>
       </BBSPopOverMenu>
     </p> : props.children}
   </div>
