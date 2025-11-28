@@ -210,6 +210,7 @@ function ModalContent({ onClose, receiveCKBAddr, nsid, onConfirm }: ModalContent
         onChange={changeMoney}
         onValueError={() => setCKBValueErr(true)}
         placeholder={'请输入捐赠金额，最多两位小数'}
+        tip={'捐赠'}
       >
         {!!formattedRes.seconds && <div className={S.error}>
           此次操作将在{formattedRes.seconds}s后超时
