@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, CSSProperties, useCallback, useState } from "react";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export type ModalInfoType = {
   postUri: string // 主帖
@@ -35,8 +36,10 @@ export const PostCommentReplyProvider = (props: {
 }) => {
   const [visible, setVisible] = useState<boolean>(false)
   const [modalInfo, setModalInfo] = useState<ModalInfoType>()
+  const { isWhiteUser } = useCurrentUser()
 
   const openModal = useCallback((info) => {
+    if (!isWhiteUser) return
     if (info) {
       setModalInfo(info)
     }

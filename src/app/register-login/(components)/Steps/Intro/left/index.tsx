@@ -7,6 +7,7 @@ import Button from "@/components/Button";
 import { useEffect } from "react";
 import { useWallet } from "@/provider/WalletProvider";
 import ExistDidPopUp from "./ExistDidPopUp";
+import { USER_DOMAIN } from "@/constant/Network";
 
 type IntroLeftProps = {
   goNext: () => void;
@@ -32,7 +33,7 @@ export const IntroLeft = (props: IntroLeftProps) => {
           [
             '存储于CKB链的数据档案库',
             '发布和回复帖子权限',
-            '专属域名（如yuming.bbs.xyz）',
+            `专属域名（如yuming.${USER_DOMAIN}）`,
           ].map((mes, idx) => {
             return <div className={S.mesItem} key={idx}>
               <CheckIcon className={S.check} />
