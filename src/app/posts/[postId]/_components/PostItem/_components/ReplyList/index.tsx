@@ -13,6 +13,7 @@ import SwitchPostHideOrOpen from "@/app/posts/[postId]/_components/PostItem/_com
 import { eventBus } from "@/lib/EventBus";
 import TipModal, { AuthorType } from "@/app/posts/[postId]/_components/PostItem/_components/Donate/TipModal";
 import DonateIcon from '@/assets/posts/donate.svg'
+import cx from "classnames";
 
 export type ReplyListRefProps = { reload: () => void }
 
@@ -25,7 +26,7 @@ const ReplyList = (props: {
   replyComment: () => void
   componentRef?: Ref<ReplyListRefProps>
 }) => {
-  const { userProfile } = useCurrentUser()
+  const { userProfile, isWhiteUser } = useCurrentUser()
 
   const { openModal } = usePostCommentReply()
 
@@ -94,13 +95,14 @@ const ReplyList = (props: {
         sectionId={props.sectionId}
         key={info.uri}
         toReply={() => reply(info)}
+        showReplyEntrance={isWhiteUser}
       />
     })}
     {props.total > 5 && (props.total !== `${replyListInfo.list.length}`) && <div
       className={S.load}
       onClick={loadMore}
     ><ArrowIcon />加载更多</div>}
-    <div className={S.button} onClick={props.replyComment}>我也说一句</div>
+    {isWhiteUser && <div className={S.button} onClick={props.replyComment}>我也说一句</div>}
   </div>
 }
 
@@ -110,8 +112,9 @@ function ReplyItem(props: {
   replyItem: any
   sectionId: string
   toReply: () => void
+  showReplyEntrance?: boolean
 }) {
-  const { replyItem, sectionId } = props;
+  const { replyItem, sectionId, showReplyEntrance } = props;
   const [disabled, setDisabled] = useState(false)
 
   const [donate, setDonate] = useState(0)
@@ -173,7 +176,7 @@ function ReplyItem(props: {
             changeDonate={changeDonate}
           />
         </div>
-        <div className={S.rightOpts}>
+        <div className={cx(S.rightOpts, !showReplyEntrance && S.rightOptsNoReply)}>
           <PostLike
             liked={replyItem.liked}
             likeCount={replyItem.like_count}
@@ -187,7 +190,7 @@ function ReplyItem(props: {
             className={S.hideReply}
             nsid={'reply'}
           />
-          <span className={S.reply} onClick={props.toReply}>回复</span>
+          {showReplyEntrance && <span className={S.reply} onClick={props.toReply}>回复</span>}
         </div>
       </div>
     </div>

@@ -165,6 +165,10 @@
       display: flex;
       align-items: center;
       gap: rem.px2flexible(10);
+
+      &.rightOptsNoReply {
+        margin-right: rem.px2flexible(-8);
+      }
     }
 
     .reply {
