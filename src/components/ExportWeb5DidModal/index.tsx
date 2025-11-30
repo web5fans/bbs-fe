@@ -8,6 +8,9 @@ import { decryptData, encryptData } from "@/lib/encrypt";
 import storage from "@/lib/storage";
 import { useBoolean } from "ahooks";
 import { useToast } from "@/provider/toast";
+import Image from "next/image";
+import remResponsive from "@/lib/rem-responsive";
+import cx from "classnames";
 
 const regex = /^[A-Za-z0-9]{8}$/;
 
@@ -91,6 +94,7 @@ function StepPassWord(props: {
   cancel: () => void
 }) {
   const [validateStatus, setValidateStatus] = useState<boolean | undefined>(undefined)
+  const [showClearText, setShowClearText] = useBoolean(false)
 
   return <div className={S.container}>
     <p className={S.title}>为保障安全</p>
@@ -98,15 +102,25 @@ function StepPassWord(props: {
     <p className={S.message}>此密码在导入web5 DID信息登录时使用，请妥善保存</p>
     <div className={'relative'}>
       <Input
+        showCaret={showClearText}
+        type={showClearText ? 'text' : 'password'}
         error={validateStatus === false}
-        wrapClassName={S.inputWrap}
+        wrapClassName={cx(S.inputWrap, !showClearText && S.showOriginCaret)}
         placeholder={'支持由数字或字母组成的8位数密码'}
         onChange={value => {
           const flag = regex.test(value)
           props.inputChange(value)
           setValidateStatus(flag)
         }}
-      />
+      >
+        <div onClick={setShowClearText.toggle} className={'cursor-pointer'}>
+          <Image
+            alt={''}
+            src={!showClearText ? require('@/assets/eye-closed.png') : require('@/assets/eye-open.png')}
+            style={{ width: remResponsive(10) }}
+          />
+        </div>
+      </Input>
       {validateStatus === false && <p className={S.error}>
         <img
           src={'/assets/warning.svg'}

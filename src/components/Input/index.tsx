@@ -14,6 +14,7 @@ type Props = Omit<JSX.IntrinsicElements['input'], 'onChange' | 'value'> & {
   onChange?: (value: string) => void;
   inputValue?: string
   isFormChild?: boolean
+  showCaret?: boolean
 } & ({
   showCount: true;
   onCountCheck: (passed: boolean) => void
@@ -31,6 +32,7 @@ const Input = (props: Props) => {
     inputValue,
     isFormChild,
     onCountCheck,
+    showCaret = true,
     ...rest
   } = props;
   const [value, setValue] = useState<string | undefined>();
@@ -100,7 +102,7 @@ const Input = (props: Props) => {
 
     <span
       ref={caretRef}
-      className={S.caret}
+      className={cx(S.caret, showCaret ? 'visible' : 'invisible')}
       style={{
         // '--left-deviation': `${hiddenSpanWidth}px`,
       }}
