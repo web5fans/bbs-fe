@@ -1,15 +1,13 @@
 import S from './index.module.scss'
 import Modal from "@/components/Modal";
 import CardWindow from "@/components/CardWindow";
-import Input from "@/components/Input";
 import Button from "@/components/Button";
-import { cloneElement, JSX, useEffect, useRef, useState } from "react";
+import { cloneElement, JSX, useEffect, useMemo, useRef, useState } from "react";
 import { decryptData, encryptData } from "@/lib/encrypt";
 import storage from "@/lib/storage";
-import { useBoolean } from "ahooks";
+import { useBoolean, useSetState } from "ahooks";
 import { useToast } from "@/provider/toast";
-
-const regex = /^[A-Za-z0-9]{8}$/;
+import PasswordInput from "./PasswordInput";
 
 const ExportWeb5DidModal = (props: {
   children: JSX.Element;
@@ -90,36 +88,52 @@ function StepPassWord(props: {
   stepChange: () => void
   cancel: () => void
 }) {
-  const [validateStatus, setValidateStatus] = useState<boolean | undefined>(undefined)
+  const [validateStatus, setValidateStatus] = useSetState<{
+    password?: boolean
+    confirmPassword?: boolean
+  }>({
+    password: undefined,
+    confirmPassword: undefined
+  })
+  const [inputValue, setInputValue] = useSetState({
+    password: '',
+    confirmPassword: ''
+  })
+
+  const buttonDis = useMemo(() => {
+    return !(validateStatus.password && validateStatus.confirmPassword && inputValue.password === inputValue.confirmPassword)
+  }, [validateStatus, inputValue])
+
+  const confirmPasswordError = useMemo(() => {
+    if ((inputValue.password !== inputValue.confirmPassword) && validateStatus.confirmPassword) {
+      return '两次密码不一致'
+    }
+    return ''
+  }, [validateStatus, inputValue])
 
   return <div className={S.container}>
-    <p className={S.title}>为保障安全</p>
-    <p className={S.title}>导出前请设置你的密码</p>
+    <p className={S.title}>为保障安全，导出前请设置你的密码</p>
     <p className={S.message}>此密码在导入web5 DID信息登录时使用，请妥善保存</p>
-    <div className={'relative'}>
-      <Input
-        error={validateStatus === false}
-        wrapClassName={S.inputWrap}
-        placeholder={'支持由数字或字母组成的8位数密码'}
-        onChange={value => {
-          const flag = regex.test(value)
-          props.inputChange(value)
-          setValidateStatus(flag)
-        }}
-      />
-      {validateStatus === false && <p className={S.error}>
-        <img
-          src={'/assets/warning.svg'}
-          alt={'warning'}
-        />
-        请输入由数字或字母组成的8位数密码</p>}
-    </div>
+    <PasswordInput
+      valueChange={v => {
+        props.inputChange(v)
+        setInputValue({ password: v })
+      }}
+      statusChange={f => setValidateStatus({ password: f })}
+    />
+
+    <p className={S.labelTitle}>确认密码：</p>
+    <PasswordInput
+      errMes={confirmPasswordError}
+      valueChange={v => setInputValue({ confirmPassword: v })}
+      statusChange={f => setValidateStatus({ confirmPassword: f })}
+    />
 
     <div className={S.footer}>
       <Button
         type={'primary'}
         className={S.button}
-        disabled={!validateStatus}
+        disabled={buttonDis}
         onClick={() => props.stepChange()}
       >确认</Button>
       <Button className={S.button} onClick={props.cancel}>取消</Button>
