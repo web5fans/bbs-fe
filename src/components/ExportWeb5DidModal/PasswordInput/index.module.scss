@@ -1,0 +1,27 @@
+@use "@/styles/rem";
+
+.wrap {
+  max-width: 100% !important;
+  --input-default-border-color: #DBDBDB;
+  --input-default-shadow-color: #DBDBDB;
+
+  &.showOriginCaret {
+    input {
+      caret-color: var(--primary-color);
+    }
+  }
+}
+
+.error {
+  color: var(--danger-color);
+  font-size: rem.px2flexible(8);
+  position: absolute;
+  bottom: rem.px2flexible(-14);
+  display: flex;
+  align-items: center;
+  gap: rem.px2flexible(2);
+
+  img {
+    width: min(16px, #{rem.px2flexible(9)});
+  }
+}

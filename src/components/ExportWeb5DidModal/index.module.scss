@@ -28,37 +28,16 @@
     margin: rem.px2flexible(8) 0 rem.px2flexible(13);
   }
 
-  .inputWrap {
-    max-width: 100%;
-    --input-default-border-color: #DBDBDB;
-    --input-default-shadow-color: #DBDBDB;
-
-    &.showOriginCaret {
-      input {
-        caret-color: var(--primary-color);
-      }
-    }
-  }
-
-  .error {
-    color: var(--danger-color);
-    font-size: rem.px2flexible(8);
-    position: absolute;
-    bottom: rem.px2flexible(-14);
-    display: flex;
-    align-items: center;
-    gap: rem.px2flexible(2);
-
-    img {
-      width: min(16px, #{rem.px2flexible(9)});
-    }
+  .labelTitle {
+    padding-top: rem.px2flexible(5);
+    margin-bottom: rem.px2flexible(5);
   }
 
   .footer {
     display: flex;
     align-items: center;
     gap: rem.px2flexible(15);
-    margin: rem.px2flexible(32) 0;
+    margin: rem.px2flexible(25) 0 rem.px2flexible(32);
 
     .button {
       width: rem.px2flexible(46);
