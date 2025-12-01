@@ -2,6 +2,9 @@ import S from './index.module.scss'
 import Button from "@/components/Button";
 import { usePathname, useRouter } from "next/navigation";
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
+import { postsWritesPDSOperation } from "@/app/posts/utils";
+import { handleToNickName } from "@/lib/handleToNickName";
+import useUserInfoStore from "@/store/userInfo";
 
 const MAIN_STATION_PATH = '/posts'
 
@@ -12,7 +15,23 @@ export const CompleteLeft = (props: {
   const pathname = usePathname()
   const router = useRouter()
 
+  const { userInfo } = useUserInfoStore();
+
+  const updateProfile = () => {
+    if (!userInfo) return
+    postsWritesPDSOperation({
+      record: {
+        $type: "app.actor.profile",
+        displayName: handleToNickName(userInfo.handle),
+        handle: userInfo.handle
+      },
+      did: userInfo.did,
+      rkey: "self"
+    })
+  }
+
   const enterMainSite = () => {
+    updateProfile()
     if (pathname === MAIN_STATION_PATH) {
       closeRegisterPop()
       return
