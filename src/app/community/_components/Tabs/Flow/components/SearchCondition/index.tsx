@@ -66,6 +66,9 @@ const SearchCondition = (props: {
       placeholder={'类型筛选'}
       onChange={(v) => setSearchParams({ category: v })}
       options={[{
+        label: '全部',
+        value: 'undefined'
+      }, {
         label: '分成收入',
         value: 0
       },{
