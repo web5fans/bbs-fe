@@ -16,10 +16,11 @@ export type TableProps<T> = {
   scroll?: {
     x: number | string
   }
+  loading?: boolean
 }
 
 export default function Table<T>(props: TableProps<T>): JSX.Element {
-  const { columns, data, scroll } = props;
+  const { columns, data, scroll, loading } = props;
 
   return <div className={S.wrap}>
     <table className={S.table} style={{ minWidth: scroll?.x }}>
@@ -58,17 +59,17 @@ export default function Table<T>(props: TableProps<T>): JSX.Element {
             key={`r${idx}-c${cdx}`}
           >{value}</td>
         })}
-      </tr>) : <Empty colsNum={columns.length} />}
+      </tr>) : <Empty colsNum={columns.length} loading={loading} />}
       </tbody>
     </table>
   </div>
 }
 
-function Empty({ colsNum }: { colsNum: number }) {
+function Empty({ colsNum, loading }: { colsNum: number; loading?: boolean }) {
   return <tr>
     <td colSpan={colsNum}>
       <div className={S.empty}>
-        暂无数据
+        {loading ? '' : '暂无数据'}
       </div>
     </td>
   </tr>

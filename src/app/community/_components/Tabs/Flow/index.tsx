@@ -17,7 +17,7 @@ import Link from "next/link";
 import StreamLineRichText from "@/components/StreamLineRichText";
 
 export type SearchParamsType = {
-  category: number | undefined
+  category: number | string
   start: string
   end: string
 }
@@ -26,7 +26,7 @@ const Flow = ({ ckbAddr }: {
   ckbAddr: string
 }) => {
   const [searchParams, setSearchParams] = useSetState<SearchParamsType>({
-    category: undefined,
+    category: 'undefined',
     start: dayjs().startOf('month').format('YYYY/MM/DD') + ' 00:00',
     end: dayjs().add(1, 'month').startOf('month').format('YYYY/MM/DD') + ' 00:00',
   })
@@ -102,7 +102,7 @@ const Flow = ({ ckbAddr }: {
     dataIndex: 'sender',
     width: '18%',
     render: (record) => {
-      if (record.category === 1) return '-'
+      if (!record.sender_author) return '-'
       return <UserAvatarInfo
         author={{
           avatar: record.sender_author?.displayName,
@@ -143,6 +143,7 @@ const Flow = ({ ckbAddr }: {
             ...searchParams,
             start: localToUTC(searchParams.start),
             end: localToUTC(searchParams.end),
+            category: searchParams.category === 'undefined' ? undefined : searchParams.category
           })
 
           return {

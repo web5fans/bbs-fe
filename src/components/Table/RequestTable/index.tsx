@@ -28,7 +28,7 @@ export default function RequestTable<T = any>(props: RequestTableProps<T>){
       {loading && <div className={S.loading}>
         <CircleLoading className={S.icon} />
       </div>}
-      <Table {...rest} data={data?.list || []} />
+      <Table {...rest} data={data?.list || []} loading={loading} />
     </div>
     <BBSPagination {...pagination} align={'center'} hideOnSinglePage />
   </div>
