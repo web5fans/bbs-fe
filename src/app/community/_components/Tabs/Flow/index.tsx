@@ -102,7 +102,7 @@ const Flow = ({ ckbAddr }: {
     dataIndex: 'sender',
     width: '18%',
     render: (record) => {
-      if (record.category === 1) return '-'
+      if (!record.sender_author) return '-'
       return <UserAvatarInfo
         author={{
           avatar: record.sender_author?.displayName,
