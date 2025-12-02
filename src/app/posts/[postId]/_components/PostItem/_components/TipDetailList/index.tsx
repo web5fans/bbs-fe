@@ -81,7 +81,7 @@ const TipDetailList = (props: {
                   </div>
                 </td>
               </tr>
-            }) : <Empty />
+            }) : <Empty loading={loading} />
           }
         </tbody>
       </table>
@@ -93,11 +93,11 @@ const TipDetailList = (props: {
 export default TipDetailList;
 
 
-function Empty() {
+function Empty({ loading }: { loading?: boolean }) {
   return <tr>
     <td colSpan={3}>
       <div className={S.empty}>
-        暂无数据
+        {loading ? '' : '暂无数据'}
       </div>
     </td>
   </tr>
