@@ -4,6 +4,7 @@ import getPDSClient from "@/lib/pdsClient";
 import { JSONContent } from "@tiptap/core";
 import { DID_PREFIX } from "@/constant/Network";
 import { showGlobalToast } from "@/provider/toast";
+import sessionWrapApi from "@/lib/wrapApiAutoSession";
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
@@ -166,7 +167,7 @@ export const handleImageUpload = async (
   }
 
   const agent = getPDSClient()
-  const result = await agent.fans.web5.ckb.uploadBlob(file, { encoding: file.type })
+  const result = await sessionWrapApi(() => agent.fans.web5.ckb.uploadBlob(file, { encoding: file.type }))
   const blobRefStr = result.data.blob.ref.toString()
   let server = result.data.blobServer
   const didSlice = did.replace(DID_PREFIX, '')

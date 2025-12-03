@@ -10,6 +10,7 @@ import { TID } from '@atproto/common-web'
 import dayjs from "dayjs";
 import { showGlobalToast } from "@/provider/toast";
 import { Secp256k1Keypair } from "@atproto/crypto";
+import sessionWrapApi from "@/lib/wrapApiAutoSession";
 
 export type PostFeedItemType = {
   uri: string,
@@ -184,23 +185,6 @@ export async function postsWritesPDSOperation(params: {
   const res = await server<CreatePostResponse>('/record/create', 'POST', serverParams)
 
   return res.results[0].uri
-}
-
-async function sessionWrapApi(callback: () => Promise<any>): Promise<void> {
-  try {
-    const result =  await callback()
-    return result
-  } catch (error) {
-    if (error.message.includes('Token has expired')) {
-      // showGlobalToast({
-      //   title: '登录信息已过期，请重新刷新页面',
-      //   icon: 'error'
-      // })
-      await getPDSClient().sessionManager.refreshSession()
-      return await callback()
-    }
-    throw error
-  }
 }
 
 export type PostOptParamsType = {
