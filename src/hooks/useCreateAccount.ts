@@ -13,7 +13,7 @@ import { hexToUint8Array, uint8ArrayToHex } from "@/lib/dag-cbor";
 import { UnsignedCommit } from "@atproto/repo";
 import { CID } from "multiformats";
 import { deleteErrUser } from "@/lib/user-account";
-import { DID_PREFIX } from "@/constant/Network";
+import { DID_PREFIX, USER_DOMAIN } from "@/constant/Network";
 import useRegisterPageStatus from "@/store/registerPageStatus";
 
 export enum CREATE_STATUS {
@@ -37,7 +37,7 @@ type CreateUserParamsType = {
 export default function useCreateAccount({ createSuccess }: {
   createSuccess?: () => void
 }) {
-  const { userHandle } = useNickName()
+  const { userHandle, nickname } = useNickName()
   const { signer, walletClient, address } = useWallet()
   const { resetUserStore, storageUserInfo } = useUserInfoStore()
 
@@ -73,11 +73,13 @@ export default function useCreateAccount({ createSuccess }: {
     const strSignKeyPriv = ccc.hexFrom(signKeyPriv)
     const signingKey = keyPair.did()
 
+    const handle = nickname?.toLowerCase() + `.${USER_DOMAIN}`
+
     const diDoc = {
       verificationMethods: {
         atproto: signingKey,
       },
-      alsoKnownAs: [`at://${userHandle}`],
+      alsoKnownAs: [`at://${handle}`],
       services: {
         atproto_pds: {
           type: 'AtprotoPersonalDataServer',
