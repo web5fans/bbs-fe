@@ -1,0 +1,23 @@
+@use "@/styles/rem";
+
+.wrap {
+  text-align: center;
+  cursor: pointer;
+
+  .inner {
+    display: inline-flex;
+    align-items: center;
+    gap: rem.px2flexible(5);
+    border-bottom: 1px solid var(--color, #000000);
+    font-size: rem.px2flexible(7);
+  }
+
+  &:hover {
+    color: var(--primary-color);
+
+    .inner {
+      gap: rem.px2flexible(2);
+      border-color: var(--primary-color);
+    }
+  }
+}
