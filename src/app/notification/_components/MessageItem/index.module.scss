@@ -1,0 +1,81 @@
+@use "@/styles/rem";
+
+.messageItem {
+  cursor: pointer;
+  padding-inline: rem.px2flexible(9);
+
+  .message {
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(9);
+    padding-block: rem.px2flexible(10);
+  }
+
+  &:hover {
+    background: #F3F3F3;
+  }
+
+  & + .messageItem {
+    .divide {
+      display: block;
+    }
+  }
+
+  .divide {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #DBDBDB;
+    display: none;
+  }
+  .icon {
+    width: rem.px2flexible(20);
+    height: rem.px2flexible(20);
+  }
+  .unread {
+    position: absolute;
+    width: rem.px2flexible(4);
+    height: rem.px2flexible(4);
+    border-radius: 100%;
+    background: #CB2C3C;
+    top: rem.px2flexible(1);
+    right: 0;
+  }
+  .messageInfo {
+    flex: 1;
+    overflow: hidden;
+    font-size: rem.px2flexible(8);
+
+    .name {
+      font-weight: 500;
+      margin-right: rem.px2flexible(2);
+      text-transform: capitalize;
+    }
+
+    .maxRow1 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .maxRow2 {
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .post {
+      cursor: pointer;
+      text-decoration: underline;
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+  }
+
+  .time {
+    font-size: rem.px2flexible(7);
+    color: #6C6C6C;
+    align-self: flex-start;
+  }
+}

@@ -1,8 +1,9 @@
 import S from "./index.module.scss";
 import { useEffect, useRef } from "react";
-import MessageItem from "./MessageItem";
 import TextHoverFocus from "@/components/TextHoverFocus";
 import Link from "next/link";
+import { EmptyText } from "@/components/Empty";
+import MessageItem from "@/app/notification/_components/MessageItem";
 
 type NotificationPopOverProps = {
   position: {
@@ -16,7 +17,7 @@ const NotificationPopOver = (props: NotificationPopOverProps) => {
 
   useEffect(() => {
     const { top } = props.position
-    if (!popoverRef.current) return
+    if (!popoverRef.current || !top) return
 
     popoverRef.current.style.top = `${top - 2}px`;
 
@@ -35,6 +36,7 @@ const NotificationPopOver = (props: NotificationPopOverProps) => {
       <MessageItem />
       <MessageItem />
       <MessageItem />
+      {/*<EmptyText message={'暂无消息，快去浏览帖子互动吧！'} className={'!h-full'} />*/}
     </div>
     <Link href={'/notification'} prefetch className={'flex items-center justify-center'}>
       <TextHoverFocus text={'查看全部'} classnames={{ wrap: S.checkAll }} />
