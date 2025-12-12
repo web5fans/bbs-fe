@@ -23,7 +23,7 @@ const BreadCrumbs = ({ breads, className }: Props) => {
             onClick()
             return
           }
-          router.replace(route)
+          if (route) router.replace(route)
         }}>{title}</a> : <span>{title}</span>}
       </div>
     })}

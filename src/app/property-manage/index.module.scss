@@ -1,0 +1,12 @@
+@use "@/styles/rem";
+
+.window {
+  max-width: 1280px;
+  margin: rem.px2flexible(22) auto;
+
+  --card-window-line-gap: #{rem.px2flexible(1)};
+}
+
+.content {
+  padding: rem.px2flexible(10);
+}

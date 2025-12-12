@@ -1,0 +1,16 @@
+@use "@/styles/rem";
+
+.modal {
+  --input-shadow-num: #{rem.px2flexible(1)};
+
+  .user {
+    display: flex;
+    align-items: center;
+    margin-top: rem.px2flexible(20);
+    gap: rem.px2flexible(20);
+
+    .input {
+      max-width: 100% !important;
+    }
+  }
+}

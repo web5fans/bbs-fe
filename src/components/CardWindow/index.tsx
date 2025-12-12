@@ -1,3 +1,5 @@
+'use client'
+
 import S from './index.module.scss'
 import cx from "classnames";
 import CloseIcon from '@/assets/window-close.svg'

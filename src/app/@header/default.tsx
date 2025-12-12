@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import UserIcon from '@/assets/header/user.svg'
 import HomeIcon from '@/assets/header/home.svg'
 import FundIcon from '@/assets/header/community-fund.svg'
-import NotificationIcon from '@/assets/header/notification.svg'
+import PropertyIcon from '@/assets/header/property-manage.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import { usePathname, useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -50,9 +50,9 @@ export default function AppHeader(props: {
             tooltip={'社区金库'}
           />}
           {/*{hasLoggedIn && <NavigatorIcon*/}
-          {/*  icon={<NotificationIcon />}*/}
-          {/*  href={'/'}*/}
-          {/*  tooltip={'消息通知'}*/}
+          {/*  icon={<PropertyIcon />}*/}
+          {/*  href={'/property-manage'}*/}
+          {/*  tooltip={'社区中心'}*/}
           {/*/>}*/}
           {
             hasLoggedIn && <Notification />
