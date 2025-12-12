@@ -17,6 +17,7 @@ import { ccc, Transaction } from "@ckb-ccc/core";
 import { useBoolean, useCountDown } from "ahooks";
 import CKBInput from "../CKBInput";
 import { useToast } from "@/provider/toast";
+import dayjs from "dayjs";
 
 export type AuthorType = {
   displayName: string;
@@ -125,7 +126,8 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
       nsid,
       uri,
       amount: ckbAmount,
-      sender: address
+      sender: address,
+      timestamp: dayjs().utc().unix()
     }
 
     const encoded = cbor.encode(params)

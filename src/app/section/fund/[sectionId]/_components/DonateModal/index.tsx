@@ -18,6 +18,7 @@ import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Modal from "@/components/Modal";
 import { NSID_TYPE_ENUM } from "@/constant/types";
 import FundIcon from '@/assets/fund/fund-fill.svg'
+import dayjs from "dayjs";
 
 type ModalContentProps = {
   onClose: () => void;
@@ -120,7 +121,8 @@ function ModalContent({ onClose, receiveCKBAddr, nsid, onConfirm }: ModalContent
       nsid,
       ckb_addr: receiveCKBAddr,
       amount: ckbAmount,
-      sender: address
+      sender: address,
+      timestamp: dayjs().utc().unix()
     }
 
     const encoded = cbor.encode(params)

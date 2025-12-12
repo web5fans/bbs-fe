@@ -205,11 +205,16 @@ export async function updatePostByAdmin(params: PostOptParamsType): Promise<void
 
   const signingKey = keyPair.did()
 
+  const paramsObj = {
+    ...params,
+    timestamp: dayjs().utc().unix()
+  }
+
   const encoded = cbor.encode({
     is_top: null,
     is_announcement: null,
     is_disabled: null,
-    ...params,
+    ...paramsObj,
     reasons_for_disabled: params.reasons_for_disabled || null,
   })
   const sig = await keyPair.sign(encoded)
@@ -217,7 +222,7 @@ export async function updatePostByAdmin(params: PostOptParamsType): Promise<void
   await server('/admin/update_tag', 'POST', {
     did,
     signing_key_did: signingKey,
-    params,
+    params: paramsObj,
     signed_bytes: uint8ArrayToHex(sig),
   })
 }
