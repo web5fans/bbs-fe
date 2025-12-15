@@ -8,6 +8,7 @@ import CardWindow from "@/components/CardWindow";
 import PostItem from "@/app/posts/[postId]/_components/PostItem";
 import BBSPagination from "@/components/BBSPagination";
 import PostDiscuss from "@/app/posts/[postId]/_components/PostDiscuss";
+import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 
 type PostContentProps = {
   breadCrumb?: React.ReactNode;
@@ -15,14 +16,14 @@ type PostContentProps = {
   componentRef?: React.Ref<{
     commentRootPostRecord: any
   }>;
-  refreshOrigin: () => void
-  originPost: any
 }
 
 const PAGE_SIZE = 20
 
 const PostsContent = (props: PostContentProps) => {
-  const { breadCrumb, postId, refreshOrigin, originPost } = props;
+  const { breadCrumb, postId } = props;
+
+  const { rootPost: originPost, refreshRootPost: refreshOrigin } = usePost()
 
   const { userProfile } = useCurrentUser()
 

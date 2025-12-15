@@ -16,6 +16,11 @@ export type ModalInfoType = {
   quoteContent: string
 } | {
   type: 'reply' | 'comment'
+}) & ({
+  isEdit: true
+  content: string
+} | {
+  isEdit?: false
 })
 
 type PopUpProviderProps = {

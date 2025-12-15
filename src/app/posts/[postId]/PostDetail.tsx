@@ -1,9 +1,7 @@
 'use client'
 
 import S from "./index.module.scss";
-import { useRequest } from "ahooks";
-import server from "@/server";
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
 import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark";
@@ -12,75 +10,38 @@ import cx from "classnames";
 import Permission from "@/app/posts/[postId]/_components/Permission";
 import PostsContent from "@/app/posts/[postId]/_components/PostsContent";
 import { SectionItem } from "@/app/posts/utils";
-import Post404Auth from "./_components/Post404Auth";
+import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 
 type PostDetailProps = {
   breadCrumb?: React.ReactNode;
   postId: string
-  sectionInfo?: SectionItem
 }
 
 const PostDetail = (props: PostDetailProps) => {
   const { breadCrumb, postId } = props;
 
-  const { userProfile, isWhiteUser } = useCurrentUser()
+  const { isWhiteUser } = useCurrentUser()
 
-  const { data: originPosterInfo, refresh: refreshOrigin } = useRequest(async () => {
-    try {
-      const result = await server('/post/detail', 'GET', {
-        uri: postId,
-        viewer: userProfile?.did
-      })
-      return result
-    } catch (err) {
-      const { error: errInfo, message } = err.response.data
-      if (errInfo === "IsDisabled") {
-        return {
-          uri: postId,
-          is_disabled: true,
-          reasons_for_disabled: message
-        }
-      }
-    }
-  }, {
-    refreshDeps: [postId, userProfile?.did]
-  })
-
-  const { data: sectionInfo } = useRequest(async () => {
-    const result = await server<SectionItem>('/section/detail', 'GET', {
-      id: originPosterInfo?.section_id
-    })
-    return result
-  }, {
-    ready: !props.sectionInfo && !!originPosterInfo?.section_id
-  })
+  const { rootPost, sectionInfo, refreshRootPost } = usePost()
 
   const { rootRef, stickyRef } = useFloatingMarkDistance()
 
   const detailRef = useRef<{ commentRootPostRecord: any } | null>(null)
 
-  const sectionDetail = props.sectionInfo || sectionInfo
-
-  return <Post404Auth
-    originPost={originPosterInfo}
-    sectionInfo={sectionDetail}
-  >
-    <div
+  return <div
       className={S.container}
       ref={rootRef}
     >
       <Permission
         rootRef={rootRef}
-        originPost={originPosterInfo}
-        sectionInfo={sectionDetail}
-        refreshData={refreshOrigin}
+        originPost={rootPost}
+        sectionInfo={sectionInfo}
+        refreshData={refreshRootPost}
       />
       <PostsContent
         componentRef={detailRef}
         postId={postId}
         breadCrumb={breadCrumb}
-        originPost={originPosterInfo}
-        refreshOrigin={refreshOrigin}
       />
       <PostsFixedMark
         detailRef={detailRef}
@@ -88,7 +49,6 @@ const PostDetail = (props: PostDetailProps) => {
         isWhiteUser={isWhiteUser}
       />
     </div>
-  </Post404Auth>
 }
 
 export default PostDetail;

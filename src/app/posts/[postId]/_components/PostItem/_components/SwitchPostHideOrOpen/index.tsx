@@ -6,7 +6,7 @@ import cx from "classnames";
 import { useBoolean } from "ahooks";
 import HidePostOrCommentModal from "@/app/posts/[postId]/_components/HidePostOrCommentModal";
 import { PostOptParamsType, updatePostByAdmin } from "@/app/posts/utils";
-import { useSection } from "../../../Post404Auth";
+import { usePost } from "../../../Post404Auth";
 
 
 const SwitchPostHideOrOpen = (props: {
@@ -18,7 +18,7 @@ const SwitchPostHideOrOpen = (props: {
 }) => {
   const { status, className, uri, onConfirm, nsid } = props;
   const [hideModalVis, { toggle: toggleHideModalVis, setFalse: closeHideModal }] = useBoolean(false)
-  const { isSectionAdmin } = useSection()
+  const { isSectionAdmin } = usePost()
 
   const handlePostsOpt = async (reason?: string) => {
     const obj: PostOptParamsType = {

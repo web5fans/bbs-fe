@@ -154,7 +154,7 @@ function MainPostFooterOpts(props: {
 }) {
   const { postInfo, floor } = props;
 
-  return <div className={S.rightPart}>
+  return <div className={S.mainPostRight}>
     <PostLike
       liked={postInfo.liked}
       likeCount={postInfo.like_count}
@@ -178,6 +178,10 @@ function FooterOptions(props: {
   const { postInfo, floor, reply, replyTotal, switchPostVisibility } = props;
 
   return <div className={`${S.rightPart} ${S.otherPost}`}>
+    <div className={S.item}>
+      <span className={S.opt}>{formatDate(postInfo.created)}</span>
+      <span className={'shrink-0'}>{floor}楼</span>
+    </div>
     <div className={cx(S.item)}>
       <PostLike
         liked={postInfo.liked}
@@ -196,11 +200,8 @@ function FooterOptions(props: {
         className={S.reply}
         onClick={reply}
       >回复&nbsp;({replyTotal})</span>
-    </div>
 
-    <div className={S.item}>
-      <span className={S.opt}>{formatDate(postInfo.created)}</span>
-      <span className={'shrink-0'}>{floor}楼</span>
+      {/*<span className={S.edit}>编辑</span>*/}
     </div>
   </div>
 }
