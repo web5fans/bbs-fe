@@ -7,6 +7,7 @@ import UserComments from "./components/UserComments";
 import { UserProfileType } from "@/store/userInfo";
 import IncomeTab from "@/app/user-center/_components/DataDetail/components/IncomeTab";
 import SpendingTab from "@/app/user-center/_components/DataDetail/components/SpendingTab";
+import SelfUserPosts from "@/app/user-center/_components/DataDetail/components/SelfUserPosts";
 
 const tabs = [{
   title: '发帖'
@@ -49,7 +50,7 @@ const SelfDataDetail = (props: { did: string; profile: UserProfileType }) => {
       })}
     </div>
     <div className={S.content}>
-      {activeTab === 0 && <UserPosts did={did} scrollToTop={scrollToTop} />}
+      {activeTab === 0 && <SelfUserPosts did={did} scrollToTop={scrollToTop} />}
       {activeTab === 1 && <UserComments did={did} commentName={profile.displayName} scrollToTop={scrollToTop} />}
       {activeTab === 2 && <IncomeTab did={did}/>}
       {activeTab === 3 && <SpendingTab did={did} />}

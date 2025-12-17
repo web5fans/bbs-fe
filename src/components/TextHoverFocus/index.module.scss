@@ -16,8 +16,16 @@
     color: var(--primary-color);
 
     .inner {
-      gap: rem.px2flexible(2);
       border-color: var(--primary-color);
+
+      span:first-child {
+        position: relative;
+        left: rem.px2flexible(3)
+      }
+      span:last-child {
+        position: relative;
+        right: rem.px2flexible(3)
+      }
     }
   }
 }

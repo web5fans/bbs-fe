@@ -25,9 +25,11 @@ export type PostFeedItemType = {
   updated: string, // 时间
   created: string, // 时间
   section: string,       // 版区名称
+  section_id: string,
   is_top: boolean
   is_announcement: boolean
   is_disabled: boolean
+  is_draft: boolean
   reasons_for_disabled?: string
 }
 
@@ -58,6 +60,7 @@ type PostRecordType = {
   text: string;
   edited?: string
   created?: string
+  is_draft?: boolean // 是否是草稿
 } | {
   $type: 'app.bbs.comment'
   post: string  // 原帖uri
@@ -82,11 +85,11 @@ type PostRecordType = {
 }
 
 type CreatePostResponse = {
-  commit: {
+  commit?: {
     cid: string
     rev: string
   },
-  results: {
+  results?: {
     $type: "fans.web5.ckb.directWrites#createResult"
     cid: string
     uri: string
@@ -98,7 +101,7 @@ export async function postsWritesPDSOperation(params: {
   record: PostRecordType
   did: string
   rkey?: string
-  type?: 'update' | 'create'
+  type?: 'update' | 'create' | 'delete'
 }) {
   const operateType = params.type || 'create'
   const pdsClient = getPDSClient()
@@ -113,6 +116,7 @@ export async function postsWritesPDSOperation(params: {
   const $typeMap = {
     create: "fans.web5.ckb.preDirectWrites#create",
     update: "fans.web5.ckb.preDirectWrites#update",
+    delete: "fans.web5.ckb.preDirectWrites#delete",
   }
 
   const writeRes = await sessionWrapApi(() => pdsClient.fans.web5.ckb.preDirectWrites({
@@ -176,15 +180,26 @@ export async function postsWritesPDSOperation(params: {
     },
   }
 
-  if (operateType === 'update') {
-    const res = await server<CreatePostResponse>('/record/update', 'POST', serverParams)
+  let requestUrl = ''
 
-    return res.results[0].uri
+  switch (operateType) {
+    case "create":
+      requestUrl = '/record/create'
+      break;
+    case "update":
+      requestUrl = '/record/update'
+      break;
+    case "delete":
+      requestUrl = '/record/delete'
+      break
   }
   
-  const res = await server<CreatePostResponse>('/record/create', 'POST', serverParams)
+  const res = await server<CreatePostResponse>(requestUrl, 'POST', serverParams)
 
-  return res.results[0].uri
+  return {
+    uri: res?.results?.[0].uri,
+    created: newRecord.created
+  }
 }
 
 export type PostOptParamsType = {

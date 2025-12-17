@@ -10,6 +10,7 @@ $bg: #EAEAEA;
   border-right: rem.px2flexible(2) solid;
   border-bottom: rem.px2flexible(2) solid;
   background: $bg;
+  font-family: var(--font-CLFN);
 
   //@include thin-border.border(rem.px2rem(0.5), rem.px2rem(1.74));
 

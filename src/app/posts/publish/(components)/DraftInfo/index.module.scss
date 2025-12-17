@@ -1,0 +1,22 @@
+@use "@/styles/rem";
+
+.wrap {
+  position: absolute;
+  right: 0;
+  top: 0;
+  .draft {
+    font-weight: normal;
+    font-size: min(14px, #{rem.px2flexible(10)}) !important;
+  }
+  .info {
+    color: #6C6C6C;
+    font-size: min(10px, #{rem.px2flexible(8)});
+    line-height: 1.5;
+    font-weight: normal;
+
+    .time {
+      color: var(--primary-color);
+      margin: 0 rem.px2flexible(2);
+    }
+  }
+}

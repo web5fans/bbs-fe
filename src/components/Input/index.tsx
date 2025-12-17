@@ -1,12 +1,16 @@
 'use client'
 
 import S from './index.module.scss'
-import { JSX, useEffect, useState } from "react";
+import { JSX, Ref, useEffect, useImperativeHandle, useState } from "react";
 import SuccessIcon from '@/assets/login/success.svg';
 import cx from "classnames";
 import setInputCursorPos from "@/components/Input/setInputCursorPos";
 
-type Props = Omit<JSX.IntrinsicElements['input'], 'onChange' | 'value'> & {
+export type InputRefType = {
+  setInputValue: (value: string) => void
+}
+
+type Props = Omit<JSX.IntrinsicElements['input'], 'onChange' | 'value' | 'ref'> & {
   checkedPass?: boolean
   error?: boolean
   children?: React.ReactNode
@@ -15,6 +19,7 @@ type Props = Omit<JSX.IntrinsicElements['input'], 'onChange' | 'value'> & {
   inputValue?: string
   isFormChild?: boolean
   showCaret?: boolean
+  ref?: Ref<InputRefType>
 } & ({
   showCount: true;
   onCountCheck: (passed: boolean) => void
@@ -33,15 +38,33 @@ const Input = (props: Props) => {
     isFormChild,
     onCountCheck,
     showCaret = true,
+    ref: componentRef,
     ...rest
   } = props;
   const [value, setValue] = useState<string | undefined>();
   const [passValidate, setPassValidate] = useState<boolean | undefined>(undefined);
   const { inputRef, caretRef, setCursorPos } = setInputCursorPos(TEM_SPAN_ID);
 
+  const checkCount = (value: string) => {
+    const pass = !(value.length < (rest.minLength || 0)) && !(value.length > (rest.maxLength || 0));
+    setPassValidate(pass)
+    onCountCheck?.(pass)
+  }
+
   useEffect(() => {
     setValue(inputValue)
   }, [inputValue]);
+
+  useImperativeHandle(props.ref, () => {
+    return {
+      setInputValue: (value) => {
+        setValue(value)
+        if (showCount) {
+          checkCount(value || '')
+        }
+      }
+    }
+  })
 
   const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
@@ -50,9 +73,7 @@ const Input = (props: Props) => {
     const newValue = e.target.value
     if (showCount) {
       const showValue = newValue.trim()
-      const pass = !(showValue.length < (rest.minLength || 0)) && !(showValue.length > (rest.maxLength || 0));
-      setPassValidate(pass)
-      onCountCheck?.(pass)
+      checkCount(showValue)
     }
     rest.onChange?.(e.target.value)
   }
