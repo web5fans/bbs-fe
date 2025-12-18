@@ -96,6 +96,7 @@ export const StepNickNameLeft = (props: StepNickNameProps) => {
     <div className={'relative'}>
       <label>设置你的DID名称</label>
       <Input
+        wrapClassName={S.input}
         onChange={onChange}
         placeholder={'支持由数字或字母或特殊字符“-”组成的名称'}
         onFocus={() => setIsInputFocus(true)}

@@ -32,7 +32,7 @@ $inputWidth: rem.px2flexible(247);
   transition: all .1s;
 
   //width: $inputWidth;
-  max-width: 500px;
+  //max-width: 500px;
   width: 100%;
   height: min(66px, #{rem.px2flexible(44)});
 
@@ -43,7 +43,6 @@ $inputWidth: rem.px2flexible(247);
   }
 
   &.formInput {
-    max-width: 100%;
     height: rem.px2flexible(31.5);
 
     --input-shadow-num: #{rem.px2flexible(1)};

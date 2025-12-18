@@ -5,6 +5,10 @@
   --input-default-border-color: #B7B7B7;
   --input-default-shadow-color: #B7B7B7;
 
+  .input {
+    max-width: 500px;
+  }
+
   .loading {
     width: rem.px2flexible(14);
     height: rem.px2flexible(14);

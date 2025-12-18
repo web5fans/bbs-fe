@@ -30,7 +30,7 @@ $inputPaddingTop: min(26px, #{rem.px2flexible(17.5)});
   transition: all .1s;
 
   width: 100%;
-  height: min(66px, #{rem.px2flexible(44)});
+  height: rem.px2flexible(31.5);
 
   &.disabled {
     background: #E7E7E7;
@@ -39,7 +39,7 @@ $inputPaddingTop: min(26px, #{rem.px2flexible(17.5)});
   }
 
   &.formInput {
-
+    height: rem.px2flexible(31.5);
     --input-shadow-num: #{rem.px2flexible(1)};
     --input-padding-left: #{rem.px2flexible(10)};
   }

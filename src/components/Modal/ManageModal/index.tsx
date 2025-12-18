@@ -1,6 +1,7 @@
 import S from './index.module.scss'
 import Modal from "@/components/Modal";
 import Button from "@/components/Button";
+import { cloneElement, JSX } from "react";
 
 type ButtonProps = {
   text?: string;
@@ -50,11 +51,13 @@ export default ManageModal;
 
 export function FormItem(props: {
   title: string
-  children: React.ReactNode
+  children: JSX.Element
   className?: string
 }) {
   return <div className={`${S.formItem} ${props.className}`}>
     <p className={S.label}>{props.title}</p>
-    {props.children}
+    {cloneElement(props.children, {
+      isFormChild: true
+    })}
   </div>
 }

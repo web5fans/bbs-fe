@@ -16,13 +16,11 @@
   }
 
   .inputWrap {
-    max-width: none;
 
     --input-font-size: #{rem.px2flexible(10)};
     --input-danger-text-color: #000;
     --caret-bottom: #{rem.px2flexible(9)};
 
-    width: 100%;
     height: rem.px2flexible(30);
     box-shadow: none !important;
     //border: 1px solid;
