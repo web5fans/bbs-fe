@@ -115,13 +115,15 @@ const PublishPostPage = () => {
       })
       setPublishing(false)
 
-      const encodeUri = postUriToHref(uri)
-      let href = '/posts/'+ encodeUri
-      if (defaultSection) {
-        href = `/section/${sectionId}/` + encodeUri
-      }
+      if (uri) {
+        const encodeUri = postUriToHref(uri)
+        let href = '/posts/'+ encodeUri
+        if (defaultSection) {
+          href = `/section/${sectionId}/` + encodeUri
+        }
 
-      router.replace(href)
+        router.replace(href)
+      }
 
       toast({ title: '发布成功', icon: 'success'})
     } catch (error) {

@@ -117,7 +117,7 @@ export async function postsWritesPDSOperation(params: {
     create: "fans.web5.ckb.preDirectWrites#create",
     update: "fans.web5.ckb.preDirectWrites#update",
     delete: "fans.web5.ckb.preDirectWrites#delete",
-  }
+  } as const
 
   const writeRes = await sessionWrapApi(() => pdsClient.fans.web5.ckb.preDirectWrites({
     repo: params.did,
@@ -153,7 +153,6 @@ export async function postsWritesPDSOperation(params: {
     throw 'sign bytes not consistent'
   }
 
-  // const commit = await signCommit(uncommit, keyPair)  会报错，所以就把源码拿出来了
   const encoded = cbor.encode(uncommit)
   const sig = await keyPair.sign(encoded)
   const commit =  {
@@ -207,7 +206,7 @@ export type PostOptParamsType = {
   uri: string
   is_top?: boolean
   is_announcement?: boolean
-} & ({ is_disabled: true; reasons_for_disabled: string } | { is_disabled?: boolean })
+} & ({ is_disabled: true; reasons_for_disabled: string } | { is_disabled?: boolean; reasons_for_disabled?: string })
 
 export async function updatePostByAdmin(params: PostOptParamsType): Promise<void> {
   const storageInfo = storage.getToken()

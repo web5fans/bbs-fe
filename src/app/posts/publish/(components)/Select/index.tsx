@@ -5,18 +5,16 @@ import CaretIcon from '@/assets/caret.svg';
 import S from './index.module.scss'
 import cx from "classnames";
 
-type OptionValueType = string | number;
-
-type SelectProps = {
-  options: { value: OptionValueType, label: string, [key: string]: any }[]
+type SelectProps<T> = {
+  options: { value: T, label: string, [key: string]: any }[]
   renderItem?: (item: any) => React.ReactNode
-  onChange: (value: OptionValueType) => void
-  selectedValue?: OptionValueType
+  onChange: (value: T) => void
+  selectedValue?: T
   className?: string
   placeholder?: string
 }
 
-const StyledSelect = (props: SelectProps) => {
+function StyledSelect<T>(props: SelectProps<T>) {
   const { selectedValue, options, placeholder } = props;
   const [value, setValue] = useState('')
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +37,7 @@ const StyledSelect = (props: SelectProps) => {
   // 获取当前选中项的标签
   const selectedLabel = options.find(opt => opt.value === selectedValue)?.label || placeholder || '选择版区';
 
-  const handleSelect = (optionValue: string) => {
+  const handleSelect = (optionValue: T) => {
     props.onChange(optionValue);
     setIsOpen(false);
   };
@@ -65,9 +63,9 @@ const StyledSelect = (props: SelectProps) => {
 
           {/* 选项列表 */}
           <div className={S.popoverInner}>
-            {options.map((option) => (
+            {options.map((option, index) => (
               <div
-                key={option.value}
+                key={`${option.value}`}
                 className={`${S.popoverItem} ${selectedValue === option.value ? S.selected : ''}`}
                 onClick={() => handleSelect(option.value)}
               >
