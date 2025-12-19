@@ -85,17 +85,17 @@ const PublishPostPage = () => {
     const filteredHtml = html.replace(/<div[^>]*data-type="image-upload"[^>]*><\/div>/g, '')
 
     textNumberRef.current?.setNumber(textNumber)
-    autoSaveDraft({
-      sectionId,
-      title: postTitleRef.current,
-      text: filteredHtml,
-    })
 
     const { content } = json
     if (!content) return
     const checkResult = checkEditorContent(json, text)
     setRichTextDis(!checkResult)
     richTextRef.current = filteredHtml
+    autoSaveDraft({
+      sectionId,
+      title: postTitleRef.current,
+      text: filteredHtml,
+    })
   }
 
   const publishPost = async () => {
