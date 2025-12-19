@@ -1,3 +1,5 @@
+'use client'
+
 import S from './index.module.scss'
 import { useState } from "react";
 import cx from "classnames";

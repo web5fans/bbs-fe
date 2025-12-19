@@ -9,7 +9,7 @@ import { useRequest } from "ahooks";
 import server from "@/server";
 import { SectionItem } from "@/app/posts/utils";
 
-const index = () => {
+const page = () => {
   const { sectionId } = useParams()
 
   const { data: sectionInfo, refresh: refreshSection } = useRequest(async () => {
@@ -47,4 +47,4 @@ const index = () => {
   </LayoutCenter>
 }
 
-export default index;
+export default page;

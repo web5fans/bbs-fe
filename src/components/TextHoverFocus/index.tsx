@@ -11,9 +11,10 @@ const TextHoverFocus = ({ text, classnames, ...rest }:{
 
   return <div {...rest} className={cx(S.wrap, classnames?.wrap)}>
     <div className={cx(S.inner, classnames?.inner)}>
-      <span>→</span>
+      <span className={S.arrowR}>→</span>
       <span>{text}</span>
-      <span>←</span>
+      <span className={S.arrowL}>←</span>
+      <span className={S.divide} />
     </div>
   </div>
 }

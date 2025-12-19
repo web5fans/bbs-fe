@@ -8,8 +8,17 @@
     display: inline-flex;
     align-items: center;
     gap: rem.px2flexible(5);
-    border-bottom: 1px solid var(--color, #000000);
     font-size: rem.px2flexible(7);
+    position: relative;
+
+    .divide {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: #000000;
+    }
   }
 
   &:hover {
@@ -18,11 +27,17 @@
     .inner {
       border-color: var(--primary-color);
 
-      span:first-child {
+      .divide {
+        left: rem.px2flexible(3);
+        right: rem.px2flexible(3);
+        background-color: var(--primary-color);
+      }
+
+      .arrowR {
         position: relative;
         left: rem.px2flexible(3)
       }
-      span:last-child {
+      .arrowL {
         position: relative;
         right: rem.px2flexible(3)
       }

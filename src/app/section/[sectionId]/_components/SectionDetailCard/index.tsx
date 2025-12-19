@@ -8,6 +8,8 @@ import { SectionItem } from "@/app/posts/utils";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import SectionInfo from "@/app/section/[sectionId]/_components/SectionDetailCard/SectionInfo";
 import { useRouter } from "next/navigation";
+import TextHoverFocus from "@/components/TextHoverFocus";
+import Link from "next/link";
 
 const SectionDetailCard = (props: {
   sectionInfo?: SectionItem
@@ -33,12 +35,9 @@ const SectionDetailCard = (props: {
       <SectionInfo sectionInfo={sectionInfo} />
 
       {/*<div className={S.buttonWrap}>*/}
-      {/*  <Button*/}
-      {/*    className={S.button}*/}
-      {/*    onClick={() => router.push(location.pathname + '/manage')}*/}
-      {/*  >*/}
-      {/*    版区管理*/}
-      {/*  </Button>*/}
+      {/*  <Link href={location.pathname + '/manage'} prefetch>*/}
+      {/*    <TextHoverFocus text={'版区管理'} />*/}
+      {/*  </Link>*/}
       {/*</div>*/}
     </div>
 

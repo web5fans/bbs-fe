@@ -49,7 +49,6 @@ const NoticeModal = (props: {
       <FormItem title={'公告标题'}>
         <Input
           inputValue={noticeInfo?.title}
-          isFormChild
           showCount
           minLength={6}
           maxLength={100}

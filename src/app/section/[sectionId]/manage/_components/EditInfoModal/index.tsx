@@ -1,10 +1,10 @@
 import ManageModal, { FormItem } from "@/components/Modal/ManageModal";
 import S from './index.module.scss'
 import Input from "@/components/Input";
-import UploadAvatar from "./UploadAvatar";
 import TextArea from "@/components/TextArea";
 import { SectionItem } from "@/app/posts/utils";
 import { useEffect, useState } from "react";
+import UploadSectionAvatar from "../UploadSectionAvatar";
 
 const EditInfoModal = (props: {
   visible: boolean,
@@ -51,7 +51,6 @@ const EditInfoModal = (props: {
       <div className={S.left}>
         <FormItem title={'版区名称'} className={S.formItem}>
           <Input
-            isFormChild
             inputValue={secInfo.name}
             onChange={v => changeSecInfo({ name: v })}
           />
@@ -62,7 +61,10 @@ const EditInfoModal = (props: {
       </div>
       <div className={S.right}>
         <FormItem title={'版区头像'} className={S.formItem}>
-          <UploadAvatar changeLogo={logo => setSecInfo({ logo })} />
+          <UploadSectionAvatar
+            changeLogo={logo => setSecInfo({ logo })}
+            classNames={{ wrap: S.uploadWrap, info: S.uploadInfo }}
+          />
         </FormItem>
       </div>
     </div>

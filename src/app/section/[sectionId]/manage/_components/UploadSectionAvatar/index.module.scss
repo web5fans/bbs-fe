@@ -1,0 +1,55 @@
+@use "@/styles/rem";
+
+.uploadWrap {
+  .uploadAvatar {
+    width: min(200px, #{rem.px2flexible(120)});
+    height: min(200px, #{rem.px2flexible(120)});
+    border-top: rem.px2flexible(1.5) solid #000;
+    border-left: rem.px2flexible(1.5) solid #000;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+
+    .loading {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .edit {
+    font-size: min(14px, #{rem.px2flexible(10)});
+    margin-top: rem.px2flexible(4);
+    margin-bottom: rem.px2flexible(2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem.px2flexible(2);
+
+    &:hover {
+      color: var(--primary-color);
+    }
+
+    .icon {
+      width: rem.px2flexible(9);
+      height: rem.px2flexible(9);
+    }
+  }
+
+  .message {
+    text-align: center;
+    color: #9F9F9F;
+    font-size: min(10px, #{rem.px2flexible(8)});
+    letter-spacing: normal;
+  }
+}
+

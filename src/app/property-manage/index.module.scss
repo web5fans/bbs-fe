@@ -9,4 +9,8 @@
 
 .content {
   padding: rem.px2flexible(10);
+
+  .gap {
+    height: rem.px2flexible(20);
+  }
 }

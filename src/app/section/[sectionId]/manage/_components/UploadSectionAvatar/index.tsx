@@ -5,10 +5,12 @@ import { DotLoading } from "@/components/Loading";
 import EditIcon from '@/assets/posts/edit.svg'
 import { handleImageUpload } from "@/lib/tiptap-utils";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import cx from "classnames";
 
-const UploadAvatar = ({ avatarUrl, changeLogo }: {
+const UploadSectionAvatar = ({ avatarUrl, changeLogo, classNames }: {
   avatarUrl?: string
   changeLogo: (url: string) => void
+  classNames?: { wrap?: string, avatar?: string, info?: string }
 }) => {
   const [uploading, setUploading] = useState(false)
   const [url, setUrl] = useState(avatarUrl)
@@ -63,8 +65,8 @@ const UploadAvatar = ({ avatarUrl, changeLogo }: {
     }
   }
 
-  return <div className={S.uploadWrap}>
-    <div className={S.uploadAvatar}>
+  return <div className={cx(S.uploadWrap, classNames?.wrap)}>
+    <div className={cx(S.uploadAvatar, classNames?.avatar)}>
       {uploading ? <div className={S.loading}>
         上传中
         <DotLoading />
@@ -73,7 +75,7 @@ const UploadAvatar = ({ avatarUrl, changeLogo }: {
         alt=""
       />}
     </div>
-    <div className={S.uploadInfo}>
+    <div className={cx(S.uploadInfo, classNames?.info)}>
       <p
         className={S.edit}
         onClick={() => uploadInputRef.current?.click()}
@@ -94,4 +96,4 @@ const UploadAvatar = ({ avatarUrl, changeLogo }: {
   </div>
 }
 
-export default UploadAvatar;
+export default UploadSectionAvatar;

@@ -43,7 +43,7 @@ export default function SectionInfo(props: {
         <p className={S.title}>{sectionInfo?.name}</p>
         <div className={S.statis}>
           {sectionInfo?.owner?.displayName && <p>
-            版主：<span className={'text-black'}>{sectionInfo?.owner?.displayName}</span>
+            版主：<span className={'text-black capitalize'}>{sectionInfo?.owner?.displayName}</span>
           </p>}
           <FeedStatistic
             commentCount={sectionInfo?.comment_count}

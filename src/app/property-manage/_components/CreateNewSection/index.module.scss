@@ -1,0 +1,53 @@
+@use "@/styles/rem";
+
+.modal {
+  .info {
+    display: flex;
+    gap: rem.px2flexible(27);
+
+    .left {
+      flex: 1;
+    }
+    .right {
+      margin-top: rem.px2flexible(-5);
+    }
+  }
+
+  .desc {
+    margin-top: rem.px2flexible(-9);
+
+    .textarea {
+      height: rem.px2flexible(100) !important;
+    }
+  }
+}
+
+@media screen and (max-width: 913px) {
+  .modal {
+    --form-label-mb: #{rem.px2flexible(10)};
+    --bw-item-mt: #{rem.px2flexible(10)};
+    .info {
+      flex-direction: column-reverse;
+      gap: 0;
+    }
+
+    .desc {
+      margin-top: rem.px2flexible(10);
+    }
+  }
+
+  .uploadWrap {
+    display: flex;
+    align-items: center;
+    gap: rem.px2flexible(10);
+    margin-bottom: rem.px2flexible(10);
+    .uploadInfo {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: rem.px2flexible(5);
+    }
+  }
+}

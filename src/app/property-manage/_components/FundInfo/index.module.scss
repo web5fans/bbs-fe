@@ -1,0 +1,45 @@
+@use "@/styles/rem";
+
+.wrap {
+  .title {
+    font-size: rem.px2flexible(10);
+    margin-bottom: rem.px2flexible(5);
+    font-weight: 500;
+  }
+
+  .total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: rem.px2flexible(10);
+    margin-bottom: rem.px2flexible(5);
+
+    .loading {
+      font-size: rem.px2flexible(24);
+    }
+
+    .num {
+      span:first-child {
+        font-size: rem.px2flexible(24);
+        font-weight: 500;
+      }
+      span:last-child {
+        font-size: rem.px2flexible(10);
+      }
+    }
+
+    .utxo {
+      width: rem.px2flexible(79);
+      height:  rem.px2flexible(20);
+    }
+  }
+
+  .info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: rem.px2flexible(3) rem.px2flexible(7);
+    font-size: rem.px2flexible(8);
+  }
+}
