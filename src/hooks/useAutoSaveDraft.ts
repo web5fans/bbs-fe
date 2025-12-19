@@ -10,7 +10,7 @@ type DraftParamsType = {
   text: string,
 }
 
-export default function useAutoSaveDraft() {
+export default function useAutoSaveDraft(props: { title: string; editorText: string; sectionId: string }) {
   const { userProfile } = useCurrentUser()
 
   const draftInfo = useRef<{ uri: string; created: string, savedTime?: string } | undefined>(undefined)
@@ -40,7 +40,13 @@ export default function useAutoSaveDraft() {
     })
   }
 
-  const { run: runPolling, loading: pollingLoading } = useRequest(editDraft, {
+  const { run: runPolling, loading: pollingLoading } = useRequest(async () => {
+    await editDraft({
+      title: props.title,
+      text: props.editorText,
+      sectionId: props.sectionId
+    })
+  }, {
     pollingInterval: 30 * 1000,
     manual: true
   });
@@ -56,8 +62,8 @@ export default function useAutoSaveDraft() {
       },
       did: userProfile?.did!
     })
-    draftInfo.current = { ...result, savedTime: result.created };
-    runPolling(obj)
+    draftInfo.current = { ...result, savedTime: result.created, uri: result.uri || '' };
+    runPolling()
   }
 
   const { run: runDebounce, loading: debounceLoading } = useRequest(async (obj: DraftParamsType) => {

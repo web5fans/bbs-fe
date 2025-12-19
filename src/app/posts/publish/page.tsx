@@ -57,7 +57,11 @@ const PublishPostPage = () => {
     updatedTime: autoSavedTime,
     setDraftInfo,
     draftUri,
-  } = useAutoSaveDraft()
+  } = useAutoSaveDraft({
+    title: postTitleRef.current,
+    editorText: richTextRef.current,
+    sectionId: sectionId,
+  })
 
   const { data: sectionList } = useRequest(async () => {
     const result = await getSectionList(userProfile?.did)
