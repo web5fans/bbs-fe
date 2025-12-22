@@ -3,13 +3,11 @@
 import S from "./index.module.scss";
 import { useRef } from "react";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { usePostCommentReply } from "@/provider/PostReplyProvider";
 import FloatingMark, { useFloatingMarkDistance } from "@/components/FloatingMark";
 import Button from "@/components/Button";
 import cx from "classnames";
 import Permission from "@/app/posts/[postId]/_components/Permission";
 import PostsContent from "@/app/posts/[postId]/_components/PostsContent";
-import { SectionItem } from "@/app/posts/utils";
 import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 
 type PostDetailProps = {
@@ -26,7 +24,7 @@ const PostDetail = (props: PostDetailProps) => {
 
   const { rootRef, stickyRef } = useFloatingMarkDistance()
 
-  const detailRef = useRef<{ commentRootPostRecord: any } | null>(null)
+  const detailRef = useRef<{ comment: () => void } | null>(null)
 
   return <div
       className={S.container}
@@ -56,17 +54,16 @@ export default PostDetail;
 function PostsFixedMark(props: {
   stickyRef: React.RefObject<HTMLDivElement | null>,
   isWhiteUser?: boolean
-  detailRef: React.RefObject<{ commentRootPostRecord: any } | null>
+  detailRef: React.RefObject<{ comment: () => void } | null>
 }) {
   const { stickyRef, isWhiteUser, detailRef } = props;
-  const { openModal } = usePostCommentReply()
 
   return <FloatingMark ref={stickyRef}>
     <Button
       type={'primary'}
       className={cx(S.comment, !isWhiteUser && '!hidden')}
       onClick={() => {
-        openModal(detailRef.current?.commentRootPostRecord)
+        detailRef.current?.comment()
         document.getElementById('comment_post')?.scrollIntoView({ behavior: "smooth" });
       }}
     ><CommentIcon /></Button>

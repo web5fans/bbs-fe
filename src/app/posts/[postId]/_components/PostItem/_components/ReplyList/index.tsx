@@ -70,19 +70,29 @@ const ReplyList = (props: {
     }
   }, []);
 
-  const reply = (info: any) => {
+  const reply = (info: any, isEdit?: boolean) => {
+    const params = {
+      toUserName: info.author.displayName,
+      toDid: info.author.did
+    }
+    if (isEdit && info.to) {
+      params.toDid = info.to?.did
+      params.toUserName = info.to?.displayName
+    }
     openModal({
       type: 'reply',
       postUri: props.rootUri,
       commentUri: props.uri,
-      toUserName: info.author.displayName,
       sectionId: props.sectionId,
-      toDid: info.author.did,
+      ...params,
       refresh: () => {
         reload()
+        if (isEdit) return
         const total = Number(props.total) + 1
         props.changeTotal(`${total}`)
-      }
+      },
+      isEdit,
+      content: info
     })
   }
 
@@ -94,8 +104,9 @@ const ReplyList = (props: {
         replyItem={info}
         sectionId={props.sectionId}
         key={info.uri}
-        toReply={() => reply(info)}
+        toReply={(isEdit) => reply(info, isEdit)}
         showReplyEntrance={isWhiteUser}
+        showEdit={userProfile?.did === info.author.did}
       />
     })}
     {props.total > 5 && (props.total !== `${replyListInfo.list.length}`) && <div
@@ -111,10 +122,11 @@ export default ReplyList;
 function ReplyItem(props: {
   replyItem: any
   sectionId: string
-  toReply: () => void
+  toReply: (isEdit?: boolean) => void
   showReplyEntrance?: boolean
+  showEdit?: boolean
 }) {
-  const { replyItem, sectionId, showReplyEntrance } = props;
+  const { replyItem, sectionId, showReplyEntrance, showEdit } = props;
   const [disabled, setDisabled] = useState(false)
 
   const [donate, setDonate] = useState(0)
@@ -149,7 +161,7 @@ function ReplyItem(props: {
           !!replyItem.to?.displayName && <span>&nbsp;回复&nbsp;
             <span className={'font-medium'}>{replyItem.to?.displayName}</span></span>
         }
-        <ShowCreateTime created={replyItem.created} />
+        <ShowCreateTime created={replyItem.edited ||replyItem.created} prefix={replyItem.edited ? '更新于' : ''} />
       </div>
 
       {/* 窗口小于1024px时，布局变化 */}
@@ -190,7 +202,8 @@ function ReplyItem(props: {
             className={S.hideReply}
             nsid={'reply'}
           />
-          {showReplyEntrance && <span className={S.reply} onClick={props.toReply}>回复</span>}
+          {showReplyEntrance && <span className={S.reply} onClick={() => props.toReply()}>回复</span>}
+          {showEdit && <span className={S.edit} onClick={() => props.toReply(true)}>编辑</span>}
         </div>
       </div>
     </div>

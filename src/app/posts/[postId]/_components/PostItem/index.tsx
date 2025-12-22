@@ -36,14 +36,13 @@ type PostItemProps = {
   isOriginPoster?: boolean
   postInfo: PostItemType
   floor: number
-  isAuthor?: boolean
   rootUri: string
   refresh?: () => void
   rootDisabled?: boolean
 }
 
 const PostItem = (props: PostItemProps) => {
-  const { postInfo = {} as PostItemType, floor, isOriginPoster, isAuthor, rootUri, rootDisabled } = props;
+  const { postInfo = {} as PostItemType, floor, isOriginPoster, rootUri, rootDisabled } = props;
 
   const [postDisabled, setPostDisabled] = useState(false)
 
@@ -68,7 +67,6 @@ const PostItem = (props: PostItemProps) => {
         <div className={S.contentInner}>
           <PostItemContent
             postInfo={postInfo}
-            isAuthor={isAuthor}
             rootUri={rootUri}
             refresh={props.refresh}
           />

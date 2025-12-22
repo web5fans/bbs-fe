@@ -12,6 +12,7 @@ import TipDetailList from "../TipDetailList";
 import SwitchPostHideOrOpen from "../SwitchPostHideOrOpen";
 import { eventBus } from "@/lib/EventBus";
 import cx from "classnames";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
@@ -80,6 +81,17 @@ const PostItemFooter = (props: {
     })
   }
 
+  const editComment = () => {
+    openModal({
+      type: "comment",
+      postUri: rootUri,
+      sectionId,
+      refresh: props.refresh,
+      isEdit: true,
+      content: postInfo
+    })
+  }
+
   const showLikeList = () => {
     changeShowType('like')
   }
@@ -118,6 +130,7 @@ const PostItemFooter = (props: {
         showLikeList={showLikeList}
         reply={reply}
         replyTotal={replyTotal}
+        editComment={editComment}
         switchPostVisibility={props.switchPostVisibility}
       /> :  <MainPostFooterOpts
         postInfo={postInfo}
@@ -173,13 +186,17 @@ function FooterOptions(props: {
   showLikeList: () => void
   switchPostVisibility: () => void
   reply: () => void
+  editComment: () => void
   replyTotal: string
 }) {
   const { postInfo, floor, reply, replyTotal, switchPostVisibility } = props;
+  const { userProfile } = useCurrentUser()
+
+  const canEdit = userProfile?.did === postInfo.author.did
 
   return <div className={`${S.rightPart} ${S.otherPost}`}>
     <div className={S.item}>
-      <span className={S.opt}>{formatDate(postInfo.created)}</span>
+      <span className={S.opt}>{postInfo.edited ? `更新于 ${formatDate(postInfo.edited)}` : formatDate(postInfo.created)}</span>
       <span className={'shrink-0'}>{floor}楼</span>
     </div>
     <div className={cx(S.item)}>
@@ -201,7 +218,7 @@ function FooterOptions(props: {
         onClick={reply}
       >回复&nbsp;({replyTotal})</span>
 
-      {/*<span className={S.edit}>编辑</span>*/}
+      {canEdit && <span className={S.edit} onClick={props.editComment}>编辑</span>}
     </div>
   </div>
 }

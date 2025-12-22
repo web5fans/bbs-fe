@@ -9,12 +9,13 @@ import PostItem from "@/app/posts/[postId]/_components/PostItem";
 import BBSPagination from "@/components/BBSPagination";
 import PostDiscuss from "@/app/posts/[postId]/_components/PostDiscuss";
 import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
+import { usePostCommentReply } from "@/provider/PostReplyProvider";
 
 type PostContentProps = {
   breadCrumb?: React.ReactNode;
   postId: string
   componentRef?: React.Ref<{
-    commentRootPostRecord: any
+    comment: () => void
   }>;
 }
 
@@ -26,6 +27,8 @@ const PostsContent = (props: PostContentProps) => {
   const { rootPost: originPost, refreshRootPost: refreshOrigin } = usePost()
 
   const { userProfile } = useCurrentUser()
+
+  const { openModal } = usePostCommentReply()
 
   const { data: commentList, run: reLoadComment, refresh: refreshComment } = useRequest(async (page: number = 1) => {
     const result = await server<{
@@ -46,11 +49,13 @@ const PostsContent = (props: PostContentProps) => {
 
   useImperativeHandle(props.componentRef, () => {
     return {
-      commentRootPostRecord: {
-        type: "comment",
-        postUri: originPost?.uri,
-        sectionId: originPost?.section_id,
-        refresh: reloadList
+      comment: () => {
+        openModal({
+          type: "comment",
+          postUri: originPost?.uri,
+          sectionId: originPost?.section_id,
+          refresh: reloadList
+        })
       }
     }
   })
@@ -74,7 +79,6 @@ const PostsContent = (props: PostContentProps) => {
         isOriginPoster
         rootUri={originPost?.uri}
         postInfo={originPost}
-        isAuthor={originPost?.author?.did === userProfile?.did}
         floor={1}
         refresh={reloadList}
       />}

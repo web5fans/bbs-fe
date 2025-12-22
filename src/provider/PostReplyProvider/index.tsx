@@ -18,7 +18,11 @@ export type ModalInfoType = {
   type: 'reply' | 'comment'
 }) & ({
   isEdit: true
-  content: string
+  content: {
+    uri: string;
+    text: string;
+    created: string
+  }
 } | {
   isEdit?: false
 })

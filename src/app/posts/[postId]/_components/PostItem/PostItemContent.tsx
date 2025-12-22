@@ -6,6 +6,7 @@ import utcToLocal from "@/lib/utcToLocal";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
 import QuotePopUp from "./_components/QuotePopUp";
 import { PostItemType } from "@/app/posts/[postId]/_components/PostItem/index";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
@@ -13,12 +14,13 @@ function formatDate(date: string) {
 
 const PostItemContent = (props: {
   postInfo: PostItemType
-  isAuthor?: boolean
   rootUri: string
   refresh?: () => void
 }) => {
   const { postInfo, rootUri } = props
   const sectionId = postInfo.section_id
+
+  const { userProfile } = useCurrentUser()
 
   const { openModal } = usePostCommentReply()
 
@@ -36,7 +38,7 @@ const PostItemContent = (props: {
     {postInfo.title && <>
       <div className={S.title}>
         <span className={S.titleInner}>{postInfo.title}</span>
-        {props.isAuthor && <PostEdit uri={postInfo.uri} />}
+        {userProfile?.did === postInfo.author.did && <PostEdit uri={postInfo.uri} />}
       </div>
       <div className={S.mainPostData}>
         <div className={S.statis}>

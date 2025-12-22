@@ -15,6 +15,7 @@ import cx from "classnames";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import { useToast } from "@/provider/toast";
 import useDetectPostCommentReply from "./useDetectPostCommentReply";
+import dayjs from "dayjs";
 
 const ReplyModal = () => {
   const { updateProfile, userProfile } = useCurrentUser();
@@ -61,7 +62,9 @@ const ReplyModal = () => {
 
   const submit = async () => {
     if (!modalInfo) return
-    const { type, postUri, commentUri, toDid, sectionId, refresh } = modalInfo;
+    const { type, postUri, commentUri, toDid, sectionId, refresh, isEdit } = modalInfo;
+    const message = isEdit ? '编辑' : '发布'
+
     setPublishing(true)
     await updateProfile()
     try {
@@ -83,52 +86,74 @@ const ReplyModal = () => {
           to: toDid
         }
       }
+      if (isEdit) {
+        record = {...record, created: modalInfo.content.created, edited: dayjs.utc().format()}
+      }
       await postsWritesPDSOperation({
         record,
-        did: userProfile?.did!
+        did: userProfile?.did!,
+        type: isEdit ? 'update' : 'create',
+        rkey: isEdit ? modalInfo.content.uri.split(`/${record.$type}/`)[1] : undefined
       })
       refresh?.();
       setPublishing(false)
       closeWindow(false)
-      toast({ title: '发布成功', icon: 'success' })
+      toast({ title: message + '成功', icon: 'success' })
     } catch (error) {
       setPublishing(false)
-      toast({ title: '发布失败', icon: 'error' })
+      toast({ title: message + '失败', icon: 'error' })
     }
+  }
+
+  const fillEditorContent = (richText: string) => {
+    const div = document.createElement("div")
+    div.innerHTML = richText;
+    setTextNumber(div.innerText.length);
+    setPublishDis(false)
+
+    richTextRef.current = richText;
+
+    setTimeout(() => {
+      editorRef.current?.setContent(richText)
+    }, 0)
   }
 
   useEffect(() => {
     if (!visible || !modalInfo) return
-    const { type, quoteContent } = modalInfo
+    const { type, quoteContent, isEdit } = modalInfo
+
+    if (isEdit) {
+      fillEditorContent(modalInfo.content.text)
+      return;
+    }
+
     if (type === 'quote' && editorRef.current) {
-
       const content = `<blockquote><p>${quoteContent}</p></blockquote>${richTextRef.current}`;
-
-      const div = document.createElement("div")
-      div.innerHTML = content;
-      setTextNumber(div.innerText.length);
-      setPublishDis(false)
-
-      richTextRef.current = content;
-
-      setTimeout(() => {
-        editorRef.current.setContent(content)
-      }, 0)
-
+      fillEditorContent(content)
     }
   }, [visible, modalInfo]);
 
   const title = useMemo(() => {
     if (!modalInfo) return "";
-    const { type, toUserName } = modalInfo;
+    const { type, toUserName, isEdit } = modalInfo;
+
+    const titlePrefix = isEdit ? '编辑 ' : ''
+
+    let title: string;
+
     switch (type) {
       case "quote":
-        return "回复帖子"
+        title = "回复帖子";
+        break
       case "reply":
-        return `回复 ${toUserName}`
+        title = `回复 ${toUserName}`;
+        break
       case "comment":
-        return "跟帖讨论"
+        title =  "跟帖讨论";
+        break
     }
+
+    return titlePrefix + title
   }, [modalInfo])
 
   if (!visible) return null
