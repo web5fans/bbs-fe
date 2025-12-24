@@ -1,4 +1,4 @@
-import getPDSClient from "@/lib/pdsClient";
+import getPDSClient, { setPDSClient } from "@/lib/pdsClient";
 import storage, { TokenStorageType } from "@/lib/storage";
 import { Secp256k1Keypair } from "@atproto/crypto";
 import { bytesFrom, hexFrom } from "@ckb-ccc/core";
@@ -6,6 +6,8 @@ import { FansWeb5CkbIndexAction, FansWeb5CkbPreIndexAction } from "web5-api";
 import { showGlobalToast } from "@/provider/toast";
 import server from "@/server";
 import { UserProfileType } from "@/store/userInfo";
+import axios from "axios";
+import { DID_INDEXER } from "@/constant/Network";
 
 export async function fetchUserProfile(did: string): Promise<UserProfileType> {
   const result = await server<UserProfileType>('/repo/profile', 'GET', {
@@ -14,9 +16,29 @@ export async function fetchUserProfile(did: string): Promise<UserProfileType> {
   return result
 }
 
+async function setLoginUserPDSClient(did: string) {
+  let res = null
+  try {
+    const response = await axios(`${DID_INDEXER}/${did}`, {
+      method: 'GET',
+    })
+    const service = response.data.services.atproto_pds.endpoint
+    res = service
+    setPDSClient(service)
+  } catch (err) {
+
+  }
+
+  return res
+}
+
 export async function userLogin(localStorage: TokenStorageType): Promise<FansWeb5CkbIndexAction.CreateSessionResult | undefined> {
-  const pdsClient = getPDSClient()
   const { did, signKey, walletAddress } = localStorage
+
+  const clientService = await setLoginUserPDSClient(did)
+  if (!clientService) return
+
+  const pdsClient = getPDSClient()
 
   const preLoginIndex = {
     $type: 'fans.web5.ckb.preIndexAction#createSession',
