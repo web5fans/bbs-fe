@@ -62,6 +62,7 @@ const Notification = () => {
     </MouseToolTip>
 
     {visible && <NotificationPopOver
+      onClose={setVisible.setFalse}
       position={{
         top: targetRef.current?.getBoundingClientRect().bottom,
       }}

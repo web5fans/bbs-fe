@@ -120,11 +120,6 @@ const MessageItem = ({ notify, isReadAll }: {
       const href = getHref()
       readNotify()
       router.push(href)
-      // const url = new URL(href, location.origin)
-      //
-      // if (url.pathname === location.pathname) {
-      //   location.reload()
-      // }
     }}>
     <div className={S.divide} />
     <div className={S.message}>

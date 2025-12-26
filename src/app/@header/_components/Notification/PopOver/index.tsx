@@ -15,6 +15,7 @@ type NotificationPopOverProps = {
   position: {
     top?: number
   }
+  onClose: () => void
 }
 
 const NotificationPopOver = (props: NotificationPopOverProps) => {
@@ -73,7 +74,9 @@ const NotificationPopOver = (props: NotificationPopOverProps) => {
     if (!notifyInfo || notifyInfo?.list?.length === 0) {
       return <EmptyText message={'暂无消息，快去浏览帖子互动吧！'} className={'!h-full'} />
     }
-    return notifyInfo?.list?.map((item, index) => <MessageItem key={item.id} notify={item} isReadAll={isReadAll} />)
+    return notifyInfo?.list?.map((item, index) => <div onClick={props.onClose}>
+      <MessageItem key={item.id} notify={item} isReadAll={isReadAll} />
+    </div>)
   }, [loading, notifyInfo, isReadAll])
 
   return <div ref={popoverRef} className={S.popover}>

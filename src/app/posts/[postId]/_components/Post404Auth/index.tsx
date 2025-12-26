@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import React, { createContext, useEffect, useMemo, useRef } from "react";
+import React, { createContext, useEffect, useMemo, useRef, useState } from "react";
 import { SectionItem } from "@/app/posts/utils";
 import PageNoAuth from "@/components/PageNoAuth";
 import { useRequest } from "ahooks";
@@ -23,6 +23,7 @@ const SectionAdminContext = createContext<{
   isSectionAdmin: boolean
   rootPost: any
   sectionInfo: SectionItem
+  freshV: number
   refreshRootPost: () => void
   anchorInfo?: AnchorInfoType
   clearAnchorInfo: () => void
@@ -30,6 +31,7 @@ const SectionAdminContext = createContext<{
   isSectionAdmin: false,
   rootPost: {} as any,
   sectionInfo: {} as SectionItem,
+  freshV: 0,
   refreshRootPost: () => {},
   clearAnchorInfo: () => {}
 })
@@ -47,6 +49,8 @@ const Post404Auth = (props: {
   const searchParams = useSearchParams()
   const anchorInfo = useRef<AnchorInfoType | undefined>(undefined)
 
+  const [v, setV] = useState(0)
+
   useEffect(() => {
     if (!searchParams.get('comment')) return
     anchorInfo.current = {
@@ -61,7 +65,8 @@ const Post404Auth = (props: {
         idx: Number(searchParams.get('replyIdx'))
       }
     }
-  }, []);
+    setV(v => v + 1)
+  }, [searchParams]);
 
   const { data: postInfo, refresh: refreshOrigin } = useRequest(async () => {
     try {
@@ -119,6 +124,7 @@ const Post404Auth = (props: {
     refreshRootPost:
     refreshOrigin,
     anchorInfo: anchorInfo.current,
+    freshV: v,
     clearAnchorInfo: () => anchorInfo.current = undefined
   }}>
     {children}

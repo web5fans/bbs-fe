@@ -25,7 +25,7 @@ const PAGE_SIZE = 20
 const PostsContent = (props: PostContentProps) => {
   const { breadCrumb, postId } = props;
 
-  const { rootPost: originPost, refreshRootPost: refreshOrigin, anchorInfo } = usePost()
+  const { rootPost: originPost, refreshRootPost: refreshOrigin, anchorInfo, freshV } = usePost()
 
   const { userProfile } = useCurrentUser()
 
@@ -67,7 +67,7 @@ const PostsContent = (props: PostContentProps) => {
 
   useEffect(() => {
     reLoadComment()
-  }, [userProfile?.did]);
+  }, [userProfile?.did, freshV]);
 
   const reloadList = () => {
     refreshOrigin()
@@ -86,19 +86,20 @@ const PostsContent = (props: PostContentProps) => {
         postInfo={originPost}
         floor={1}
         refresh={reloadList}
+        key={`post-item-${originPost?.uri}-${freshV}`}
       />}
 
       {commentList?.comments?.map((p, idx) => {
         const floor = ((commentList?.page || 1) - 1) * PAGE_SIZE + idx + 2;
         const info = {...p, section_id: originPost?.section_id}
         return <PostItem
-          key={p.uri}
           postInfo={info}
           floor={floor}
           isOriginPoster={p.author.did === originPost?.author?.did}
           rootUri={originPost?.uri}
           rootDisabled={originPost.is_disabled}
           refresh={reloadList}
+          key={`post-item-${p?.uri}-${freshV}`}
         />
       })}
 
