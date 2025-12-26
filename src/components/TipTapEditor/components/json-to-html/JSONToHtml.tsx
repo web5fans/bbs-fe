@@ -1,15 +1,16 @@
 'use client'
 
-import { memo, useEffect, useMemo } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 import {
   highlightWithLowlight
 } from "../tiptap-node/code-block-node/code-block-node";
 import parse, { domToReact } from 'html-react-parser';
 import S from './index.module.scss'
-import CopyText from "@/components/CopyText";
 import cx from "classnames";
 
-const JSONToHtml = ({html}: {html: string}) => {
+const JSONToHtml = ({html, uri, htmlDidMount}: {html: string; uri?: string; htmlDidMount?: () => void}) => {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const wrapSizeRef = useRef<number | undefined>(undefined)
 
   const nodes = useMemo(() => {
     if (!html) return
@@ -45,11 +46,38 @@ const JSONToHtml = ({html}: {html: string}) => {
     };
   }, [html]);
 
-  if (nodes?.needParse) {
-    return <div className={cx('tiptap ProseMirror', S.richText)}>{nodes.node}</div>
-  }
+  useEffect(() => {
+    if (!wrapRef.current) return;
 
-  return <div className={cx('tiptap ProseMirror', S.richText)} dangerouslySetInnerHTML={{ __html: nodes?.json || '' }} />
+    const observer = new ResizeObserver((entries) => {
+      requestAnimationFrame(() => {
+        if (!wrapRef.current) return;
+
+        const entry = entries[0]
+        const height = entry.contentRect.height
+        if (wrapSizeRef.current) {
+          htmlDidMount?.()
+          observer.unobserve(wrapRef.current)
+          return
+        }
+        wrapSizeRef.current = height
+      })
+    })
+
+    observer.observe(wrapRef.current)
+
+    return () => {
+      if (!wrapRef.current) return
+      observer.unobserve(wrapRef.current)
+    }
+  }, []);
+
+  return <div ref={wrapRef}>
+    {
+      nodes?.needParse ? <div className={cx('tiptap ProseMirror', S.richText)}>{nodes.node}</div>
+        : <div className={cx('tiptap ProseMirror', S.richText)} dangerouslySetInnerHTML={{ __html: nodes?.json || '' }} />
+    }
+  </div>
 }
 
 const MemoizedJSONToHtml = memo(JSONToHtml);

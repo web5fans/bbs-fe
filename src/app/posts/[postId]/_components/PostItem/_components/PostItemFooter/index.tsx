@@ -13,6 +13,7 @@ import SwitchPostHideOrOpen from "../SwitchPostHideOrOpen";
 import { eventBus } from "@/lib/EventBus";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
@@ -38,6 +39,15 @@ const PostItemFooter = (props: {
   const [arrowPos, setArrowPos] = useState<{ left: string } | undefined>(undefined)
 
   const { openModal } = usePostCommentReply()
+
+  const { anchorInfo } = usePost()
+
+  useEffect(() => {
+    if (!anchorInfo || anchorInfo.comment.uri !== postInfo.uri) return
+    if (anchorInfo.reply) {
+      setShowType('reply')
+    }
+  }, []);
 
   const changeShowType = (type: ShowTypeType) => {
     if (showType === type) {

@@ -9,6 +9,12 @@
     align-items: center;
     gap: rem.px2flexible(9);
     padding-block: rem.px2flexible(10);
+
+    &:not(:has( .unread)) {
+      .messageInfo, .time {
+        opacity: .5;
+      }
+    }
   }
 
   &:hover {

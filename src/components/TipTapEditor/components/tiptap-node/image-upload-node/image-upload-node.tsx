@@ -352,17 +352,25 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
     if (url) {
       const pos = props.getPos()
       const filename = files[0]?.name.replace(/\.[^/.]+$/, "") || "unknown"
+      const { width, height } = await getImagesDimensions(files[0])
+      // console.log('w', width, height)
+      // style: `width:100%;max-width:${width}px;aspect-ratio:${width}/${height};`
 
       props.editor
         .chain()
         .focus()
         .deleteRange({ from: pos, to: pos + 1 })
-        .insertContentAt(pos, [
-          {
-            type: "image",
-            attrs: { src: url, alt: filename, title: filename },
-          },
-        ])
+        .insertContentAt(pos, {
+          type: 'image',
+          attrs: {
+            src: url,
+            alt: filename,
+            title: filename,
+            width,
+            height,
+            style: `width: 100%; max-width: ${width}px; aspect-ratio: ${width}/${height};`
+          }
+        })
         .run()
     }
   }
@@ -404,4 +412,27 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
       />
     </NodeViewWrapper>
   )
+}
+
+function getImagesDimensions(file: File) {
+  return new Promise((resolve: (value: { width: number; height: number }) => void, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      console.log('>>>>', img.width, img.height)
+      resolve({
+        width: img.width,
+        height: img.height,
+      });
+      URL.revokeObjectURL(objectUrl);
+    };
+
+    img.onerror = () => {
+      reject(new Error(`无法加载图片: ${file.name}`));
+      URL.revokeObjectURL(objectUrl);
+    };
+
+    img.src = objectUrl;
+  });
 }

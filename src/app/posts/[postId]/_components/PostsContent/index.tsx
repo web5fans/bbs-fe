@@ -10,6 +10,7 @@ import BBSPagination from "@/components/BBSPagination";
 import PostDiscuss from "@/app/posts/[postId]/_components/PostDiscuss";
 import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
+import { useSearchParams } from "next/navigation";
 
 type PostContentProps = {
   breadCrumb?: React.ReactNode;
@@ -24,13 +25,17 @@ const PAGE_SIZE = 20
 const PostsContent = (props: PostContentProps) => {
   const { breadCrumb, postId } = props;
 
-  const { rootPost: originPost, refreshRootPost: refreshOrigin } = usePost()
+  const { rootPost: originPost, refreshRootPost: refreshOrigin, anchorInfo } = usePost()
 
   const { userProfile } = useCurrentUser()
 
+  const defaultCommentIdx = anchorInfo?.comment?.idx
+
   const { openModal } = usePostCommentReply()
 
-  const { data: commentList, run: reLoadComment, refresh: refreshComment } = useRequest(async (page: number = 1) => {
+  const { data: commentList, run: reLoadComment, refresh: refreshComment } = useRequest(async (curPage?: number) => {
+    const defaultPage = defaultCommentIdx ?  Math.ceil(Number(defaultCommentIdx) / PAGE_SIZE) : 1;
+    const page = curPage || defaultPage
     const result = await server<{
       comments: PostFeedItemType[],
       total: number,
@@ -98,6 +103,7 @@ const PostsContent = (props: PostContentProps) => {
       })}
 
       <BBSPagination
+        current={commentList?.page || 1}
         hideOnSinglePage
         pageSize={20}
         total={commentList?.total || 0}

@@ -1,18 +1,37 @@
 'use client'
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import React, { createContext, useMemo } from "react";
+import React, { createContext, useEffect, useMemo, useRef } from "react";
 import { SectionItem } from "@/app/posts/utils";
 import PageNoAuth from "@/components/PageNoAuth";
 import { useRequest } from "ahooks";
 import server from "@/server";
 
-const SectionAdminContext = createContext({
+type AnchorInfoType = {
+  comment: {
+    uri: string
+    idx: number
+  },
+  reply?: {
+    uri: string
+    idx: number
+  }
+}
+
+const SectionAdminContext = createContext<{
+  isSectionAdmin: boolean
+  rootPost: any
+  sectionInfo: SectionItem
+  refreshRootPost: () => void
+  anchorInfo?: AnchorInfoType
+  clearAnchorInfo: () => void
+}>({
   isSectionAdmin: false,
   rootPost: {} as any,
   sectionInfo: {} as SectionItem,
-  refreshRootPost: () => {}
+  refreshRootPost: () => {},
+  clearAnchorInfo: () => {}
 })
 
 const Post404Auth = (props: {
@@ -25,6 +44,24 @@ const Post404Auth = (props: {
   const router = useRouter();
 
   const { userProfile } = useCurrentUser()
+  const searchParams = useSearchParams()
+  const anchorInfo = useRef<AnchorInfoType | undefined>(undefined)
+
+  useEffect(() => {
+    if (!searchParams.get('comment')) return
+    anchorInfo.current = {
+      comment: {
+        uri: searchParams.get('comment'),
+        idx: Number(searchParams.get('commentIdx'))
+      }
+    }
+    if (anchorInfo.current && searchParams.get('reply') && searchParams.get('replyIdx')) {
+      anchorInfo.current.reply = {
+        uri: searchParams.get('reply'),
+        idx: Number(searchParams.get('replyIdx'))
+      }
+    }
+  }, []);
 
   const { data: postInfo, refresh: refreshOrigin } = useRequest(async () => {
     try {
@@ -75,7 +112,15 @@ const Post404Auth = (props: {
     />
   }
 
-  return <SectionAdminContext.Provider value={{ isSectionAdmin, rootPost: postInfo, sectionInfo, refreshRootPost: refreshOrigin }}>
+  return <SectionAdminContext.Provider value={{
+    isSectionAdmin,
+    rootPost: postInfo,
+    sectionInfo,
+    refreshRootPost:
+    refreshOrigin,
+    anchorInfo: anchorInfo.current,
+    clearAnchorInfo: () => anchorInfo.current = undefined
+  }}>
     {children}
   </SectionAdminContext.Provider>
 }

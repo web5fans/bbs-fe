@@ -4,7 +4,7 @@ import server from "@/server";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
-import { Ref, useEffect, useImperativeHandle, useState } from "react";
+import { Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
 import ArrowIcon from '@/assets/arrow-s.svg';
 import ShowCreateTime from "./ShowCreateTime";
 import HtmlContent from "./HTMLContent";
@@ -14,6 +14,7 @@ import { eventBus } from "@/lib/EventBus";
 import TipModal, { AuthorType } from "@/app/posts/[postId]/_components/PostItem/_components/Donate/TipModal";
 import DonateIcon from '@/assets/posts/donate.svg'
 import cx from "classnames";
+import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 
 export type ReplyListRefProps = { reload: () => void }
 
@@ -30,14 +31,14 @@ const ReplyList = (props: {
 
   const { openModal } = usePostCommentReply()
 
+  const { anchorInfo, clearAnchorInfo } = usePost()
+
   const { data: replyListInfo, loading, loadingMore, loadMore, noMore, reload, mutate } = useInfiniteScroll(async (prevData) => {
-
-    const { nextCursor } = prevData || {};
-
+    const limit = anchorInfo?.reply?.idx || 5
     const pagedData = await server('/reply/list', 'POST', {
       comment: props.uri,
-      limit: 5,
-      cursor: nextCursor,
+      limit: prevData?.nextCursor ? 5 : limit,
+      cursor: prevData?.nextCursor,
       viewer: userProfile?.did
     })
 
@@ -131,6 +132,10 @@ function ReplyItem(props: {
 
   const [donate, setDonate] = useState(0)
 
+  const wrapRef = useRef<HTMLDivElement>(null)
+
+  const { anchorInfo, clearAnchorInfo } = usePost()
+
   useEffect(() => {
     setDisabled(replyItem.is_disabled)
     setDonate(Number(replyItem.tip_count))
@@ -146,7 +151,16 @@ function ReplyItem(props: {
 
   const totalDonate = (donate / Math.pow(10, 8)).toFixed(2)
 
-  return <div className={S.replyItem}>
+  const scrollToTarget = () => {
+    if (!anchorInfo || !anchorInfo?.reply) return;
+    if (anchorInfo.reply.uri !== replyItem.uri) return
+    wrapRef.current?.scrollIntoView({
+      behavior: 'smooth'
+    })
+    clearAnchorInfo()
+  }
+
+  return <div className={S.replyItem} ref={wrapRef}>
     {disabled && <div className={S.mask} />}
     <div className={S.title}>
       <div className={S.left}>
@@ -177,7 +191,7 @@ function ReplyItem(props: {
       </div>
     </div>
     <div className={S.contentWrap}>
-      <HtmlContent html={replyItem.text} />
+      <HtmlContent html={replyItem.text} scrollToTarget={scrollToTarget} />
       <div className={S.footer}>
         <div className={S.leftOpts}>
           <DonateIcon className={S.icon} />

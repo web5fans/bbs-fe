@@ -22,7 +22,6 @@ const PostItemUser = ({ post, isOriginPoster }: { post: PostItemType; isOriginPo
   useEffect(() => {
     const f = () => {
       requestAnimationFrame(() => {
-        console.log('>>>', window.innerWidth)
         setRefresh(v => v + 1)
       })
     }

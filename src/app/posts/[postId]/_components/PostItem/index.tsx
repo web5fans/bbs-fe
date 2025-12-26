@@ -7,6 +7,8 @@ import { useEffect, useRef, useState } from "react";
 import PostItemFooter from "./_components/PostItemFooter";
 import PostItemUser from "./_components/PostItemUser";
 import PostItemUserMobile from "./_components/PostItemUserMobile";
+import { useSearchParams } from "next/navigation";
+import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 
 export type PostItemType = {
   cid: string
@@ -46,6 +48,10 @@ const PostItem = (props: PostItemProps) => {
 
   const [postDisabled, setPostDisabled] = useState(false)
 
+  const wrapRef = useRef<HTMLDivElement>(null)
+
+  const { anchorInfo, clearAnchorInfo } = usePost()
+
   useEffect(() => {
     setPostDisabled(postInfo.is_disabled)
   }, [postInfo]);
@@ -56,7 +62,16 @@ const PostItem = (props: PostItemProps) => {
 
   const disabled = rootDisabled || postDisabled
 
-  return <div className={S.wrap}>
+  const scrollToTarget = () => {
+    if (!anchorInfo || anchorInfo?.reply) return;
+    if (anchorInfo.comment.uri !== postInfo.uri) return
+    wrapRef.current?.scrollIntoView({
+      behavior: 'smooth'
+    })
+    clearAnchorInfo()
+  }
+
+  return <div className={S.wrap} ref={wrapRef}>
 
     <PostItemUser post={postInfo} isOriginPoster={isOriginPoster} />
 
@@ -69,6 +84,7 @@ const PostItem = (props: PostItemProps) => {
             postInfo={postInfo}
             rootUri={rootUri}
             refresh={props.refresh}
+            scrollToTarget={scrollToTarget}
           />
         </div>
         <PostItemFooter

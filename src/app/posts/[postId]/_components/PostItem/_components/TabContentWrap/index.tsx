@@ -4,7 +4,7 @@ import TabArrowDown from "@/assets/posts/tab-arrow.svg";
 
 export default function TabContentWrap(props: {
   children?: React.ReactNode;
-  arrowPos: {left: string} | undefined
+  arrowPos?: {left: string}
   arrowColor?: string
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -20,7 +20,7 @@ export default function TabContentWrap(props: {
           observer.unobserve(wrapRef.current)
           return;
         } else {
-          if (wrapRef.current.clientHeight > 0) {
+          if (wrapRef.current.clientHeight > 0 && props.arrowPos) {
             arrowRef.current.style.display = 'block';
             arrowRef.current.style.left = props.arrowPos.left;
           }

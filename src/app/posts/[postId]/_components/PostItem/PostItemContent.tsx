@@ -16,8 +16,9 @@ const PostItemContent = (props: {
   postInfo: PostItemType
   rootUri: string
   refresh?: () => void
+  scrollToTarget?: () => void
 }) => {
-  const { postInfo, rootUri } = props
+  const { postInfo, rootUri, scrollToTarget } = props
   const sectionId = postInfo.section_id
 
   const { userProfile } = useCurrentUser()
@@ -55,8 +56,8 @@ const PostItemContent = (props: {
 
     {
       rootUri === postInfo.uri ? <QuotePopUp quoteComment={quoteComment}>
-        <JSONToHtml html={postInfo.text} />
-      </QuotePopUp> : <JSONToHtml html={postInfo.text} />
+        <JSONToHtml html={postInfo.text} htmlDidMount={scrollToTarget} uri={postInfo.uri} />
+      </QuotePopUp> : <JSONToHtml html={postInfo.text} htmlDidMount={scrollToTarget} uri={postInfo.uri} />
     }
   </div>
 }
