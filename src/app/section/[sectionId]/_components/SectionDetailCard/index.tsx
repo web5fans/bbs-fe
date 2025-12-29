@@ -34,11 +34,11 @@ const SectionDetailCard = (props: {
     <div className={S.innerWrap}>
       <SectionInfo sectionInfo={sectionInfo} />
 
-      {/*<div className={S.buttonWrap}>*/}
-      {/*  <Link href={location.pathname + '/manage'} prefetch>*/}
-      {/*    <TextHoverFocus text={'版区管理'} />*/}
-      {/*  </Link>*/}
-      {/*</div>*/}
+      <div className={S.buttonWrap}>
+        <Link href={location.pathname + '/manage'} prefetch>
+          <TextHoverFocus text={'版区管理'} />
+        </Link>
+      </div>
     </div>
 
 

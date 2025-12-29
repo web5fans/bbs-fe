@@ -49,11 +49,11 @@ export default function AppHeader(props: {
             href={'/community'}
             tooltip={'社区金库'}
           />}
-          {/*{hasLoggedIn && <NavigatorIcon*/}
-          {/*  icon={<PropertyIcon />}*/}
-          {/*  href={'/property-manage'}*/}
-          {/*  tooltip={'社区中心'}*/}
-          {/*/>}*/}
+          {hasLoggedIn && <NavigatorIcon
+            icon={<PropertyIcon />}
+            href={'/property-manage'}
+            tooltip={'社区中心'}
+          />}
           {
             hasLoggedIn && <Notification />
           }

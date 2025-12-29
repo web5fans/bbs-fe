@@ -19,7 +19,7 @@ export type TableProps<T> = {
   loading?: boolean
 }
 
-export default function Table<T>(props: TableProps<T>): JSX.Element {
+export default function Table<T extends {[key: string]: any}>(props: TableProps<T>): JSX.Element {
   const { columns, data, scroll, loading } = props;
 
   return <div className={S.wrap}>
@@ -51,7 +51,7 @@ export default function Table<T>(props: TableProps<T>): JSX.Element {
       </tr>
       </thead>
       <tbody>
-      {data.length > 0 ? data.map((d, idx) => <tr>
+      {data.length > 0 ? data.map((d, idx) => <tr key={`r${idx}`}>
         {columns.map((col, cdx) => {
           const value = col.render?.(d, idx) || d[col.dataIndex]
           return <td

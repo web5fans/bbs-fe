@@ -27,20 +27,6 @@
     flex-wrap: wrap;
     gap: rem.px2flexible(10);
 
-    .loading {
-      font-size: rem.px2flexible(24);
-    }
-
-    .num {
-      span:first-child {
-        font-size: rem.px2flexible(24);
-        margin-right: rem.px2flexible(2);
-      }
-      span:last-child {
-        font-size: rem.px2flexible(10);
-      }
-    }
-
     .donate {
       width: rem.px2flexible(50);
       height: rem.px2flexible(16);

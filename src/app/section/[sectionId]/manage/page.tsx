@@ -8,6 +8,8 @@ import SectionCard from "./_components/SectionCard";
 import { useRequest } from "ahooks";
 import server from "@/server";
 import { SectionItem } from "@/app/posts/utils";
+import Tabs from "@/components/Tabs";
+import FundInfo from "./_components/FundInfo";
 
 const page = () => {
   const { sectionId } = useParams()
@@ -27,19 +29,26 @@ const page = () => {
       <SectionCard sectionInfo={sectionInfo} refreshDetail={refreshSection} />
 
       <div className={S.content}>
-
-        <div className={S.tabsWrap}>
-          <div className={S.tabs}>
-            <p className={S.active}>版区公告</p>
-            <p>隐藏帖子</p>
-            <p>隐藏评论</p>
-            <p>操作日志</p>
-          </div>
+        <FundInfo section={sectionInfo} />
+        <div className={S.gap} />
+        <Tabs tabItems={[{
+          name: '版区公告',
+          value: 'notice'
+        }, {
+          name: '隐藏帖子',
+          value: 'hiddenPost'
+        }, {
+          name: '隐藏评论',
+          value: 'hiddenComment'
+        },{
+          name: '操作日志',
+          value: 'operation'
+        }]}>
           <div className={S.tabsContent}>
             <TabNotice />
 
           </div>
-        </div>
+        </Tabs>
 
       </div>
 

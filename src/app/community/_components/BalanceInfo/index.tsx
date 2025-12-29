@@ -3,27 +3,20 @@
 import S from './index.module.scss'
 import CardWindow from "@/components/CardWindow";
 import Button from "@/components/Button";
-import numeral from "numeral";
 import FlatBottomedCard from "@/components/FlatBottomedCard";
 import CopyText from "@/components/CopyText";
 import { SectionItem } from "@/app/posts/utils";
 import GoExplorer from "@/components/GoExplorer";
 import { shannonToCkb } from "@/lib/utils";
-import { useEffect, useMemo, useState } from "react";
-import { ccc } from "@ckb-ccc/core";
-import { useWallet } from "@/provider/WalletProvider";
-import { useBoolean, useRequest } from "ahooks";
-import { DotLoading } from "@/components/Loading";
+import { useRequest } from "ahooks";
 import server from "@/server";
+import Balance from "@/components/Balance";
 
-const Balance = (props: {
+const BalanceInfo = (props: {
   section: SectionItem
   openDonateModal: () => void
 }) => {
   const { section, openDonateModal } = props;
-  const [balance, setBalance] = useState('0')
-  const [loading, setLoading] = useBoolean(true)
-  const { walletClient } = useWallet()
 
   const { data: statistic } = useRequest(async () => {
     return await server('/tip/stats', 'GET', {
@@ -35,18 +28,6 @@ const Balance = (props: {
 
   const ckbAddr = section.ckb_addr
 
-  const getBalance = async () => {
-    const addr = await ccc.Address.fromString(section.ckb_addr, walletClient)
-    const result = await walletClient?.getBalanceSingle(addr.script)
-                                     .finally(() => setLoading.setFalse())
-
-    setBalance(shannonToCkb(result))
-  }
-
-  useEffect(() => {
-    getBalance()
-  }, [section]);
-
   return <CardWindow
     wrapClassName={S.cardWindow}
     header={'BBS社区基金'}
@@ -54,12 +35,7 @@ const Balance = (props: {
     <div className={S.wrap}>
       <p className={S.title}>BBS社区基金金额</p>
       <div className={S.total}>
-        {loading ? <div className={S.loading}>
-          获取中<DotLoading />
-        </div> : <p className={S.num}>
-          <span>{numeral(balance).format('0,0.[00000000]')}</span>
-          <span>CKB</span>
-        </p>}
+        <Balance ckbAddr={section?.ckb_addr} />
 
         <Button
           className={S.donate}
@@ -89,7 +65,7 @@ const Balance = (props: {
   </CardWindow>
 }
 
-export default Balance;
+export default BalanceInfo;
 
 function ReceiptAndPay({
   label,

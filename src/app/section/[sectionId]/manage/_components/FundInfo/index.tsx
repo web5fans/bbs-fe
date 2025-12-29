@@ -1,8 +1,6 @@
 'use client'
 
 import S from './index.module.scss'
-import { useBoolean, useRequest } from "ahooks";
-import server from "@/server";
 import { SectionItem } from "@/app/posts/utils";
 import Button from "@/components/Button";
 import FlatBottomedCard from "@/components/FlatBottomedCard";
@@ -10,22 +8,17 @@ import CopyText from "@/components/CopyText";
 import GoExplorer from "@/components/GoExplorer";
 import Balance from "@/components/Balance";
 
-const FundInfo = () => {
-  const { data: section } = useRequest(async () => {
-    return await server<SectionItem>('/section/detail', 'GET', {
-      id: 0
-    })
-  })
-
+const FundInfo = ({ section }: {
+  section?: SectionItem
+}) => {
   return <div className={S.wrap}>
-    <p className={S.title}>金库基金余额</p>
+    <p className={S.title}>版区基金余额</p>
     <div className={S.total}>
       <Balance ckbAddr={section?.ckb_addr} />
 
-
       <Button
         className={S.utxo}
-      >查看utxo钱包</Button>
+      >进入utxo钱包</Button>
     </div>
     <FlatBottomedCard>
       <div className={S.info}>

@@ -1,7 +1,7 @@
 'use client'
 
 import S from "./index.module.scss";
-import Balance from "./_components/Balance";
+import Balance from "./_components/BalanceInfo";
 import Tabs from "./_components/Tabs";
 import { NSID_TYPE_ENUM } from "@/constant/types";
 import { SectionItem } from "@/app/posts/utils";
