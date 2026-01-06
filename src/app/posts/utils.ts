@@ -65,11 +65,13 @@ type PostRecordType = {
   edited?: string
   created?: string
   is_draft?: boolean // 是否是草稿
+  is_announcement?: boolean // 是否是草稿
 } | {
   $type: 'app.bbs.comment'
   post: string  // 原帖uri
   text: string;
   section_id: string;
+  edited?: string
 } | {
   $type: 'app.actor.profile'
   displayName: string;
@@ -86,6 +88,7 @@ type PostRecordType = {
   to?: string   // 对方did, 有就填，没有就是直接回复评论的
   text: string
   section_id: string
+  edited?: string
 }
 
 type CreatePostResponse = {
@@ -100,13 +103,15 @@ type CreatePostResponse = {
   }[]
 }
 
-/* 发帖、回帖、点赞、编辑帖子PDS写入操作 */
-export async function postsWritesPDSOperation(params: {
+export type WritePDSOptParamsType = {
   record: PostRecordType
   did: string
   rkey?: string
   type?: 'update' | 'create' | 'delete'
-}) {
+}
+
+/* 发帖、回帖、点赞、编辑帖子PDS写入操作 */
+export async function postsWritesPDSOperation(params: WritePDSOptParamsType) {
   const operateType = params.type || 'create'
   const pdsClient = getPDSClient()
 

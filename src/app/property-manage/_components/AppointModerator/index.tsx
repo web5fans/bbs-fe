@@ -60,8 +60,7 @@ const AppointModeratorModal = (props: {
       })
       props.refresh?.()
       props.onClose()
-    } catch (error) {
-      console.log('error', error)
+    } catch (error: any) {
       if (error.response.data.message.includes('display name not match')) {
         toast({
           icon: 'error',

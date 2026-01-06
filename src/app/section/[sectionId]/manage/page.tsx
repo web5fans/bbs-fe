@@ -10,9 +10,12 @@ import server from "@/server";
 import { SectionItem } from "@/app/posts/utils";
 import Tabs from "@/components/Tabs";
 import FundInfo from "./_components/FundInfo";
+import { useState } from "react";
 
 const page = () => {
-  const { sectionId } = useParams()
+  const { sectionId } = useParams<{ sectionId: string }>()
+
+  const [tab, setTab] = useState(0)
 
   const { data: sectionInfo, refresh: refreshSection } = useRequest(async () => {
     return await server<SectionItem>('/section/detail', 'GET', {
@@ -31,21 +34,18 @@ const page = () => {
       <div className={S.content}>
         <FundInfo section={sectionInfo} />
         <div className={S.gap} />
-        <Tabs tabItems={[{
+        <Tabs onChange={setTab} tabItems={[{
           name: '版区公告',
-          value: 'notice'
         }, {
           name: '隐藏帖子',
-          value: 'hiddenPost'
         }, {
           name: '隐藏评论',
-          value: 'hiddenComment'
         },{
           name: '操作日志',
-          value: 'operation'
         }]}>
           <div className={S.tabsContent}>
-            <TabNotice />
+            {tab === 0 && <TabNotice sectionId={sectionId} />}
+
 
           </div>
         </Tabs>
