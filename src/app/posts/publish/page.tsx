@@ -284,7 +284,8 @@ function SelectDropItem(props: {
 
   return <div className={cx(S.popoverItem, props.isChosen && S.selected)}>
     <div className={S.image}>
-      <SectionEarth />
+      {itemInfo.image ? <img src={itemInfo.image} alt={''} />
+        : <SectionEarth /> }
     </div>
     <div className={S.content}>
       <p className={S.contentT}>{itemInfo.name}</p>

@@ -18,7 +18,7 @@ const Avatar = (props: {
 
   useEffect(() => {
     const f = () => {
-      if (!rootRef.current) return
+      if (!rootRef.current || !outerRef.current || !innerRef.current) return
       const width = rootRef.current.clientWidth
       const outerWidth = `${Math.floor(width)}px`
       outerRef.current.style.width = outerWidth;

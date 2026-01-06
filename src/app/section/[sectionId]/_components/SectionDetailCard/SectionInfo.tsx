@@ -38,7 +38,7 @@ export default function SectionInfo(props: {
 
   return <>
     <div className={S.wrap}>
-      <div className={S.sectionImage} ref={imageRef} />
+      <div className={S.sectionImage} ref={imageRef} style={sectionInfo?.image ? { backgroundImage: `url(${sectionInfo?.image})` } : {}} />
       <div className={S.content} ref={contentRef}>
         <p className={S.title}>{sectionInfo?.name}</p>
         <div className={S.statis}>

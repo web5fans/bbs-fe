@@ -63,7 +63,7 @@ function StyledSelect<T>(props: SelectProps<T>) {
 
           {/* 选项列表 */}
           <div className={S.popoverInner}>
-            {options.map((option, index) => (
+            {options.length === 0 ? <div className={S.noData}>暂无数据</div> :options.map((option, index) => (
               <div
                 key={`${option.value}`}
                 className={`${S.popoverItem} ${selectedValue === option.value ? S.selected : ''}`}

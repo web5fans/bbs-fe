@@ -44,12 +44,16 @@ export type SectionItem = {
   owner?: { did: string; displayName?: string } // 版主
   description?: string // 描述
   administrators: {did: string; [key: string]: any}[]  // 管理员列表
+  is_disabled?: boolean
+  owner_set_time: string | null
+  image: string | null
 }
 
 /* 获取版区列表 */
 export async function getSectionList(did?: string) {
   return await server<SectionItem[]>('/section/list', 'GET', {
-    repo: did
+    repo: did,
+    is_disabled: false
   })
 }
 

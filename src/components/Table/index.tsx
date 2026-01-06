@@ -8,7 +8,7 @@ export type TableProps<T> = {
     title: string | JSX.Element;
     dataIndex: string;
     width?: string;
-    render?: (record: T | any, index: number) => any
+    render?: (record: T, index: number) => any
     info?: string | JSX.Element
     align?: "left" | "center" | 'right'
   }[];
