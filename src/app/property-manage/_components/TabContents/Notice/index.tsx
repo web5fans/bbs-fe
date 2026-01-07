@@ -2,7 +2,6 @@ import S from './index.module.scss'
 import Search from "@/components/Input/Search";
 import Button from "@/components/Button";
 import { useBoolean } from "ahooks";
-import NoticeModal from "./NoticeModal";
 import UnShelfConfirm from "./UnShelfConfirm";
 import RequestTable from "@/components/Table/RequestTable";
 import server from "@/server";
@@ -11,11 +10,9 @@ import { useRef, useState } from "react";
 import StreamLineRichText from "@/components/StreamLineRichText";
 import utcToLocal from "@/lib/utcToLocal";
 import { TableProps } from "@/components/Table";
-import remResponsive from "@/lib/rem-responsive";
+import NoticeModal from "@/app/section/[sectionId]/manage/_components/tabs/Notice/NoticeModal";
 
-const TabNotice = ({ sectionId }: {
-  sectionId: string
-}) => {
+const TabNotice = () => {
 
   const [noticeModalVis, setNoticeModal] = useBoolean(false)
 
@@ -78,7 +75,7 @@ const TabNotice = ({ sectionId }: {
           page: current,
           per_page: pageSize,
           is_announcement: true,
-          section_id: sectionId,
+          section_id: '0',
           q: searchContent
         })
         return {
@@ -91,7 +88,7 @@ const TabNotice = ({ sectionId }: {
 
     {noticeModalVis && <NoticeModal
       noticeInfo={editNoticeRef.current}
-      sectionId={sectionId}
+      sectionId={'0'}
       onClose={setNoticeModal.setFalse}
       refresh={() => {
         setV(v => v + 1)

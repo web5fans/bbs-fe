@@ -1,6 +1,5 @@
 'use client'
 
-import Button from "@/components/Button";
 import RequestTable from "@/components/Table/RequestTable";
 import server from "@/server";
 import { SectionItem } from "@/app/posts/utils";
@@ -14,6 +13,7 @@ import getSigningKeyInfo from "@/lib/signing-key";
 import { useToast } from "@/provider/toast";
 import { TableProps } from "@/components/Table";
 import AppointModeratorModal from "../../AppointModerator";
+import AddNewSection from "./AddNewSection";
 
 const Section = () => {
   const { userProfile } = useCurrentUser()
@@ -85,7 +85,7 @@ const Section = () => {
       name: null,
     }
 
-    const obj = await getSigningKeyInfo(params)
+    const obj = await getSigningKeyInfo({ ...params, ckb_addr: null })
 
     if (!obj) return
 
@@ -107,7 +107,7 @@ const Section = () => {
 
   return <div className={S.wrap}>
     <div className={S.header}>
-      <Button className={S.button}>创建新版区</Button>
+      <AddNewSection refresh={() => setV(v => v + 1)} />
     </div>
     <RequestTable
       requestOptions={{

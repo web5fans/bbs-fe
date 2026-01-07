@@ -26,7 +26,7 @@ const EditInfoModal = (props: {
   const toast = useToast()
 
   const onConfirm = async () => {
-    const obj = await getSigningKeyInfo(secInfo)
+    const obj = await getSigningKeyInfo({ ...secInfo, ckb_addr: null })
     if (!obj) return
     await server('/admin/update_section', 'POST', {
       did: obj.did,

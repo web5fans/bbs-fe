@@ -1,6 +1,6 @@
 'use client'
 
-import { PostFeedItemType } from "@/app/posts/utils";
+import { CommentAllPostType } from "@/app/posts/utils";
 import S from "./index.module.scss";
 import Avatar from "@/components/Avatar";
 import FeedStatistic, { FeedLikes } from "@/components/FeedStatistic";
@@ -9,7 +9,7 @@ import cx from "classnames";
 import StreamLineRichText from "@/components/StreamLineRichText";
 
 export default function CommentPostItem({ feed, onClick, onHover, nickname, disabled }: {
-  feed: PostFeedItemType;
+  feed: CommentAllPostType;
   onClick?: () => void
   onHover?: () => void
   nickname: string

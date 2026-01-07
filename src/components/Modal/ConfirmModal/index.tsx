@@ -11,7 +11,7 @@ type ConfirmModalProps = {
   lockScroll?: boolean
   footer?: {
     confirm?: {
-      text: string;
+      text?: string;
       onClick: () => void;
       disabled?: boolean;
     },
@@ -41,7 +41,7 @@ const ConfirmModal = (props: ConfirmModalProps) => {
           type='primary'
           onClick={() => confirm.onClick()}
           disabled={confirm.disabled}
-        >{confirm.text}</Button>}
+        >{confirm.text || '确认'}</Button>}
         {cancel && <Button onClick={() => cancel.onClick()} disabled={cancel.disabled}>{cancel.text || '取消'}</Button>}
       </div>
     </div>

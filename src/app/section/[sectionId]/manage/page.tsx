@@ -11,6 +11,9 @@ import { SectionItem } from "@/app/posts/utils";
 import Tabs from "@/components/Tabs";
 import FundInfo from "./_components/FundInfo";
 import { useState } from "react";
+import HiddenPosts from "./_components/tabs/HiddenPosts";
+import HiddenComments from "./_components/tabs/HiddenComments";
+import Operations from "@/app/section/[sectionId]/manage/_components/tabs/Operations";
 
 const page = () => {
   const { sectionId } = useParams<{ sectionId: string }>()
@@ -45,8 +48,9 @@ const page = () => {
         }]}>
           <div className={S.tabsContent}>
             {tab === 0 && <TabNotice sectionId={sectionId} />}
-
-
+            {tab === 1 && <HiddenPosts sectionId={sectionId} />}
+            {tab === 2 && <HiddenComments sectionId={sectionId} />}
+            {tab === 3 && <Operations sectionId={sectionId} />}
           </div>
         </Tabs>
 

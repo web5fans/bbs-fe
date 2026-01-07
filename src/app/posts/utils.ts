@@ -2,13 +2,12 @@ import server from "@/server";
 import getPDSClient from "@/lib/pdsClient";
 import storage from "@/lib/storage";
 import * as crypto from '@atproto/crypto'
-import { signCommit, UnsignedCommit } from '@atproto/repo'
+import { UnsignedCommit } from '@atproto/repo'
 import { uint8ArrayToHex } from "@/lib/dag-cbor";
 import { CID } from 'multiformats/cid'
 import * as cbor from '@ipld/dag-cbor'
 import { TID } from '@atproto/common-web'
 import dayjs from "dayjs";
-import { showGlobalToast } from "@/provider/toast";
 import { Secp256k1Keypair } from "@atproto/crypto";
 import sessionWrapApi from "@/lib/wrapApiAutoSession";
 
@@ -31,6 +30,16 @@ export type PostFeedItemType = {
   is_disabled: boolean
   is_draft: boolean
   reasons_for_disabled?: string
+  edited?: string
+}
+
+export type CommentAllPostType = PostFeedItemType & {
+  comment_uri: string
+  comment_text: string
+  comment_created: string
+  comment_reasons_for_disabled: string | null
+  comment_disabled: boolean | null
+  comment_updated?: string
 }
 
 export type SectionItem = {

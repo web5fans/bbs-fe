@@ -1,0 +1,25 @@
+@use "@/styles/rem";
+
+.wrap {
+  .search {
+    width: rem.px2flexible(150);
+    margin-bottom: rem.px2flexible(12);
+  }
+
+  .info {
+    .title {
+      font-size: rem.px2flexible(9);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .des {
+      font-size: rem.px2flexible(7);
+      color: #6C6C6C;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
