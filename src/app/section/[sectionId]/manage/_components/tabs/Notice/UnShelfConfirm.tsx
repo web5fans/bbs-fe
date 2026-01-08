@@ -13,7 +13,6 @@ const UnShelfConfirm = ({ uri, refresh }: {
 
   const confirm = async () => {
     await updatePostByAdmin({
-      nsid: 'app.bbs.post',
       uri,
       is_announcement: false
     })

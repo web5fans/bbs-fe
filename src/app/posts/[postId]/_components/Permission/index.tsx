@@ -66,7 +66,6 @@ const PostPermission = (props: {
 
   const changePostStatus = async (type: PostPermissionType, hideReason?: string) => {
     const obj: PostOptParamsType = {
-      nsid: 'app.bbs.post',
       uri: originPost.uri
     }
     switch (type) {

@@ -220,7 +220,6 @@ export async function postsWritesPDSOperation(params: WritePDSOptParamsType) {
 }
 
 export type PostOptParamsType = {
-  nsid: 'app.bbs.post' | 'app.bbs.comment' | 'app.bbs.reply'
   uri: string
   is_top?: boolean
   is_announcement?: boolean

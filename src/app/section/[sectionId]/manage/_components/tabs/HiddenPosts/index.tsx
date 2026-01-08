@@ -63,7 +63,6 @@ const HiddenPosts = ({ sectionId }: {
     if (!postInfo) return
 
     await updatePostByAdmin({
-      nsid: 'app.bbs.post',
       uri: postInfo.uri,
       is_disabled: false,
     })

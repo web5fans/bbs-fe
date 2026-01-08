@@ -67,7 +67,6 @@ const HiddenComments = ({ sectionId }: {
     if (!info) return
 
     await updatePostByAdmin({
-      nsid: 'app.bbs.comment',
       uri: info.comment_uri,
       is_disabled: false,
     })
