@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import cx from "classnames";
 import { useEffect, useState } from "react";
 import identityLabel from "@/lib/identityLabel";
+import { formatLinkParam } from "@/lib/postUriHref";
 
 const PostItemUserMobile = ({ post, isOriginPoster }: { post: PostItemType; isOriginPoster?: boolean }) => {
   const [_, setRefresh] = useState(0)
   const router = useRouter()
 
-  const href = `/user-center/${encodeURIComponent(post.author?.did)}`
+  const href = `/user-center/${formatLinkParam(post.author?.did)}`
 
   const nickname = post.author?.displayName
 

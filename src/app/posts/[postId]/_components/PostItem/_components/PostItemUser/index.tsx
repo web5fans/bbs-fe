@@ -7,12 +7,13 @@ import Avatar from "@/components/Avatar";
 import { useRouter } from "next/navigation";
 import BadgeIcon from '@/assets/user-center/badge.svg'
 import identityLabel from "@/lib/identityLabel";
+import { formatLinkParam } from "@/lib/postUriHref";
 
 const PostItemUser = ({ post, isOriginPoster }: { post: PostItemType; isOriginPoster?: boolean }) => {
   const [_, setRefresh] = useState(0)
   const router = useRouter()
 
-  const href = `/user-center/${encodeURIComponent(post.author?.did)}`
+  const href = `/user-center/${formatLinkParam(post.author?.did)}`
 
   const nickname = post.author?.displayName
 

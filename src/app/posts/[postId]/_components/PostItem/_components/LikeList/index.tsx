@@ -7,6 +7,7 @@ import remResponsive from "@/lib/rem-responsive";
 import MouseToolTip from "@/components/MouseToolTip";
 import { useRouter } from "next/navigation";
 import { eventBus } from "@/lib/EventBus";
+import { formatLinkParam } from "@/lib/postUriHref";
 
 export type LikeListRef = { reloadLikeList: () => void }
 
@@ -117,7 +118,7 @@ const LikeList = (props: {
       <div className={S.inner}>
         {
           showAvatars.map((info) => {
-            const href = `/user-center/${encodeURIComponent(info.author?.did)}`
+            const href = `/user-center/${formatLinkParam(info.author?.did)}`
             const name = info.author.displayName || ''
             const tips = info.author.handle ? name?.[0]?.toUpperCase() + name.slice(1) : '该用户已注销'
 
