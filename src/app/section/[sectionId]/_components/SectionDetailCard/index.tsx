@@ -15,9 +15,7 @@ const SectionDetailCard = (props: {
   sectionInfo?: SectionItem
 }) => {
   const { sectionInfo } = props;
-  const { hasLoggedIn, isWhiteUser } = useCurrentUser()
-
-  const router = useRouter()
+  const { userProfile } = useCurrentUser()
 
   return <CardWindow
     wrapClassName={S.wrap}
@@ -34,11 +32,11 @@ const SectionDetailCard = (props: {
     <div className={S.innerWrap}>
       <SectionInfo sectionInfo={sectionInfo} />
 
-      <div className={S.buttonWrap}>
+      {sectionInfo?.owner?.did === userProfile?.did && <div className={S.buttonWrap}>
         <Link href={location.pathname + '/manage'} prefetch>
           <TextHoverFocus text={'版区管理'} />
         </Link>
-      </div>
+      </div>}
     </div>
 
 

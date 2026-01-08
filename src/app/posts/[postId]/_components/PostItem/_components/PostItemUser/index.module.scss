@@ -65,6 +65,22 @@ $userPaddingBlock: min(14px, #{rem.px2flexible(9)});
     overflow: hidden;
   }
 
+  .identity {
+    display: flex;
+    align-items: center;
+    font-size: rem.px2flexible(6);
+    margin-top: rem.px2flexible(3);
+    justify-content: center;
+    text-align: center;
+    width: 0;
+
+    .bagde {
+      width: rem.px2flexible(13.5);
+      height:  rem.px2flexible(13.5);
+      display: none;
+    }
+  }
+
   .postNum {
     width: 100%;
     display: flex;
@@ -87,6 +103,10 @@ $userPaddingBlock: min(14px, #{rem.px2flexible(9)});
 
     .postNum {
       padding: 0 15px;
+    }
+
+    .identity .bagde {
+      display: block;
     }
   }
 }

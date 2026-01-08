@@ -3,7 +3,7 @@
 import { LayoutCenter } from "@/components/Layout";
 import S from './index.module.scss'
 import TabNotice from "./_components/tabs/Notice";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import SectionCard from "./_components/SectionCard";
 import { useRequest } from "ahooks";
 import server from "@/server";
@@ -14,9 +14,15 @@ import { useState } from "react";
 import HiddenPosts from "./_components/tabs/HiddenPosts";
 import HiddenComments from "./_components/tabs/HiddenComments";
 import Operations from "@/app/section/[sectionId]/manage/_components/tabs/Operations";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import PageNoAuth from "@/components/PageNoAuth";
 
 const page = () => {
   const { sectionId } = useParams<{ sectionId: string }>()
+
+  const { userProfile } = useCurrentUser()
+
+  const router = useRouter()
 
   const [tab, setTab] = useState(0)
 
@@ -28,6 +34,16 @@ const page = () => {
     ready: !!sectionId,
     refreshDeps: [sectionId]
   })
+
+  if (!sectionInfo) return null
+
+  if (userProfile?.did !== sectionInfo?.owner?.did) {
+    return <PageNoAuth
+      title={'Ops...你没有权限访问该版区管理'}
+      buttonProps={{ text: '返回社区首页', onClick: () => router.replace('/') }}
+    />
+  }
+
 
   return <LayoutCenter>
     <div className={S.wrap}>

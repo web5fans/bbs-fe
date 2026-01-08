@@ -29,6 +29,20 @@
       text-align: center;
       text-transform: capitalize;
     }
+
+    .identity {
+      display: flex;
+      align-items: center;
+      font-size: rem.px2flexible(9);
+      margin-top: rem.px2flexible(3);
+      text-align: center;
+
+      .bagde {
+        width: rem.px2flexible(13.5);
+        height:  rem.px2flexible(13.5);
+        display: none;
+      }
+    }
   }
 
   .rightWrap {
@@ -86,6 +100,10 @@
         height: 140px;
         font-size: 56px;
         margin: 0 12px;
+      }
+
+      .identity .bagde {
+        display: block;
       }
     }
   }
