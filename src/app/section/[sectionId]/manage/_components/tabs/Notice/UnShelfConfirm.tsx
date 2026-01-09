@@ -17,7 +17,8 @@ const UnShelfConfirm = ({ uri, refresh }: {
       is_announcement: false
     })
     toast({
-      title: '下架成功'
+      title: '下架成功',
+      icon: 'success'
     })
     refresh()
     setConfirmModal.setFalse()

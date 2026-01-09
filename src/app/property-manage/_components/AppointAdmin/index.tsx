@@ -1,7 +1,6 @@
 import ManageModal, { FormItem } from "@/components/Modal/ManageModal";
 import Input from "@/components/Input";
 import S from './index.module.scss'
-import { useEffect, useState } from "react";
 import { useSetState } from "ahooks";
 import { useToast } from "@/provider/toast";
 import getSigningKeyInfo from "@/lib/signing-key";
@@ -24,14 +23,22 @@ const AppointAdminModal = (props: {
   const onSubmit = async () => {
     const params = await getSigningKeyInfo(form)
     if (!params) return
-    const result = await server('/admin/add', 'POST', {
-      did: params.did,
-      params: params.format_params,
-      signed_bytes: params.signed_bytes,
-      signing_key_did: params.signing_key_did,
-    })
-    onFresh()
-    onClose()
+    try {
+      await server('/admin/add', 'POST', {
+        did: params.did,
+        params: params.format_params,
+        signed_bytes: params.signed_bytes,
+        signing_key_did: params.signing_key_did,
+      })
+      onFresh()
+      onClose()
+    } catch (error: any) {
+      const message = error.response.data.message.includes('display name not match') ? '用户名称与DID不匹配' : error.response.data.message
+      toast({
+        icon: 'error',
+        title: message,
+      })
+    }
   }
 
   return <ManageModal

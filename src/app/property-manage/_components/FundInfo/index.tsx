@@ -9,6 +9,7 @@ import FlatBottomedCard from "@/components/FlatBottomedCard";
 import CopyText from "@/components/CopyText";
 import GoExplorer from "@/components/GoExplorer";
 import Balance from "@/components/Balance";
+import AddWhiteList from "./AddWhiteList";
 
 const FundInfo = () => {
   const { data: section } = useRequest(async () => {
@@ -17,8 +18,13 @@ const FundInfo = () => {
     })
   })
 
+  const [whiteListVis, setWhiteListVis] = useBoolean(false)
+
   return <div className={S.wrap}>
-    <p className={S.title}>金库基金余额</p>
+    <p className={S.title}>
+      <span>金库基金余额</span>
+      <Button className={S.whiteButton} onClick={setWhiteListVis.setTrue}>新增白名单</Button>
+    </p>
     <div className={S.total}>
       <Balance ckbAddr={section?.ckb_addr} />
 
@@ -37,6 +43,8 @@ const FundInfo = () => {
         <GoExplorer hash={section?.ckb_addr || ''} subPath={'address'} />
       </div>
     </FlatBottomedCard>
+
+    {whiteListVis && <AddWhiteList onClose={setWhiteListVis.setFalse} />}
   </div>
 }
 

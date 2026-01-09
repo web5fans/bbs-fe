@@ -98,6 +98,7 @@ const Section = () => {
 
     toast({
       title: '操作成功',
+      icon: 'success'
     })
 
     setV(v + 1)
