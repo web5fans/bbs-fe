@@ -2,7 +2,7 @@ import { useRequest } from "ahooks";
 import { postsWritesPDSOperation } from "@/app/posts/utils";
 import dayjs from "dayjs";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 type DraftParamsType = {
   sectionId: string,
@@ -40,7 +40,7 @@ export default function useAutoSaveDraft(props: { title: string; editorText: str
     })
   }
 
-  const { run: runPolling, loading: pollingLoading } = useRequest(async () => {
+  const { run: runPolling, loading: pollingLoading, cancel: cancelPolling } = useRequest(async () => {
     await editDraft({
       title: props.title,
       text: props.editorText,
@@ -78,6 +78,12 @@ export default function useAutoSaveDraft(props: { title: string; editorText: str
   });
 
   const loading = useMemo(() => debounceLoading || pollingLoading, [debounceLoading, pollingLoading])
+
+  useEffect(() => {
+    return () => {
+      cancelPolling()
+    }
+  }, []);
 
   return {
     autoSaveDraft: runDebounce,

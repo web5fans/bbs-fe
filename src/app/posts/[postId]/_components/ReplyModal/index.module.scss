@@ -8,6 +8,7 @@
   bottom: rem.px2flexible(24);
   height: rem.px2flexible(200);
   transition: all 100ms;
+  z-index: 9;
 
   &.wrapPack {
     height: auto;

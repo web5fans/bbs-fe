@@ -10,6 +10,7 @@ import { CircleLoading } from "@/components/Loading";
 import Link from "next/link";
 import GoExplorer from "@/components/GoExplorer";
 import { NSID_TYPE_ENUM } from "@/constant/types";
+import { formatLinkParam } from "@/lib/postUriHref";
 
 const nsidMap = {
   post: NSID_TYPE_ENUM.POST,
@@ -53,7 +54,7 @@ const TipDetailList = (props: {
           {
             data?.list && data.list.length !== 0 ? data?.list.map(row => {
               const author = row.sender_author
-              const href = `/user-center/${encodeURIComponent(row.senderDid)}`
+              const href = `/user-center/${formatLinkParam(row.senderDid)}`
               return <tr>
                 <td>
                   <div className={S.userInfo}>

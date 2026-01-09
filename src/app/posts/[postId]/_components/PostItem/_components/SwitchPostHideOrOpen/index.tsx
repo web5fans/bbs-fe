@@ -22,7 +22,6 @@ const SwitchPostHideOrOpen = (props: {
 
   const handlePostsOpt = async (reason?: string) => {
     const obj: PostOptParamsType = {
-      nsid: nsid === 'comment' ? 'app.bbs.comment' : 'app.bbs.reply',
       uri: uri,
       is_disabled: status === 'hide',
       reasons_for_disabled: reason

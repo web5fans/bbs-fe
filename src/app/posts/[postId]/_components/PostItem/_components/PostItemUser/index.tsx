@@ -5,12 +5,15 @@ import remResponsive from "@/lib/rem-responsive";
 import cx from "classnames";
 import Avatar from "@/components/Avatar";
 import { useRouter } from "next/navigation";
+import BadgeIcon from '@/assets/user-center/badge.svg'
+import identityLabel from "@/lib/identityLabel";
+import { formatLinkParam } from "@/lib/postUriHref";
 
 const PostItemUser = ({ post, isOriginPoster }: { post: PostItemType; isOriginPoster?: boolean }) => {
   const [_, setRefresh] = useState(0)
   const router = useRouter()
 
-  const href = `/user-center/${encodeURIComponent(post.author?.did)}`
+  const href = `/user-center/${formatLinkParam(post.author?.did)}`
 
   const nickname = post.author?.displayName
 
@@ -41,7 +44,12 @@ const PostItemUser = ({ post, isOriginPoster }: { post: PostItemType; isOriginPo
     onClick={() => goUserCenter(post.author)}
     onMouseEnter={() => router.prefetch(href)}
   >
-    <UserAvatar nickname={nickname} isOriginPoster={isOriginPoster} isLoggedOff={!post.author?.handle} />
+    <UserAvatar
+      nickname={nickname}
+      isOriginPoster={isOriginPoster}
+      isLoggedOff={!post.author?.handle}
+      tags={post.author?.tags}
+    />
     <div className={S.divide} />
     <p className={S.postNum}>
       <span>发帖数量</span>
@@ -54,12 +62,14 @@ export default PostItemUser;
 
 let resizeObserver: ResizeObserver | null = null;
 
-function UserAvatar({ isOriginPoster, nickname, isLoggedOff }: {
+function UserAvatar({ isOriginPoster, nickname, isLoggedOff, tags }: {
   isOriginPoster?: boolean
   nickname: string
   isLoggedOff?: boolean
+  tags: PostItemType['author']['tags']
 }) {
   const avatarRef = useRef<HTMLDivElement>(null);
+  const identityRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLParagraphElement>(null);
   const name = isLoggedOff ? '已注销' : nickname
 
@@ -86,6 +96,9 @@ function UserAvatar({ isOriginPoster, nickname, isLoggedOff }: {
 
           // 获取容器和文本宽度
           const containerWidth = avatarRef.current?.scrollWidth;
+          if (identityRef.current) {
+            identityRef.current.style.width = `${containerWidth}px`;
+          }
 
           if (!containerWidth) return
 
@@ -146,5 +159,10 @@ function UserAvatar({ isOriginPoster, nickname, isLoggedOff }: {
       className={S.title}
       ref={nameRef}
     >{name}</p>
+    {tags && <div className={S.identity} ref={identityRef}>
+      <BadgeIcon className={S.bagde} />
+      {identityLabel(tags)}
+      <BadgeIcon className={S.bagde} />
+    </div>}
   </>
 }

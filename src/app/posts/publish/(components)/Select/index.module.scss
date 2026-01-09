@@ -60,6 +60,13 @@
       padding: min(10px, #{rem.px2flexible(7.5)});
     }
 
+    .noData {
+      padding: min(10px, #{rem.px2flexible(7.5)});
+      font-size: var(--popover-font-size);
+      white-space: nowrap;
+      color: #6C6C6C;
+    }
+
     .popoverItem {
       padding: min(10px, #{rem.px2flexible(7.5)});
       font-size: var(--popover-font-size);

@@ -25,6 +25,7 @@ const FundInfo = () => {
 
       <Button
         className={S.utxo}
+        onClick={() => window.open('https://safe.utxo.global', '_blank')}
       >查看utxo钱包</Button>
     </div>
     <FlatBottomedCard>

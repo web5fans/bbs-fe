@@ -12,6 +12,10 @@
     background: #EAEAEA;
     padding: rem.px2flexible(10);
 
+    .tabsContent {
+      min-height: rem.px2flexible(200);
+    }
+
     .gap {
       height: rem.px2flexible(20);
     }

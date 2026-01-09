@@ -18,7 +18,7 @@ import Notification from "./_components/Notification";
 export default function AppHeader(props: {
   isPopUp?: boolean
 }) {
-  const { hasLoggedIn } = useCurrentUser()
+  const { hasLoggedIn, isAdmin } = useCurrentUser()
   const { openRegisterPop, closeRegisterPop } = useRegisterPopUp()
   const pathname = usePathname()
 
@@ -49,11 +49,11 @@ export default function AppHeader(props: {
             href={'/community'}
             tooltip={'社区金库'}
           />}
-          {/*{hasLoggedIn && <NavigatorIcon*/}
-          {/*  icon={<PropertyIcon />}*/}
-          {/*  href={'/property-manage'}*/}
-          {/*  tooltip={'社区中心'}*/}
-          {/*/>}*/}
+          {hasLoggedIn && isAdmin && <NavigatorIcon
+            icon={<PropertyIcon />}
+            href={'/property-manage'}
+            tooltip={'社区中心'}
+          />}
           {
             hasLoggedIn && <Notification />
           }

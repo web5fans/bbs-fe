@@ -17,6 +17,7 @@ export type UserProfileType = {
   created?: string
   handle?: string
   ckb_addr: string
+  tags?: ({ owner: string; admin: undefined } | { admin: 0 | 1; owner: undefined })[]
 }
 
 type UserInfoStoreValue = {
@@ -30,7 +31,7 @@ type UserInfoStoreValue = {
 const STORAGE_VISITOR = '@bbs:visitor'
 
 
-type UserInfoStore = UserInfoStoreValue & {
+export type UserInfoStore = UserInfoStoreValue & {
   setStoreData: (storeData: UserInfoStoreValue) => void
   storageUserInfo: (params: { signKey: string; ckbAddr: string; userInfo: FansWeb5CkbCreateAccount.OutputSchema}) => void
   web5Login: () => Promise<void>

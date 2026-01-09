@@ -9,6 +9,7 @@ import PostItemUser from "./_components/PostItemUser";
 import PostItemUserMobile from "./_components/PostItemUserMobile";
 import { useSearchParams } from "next/navigation";
 import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
+import { UserProfileType } from "@/store/userInfo";
 
 export type PostItemType = {
   cid: string
@@ -28,6 +29,7 @@ export type PostItemType = {
     displayName: string
     handle: string
     [key: string]: any
+    tags: UserProfileType['tags']
   }
   [key: string]: any
   is_disabled: boolean

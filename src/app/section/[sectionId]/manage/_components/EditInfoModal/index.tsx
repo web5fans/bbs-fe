@@ -3,39 +3,55 @@ import S from './index.module.scss'
 import Input from "@/components/Input";
 import TextArea from "@/components/TextArea";
 import { SectionItem } from "@/app/posts/utils";
-import { useEffect, useState } from "react";
 import UploadSectionAvatar from "../UploadSectionAvatar";
+import { useSetState } from "ahooks";
+import getSigningKeyInfo from "@/lib/signing-key";
+import server from "@/server";
+import { useToast } from "@/provider/toast";
 
 const EditInfoModal = (props: {
-  visible: boolean,
   onClose: () => void
   sectionInfo?: SectionItem
   refreshDetail: () => void
 }) => {
-  const { visible, onClose, sectionInfo, refreshDetail } = props;
-  const [ secInfo, setSecInfo ] = useState({} as SectionItem);
+  const { onClose, sectionInfo, refreshDetail } = props;
+  const [secInfo, setInfo] = useSetState({
+    image: sectionInfo?.image,
+    name: sectionInfo?.name,
+    description: sectionInfo?.description,
+    section: sectionInfo?.id,
+  })
 
-  useEffect(() => {
-    if (!sectionInfo) return
-    setSecInfo(sectionInfo);
-  }, [sectionInfo]);
+  const toast = useToast()
 
-  const changeSecInfo = (info: Partial<SectionItem>) => {
-    setSecInfo({...secInfo, ...info});
-  }
+  const onConfirm = async () => {
+    const obj = await getSigningKeyInfo({
+      ...secInfo,
+      ckb_addr: null,
+      is_disabled: null,
+      image: sectionInfo?.image === secInfo.image ? null : secInfo.image,
+      name: sectionInfo?.name === secInfo.name ? null : secInfo.name,
+      description: sectionInfo?.description === secInfo.description ? null : secInfo.description,
+    })
+    if (!obj) return
+    await server('/admin/update_section', 'POST', {
+      did: obj.did,
+      params: obj.format_params,
+      signing_key_did: obj.signing_key_did,
+      signed_bytes: obj.signed_bytes
+    })
 
-  const cancel = () => {
-    setSecInfo(sectionInfo || {} as SectionItem);
+    toast({
+      title: '版区信息更新成功',
+      icon: 'success',
+    })
+
+    refreshDetail()
     onClose()
   }
 
-  const onConfirm = async () => {
-    refreshDetail()
-    cancel()
-  }
-
   return <ManageModal
-    visible={visible}
+    visible
     title={'编辑版区信息'}
     footer={{
       confirm: {
@@ -43,7 +59,7 @@ const EditInfoModal = (props: {
         onClick: onConfirm
       },
       cancel: {
-        onClick: cancel,
+        onClick: onClose,
       }
     }}
   >
@@ -52,7 +68,7 @@ const EditInfoModal = (props: {
         <FormItem title={'版区名称'} className={S.formItem}>
           <Input
             inputValue={secInfo.name}
-            onChange={v => changeSecInfo({ name: v })}
+            onChange={v => setInfo({ name: v })}
           />
         </FormItem>
         <FormItem title={'版主Web5 DID'} className={S.formItem}>
@@ -62,7 +78,8 @@ const EditInfoModal = (props: {
       <div className={S.right}>
         <FormItem title={'版区头像'} className={S.formItem}>
           <UploadSectionAvatar
-            changeLogo={logo => setSecInfo({ logo })}
+            avatarUrl={secInfo.image}
+            changeLogo={url => setInfo({ image: url })}
             classNames={{ wrap: S.uploadWrap, info: S.uploadInfo }}
           />
         </FormItem>
@@ -72,7 +89,7 @@ const EditInfoModal = (props: {
       <TextArea
         wrapClassName={S.textarea}
         inputValue={secInfo.description}
-        onChange={v => changeSecInfo({ description: v })}
+        onChange={v => setInfo({ description: v })}
       />
     </FormItem>
   </ManageModal>

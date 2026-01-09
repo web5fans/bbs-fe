@@ -3,10 +3,12 @@ import cx from "classnames";
 import Avatar from "@/components/Avatar";
 import { UserProfileType } from "@/store/userInfo";
 import utcToLocal from "@/lib/utcToLocal";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import FlatBottomedCard from "@/components/FlatBottomedCard";
 import Copy from "@/components/CopyText/Copy";
 import ellipsis from "@/lib/ellipsis";
+import BadgeIcon from '@/assets/user-center/badge.svg'
+import identityLabel from "@/lib/identityLabel";
 
 const UserInfo = ({ userProfile, isMe, className }: {
   userProfile?: UserProfileType
@@ -14,7 +16,7 @@ const UserInfo = ({ userProfile, isMe, className }: {
   className?: string
 }) => {
   return <div className={cx(S.container, className)}>
-    <LeftInfo nickname={userProfile?.displayName} />
+    <LeftInfo nickname={userProfile?.displayName} tags={userProfile?.tags} />
     <div className={S.rightWrap}>
       <CardItem title={'Web5域名'} content={userProfile?.handle} showCopy={isMe} />
       <CardItem title={'Web5 did'} content={userProfile?.did} showCopy={isMe} />
@@ -28,8 +30,9 @@ const UserInfo = ({ userProfile, isMe, className }: {
 
 export default UserInfo;
 
-function LeftInfo({ nickname }: {
+function LeftInfo({ nickname, tags }: {
   nickname?: string
+  tags: UserProfileType['tags']
 }) {
   const avatarRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLParagraphElement>(null);
@@ -85,6 +88,11 @@ function LeftInfo({ nickname }: {
       />
     </div>
     <p className={S.userName} ref={nameRef}>{nickname}</p>
+    {tags && <p className={S.identity}>
+      <BadgeIcon className={S.bagde} />
+      {identityLabel(tags)}
+      <BadgeIcon className={S.bagde} />
+    </p>}
   </div>
 }
 
