@@ -7,12 +7,14 @@
   }
 
   .info {
+    cursor: pointer;
     .title {
       font-size: rem.px2flexible(9);
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-decoration: underline;
     }
     .des {
       font-size: rem.px2flexible(7);
@@ -20,6 +22,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-decoration: underline;
     }
   }
 }

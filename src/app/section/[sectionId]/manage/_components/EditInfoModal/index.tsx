@@ -20,13 +20,19 @@ const EditInfoModal = (props: {
     name: sectionInfo?.name,
     description: sectionInfo?.description,
     section: sectionInfo?.id,
-    is_disabled: sectionInfo?.is_disabled,
   })
 
   const toast = useToast()
 
   const onConfirm = async () => {
-    const obj = await getSigningKeyInfo({ ...secInfo, ckb_addr: null })
+    const obj = await getSigningKeyInfo({
+      ...secInfo,
+      ckb_addr: null,
+      is_disabled: null,
+      image: sectionInfo?.image === secInfo.image ? null : secInfo.image,
+      name: sectionInfo?.name === secInfo.name ? null : secInfo.name,
+      description: sectionInfo?.description === secInfo.description ? null : secInfo.description,
+    })
     if (!obj) return
     await server('/admin/update_section', 'POST', {
       did: obj.did,

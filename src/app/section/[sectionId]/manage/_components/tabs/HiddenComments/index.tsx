@@ -11,6 +11,8 @@ import { useToast } from "@/provider/toast";
 import Search from "@/components/Input/Search";
 import S from './index.module.scss'
 import StreamLineRichText from "@/components/StreamLineRichText";
+import { postUriToHref } from "@/lib/postUriHref";
+import { useRouter } from "next/navigation";
 
 const HiddenComments = ({ sectionId }: {
   sectionId: string
@@ -22,12 +24,15 @@ const HiddenComments = ({ sectionId }: {
 
   const toast = useToast()
 
+  const router = useRouter()
+
   const columns: TableProps<CommentAllPostType>['columns'] = [{
     title: '评论',
     dataIndex: 'title',
     width: '32%',
     render(record) {
-      return <div className={S.info}>
+      const link = `/section/${sectionId}/${postUriToHref(record.uri)}`
+      return <div className={S.info} onClick={() => router.push(link)}>
         <p className={S.title}>{record.title}</p>
         <StreamLineRichText richText={record.comment_text} className={S.des} />
       </div>

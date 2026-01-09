@@ -10,6 +10,8 @@ import { useRef, useState } from "react";
 import { useToast } from "@/provider/toast";
 import Search from "@/components/Input/Search";
 import S from './index.module.scss'
+import { useRouter } from "next/navigation";
+import { postUriToHref } from "@/lib/postUriHref";
 
 const HiddenPosts = ({ sectionId }: {
   sectionId: string
@@ -21,12 +23,17 @@ const HiddenPosts = ({ sectionId }: {
 
   const toast = useToast()
 
+  const router = useRouter()
+
   const columns: TableProps<PostFeedItemType>['columns'] = [{
     title: '帖子',
     dataIndex: 'title',
     width: '32%',
     render(record) {
-      return <p className={'font-medium truncate'}>{record.title}</p>
+      return <p
+        className={'font-medium truncate underline cursor-pointer'}
+        onClick={() => router.push(`/section/${sectionId}/${postUriToHref(record.uri)}`)}
+      >{record.title}</p>
     }
   }, {
     title: '隐藏原因',

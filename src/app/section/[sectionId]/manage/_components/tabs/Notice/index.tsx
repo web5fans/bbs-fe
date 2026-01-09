@@ -11,7 +11,8 @@ import { useRef, useState } from "react";
 import StreamLineRichText from "@/components/StreamLineRichText";
 import utcToLocal from "@/lib/utcToLocal";
 import { TableProps } from "@/components/Table";
-import remResponsive from "@/lib/rem-responsive";
+import { useRouter } from "next/navigation";
+import { postUriToHref } from "@/lib/postUriHref";
 
 const TabNotice = ({ sectionId }: {
   sectionId: string
@@ -24,12 +25,14 @@ const TabNotice = ({ sectionId }: {
 
   const editNoticeRef = useRef<PostFeedItemType | null>(null)
 
+  const router = useRouter()
+
   const columns: TableProps<PostFeedItemType>['columns'] = [{
     title: '公告内容',
     dataIndex: 'name',
     width: '50%',
     render(record) {
-      return <div className={S.noticeInfo}>
+      return <div className={S.noticeInfo} onClick={() => router.push(`/section/${sectionId}/${postUriToHref(record.uri)}`)}>
         <p className={S.title}>{record.title}</p>
         <StreamLineRichText richText={record.text} className={S.des} />
       </div>
