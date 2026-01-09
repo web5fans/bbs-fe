@@ -57,16 +57,16 @@ const AppointModeratorModal = (props: {
 
       toast({
         title: '操作成功',
+        icon: 'success'
       })
       props.refresh?.()
       props.onClose()
     } catch (error: any) {
-      if (error.response.data.message.includes('display name not match')) {
-        toast({
-          icon: 'error',
-          title: '用户名称与DID不匹配',
-        })
-      }
+      const message = error.response.data.message.includes('display name not match') ? '用户名称与DID不匹配' : error.response.data.message
+      toast({
+        icon: 'error',
+        title: message,
+      })
     }
   }
 

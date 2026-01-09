@@ -75,7 +75,8 @@ const HiddenPosts = ({ sectionId }: {
     })
 
     toast({
-      title: '公开帖子成功'
+      title: '公开帖子成功',
+      icon: 'success'
     })
     setV(v => v + 1)
     setConfirmModalVis.setFalse()

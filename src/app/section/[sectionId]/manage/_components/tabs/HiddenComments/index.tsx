@@ -77,7 +77,8 @@ const HiddenComments = ({ sectionId }: {
     })
 
     toast({
-      title: '公开评论成功'
+      title: '公开评论成功',
+      icon: 'success'
     })
     setV(v => v + 1)
     setConfirmModalVis.setFalse()
