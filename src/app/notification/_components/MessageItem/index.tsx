@@ -82,7 +82,7 @@ const MessageItem = ({ notify, isReadAll }: {
             <span className={'text-[#999631] font-medium'}>{numeral(shannonToCkb(notify.amount)).format('0.00a')} CKB</span>
           </div>
           <div className={'flex'}>
-            来自&nbsp;<RichText richText={notify.target.text} className={'flex-1'} />
+            来自&nbsp;<RichText richText={notify.target.title || notify.target.text} className={'flex-1'} />
           </div>
         </div>;
       case NOTIFY_TYPE_ENUM.NEW_LIKE:
@@ -98,7 +98,7 @@ const MessageItem = ({ notify, isReadAll }: {
           <div className={'flex'}>
             <span className={S.name}>{notify.sender.displayName}</span>
             <span>隐藏了你的{postTypeName}</span>&nbsp;
-            <RichText richText={notify.target.text} className={'flex-1'} />
+            <RichText richText={notify.target.title || notify.target.text} className={'flex-1'} />
           </div>
           <p className={S.maxRow2}>原因：{notify.target.reasons_for_disabled}</p>
         </div>;
@@ -108,7 +108,7 @@ const MessageItem = ({ notify, isReadAll }: {
             <span className={S.name}>{notify.sender.displayName}</span>
             <span>公开了你的{postTypeName}</span>&nbsp;
           </div>
-          <RichText richText={notify.target.text} />
+          <RichText richText={notify.target.title || notify.target.text} />
         </div>
     }
 
