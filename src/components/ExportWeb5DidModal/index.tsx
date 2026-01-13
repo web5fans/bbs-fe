@@ -8,6 +8,7 @@ import storage from "@/lib/storage";
 import { useBoolean, useSetState } from "ahooks";
 import { useToast } from "@/provider/toast";
 import PasswordInput from "./PasswordInput";
+import preloadImage from "@/lib/preloadImage";
 
 const ExportWeb5DidModal = (props: {
   children: JSX.Element;
@@ -44,6 +45,10 @@ export function ExportWebDidWindow(props: {
 }) {
   const [curStep, setCurStep] = useState<'password' | 'export'>('password')
   const passwordRef = useRef('')
+
+  useEffect(() => {
+    preloadImage('/assets/export-computer.png')
+  }, []);
 
   const close = () => {
     passwordRef.current = ''

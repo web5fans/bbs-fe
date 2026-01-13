@@ -33,30 +33,6 @@ const RootLayout = async (props: any) => {
     <html lang="cn" style={{ visibility: "hidden" }}>
     <head>
       <PublicEnvScript />
-      <link
-        rel="preload"
-        href="/assets/login/byte-static.png"
-        as="image"
-        type="image/png"
-      />
-      <link
-        rel="preload"
-        href="/assets/login/byte-static-m.png"
-        as="image"
-        type="image/png"
-      />
-      <link
-        rel="preload"
-        href="/assets/export-computer.png"
-        as="image"
-        type="image/png"
-      />
-      <link
-        rel="preload"
-        href="/assets/import-did/loading-wrap.png"
-        as="image"
-        type="image/png"
-      />
     </head>
     <body
       className={fontVariables}
