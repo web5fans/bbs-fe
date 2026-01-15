@@ -21,10 +21,10 @@ const FundInfo = () => {
   const [whiteListVis, setWhiteListVis] = useBoolean(false)
 
   return <div className={S.wrap}>
-    <p className={S.title}>
+    <div className={S.title}>
       <span>金库基金余额</span>
       <Button className={S.whiteButton} onClick={setWhiteListVis.setTrue}>新增白名单</Button>
-    </p>
+    </div>
     <div className={S.total}>
       <Balance ckbAddr={section?.ckb_addr} />
 
