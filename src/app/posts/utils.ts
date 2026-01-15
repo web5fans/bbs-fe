@@ -197,24 +197,30 @@ export async function postsWritesPDSOperation(params: WritePDSOptParamsType) {
     },
   }
 
-  let requestUrl = ''
+  const directWriteTypeMap = {
+    create: "fans.web5.ckb.directWrites#create",
+    update: "fans.web5.ckb.directWrites#update",
+    delete: "fans.web5.ckb.directWrites#delete",
+  } as const
 
-  switch (operateType) {
-    case "create":
-      requestUrl = '/record/create'
-      break;
-    case "update":
-      requestUrl = '/record/update'
-      break;
-    case "delete":
-      requestUrl = '/record/delete'
-      break
-  }
-  
-  const res = await server<CreatePostResponse>(requestUrl, 'POST', serverParams)
+  const result = await sessionWrapApi(() => pdsClient.fans.web5.ckb.directWrites({
+    repo: serverParams.repo,
+    writes: [{
+      $type: directWriteTypeMap[operateType],
+      collection: newRecord.$type,
+      rkey: serverParams.rkey,
+      value: serverParams.value
+    }],
+    validate: false,
+    signingKey: serverParams.signing_key,
+    root: serverParams.root,
+    ckbAddr: serverParams.ckb_addr
+  }))
+
+  console.log('result>>>>', result)
 
   return {
-    uri: res?.results?.[0].uri,
+    uri: result.data.results?.[0].uri,
     created: newRecord.created
   }
 }
