@@ -5,6 +5,14 @@ import {
 } from '@tiptap/core'
 import TipTapImage from "@tiptap/extension-image"
 
+declare module "@tiptap/react" {
+  interface Commands<ReturnType> {
+    image: {
+      setImage: (options: { src: string, alt?: string, title?: string, style?: string }) => ReturnType,
+    }
+  }
+}
+
 const inputRegex = /(?:^|\s)(!\[(.+|:?)]\((\S+)(?:(?:\s+)["'](\S+)["'])?\))$/
 
 /**

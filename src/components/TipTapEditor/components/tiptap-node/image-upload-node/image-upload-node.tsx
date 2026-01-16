@@ -7,6 +7,7 @@ import { CloseIcon } from "@/components/TipTapEditor/components/tiptap-icons/clo
 import "@/components/TipTapEditor/components/tiptap-node/image-upload-node/image-upload-node.scss"
 import Uploading from "./uploading";
 import { useToast } from "@/provider/toast";
+import { getImagesDimensions } from "@/lib/tiptap-utils";
 
 export interface FileItem {
   id: string
@@ -412,27 +413,4 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
       />
     </NodeViewWrapper>
   )
-}
-
-function getImagesDimensions(file: File) {
-  return new Promise((resolve: (value: { width: number; height: number }) => void, reject) => {
-    const img = new Image();
-    const objectUrl = URL.createObjectURL(file);
-
-    img.onload = () => {
-      console.log('>>>>', img.width, img.height)
-      resolve({
-        width: img.width,
-        height: img.height,
-      });
-      URL.revokeObjectURL(objectUrl);
-    };
-
-    img.onerror = () => {
-      reject(new Error(`无法加载图片: ${file.name}`));
-      URL.revokeObjectURL(objectUrl);
-    };
-
-    img.src = objectUrl;
-  });
 }

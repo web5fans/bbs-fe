@@ -316,3 +316,26 @@ export function checkEditorContent(json: JSONContent, text: string) {
   const hasUploadedImg = json.content?.find(e => e.type === 'image');
   return !!text || !!hasUploadedImg
 }
+
+export function getImagesDimensions(file: File) {
+  return new Promise((resolve: (value: { width: number; height: number }) => void, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      console.log('>>>>', img.width, img.height)
+      resolve({
+        width: img.width,
+        height: img.height,
+      });
+      URL.revokeObjectURL(objectUrl);
+    };
+
+    img.onerror = () => {
+      reject(new Error(`无法加载图片: ${file.name}`));
+      URL.revokeObjectURL(objectUrl);
+    };
+
+    img.src = objectUrl;
+  });
+}
