@@ -2,6 +2,9 @@
 
 import S from './index.module.scss'
 import LikeIcon from '@/assets/notification/like.svg'
+import CommentIcon from '@/assets/notification/comment.svg'
+import MessageIcon from '@/assets/notification/message.svg'
+import TipIcon from '@/assets/notification/tip.svg'
 import { useMemo } from "react";
 import cx from "classnames";
 import { NOTIFY_TYPE_ENUM, NotifyItemType } from "@types/notification";
@@ -114,6 +117,22 @@ const MessageItem = ({ notify, isReadAll }: {
 
   }, [notify])
 
+  const messageIcon = useMemo(() => {
+    const { n_type } = notify
+
+    switch (n_type) {
+      case NOTIFY_TYPE_ENUM.NEW_COMMENT:
+      case NOTIFY_TYPE_ENUM.NEW_REPLY:
+        return <CommentIcon className={S.icon} />
+      case NOTIFY_TYPE_ENUM.NEW_LIKE:
+        return  <LikeIcon className={S.icon} />
+      case NOTIFY_TYPE_ENUM.NEW_TIP:
+        return <TipIcon className={S.icon} />
+      default:
+        return <MessageIcon className={S.icon} />
+    }
+  }, [notify])
+
   return <div
     className={S.messageItem}
     onClick={() => {
@@ -124,7 +143,7 @@ const MessageItem = ({ notify, isReadAll }: {
     <div className={S.divide} />
     <div className={S.message}>
       <div className={'relative'}>
-        <LikeIcon className={S.icon} />
+        {messageIcon}
         {!(hasRead || isReadAll) && <span className={S.unread} />}
       </div>
       {detailInfo}

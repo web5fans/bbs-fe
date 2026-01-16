@@ -92,6 +92,7 @@ const SpendingTab = (props: {
   },{
     title: '支出钱包地址',
     dataIndex: 'sender',
+    width: '18%',
     render: (record) => {
       return <CopyText text={record.sender} ellipsis className={{ icon: S.copyTextIcon }} />
     }
@@ -135,7 +136,7 @@ const SpendingTab = (props: {
         list: result.tips
       }
     }}
-    scroll={{ x: remResponsive(500) }}
+    scroll={{ x: remResponsive(600) }}
     afterLoading={props.scrollToTop}
   />
 }
