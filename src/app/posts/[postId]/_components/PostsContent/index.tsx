@@ -10,7 +10,8 @@ import BBSPagination from "@/components/BBSPagination";
 import PostDiscuss from "@/app/posts/[postId]/_components/PostDiscuss";
 import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
-import { useSearchParams } from "next/navigation";
+import { CircleLoading } from "@/components/Loading";
+import cx from "classnames";
 
 type PostContentProps = {
   breadCrumb?: React.ReactNode;
@@ -80,37 +81,42 @@ const PostsContent = (props: PostContentProps) => {
     headerExtra={breadCrumb}
   >
     <div className={S.wrap}>
-      {commentList?.page === 1 && <PostItem
-        isOriginPoster
-        rootUri={originPost?.uri}
-        postInfo={originPost}
-        floor={1}
-        refresh={reloadList}
-        key={`post-item-${originPost?.uri}-${freshV}`}
-      />}
-
-      {commentList?.comments?.map((p, idx) => {
-        const floor = ((commentList?.page || 1) - 1) * PAGE_SIZE + idx + 2;
-        const info = {...p, section_id: originPost?.section_id}
-        return <PostItem
-          postInfo={info}
-          floor={floor}
-          isOriginPoster={p.author.did === originPost?.author?.did}
+      {!commentList ? <div className={cx('flex items-center justify-center', S.loadingWrap)}>
+        <CircleLoading className={S.loading} />
+      </div> : <>
+        {commentList?.page === 1 && <PostItem
+          isOriginPoster
           rootUri={originPost?.uri}
-          rootDisabled={originPost.is_disabled}
+          postInfo={originPost}
+          floor={1}
           refresh={reloadList}
-          key={`post-item-${p?.uri}-${freshV}`}
-        />
-      })}
+          key={`post-item-${originPost?.uri}-${freshV}`}
+        />}
 
-      <BBSPagination
-        current={commentList?.page || 1}
-        hideOnSinglePage
-        pageSize={20}
-        total={commentList?.total || 0}
-        onChange={(page) => reLoadComment(page)}
-        align={'center'}
-      />
+        {commentList?.comments?.map((p, idx) => {
+          const floor = ((commentList?.page || 1) - 1) * PAGE_SIZE + idx + 2;
+          const info = {...p, section_id: originPost?.section_id}
+          return <PostItem
+            postInfo={info}
+            floor={floor}
+            isOriginPoster={p.author.did === originPost?.author?.did}
+            rootUri={originPost?.uri}
+            rootDisabled={originPost.is_disabled}
+            refresh={reloadList}
+            key={`post-item-${p?.uri}-${freshV}`}
+          />
+        })}
+
+        <BBSPagination
+          current={commentList?.page || 1}
+          hideOnSinglePage
+          pageSize={20}
+          total={commentList?.total || 0}
+          onChange={(page) => reLoadComment(page)}
+          align={'center'}
+        />
+      </>}
+
 
       <PostDiscuss
         sectionId={originPost?.section_id}
