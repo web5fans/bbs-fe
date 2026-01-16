@@ -13,12 +13,14 @@ import utcToLocal from "@/lib/utcToLocal";
 import { TableProps } from "@/components/Table";
 import { useRouter } from "next/navigation";
 import { postUriToHref } from "@/lib/postUriHref";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const TabNotice = ({ sectionId }: {
   sectionId: string
 }) => {
 
   const [noticeModalVis, setNoticeModal] = useBoolean(false)
+  const { userProfile } = useCurrentUser()
 
   const [v, setV] = useState(0)
   const [searchContent, setSearchContent] = useState<string | null>(null)
@@ -50,10 +52,12 @@ const TabNotice = ({ sectionId }: {
     width: '25%',
     render: (record) => {
       return <div className={S.options}>
-        <a className={'cursor-pointer'} onClick={() => {
+        {record.author.did === userProfile?.did && <a
+          className={'cursor-pointer'} onClick={() => {
           editNoticeRef.current = record
           setNoticeModal.setTrue()
-        }}>编辑</a>
+        }}
+        >编辑</a>}
         <UnShelfConfirm
           uri={record.uri}
           refresh={() => {

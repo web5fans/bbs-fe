@@ -14,7 +14,7 @@ import sessionWrapApi from "@/lib/wrapApiAutoSession";
 export type PostFeedItemType = {
   uri: string,
   cid: string,
-  author: { displayName: string, [key: string]: string },
+  author: { displayName: string, [key: string]: string, did: string },
   title: string,
   text: string,
   visited_count: string,
