@@ -5,18 +5,22 @@ import S from './index.module.scss'
 import Input from "@/components/Input";
 import UploadSectionAvatar from "@/app/section/[sectionId]/manage/_components/UploadSectionAvatar";
 import TextArea from "@/components/TextArea";
-import { useSetState } from "ahooks";
+import { useBoolean, useSetState } from "ahooks";
 import { useState } from "react";
 import server from "@/server";
 import getSigningKeyInfo from "@/lib/signing-key";
 import { useToast } from "@/provider/toast";
+import { ccc } from "@ckb-ccc/core";
+import { useWallet } from "@/provider/WalletProvider";
 
 const CreateNewSectionModal = ({ onClose, refresh }: {
   onClose: () => void
   refresh: () => void
 }) => {
   const toast = useToast()
+  const { walletClient } = useWallet()
   const [disabled, setDisabled] = useState(false)
+  const [loading, setLoading] = useBoolean(false)
   const [sectionParams, setSectionParams] = useSetState({
     ckb_addr: '',
     description: '',
@@ -28,12 +32,25 @@ const CreateNewSectionModal = ({ onClose, refresh }: {
   const confirm = async () => {
     const info = await getSigningKeyInfo(sectionParams)
     if (!info) return
+    setLoading.setTrue()
+    try {
+      await ccc.Address.fromString(sectionParams.ckb_addr, walletClient!)
+    } catch (err) {
+      toast({
+        title: '金库地址不合法，请重新输入',
+        icon: 'error'
+      })
+      setLoading.setFalse()
+      return
+    }
+
     await server('/admin/create_section', 'POST', {
       did: info.did,
       params: info.format_params,
       signed_bytes: info.signed_bytes,
       signing_key_did: info.signing_key_did
     })
+    setLoading.setFalse()
     toast({
       title: '创建成功'
     })
@@ -46,7 +63,7 @@ const CreateNewSectionModal = ({ onClose, refresh }: {
     visible
     footer={{
       confirm: {
-        disabled: !sectionParams.name || !sectionParams.ckb_addr || !sectionParams.description || !sectionParams.owner || disabled,
+        disabled: !sectionParams.name || !sectionParams.ckb_addr || !sectionParams.description || !sectionParams.owner || disabled || loading,
         onClick: confirm
       },
       cancel: {
