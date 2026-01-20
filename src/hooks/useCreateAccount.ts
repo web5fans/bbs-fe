@@ -218,7 +218,7 @@ export default function useCreateAccount({ createSuccess }: {
       did: preCreateResult.did,
       version: 3,
       rev: preCreateResult.rev,
-      prev: preCreateResult.prev ?? null,
+      prev: preCreateResult.prev ? CID.parse(preCreateResult.prev) : null,
       data: CID.parse(preCreateResult.data),
     }
     const preEncoded = cbor.encode(uncommit)
