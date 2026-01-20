@@ -13,9 +13,10 @@ import FundInfo from "./_components/FundInfo";
 import { useState } from "react";
 import HiddenPosts from "./_components/tabs/HiddenPosts";
 import HiddenComments from "./_components/tabs/HiddenComments";
-import Operations from "@/app/section/[sectionId]/manage/_components/tabs/Operations";
+import Operations from "./_components/tabs/Operations";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import PageNoAuth from "@/components/PageNoAuth";
+import HiddenReply from "./_components/tabs/HiddenReply";
 
 const page = () => {
   const { sectionId } = useParams<{ sectionId: string }>()
@@ -60,13 +61,16 @@ const page = () => {
         }, {
           name: '隐藏评论',
         },{
+          name: '隐藏回复',
+        },{
           name: '操作日志',
         }]}>
           <div className={S.tabsContent}>
             {tab === 0 && <TabNotice sectionId={sectionId} />}
             {tab === 1 && <HiddenPosts sectionId={sectionId} />}
             {tab === 2 && <HiddenComments sectionId={sectionId} />}
-            {tab === 3 && <Operations sectionId={sectionId} />}
+            {tab === 3 && <HiddenReply sectionId={sectionId} />}
+            {tab === 4 && <Operations sectionId={sectionId} />}
           </div>
         </Tabs>
 
