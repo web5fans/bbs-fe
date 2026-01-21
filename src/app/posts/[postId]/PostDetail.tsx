@@ -35,6 +35,7 @@ const PostDetail = (props: PostDetailProps) => {
         originPost={rootPost}
         sectionInfo={sectionInfo}
         refreshData={refreshRootPost}
+        className={'!z-10'}
       />
       <PostsContent
         componentRef={detailRef}
