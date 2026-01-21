@@ -81,6 +81,7 @@ const SectionDetailPage = () => {
             sectionId={sectionId}
             listEmptyRender={<EmptyPostsList goPublish={goToPublish} />}
             feedItemHeaderOpts={feedItemHeaderOpts}
+            classnames={{ content: S.content }}
           />
         </div>
         <div className={S.right}>

@@ -44,7 +44,7 @@ export async function userLogin(localStorage: TokenStorageType): Promise<FansWeb
     $type: 'fans.web5.ckb.preIndexAction#createSession',
   }
 
-  let preLogin: FansWeb5CkbPreIndexAction.Response
+  let preLogin: FansWeb5CkbPreIndexAction.Response | undefined = undefined
 
   try {
     preLogin = await pdsClient.fans.web5.ckb.preIndexAction({

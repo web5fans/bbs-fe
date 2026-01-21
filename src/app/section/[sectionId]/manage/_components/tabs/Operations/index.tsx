@@ -76,10 +76,10 @@ const Operations = ({ sectionId }: { sectionId: string }) => {
     dataIndex: 'action',
     width: '34%',
     render(row) {
-      const target = row.target
-      const actionNames = ['', '隐藏帖子', '公开帖子', '隐藏评论', '公开评论','隐藏回复','公开回复','隐藏回复','隐藏版区', '公开版区']
+      const actionNames = ['', '隐藏帖子', '公开帖子', '隐藏评论', '公开评论','隐藏回复','公开回复','隐藏版区', '公开版区']
+      const isHiddenOpt = [OPERATION_ACTION_TYPE_ENUM.DisablePost, OPERATION_ACTION_TYPE_ENUM.DisableComment, OPERATION_ACTION_TYPE_ENUM.DisableReply]
       return <p className={'truncate'}>
-        {actionNames[row.action_type] || row.action} {target.is_disabled ? `原因：${target.reasons_for_disabled}离开家阿斯蒂芬计划卡机收到回复` : ''}
+        {actionNames[row.action_type] || row.action} {isHiddenOpt.includes(Number(row.action_type)) ? `原因：${row.message}` : ''}
       </p>
     }
   },{
