@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import server from "@/server";
 import getSigningKeyInfo from "@/lib/signing-key";
 import { useToast } from "@/provider/toast";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const AppointModeratorModal = (props: {
   onClose: () => void
@@ -18,6 +19,7 @@ const AppointModeratorModal = (props: {
   defaultSection?: string
 }) => {
   const toast = useToast()
+  const { userProfile } = useCurrentUser()
   const [params, setParams] = useSetState<{ section?: string, did: string, name: string }>({
     section: props.defaultSection,
     did: '',
@@ -25,7 +27,9 @@ const AppointModeratorModal = (props: {
   })
 
   const { data: sectionList, run: fetchSections } = useRequest(async () => {
-    const result = await server<SectionItem[]>('/section/list', 'GET')
+    const result = await server<SectionItem[]>('/section/list', 'GET', {
+      repo: userProfile?.did
+    })
     const noOwner = result.filter(i => !i.owner?.did)
     return noOwner.map(i => ({
       ...i,
