@@ -12,7 +12,7 @@ import { PostFeedItemType } from "@/app/posts/utils";
 import PostFeedItem from "@/components/PostFeedItem";
 import { postUriToHref } from "@/lib/postUriHref";
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = 5
 
 type ISPageData = {
   list: PostFeedItemType[],
@@ -24,7 +24,7 @@ export type PostFeedType = {
   posts: PostFeedItemType[]
 }
 
-const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra, feedItemHeaderOpts, classnames }: {
+const PostsList = ({ sectionId, minLimit = 5, listEmptyRender, headerExtra, feedItemHeaderOpts, classnames }: {
   sectionId?: string
   minLimit?: number
   listEmptyRender?: React.ReactNode
@@ -36,7 +36,7 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra, fee
 }) => {
   const router = useRouter()
 
-  const [clickedShowMore, setClickedShowMore] = useState(false)
+  // const [clickedShowMore, setClickedShowMore] = useState(false)
   const { data: dataSource, loading, loadingMore, loadMore, noMore, reload } = useInfiniteScroll<ISPageData>(async (prevData) => {
 
     const { nextCursor } = prevData || {};
@@ -58,9 +58,9 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra, fee
     isNoMore: d => !d?.nextCursor,
   });
 
-  const showClickLoadMore = !clickedShowMore && (dataSource?.list.length || 0) > minLimit
+  // const showClickLoadMore = !clickedShowMore && (dataSource?.list.length || 0) > minLimit
 
-  const showList = showClickLoadMore ? dataSource?.list.slice(0, minLimit) : dataSource?.list
+  // const showList = showClickLoadMore ? dataSource?.list.slice(0, minLimit) : dataSource?.list
 
   if (dataSource?.list.length === 0 && listEmptyRender) {
     return <div className={S.wrap}>
@@ -77,7 +77,7 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra, fee
       {headerExtra}
     </div>
     <div className={cx(S.content, classnames?.content)}>
-      {showList?.map((item, index) => {
+      {dataSource?.list?.map((item, index) => {
         const uri = postUriToHref(item.uri)
         let href = `/posts/${uri}`
         if (sectionId) {
@@ -94,16 +94,16 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra, fee
       })}
 
 
-      {showClickLoadMore &&<div
-        className={S.load}
-        onClick={() => setClickedShowMore(true)}
-      >
-        <ArrowSDown className={S.arrow} />
-        加载更多
-      </div>}
+      {/*{showClickLoadMore &&<div*/}
+      {/*  className={S.load}*/}
+      {/*  onClick={() => setClickedShowMore(true)}*/}
+      {/*>*/}
+      {/*  <ArrowSDown className={S.arrow} />*/}
+      {/*  加载更多*/}
+      {/*</div>}*/}
 
       {
-        clickedShowMore && !loading && !noMore && (
+        !loading && !noMore && (
           <LoadMoreView onLoadMore={loadMore} />
         )
       }
