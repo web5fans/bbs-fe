@@ -1,6 +1,7 @@
 import {Extension} from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
-import { handleImageUpload } from "@/lib/tiptap-utils";
+import { getImagesDimensions, handleImageUpload } from "@/lib/tiptap-utils";
+import { showGlobalToast } from "@/provider/toast";
 
 export const EventHandler = Extension.create({
   name: 'eventHandler',
@@ -29,10 +30,21 @@ export const EventHandler = Extension.create({
             if (item?.type.indexOf("image") !== 0) {
               return false;
             }
+            const enableTypes = "image/png,image/jpg,image/jpeg,image/webp,image/gif".split(',')
+
+            if (!enableTypes.includes(item?.type)) {
+              showGlobalToast({
+                title: '文件类型只支持png,jpg,jpeg,webp,gif',
+                icon: 'error',
+              })
+              return false
+            }
             const file = item.getAsFile()
             if (file) {
               handleImageUpload(file, self.options.userDid).then(url => {
-                self.editor.commands.setImage({src: url})
+                getImagesDimensions(file).then(({ width, height }) => {
+                  self.editor.commands.setImage({src: url, style: `width: 100%; max-width: ${width}px; aspect-ratio: ${width}/${height};`})
+                })
               })
               return true
             }

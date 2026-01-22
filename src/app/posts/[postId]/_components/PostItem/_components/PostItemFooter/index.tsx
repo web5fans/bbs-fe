@@ -12,6 +12,8 @@ import TipDetailList from "../TipDetailList";
 import SwitchPostHideOrOpen from "../SwitchPostHideOrOpen";
 import { eventBus } from "@/lib/EventBus";
 import cx from "classnames";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 
 function formatDate(date: string) {
   return utcToLocal(date, 'YYYY/MM/DD HH:mm:ss')
@@ -37,6 +39,15 @@ const PostItemFooter = (props: {
   const [arrowPos, setArrowPos] = useState<{ left: string } | undefined>(undefined)
 
   const { openModal } = usePostCommentReply()
+
+  const { anchorInfo } = usePost()
+
+  useEffect(() => {
+    if (!anchorInfo || anchorInfo.comment.uri !== postInfo.uri) return
+    if (anchorInfo.reply) {
+      setShowType('reply')
+    }
+  }, []);
 
   const changeShowType = (type: ShowTypeType) => {
     if (showType === type) {
@@ -80,6 +91,17 @@ const PostItemFooter = (props: {
     })
   }
 
+  const editComment = () => {
+    openModal({
+      type: "comment",
+      postUri: rootUri,
+      sectionId,
+      refresh: props.refresh,
+      isEdit: true,
+      content: postInfo
+    })
+  }
+
   const showLikeList = () => {
     changeShowType('like')
   }
@@ -118,6 +140,7 @@ const PostItemFooter = (props: {
         showLikeList={showLikeList}
         reply={reply}
         replyTotal={replyTotal}
+        editComment={editComment}
         switchPostVisibility={props.switchPostVisibility}
       /> :  <MainPostFooterOpts
         postInfo={postInfo}
@@ -154,7 +177,7 @@ function MainPostFooterOpts(props: {
 }) {
   const { postInfo, floor } = props;
 
-  return <div className={S.rightPart}>
+  return <div className={S.mainPostRight}>
     <PostLike
       liked={postInfo.liked}
       likeCount={postInfo.like_count}
@@ -173,11 +196,19 @@ function FooterOptions(props: {
   showLikeList: () => void
   switchPostVisibility: () => void
   reply: () => void
+  editComment: () => void
   replyTotal: string
 }) {
   const { postInfo, floor, reply, replyTotal, switchPostVisibility } = props;
+  const { userProfile } = useCurrentUser()
+
+  const canEdit = userProfile?.did === postInfo.author.did
 
   return <div className={`${S.rightPart} ${S.otherPost}`}>
+    <div className={S.item}>
+      <span className={S.opt}>{postInfo.edited ? `更新于 ${formatDate(postInfo.edited)}` : formatDate(postInfo.created)}</span>
+      <span className={'shrink-0'}>{floor}楼</span>
+    </div>
     <div className={cx(S.item)}>
       <PostLike
         liked={postInfo.liked}
@@ -196,11 +227,8 @@ function FooterOptions(props: {
         className={S.reply}
         onClick={reply}
       >回复&nbsp;({replyTotal})</span>
-    </div>
 
-    <div className={S.item}>
-      <span className={S.opt}>{formatDate(postInfo.created)}</span>
-      <span className={'shrink-0'}>{floor}楼</span>
+      {canEdit && <span className={S.edit} onClick={props.editComment}>编辑</span>}
     </div>
   </div>
 }

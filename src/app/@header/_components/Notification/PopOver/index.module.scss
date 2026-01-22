@@ -1,0 +1,53 @@
+@use '@/styles/rem';
+@use '@/styles/scroll-bar';
+
+.popover {
+  position: absolute;
+  border: rem.px2flexible(1) solid #000;
+  background: #EAEAEA;
+  box-shadow: rem.px2flexible(2) rem.px2flexible(2) 0 0 #000;
+  padding: rem.px2flexible(10);
+  width: rem.px2flexible(270);
+  height: rem.px2flexible(330);
+  z-index: 10;
+  right: rem.px2flexible(22);
+  font-family: var(--font-CLFN);
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: rem.px2flexible(8);
+    .title {
+      font-size: rem.px2flexible(9);
+      font-weight: 500;
+    }
+
+    .readAll {
+      text-decoration: underline;
+      font-size: rem.px2flexible(7);
+      cursor: pointer;
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  .content {
+    flex: 1;
+    border: rem.px2flexible(1) solid #000;
+    background: #FFF;
+    box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) rem.px2flexible(3) 0 #DBDBDB inset;
+    overflow-y: auto;
+
+    @include scroll-bar.component-y-scroll;
+  }
+
+  .checkAll {
+    color: #6C6C6C;
+    font-size: rem.px2flexible(7);
+    margin-top: rem.px2flexible(8);
+  }
+}

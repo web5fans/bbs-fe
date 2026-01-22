@@ -4,6 +4,7 @@ import SectionEarth from "@/assets/posts/section.svg";
 import ReadIcon from "@/assets/posts/read.svg";
 import CommentIcon from "@/assets/posts/comment.svg";
 import type { SectionItem } from "@/app/posts/utils";
+import Image from "next/image";
 
 export default function SectionItem(props: {
   section: SectionItem;
@@ -19,7 +20,8 @@ export default function SectionItem(props: {
     onMouseEnter={() => router.prefetch(href)}
   >
     <div className={S.image}>
-      <SectionEarth className={S.earth} />
+      {section.image ? <img src={section.image} alt={''} />
+       : <SectionEarth className={S.earth} /> }
     </div>
     <div className={S.content}>
       <p className={S.cardTitle}>{section.name}</p>

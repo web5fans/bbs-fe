@@ -1,0 +1,112 @@
+@use "@/styles/rem";
+
+$userPaddingBlock: min(14px, #{rem.px2flexible(9)});
+
+.user {
+  display: flex;
+  padding: $userPaddingBlock rem.px2flexible(9);
+  border: rem.px2flexible(1) solid #000;
+  background: #FFF;
+  box-shadow: rem.px2flexible(1.5) rem.px2flexible(1.5) rem.px2flexible(3) 0 var(--150, #DBDBDB) inset;
+  flex-direction: column;
+  align-items: center;
+  //width: 210px;
+  flex-shrink: 0;
+  align-self: start;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--primary-color);
+    //color: var(--primary-color);
+  }
+
+  .divide {
+    width: 100%;
+    height: 1px;
+    background: #F3F3F3;
+    margin: rem.px2flexible(6) 0;
+  }
+
+  .avatarWrap {
+    position: relative;
+    margin-bottom: rem.px2flexible(10);
+    width: 100%;
+
+    &.normal {
+      margin-bottom: rem.px2flexible(6);
+      .poster {
+        display: none;
+      }
+    }
+
+    .poster {
+      width: rem.px2flexible(20);
+      height: rem.px2flexible(11);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+  }
+
+  .avatar {
+    width: rem.px2flexible(36);
+    height: rem.px2flexible(36);
+    font-size: rem.px2flexible(12);
+    margin: 0 auto;
+  }
+
+  .title {
+    font-size: rem.px2flexible(9);
+    font-weight: 500;
+    text-transform: capitalize;
+    text-align: center;
+    width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .identity {
+    display: flex;
+    align-items: center;
+    font-size: rem.px2flexible(6);
+    margin-top: rem.px2flexible(3);
+    justify-content: center;
+    text-align: center;
+    width: 0;
+
+    .bagde {
+      width: rem.px2flexible(13.5);
+      height:  rem.px2flexible(13.5);
+      display: none;
+    }
+  }
+
+  .postNum {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: rem.px2flexible(7);
+  }
+}
+
+@media screen and (min-width: 1024px){
+  .user {
+    padding: 38px 25px;
+    width: 210px;
+
+    .avatar {
+      width: 84px;
+      height: 84px;
+      font-size: 30px;
+    }
+
+    .postNum {
+      padding: 0 15px;
+    }
+
+    .identity .bagde {
+      display: block;
+    }
+  }
+}

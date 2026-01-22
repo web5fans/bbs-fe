@@ -1,0 +1,32 @@
+@use "@/styles/rem";
+
+.window {
+  max-width: 952px;
+  margin: rem.px2flexible(22) auto;
+
+  --card-window-header-padding-block: #{rem.px2flexible(4)};
+  --card-window-header-padding-inline: #{rem.px2flexible(8)};
+  --card-window-line-gap: #{rem.px2flexible(1.5)};
+  --card-window-title-size: #{rem.px2flexible(9)};
+  --card-window-title-padding-inline: #{rem.px2flexible(8)};
+}
+
+.wrap {
+  padding: rem.px2flexible(10);
+
+  .content {
+    min-height: rem.px2flexible(250);
+  }
+
+  .readAll {
+    font-size:  rem.px2flexible(7);
+    text-decoration: underline;
+    position: absolute;
+    right: 0;
+    top: rem.px2flexible(3);
+    cursor: pointer;
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}

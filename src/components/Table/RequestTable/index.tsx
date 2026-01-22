@@ -12,7 +12,7 @@ type RequestTableProps<T> = {
   afterLoading?: () => void
 } & Omit<TableProps<T>, 'data'>
 
-export default function RequestTable<T = any>(props: RequestTableProps<T>){
+export default function RequestTable<T>(props: RequestTableProps<T>){
   const { request, requestOptions, afterLoading, ...rest } = props;
   const { data, loading, pagination } = usePagination(request, {
     ...(requestOptions || {})

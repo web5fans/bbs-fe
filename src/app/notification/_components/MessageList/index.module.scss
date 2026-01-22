@@ -1,0 +1,5 @@
+@use "@/styles/rem";
+
+.minHeight {
+  min-height: rem.px2flexible(250);
+}

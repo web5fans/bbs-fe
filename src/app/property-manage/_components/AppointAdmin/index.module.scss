@@ -1,0 +1,40 @@
+@use "@/styles/rem";
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: rem.px2flexible(20);
+  margin-bottom: rem.px2flexible(20);
+
+  .name {
+    width: rem.px2flexible(150);
+  }
+  .did {
+    flex: 1;
+    margin-top: 0 !important;
+  }
+}
+
+.content {
+  font-size: rem.px2flexible(8);
+  .title {
+    span:first-child {
+     font-weight: 500;
+    }
+  }
+  ul{
+    list-style-type: disc;
+    margin-left: rem.px2flexible(10);
+  }
+}
+
+@media screen and (max-width: 913px) {
+  .container {
+    flex-direction: column;
+    gap: rem.px2flexible(20);
+
+    .name, .did {
+      width: 100%;
+    }
+  }
+}

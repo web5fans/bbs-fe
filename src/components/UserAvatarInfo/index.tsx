@@ -5,24 +5,24 @@ import cx from "classnames";
 
 const UserAvatarInfo = ({ author, className }: {
   author: {
-    avatar: string
-    name: string
-    address: string
+    avatar?: string
+    name?: string
+    address?: string
   }
   className?: string
 }) => {
   return <div className={cx(S.userInfo, className)}>
     <Avatar
-      nickname={author.avatar}
+      nickname={author.avatar || '?'}
       className={S.avatar}
     />
     <div className={S.info}>
-      <p className={S.name}>{author.name}</p>
-      <CopyText
+      <p className={S.name}>{author.name || '--'}</p>
+      {!author.address ? <span className={S.address}>--</span> : <CopyText
         text={author.address}
         ellipsis
         className={{ icon: S.copy, wrap: S.address }}
-      />
+      />}
     </div>
   </div>
 }

@@ -40,12 +40,11 @@ const SectionCard = (props: {
       </div>
     </div>
 
-    <EditInfoModal
-      visible={visible}
+    {visible && <EditInfoModal
       refreshDetail={refreshDetail}
       onClose={() => setVisible(false)}
       sectionInfo={sectionInfo}
-    />
+    />}
   </CardWindow>
 }
 

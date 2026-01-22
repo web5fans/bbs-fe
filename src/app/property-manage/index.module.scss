@@ -1,0 +1,28 @@
+@use "@/styles/rem";
+
+.authTitle {
+  margin-top: rem.px2flexible(10) !important;
+  margin-bottom: rem.px2flexible(4) !important;
+}
+
+.authUl {
+  list-style-type: disc;
+  font-size: rem.px2flexible(8);
+  color: #6C6C6C;
+  margin-bottom: rem.px2flexible(10);
+}
+
+.window {
+  max-width: 1280px;
+  margin: rem.px2flexible(22) auto;
+
+  --card-window-line-gap: #{rem.px2flexible(1)};
+}
+
+.content {
+  padding: rem.px2flexible(10);
+
+  .gap {
+    height: rem.px2flexible(20);
+  }
+}

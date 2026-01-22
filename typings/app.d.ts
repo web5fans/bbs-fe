@@ -15,10 +15,6 @@ declare namespace App {
 
   type Entry<P = {}> = React.FC<React.PropsWithChildren<P & { params: Params }>>
 
-  declare type Page<P = {}> = Entry<P>
-
   declare type Layout<P = {}> = Entry<P>
-
-  declare type LayoutWithParallel<R> = Layout<Record<R, React.ReactNode>>
 
 }

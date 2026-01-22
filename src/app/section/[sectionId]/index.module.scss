@@ -12,8 +12,11 @@
   }
 
   .left {
-    flex: 1;
-    overflow: hidden;
+    width: calc(100% - 40px - 290px);
+
+    .content {
+      overflow: initial;
+    }
   }
 
   .right {
@@ -29,6 +32,9 @@
 
 @media screen and (max-width: 1023px) {
   .container {
+    .left {
+      width: 100%;
+    }
     .right {
       display: none;
     }

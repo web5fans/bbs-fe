@@ -4,6 +4,15 @@
   --card-window-line-gap: #{rem.px2flexible(1)};
 }
 
+.loadingWrap {
+  min-height: rem.px2flexible(100);
+
+  .loading {
+    width: rem.px2flexible(17);
+    height: rem.px2flexible(17);
+  }
+}
+
 .wrap {
   padding: rem.px2flexible(15);
 }

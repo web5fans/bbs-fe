@@ -4,7 +4,7 @@ import cx from "classnames";
 import S from "./index.module.scss";
 import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
 
-export default function HtmlContent(props: {html: string}) {
+export default function HtmlContent(props: {html: string; scrollToTarget?: () => void}) {
   const [showDetailVis, setShowDetailVis] = useState(false)
   const [expand, { toggle }] = useBoolean(false)
 
@@ -36,7 +36,7 @@ export default function HtmlContent(props: {html: string}) {
       className={cx(S.htmlContent, expand ? '!max-h-none' : '')}
       ref={htmlRef}
     >
-      <JSONToHtml html={props.html} />
+      <JSONToHtml html={props.html} htmlDidMount={props.scrollToTarget} />
     </div>
     {showDetailVis && <p
       className={S.showDetail}

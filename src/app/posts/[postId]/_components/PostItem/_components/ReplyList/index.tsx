@@ -4,7 +4,7 @@ import server from "@/server";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
-import { Ref, useEffect, useImperativeHandle, useState } from "react";
+import { Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
 import ArrowIcon from '@/assets/arrow-s.svg';
 import ShowCreateTime from "./ShowCreateTime";
 import HtmlContent from "./HTMLContent";
@@ -14,6 +14,7 @@ import { eventBus } from "@/lib/EventBus";
 import TipModal, { AuthorType } from "@/app/posts/[postId]/_components/PostItem/_components/Donate/TipModal";
 import DonateIcon from '@/assets/posts/donate.svg'
 import cx from "classnames";
+import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 
 export type ReplyListRefProps = { reload: () => void }
 
@@ -30,14 +31,14 @@ const ReplyList = (props: {
 
   const { openModal } = usePostCommentReply()
 
+  const { anchorInfo, clearAnchorInfo } = usePost()
+
   const { data: replyListInfo, loading, loadingMore, loadMore, noMore, reload, mutate } = useInfiniteScroll(async (prevData) => {
-
-    const { nextCursor } = prevData || {};
-
+    const limit = anchorInfo?.reply?.idx || 5
     const pagedData = await server('/reply/list', 'POST', {
       comment: props.uri,
-      limit: 5,
-      cursor: nextCursor,
+      limit: prevData?.nextCursor ? 5 : limit,
+      cursor: prevData?.nextCursor,
       viewer: userProfile?.did
     })
 
@@ -70,19 +71,29 @@ const ReplyList = (props: {
     }
   }, []);
 
-  const reply = (info: any) => {
+  const reply = (info: any, isEdit?: boolean) => {
+    const params = {
+      toUserName: info.author.displayName,
+      toDid: info.author.did
+    }
+    if (isEdit && info.to) {
+      params.toDid = info.to?.did
+      params.toUserName = info.to?.displayName
+    }
     openModal({
       type: 'reply',
       postUri: props.rootUri,
       commentUri: props.uri,
-      toUserName: info.author.displayName,
       sectionId: props.sectionId,
-      toDid: info.author.did,
+      ...params,
       refresh: () => {
         reload()
+        if (isEdit) return
         const total = Number(props.total) + 1
         props.changeTotal(`${total}`)
-      }
+      },
+      isEdit,
+      content: info
     })
   }
 
@@ -94,8 +105,9 @@ const ReplyList = (props: {
         replyItem={info}
         sectionId={props.sectionId}
         key={info.uri}
-        toReply={() => reply(info)}
+        toReply={(isEdit) => reply(info, isEdit)}
         showReplyEntrance={isWhiteUser}
+        showEdit={userProfile?.did === info.author.did}
       />
     })}
     {props.total > 5 && (props.total !== `${replyListInfo.list.length}`) && <div
@@ -111,13 +123,18 @@ export default ReplyList;
 function ReplyItem(props: {
   replyItem: any
   sectionId: string
-  toReply: () => void
+  toReply: (isEdit?: boolean) => void
   showReplyEntrance?: boolean
+  showEdit?: boolean
 }) {
-  const { replyItem, sectionId, showReplyEntrance } = props;
+  const { replyItem, sectionId, showReplyEntrance, showEdit } = props;
   const [disabled, setDisabled] = useState(false)
 
   const [donate, setDonate] = useState(0)
+
+  const wrapRef = useRef<HTMLDivElement>(null)
+
+  const { anchorInfo, clearAnchorInfo } = usePost()
 
   useEffect(() => {
     setDisabled(replyItem.is_disabled)
@@ -134,7 +151,16 @@ function ReplyItem(props: {
 
   const totalDonate = (donate / Math.pow(10, 8)).toFixed(2)
 
-  return <div className={S.replyItem}>
+  const scrollToTarget = () => {
+    if (!anchorInfo || !anchorInfo?.reply) return;
+    if (anchorInfo.reply.uri !== replyItem.uri) return
+    wrapRef.current?.scrollIntoView({
+      behavior: 'smooth'
+    })
+    clearAnchorInfo()
+  }
+
+  return <div className={S.replyItem} ref={wrapRef}>
     {disabled && <div className={S.mask} />}
     <div className={S.title}>
       <div className={S.left}>
@@ -149,7 +175,7 @@ function ReplyItem(props: {
           !!replyItem.to?.displayName && <span>&nbsp;回复&nbsp;
             <span className={'font-medium'}>{replyItem.to?.displayName}</span></span>
         }
-        <ShowCreateTime created={replyItem.created} />
+        <ShowCreateTime created={replyItem.edited ||replyItem.created} prefix={replyItem.edited ? '更新于' : ''} />
       </div>
 
       {/* 窗口小于1024px时，布局变化 */}
@@ -165,7 +191,7 @@ function ReplyItem(props: {
       </div>
     </div>
     <div className={S.contentWrap}>
-      <HtmlContent html={replyItem.text} />
+      <HtmlContent html={replyItem.text} scrollToTarget={scrollToTarget} />
       <div className={S.footer}>
         <div className={S.leftOpts}>
           <DonateIcon className={S.icon} />
@@ -190,7 +216,8 @@ function ReplyItem(props: {
             className={S.hideReply}
             nsid={'reply'}
           />
-          {showReplyEntrance && <span className={S.reply} onClick={props.toReply}>回复</span>}
+          {showReplyEntrance && <span className={S.reply} onClick={() => props.toReply()}>回复</span>}
+          {showEdit && <span className={S.edit} onClick={() => props.toReply(true)}>编辑</span>}
         </div>
       </div>
     </div>

@@ -5,7 +5,6 @@ import TipTapEditor, { EditorRefType, EditorUpdateData } from "@/components/TipT
 import Button from "@/components/Button";
 import FaceIcon from '@/assets/login/multiDid/face.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
-import PublishPostCancelButton from "@/components/PublishPostCancelButton";
 import { useRef, useState } from "react";
 import { postsWritesPDSOperation } from "@/app/posts/utils";
 import { useToast } from "@/provider/toast";
@@ -13,6 +12,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import Link from "next/link";
 import { APPLY_WHITE_LIST_URL } from "@/constant/constant";
 import { checkEditorContent } from "@/lib/tiptap-utils";
+import DiscussCancelButton from "./DiscussCancelButton";
 
 const PostDiscuss = (props: {
   postUri: string
@@ -95,7 +95,7 @@ const PostDiscuss = (props: {
             onClick={publishComment}
           >发布</Button>
       }
-      <PublishPostCancelButton className={S.publish} disabled={publishDis || !richText} />
+      <DiscussCancelButton className={S.publish} disabled={publishDis || !richText} />
     </div>
   </div>
 }

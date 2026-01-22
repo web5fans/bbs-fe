@@ -1,0 +1,33 @@
+@use "@/styles/rem";
+
+.wrap {
+  .tabs {
+    display: flex;
+    margin-left: rem.px2flexible(1);
+    position: relative;
+    > span {
+      display: flex;
+      align-items: center;
+      height: rem.px2flexible(24);
+      border: rem.px2flexible(1) solid var(--black, #000);
+      border-bottom: none;
+      background: var(--white, #FFF);
+      padding: 0 rem.px2flexible(14);
+      font-size: rem.px2flexible(9);
+      cursor: pointer;
+      margin-left: rem.px2flexible(-1);
+
+      &.active {
+        background: var(--primary-color);
+        color: #FFFFFF;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .content {
+    border: rem.px2flexible(1) solid #000;
+    background: #FFF;
+    padding: rem.px2flexible(10);
+  }
+}

@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { useRequest } from "ahooks";
 import { getPostUriHref } from "@/lib/postUriHref";
 import { LayoutCenter } from "@/components/Layout";
+import Post404Auth from "@/app/posts/[postId]/_components/Post404Auth";
 
 export default function SectionPostPage(){
   const { postId, sectionId } = useParams<{ postId: string; sectionId: string }>()
@@ -24,21 +25,22 @@ export default function SectionPostPage(){
   const decodeId = getPostUriHref(postId)
 
   return <LayoutCenter>
-    <PostDetail
-      sectionInfo={sectionInfo}
-      postId={decodeId}
-      breadCrumb={<BreadCrumbs
-        className={S.breadCrumb}
-        breads={[{
-          title: '首页',
-          route: '/posts'
-        }, {
-          title: sectionInfo?.name || '',
-          route: `/section/${sectionId}`
-        }, {
-          title: '帖子详情'
-        }]}
-      />}
-    />
+    <Post404Auth postId={decodeId} section={sectionInfo}>
+      <PostDetail
+        postId={decodeId}
+        breadCrumb={<BreadCrumbs
+          className={S.breadCrumb}
+          breads={[{
+            title: '首页',
+            route: '/posts'
+          }, {
+            title: sectionInfo?.name || '',
+            route: `/section/${sectionId}`
+          }, {
+            title: '帖子详情'
+          }]}
+        />}
+      />
+    </Post404Auth>
   </LayoutCenter>
 }

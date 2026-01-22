@@ -2,8 +2,6 @@ import S from './index.module.scss'
 import Logo from '@/assets/fund/fund.svg'
 import numeral from "numeral";
 import Button from "@/components/Button";
-import FundDonate from "@/app/section/[sectionId]/_components/FundDonate";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useBoolean } from "ahooks";
 import { useWallet } from "@/provider/WalletProvider";

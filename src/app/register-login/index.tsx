@@ -16,6 +16,7 @@ import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import { LayoutCenter } from "@/components/Layout";
 import ImportDid from "@/app/register-login/(components)/ImportDid";
 import { ExportWebDidWindow } from "@/components/ExportWeb5DidModal";
+import preloadImage from "@/lib/preloadImage";
 
 type WindowTypeInfoType = {
   type: 'register' | 'export'
@@ -49,6 +50,11 @@ export default function RegisterLogin() {
       })
     }
   }, [visible]);
+
+  useEffect(() => {
+    preloadImage('/assets/login/byte-static.png')
+    preloadImage('/assets/login/byte-static-m.png')
+  }, []);
 
   const stepRender = useMemo(() => {
     switch (curStep) {

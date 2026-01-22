@@ -7,6 +7,7 @@ import { CloseIcon } from "@/components/TipTapEditor/components/tiptap-icons/clo
 import "@/components/TipTapEditor/components/tiptap-node/image-upload-node/image-upload-node.scss"
 import Uploading from "./uploading";
 import { useToast } from "@/provider/toast";
+import { getImagesDimensions } from "@/lib/tiptap-utils";
 
 export interface FileItem {
   id: string
@@ -352,17 +353,25 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
     if (url) {
       const pos = props.getPos()
       const filename = files[0]?.name.replace(/\.[^/.]+$/, "") || "unknown"
+      const { width, height } = await getImagesDimensions(files[0])
+      // console.log('w', width, height)
+      // style: `width:100%;max-width:${width}px;aspect-ratio:${width}/${height};`
 
       props.editor
         .chain()
         .focus()
         .deleteRange({ from: pos, to: pos + 1 })
-        .insertContentAt(pos, [
-          {
-            type: "image",
-            attrs: { src: url, alt: filename, title: filename },
-          },
-        ])
+        .insertContentAt(pos, {
+          type: 'image',
+          attrs: {
+            src: url,
+            alt: filename,
+            title: filename,
+            width,
+            height,
+            style: `width: 100%; max-width: ${width}px; aspect-ratio: ${width}/${height};`
+          }
+        })
         .run()
     }
   }

@@ -13,7 +13,7 @@
   max-width: 150px;
   //width: 100%;
   aspect-ratio: 1;
-  background: url("/assets/section-iconx2.png") no-repeat;
+  background: var(--section-image, url("/assets/section-iconx2.png")) no-repeat;
   background-size: contain;
   flex-shrink: 0;
   margin-right: rem.px2flexible(10);

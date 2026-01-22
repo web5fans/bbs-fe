@@ -9,3 +9,7 @@ export default function getPDSClient() {
   }
   return agent;
 }
+
+export function setPDSClient(service: string) {
+  agent = new AtpAgent({ service });
+}

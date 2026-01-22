@@ -24,12 +24,15 @@ export type PostFeedType = {
   posts: PostFeedItemType[]
 }
 
-const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra, feedItemHeaderOpts }: {
+const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra, feedItemHeaderOpts, classnames }: {
   sectionId?: string
   minLimit?: number
   listEmptyRender?: React.ReactNode
   headerExtra?: React.ReactNode
   feedItemHeaderOpts?: (post: PostFeedItemType, hover: boolean, reload: () => void) => React.ReactNode;
+  classnames?: {
+    content?: string
+  }
 }) => {
   const router = useRouter()
 
@@ -62,7 +65,7 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra, fee
   if (dataSource?.list.length === 0 && listEmptyRender) {
     return <div className={S.wrap}>
       <p className={S.title}>最新帖子</p>
-      <div className={cx(S.content)}>
+      <div className={cx(S.content, classnames?.content)}>
         {listEmptyRender}
       </div>
     </div>
@@ -73,7 +76,7 @@ const PostsList = ({ sectionId, minLimit = 20, listEmptyRender, headerExtra, fee
       <span>最新帖子</span>
       {headerExtra}
     </div>
-    <div className={cx(S.content)}>
+    <div className={cx(S.content, classnames?.content)}>
       {showList?.map((item, index) => {
         const uri = postUriToHref(item.uri)
         let href = `/posts/${uri}`

@@ -12,7 +12,8 @@
     font-family: var(--font-CLFN);
     font-weight: 500;
     line-height: 1;
-    margin-bottom: rem.px2flexible(9);
+    margin-bottom: rem.px2flexible(12);
+    position: relative;
   }
 
   .header {
@@ -22,14 +23,11 @@
 
     .inputWrap {
       flex: 1;
-      max-width: none;
       min-width: rem.px2flexible(164);
 
       --input-font-size: #{rem.px2flexible(10)};
       --input-danger-text-color: #000;
       --caret-bottom: #{rem.px2flexible(9)};
-
-      width: 100%;
       height: rem.px2flexible(30);
       box-shadow: none !important;
       //border: 1px solid;

@@ -2,11 +2,21 @@
 const uriPrefix = ''
 
 export function postUriToHref(uri: string): string {
-  const linkuri = uri.replace(uriPrefix, '')
-  return encodeURIComponent(linkuri)
+  return uri.replaceAll("at://", "at_")
+                     .replaceAll(':', "_")
+                     .replaceAll('/', "-");
 }
 
 export function getPostUriHref(uri: string): string {
-  const linkUri = decodeURIComponent(uri)
-  return uriPrefix + linkUri
+  return uri.replaceAll("at_", "at://")
+                     .replaceAll('_', ":")
+                     .replaceAll('-', "/");
+}
+
+export function formatLinkParam(f: string) {
+  return f.replaceAll(':', "_")
+}
+
+export function parseLinkParam(f: string) {
+  return f.replaceAll('_', ":")
 }

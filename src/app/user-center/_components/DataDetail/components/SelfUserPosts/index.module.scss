@@ -1,0 +1,8 @@
+@use "@/styles/rem";
+
+.button {
+  width: rem.px2flexible(60);
+  height: rem.px2flexible(20);
+  font-size: rem.px2flexible(7);
+  margin-bottom: rem.px2flexible(8);
+}

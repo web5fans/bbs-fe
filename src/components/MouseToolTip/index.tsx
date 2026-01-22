@@ -13,14 +13,14 @@ const MouseToolTip = (props: {
   const { open = true, children, message, tipClassName, ...rest } = props;
   const tipsRef = useRef<HTMLDivElement>(null)
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: any) => {
     if (tipsRef.current) {
       tipsRef.current.style.left = e.nativeEvent.x - 8 + 'px';
       tipsRef.current.style.top = e.nativeEvent.y + 20 + 'px';
     }
   };
 
-  const mouseEnter = (e) => {
+  const mouseEnter = (e: any) => {
     if (!tipsRef.current || !open) return
     if (tipsRef.current) {
       tipsRef.current.style.left = e.nativeEvent.x + 'px';

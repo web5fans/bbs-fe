@@ -4,7 +4,6 @@ import * as React from "react"
 import { Editor, EditorContent, EditorContext, generateHTML, generateJSON, useEditor } from "@tiptap/react"
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
-import { Image } from "@tiptap/extension-image"
 import { TextAlign } from "@tiptap/extension-text-align"
 import { Typography } from "@tiptap/extension-typography"
 import { Highlight } from "@tiptap/extension-highlight"
@@ -15,6 +14,7 @@ import { Placeholder } from "@tiptap/extension-placeholder"
 
 // --- Custom Extensions ---
 import { Link } from "@/components/TipTapEditor/components/tiptap-extension/link-extension"
+import { CustomImage } from "@/components/TipTapEditor/components/tiptap-node/image-node/image-node-extension"
 import { Selection } from "@/components/TipTapEditor/components/tiptap-extension/selection-extension"
 import { TrailingNode } from "@/components/TipTapEditor/components/tiptap-extension/trailing-node-extension"
 
@@ -228,7 +228,7 @@ export default function TipTapEditor(props: TipTapEditorProps) {
       Underline,
       LiteralTab,
       Highlight.configure({ multicolor: true }),
-      Image,
+      CustomImage,
       Typography,
       Superscript,
       Subscript,

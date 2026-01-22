@@ -171,12 +171,16 @@
       }
     }
 
-    .reply {
+    .reply, .edit {
       color: black;
       cursor: pointer;
       &:hover {
         color: var(--primary-color);
       }
+    }
+
+    .edit {
+      margin-left: rem.px2flexible(8);
     }
   }
 

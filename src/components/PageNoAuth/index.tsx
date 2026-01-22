@@ -12,6 +12,7 @@ const PageNoAuth = (props: {
     onClick: () => void
   }
   titleClassName?: string
+  children?: React.ReactNode
 }) => {
   const { title, buttonProps, titleClassName } = props;
 
@@ -19,6 +20,7 @@ const PageNoAuth = (props: {
     <div className={S.content}>
       <FaceIcon className={S.faceIcon} />
       <p className={cx(S.title, titleClassName)}>{title}</p>
+      {props.children}
       <Button
         type={'primary'}
         className={S.button}

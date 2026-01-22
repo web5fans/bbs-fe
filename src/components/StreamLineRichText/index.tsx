@@ -8,8 +8,9 @@ const StreamLineRichText = (props: {
   richText: string
   postUri?: string
   className?: string
+  href?: string
 }) => {
-  const { richText, postUri, className } = props
+  const { richText, postUri, className, href } = props
   const [innerRichText, setInnerRichText] = useState('')
 
   useEffect(() => {
@@ -29,13 +30,13 @@ const StreamLineRichText = (props: {
     setInnerRichText(tempDiv.innerText)
   }, [richText]);
 
-  const href = '/posts/' + postUriToHref(postUri || '')
+  const url = '/posts/' + postUriToHref(postUri || '')
 
-  if (!postUri) {
+  if (!postUri && !href) {
     return <div className={className}>{innerRichText}</div>
   }
 
-  return <Link href={href}>
+  return <Link href={href || url}>
     <div className={className}>{innerRichText}</div>
   </Link>
 }

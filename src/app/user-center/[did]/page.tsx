@@ -11,10 +11,11 @@ import DataDetail from "@/app/user-center/_components/DataDetail";
 import { useParams, useRouter } from "next/navigation";
 import BBSDataOther from "@/app/user-center/_components/BBSDataOther";
 import { LayoutCenter } from "@/components/Layout";
+import { parseLinkParam } from "@/lib/postUriHref";
 
 const UserProfilePage = () => {
   const { did } = useParams<{ did: string }>()
-  const decodeDid = decodeURIComponent(did)
+  const decodeDid = parseLinkParam(did)
 
   const router = useRouter();
 

@@ -1,0 +1,31 @@
+@use '@/styles/rem';
+
+.icon {
+  position: relative;
+  width: rem.px2flexible(20);
+  height: rem.px2flexible(20);
+  cursor: pointer;
+
+  &.active, &:hover {
+    color: var(--primary-color);
+  }
+
+  > svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.unread {
+  position: absolute;
+  width: rem.px2flexible(4);
+  height: rem.px2flexible(4);
+  border-radius: 100%;
+  background: #CB2C3C;
+  top: rem.px2flexible(1);
+  right: rem.px2flexible(1);
+}
+
+.mouseTips {
+  width: auto !important;
+}

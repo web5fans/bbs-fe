@@ -2,20 +2,19 @@ import server from "@/server";
 import getPDSClient from "@/lib/pdsClient";
 import storage from "@/lib/storage";
 import * as crypto from '@atproto/crypto'
-import { signCommit, UnsignedCommit } from '@atproto/repo'
+import { UnsignedCommit } from '@atproto/repo'
 import { uint8ArrayToHex } from "@/lib/dag-cbor";
 import { CID } from 'multiformats/cid'
 import * as cbor from '@ipld/dag-cbor'
 import { TID } from '@atproto/common-web'
 import dayjs from "dayjs";
-import { showGlobalToast } from "@/provider/toast";
 import { Secp256k1Keypair } from "@atproto/crypto";
 import sessionWrapApi from "@/lib/wrapApiAutoSession";
 
 export type PostFeedItemType = {
   uri: string,
   cid: string,
-  author: { displayName: string, [key: string]: string },
+  author: { displayName: string, [key: string]: string, did: string },
   title: string,
   text: string,
   visited_count: string,
@@ -25,10 +24,22 @@ export type PostFeedItemType = {
   updated: string, // 时间
   created: string, // 时间
   section: string,       // 版区名称
+  section_id: string,
   is_top: boolean
   is_announcement: boolean
   is_disabled: boolean
+  is_draft: boolean
   reasons_for_disabled?: string
+  edited?: string
+}
+
+export type CommentAllPostType = PostFeedItemType & {
+  comment_uri: string
+  comment_text: string
+  comment_created: string
+  comment_reasons_for_disabled: string | null
+  comment_disabled: boolean | null
+  comment_updated?: string
 }
 
 export type SectionItem = {
@@ -42,12 +53,16 @@ export type SectionItem = {
   owner?: { did: string; displayName?: string } // 版主
   description?: string // 描述
   administrators: {did: string; [key: string]: any}[]  // 管理员列表
+  is_disabled?: boolean
+  owner_set_time: string | null
+  image: string | null
 }
 
 /* 获取版区列表 */
 export async function getSectionList(did?: string) {
   return await server<SectionItem[]>('/section/list', 'GET', {
-    repo: did
+    repo: did,
+    is_disabled: false
   })
 }
 
@@ -58,11 +73,14 @@ type PostRecordType = {
   text: string;
   edited?: string
   created?: string
+  is_draft?: boolean // 是否是草稿
+  is_announcement?: boolean // 是否是草稿
 } | {
   $type: 'app.bbs.comment'
   post: string  // 原帖uri
   text: string;
   section_id: string;
+  edited?: string
 } | {
   $type: 'app.actor.profile'
   displayName: string;
@@ -79,27 +97,30 @@ type PostRecordType = {
   to?: string   // 对方did, 有就填，没有就是直接回复评论的
   text: string
   section_id: string
+  edited?: string
 }
 
 type CreatePostResponse = {
-  commit: {
+  commit?: {
     cid: string
     rev: string
   },
-  results: {
+  results?: {
     $type: "fans.web5.ckb.directWrites#createResult"
     cid: string
     uri: string
   }[]
 }
 
-/* 发帖、回帖、点赞、编辑帖子PDS写入操作 */
-export async function postsWritesPDSOperation(params: {
+export type WritePDSOptParamsType = {
   record: PostRecordType
   did: string
   rkey?: string
-  type?: 'update' | 'create'
-}) {
+  type?: 'update' | 'create' | 'delete'
+}
+
+/* 发帖、回帖、点赞、编辑帖子PDS写入操作 */
+export async function postsWritesPDSOperation(params: WritePDSOptParamsType) {
   const operateType = params.type || 'create'
   const pdsClient = getPDSClient()
 
@@ -113,7 +134,8 @@ export async function postsWritesPDSOperation(params: {
   const $typeMap = {
     create: "fans.web5.ckb.preDirectWrites#create",
     update: "fans.web5.ckb.preDirectWrites#update",
-  }
+    delete: "fans.web5.ckb.preDirectWrites#delete",
+  } as const
 
   const writeRes = await sessionWrapApi(() => pdsClient.fans.web5.ckb.preDirectWrites({
     repo: params.did,
@@ -149,7 +171,6 @@ export async function postsWritesPDSOperation(params: {
     throw 'sign bytes not consistent'
   }
 
-  // const commit = await signCommit(uncommit, keyPair)  会报错，所以就把源码拿出来了
   const encoded = cbor.encode(uncommit)
   const sig = await keyPair.sign(encoded)
   const commit =  {
@@ -176,23 +197,33 @@ export async function postsWritesPDSOperation(params: {
     },
   }
 
-  if (operateType === 'update') {
-    const res = await server<CreatePostResponse>('/record/update', 'POST', serverParams)
+  let requestUrl = ''
 
-    return res.results[0].uri
+  switch (operateType) {
+    case "create":
+      requestUrl = '/record/create'
+      break;
+    case "update":
+      requestUrl = '/record/update'
+      break;
+    case "delete":
+      requestUrl = '/record/delete'
+      break
   }
   
-  const res = await server<CreatePostResponse>('/record/create', 'POST', serverParams)
+  const res = await server<CreatePostResponse>(requestUrl, 'POST', serverParams)
 
-  return res.results[0].uri
+  return {
+    uri: res?.results?.[0].uri,
+    created: newRecord.created
+  }
 }
 
 export type PostOptParamsType = {
-  nsid: 'app.bbs.post' | 'app.bbs.comment' | 'app.bbs.reply'
   uri: string
   is_top?: boolean
   is_announcement?: boolean
-} & ({ is_disabled: true; reasons_for_disabled: string } | { is_disabled?: boolean })
+} & ({ is_disabled: true; reasons_for_disabled: string } | { is_disabled?: boolean; reasons_for_disabled?: string })
 
 export async function updatePostByAdmin(params: PostOptParamsType): Promise<void> {
   const storageInfo = storage.getToken()
@@ -205,11 +236,16 @@ export async function updatePostByAdmin(params: PostOptParamsType): Promise<void
 
   const signingKey = keyPair.did()
 
+  const paramsObj = {
+    ...params,
+    timestamp: dayjs().utc().unix()
+  }
+
   const encoded = cbor.encode({
     is_top: null,
     is_announcement: null,
     is_disabled: null,
-    ...params,
+    ...paramsObj,
     reasons_for_disabled: params.reasons_for_disabled || null,
   })
   const sig = await keyPair.sign(encoded)
@@ -217,7 +253,7 @@ export async function updatePostByAdmin(params: PostOptParamsType): Promise<void
   await server('/admin/update_tag', 'POST', {
     did,
     signing_key_did: signingKey,
-    params,
+    params: paramsObj,
     signed_bytes: uint8ArrayToHex(sig),
   })
 }

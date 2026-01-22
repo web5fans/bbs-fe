@@ -1,0 +1,8 @@
+@use "@/styles/rem";
+
+.wrap {
+  .search {
+    width: rem.px2flexible(150);
+    margin-bottom: rem.px2flexible(12);
+  }
+}

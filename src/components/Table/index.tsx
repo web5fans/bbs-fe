@@ -8,7 +8,7 @@ export type TableProps<T> = {
     title: string | JSX.Element;
     dataIndex: string;
     width?: string;
-    render?: (record: T | any, index: number) => any
+    render?: (record: T, index: number) => any
     info?: string | JSX.Element
     align?: "left" | "center" | 'right'
   }[];
@@ -19,11 +19,13 @@ export type TableProps<T> = {
   loading?: boolean
 }
 
-export default function Table<T>(props: TableProps<T>): JSX.Element {
+export default function Table<T extends {[key: string]: any}>(props: TableProps<T>): JSX.Element {
   const { columns, data, scroll, loading } = props;
 
+  const hasColWidth = columns.some(col => col.width)
+
   return <div className={S.wrap}>
-    <table className={S.table} style={{ minWidth: scroll?.x }}>
+    <table className={S.table} style={{ minWidth: scroll?.x, tableLayout: hasColWidth ? 'fixed' : 'auto' }}>
       <thead>
       <tr>
         {columns.map((col, cdx) => {
@@ -51,7 +53,7 @@ export default function Table<T>(props: TableProps<T>): JSX.Element {
       </tr>
       </thead>
       <tbody>
-      {data.length > 0 ? data.map((d, idx) => <tr>
+      {data.length > 0 ? data.map((d, idx) => <tr key={`r${idx}`}>
         {columns.map((col, cdx) => {
           const value = col.render?.(d, idx) || d[col.dataIndex]
           return <td

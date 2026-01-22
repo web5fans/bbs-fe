@@ -1,7 +1,7 @@
 import S from './index.module.scss'
 import FlatBottomedCard from "@/components/FlatBottomedCard";
 import UploadIcon from '@/assets/login/upload.svg'
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import EnterPassword from "../EnterPassword";
 import PINPassword from "../EnterPassword/PINPassword";
 import jsQR from "jsqr";
@@ -10,6 +10,7 @@ import { QRCODE_TIME_ENCRYPT_KEY } from "@/constant/constant";
 import { QRCodeDataType } from "@/app/user-center/_components/KeyQRCodeModal/QRCodeStep";
 import ImportLoading from "@/app/register-login/(components)/ImportDid/FileImport/ImportLoading";
 import useUserInfoStore from "@/store/userInfo";
+import preloadImage from "@/lib/preloadImage";
 
 const FileImport = (props: {
   jumpToMain: () => void
@@ -22,6 +23,10 @@ const FileImport = (props: {
   const [errMessage, setErrMessage] = useState<string | undefined>()
 
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    preloadImage('/assets/import-did/loading-wrap.png');
+  }, []);
 
   const readFile = (file: File) => {
     const reader = new FileReader();

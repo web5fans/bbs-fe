@@ -1,0 +1,15 @@
+@use "@/styles/rem";
+
+.loading {
+  font-size: var(--balance-font-size, #{rem.px2flexible(24)});
+}
+
+.num {
+  span:first-child {
+    font-size: var(--balance-font-size, #{rem.px2flexible(24)});
+    font-weight: 500;
+  }
+  span:last-child {
+    font-size: var(--balance-unit-font-size, #{rem.px2flexible(10)});
+  }
+}

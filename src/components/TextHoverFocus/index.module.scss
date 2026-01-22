@@ -1,0 +1,46 @@
+@use "@/styles/rem";
+
+.wrap {
+  text-align: center;
+  cursor: pointer;
+
+  .inner {
+    display: inline-flex;
+    align-items: center;
+    gap: rem.px2flexible(5);
+    font-size: rem.px2flexible(7);
+    position: relative;
+
+    .divide {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: #000000;
+    }
+  }
+
+  &:hover {
+    color: var(--primary-color);
+
+    .inner {
+      border-color: var(--primary-color);
+
+      .divide {
+        left: rem.px2flexible(3);
+        right: rem.px2flexible(3);
+        background-color: var(--primary-color);
+      }
+
+      .arrowR {
+        position: relative;
+        left: rem.px2flexible(3)
+      }
+      .arrowL {
+        position: relative;
+        right: rem.px2flexible(3)
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@ import Button from "@/components/Button";
 import UserIcon from '@/assets/header/user.svg'
 import HomeIcon from '@/assets/header/home.svg'
 import FundIcon from '@/assets/header/community-fund.svg'
+import PropertyIcon from '@/assets/header/property-manage.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import { usePathname, useRouter } from "next/navigation";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -12,11 +13,12 @@ import Link from "next/link";
 import { JSX } from "react";
 import cx from "classnames";
 import MouseToolTip from "@/components/MouseToolTip";
+import Notification from "./_components/Notification";
 
 export default function AppHeader(props: {
   isPopUp?: boolean
 }) {
-  const { hasLoggedIn } = useCurrentUser()
+  const { hasLoggedIn, isAdmin } = useCurrentUser()
   const { openRegisterPop, closeRegisterPop } = useRegisterPopUp()
   const pathname = usePathname()
 
@@ -47,6 +49,14 @@ export default function AppHeader(props: {
             href={'/community'}
             tooltip={'社区金库'}
           />}
+          {hasLoggedIn && isAdmin && <NavigatorIcon
+            icon={<PropertyIcon />}
+            href={'/property-manage'}
+            tooltip={'社区中心'}
+          />}
+          {
+            hasLoggedIn && <Notification />
+          }
           {hasLoggedIn ? <NavigatorIcon icon={<UserIcon />} href={'/user-center'} tooltip={'个人中心'} /> :
           <Button
             type={'primary'}

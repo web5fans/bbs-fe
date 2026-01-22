@@ -1,0 +1,56 @@
+@use "@/styles/rem";
+
+.wrap {
+  padding-inline: rem.px2flexible(15);
+  padding-top: rem.px2flexible(15);
+
+  .divide {
+    width: 100%;
+    height: 1px;
+    background: #F3F3F3;
+    margin-top: rem.px2flexible(10);
+  }
+
+  .avatarWrap {
+    position: relative;
+    margin-right: rem.px2flexible(8);
+
+    &.normal {
+      .poster {
+        display: none;
+      }
+    }
+
+    .poster {
+      width: rem.px2flexible(15);
+      height: rem.px2flexible(8);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+  }
+
+  .avatar {
+    width: rem.px2flexible(24);
+    height: rem.px2flexible(24);
+    font-size: rem.px2flexible(8);
+  }
+
+  .title {
+    font-size: rem.px2flexible(9);
+    font-weight: 500;
+    text-transform: capitalize;
+    text-align: center;
+    width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .postInfo {
+    > p {
+      font-size: rem.px2flexible(6);
+      text-transform: capitalize;
+      margin-top: rem.px2flexible(2);
+    }
+  }
+}
