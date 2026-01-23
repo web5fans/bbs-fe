@@ -83,7 +83,10 @@ const EditPost = () => {
           title: postTitleRef.current,
           text: richTextRef.current,
           edited: dayjs.utc().format(),
-          created: postInfo.created
+          created: postInfo.created,
+          is_announcement: postInfo.is_announcement,
+          is_top: postInfo.is_top,
+          is_disabled: postInfo.is_disabled,
         },
         did: userProfile?.did!,
         rkey,
