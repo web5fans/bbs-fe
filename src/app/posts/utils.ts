@@ -217,11 +217,11 @@ export async function postsWritesPDSOperation(params: WritePDSOptParamsType) {
     ckbAddr: serverParams.ckb_addr
   }))
 
-  console.log('result>>>>', result)
-
+  const resultsNew = result.data.results?.[0]
   return {
-    uri: result.data.results?.[0].uri,
-    created: newRecord.created
+    uri: resultsNew?.uri,
+    created: newRecord.created,
+    cid: resultsNew?.cid,
   }
 }
 

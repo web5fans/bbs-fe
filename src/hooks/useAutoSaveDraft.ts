@@ -96,6 +96,6 @@ export default function useAutoSaveDraft(props: { title: string; editorText: str
     setDraftInfo: function (info: { uri: string; created: string }){
       draftInfo.current = info
     },
-    draftUri: draftInfo.current?.uri
+    draftInfo: draftInfo.current
   }
 }
