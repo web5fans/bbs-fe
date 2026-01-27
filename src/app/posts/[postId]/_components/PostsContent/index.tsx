@@ -2,7 +2,7 @@ import S from './index.module.scss'
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useRequest } from "ahooks";
 import server from "@/server";
-import { PostFeedItemType } from "@/app/posts/utils";
+import { CommentOrReplyItemType, PostFeedItemType } from "@/app/posts/utils";
 import { useEffect, useImperativeHandle } from "react";
 import CardWindow from "@/components/CardWindow";
 import PostItem from "@/app/posts/[postId]/_components/PostItem";
@@ -34,7 +34,7 @@ const PostsContent = (props: PostContentProps) => {
 
   const { openModal } = usePostCommentReply()
 
-  const { data: commentList, run: reLoadComment, refresh: refreshComment } = useRequest(async (curPage?: number) => {
+  const { data: commentList, run: reLoadComment, refresh: refreshComment, mutate } = useRequest(async (curPage?: number) => {
     const defaultPage = defaultCommentIdx ?  Math.ceil(Number(defaultCommentIdx) / PAGE_SIZE) : 1;
     const page = curPage || defaultPage
     const result = await server<{
@@ -60,7 +60,7 @@ const PostsContent = (props: PostContentProps) => {
           type: "comment",
           postUri: originPost?.uri,
           sectionId: originPost?.section_id,
-          refresh: reloadList
+          refresh: mutateComment
         })
       }
     }
@@ -73,6 +73,30 @@ const PostsContent = (props: PostContentProps) => {
   const reloadList = () => {
     refreshOrigin()
     refreshComment()
+  }
+
+  const mutateComment = (state: CommentOrReplyItemType, isEdit?: boolean) => {
+    if (!commentList?.comments) return;
+    if (isEdit) {
+      const targetIdx = commentList?.comments.findIndex(e => e.uri === state.uri)
+      if (targetIdx < 0) return;
+      const comments = [...commentList.comments]
+      comments.splice(targetIdx, 1, {...comments[targetIdx], text: state.text, edited: state.edited})
+
+      mutate(old => {
+        if (!old) return old
+        return {
+          ...old,
+          comments,
+        }
+      })
+      return
+    }
+    mutate({
+      comments: (commentList?.comments.length || 0) < PAGE_SIZE ? [...(commentList?.comments || []), state] : commentList?.comments,
+      total: (commentList?.total || 0) + 1,
+      page: commentList?.page || 1
+    })
   }
 
   return <CardWindow
@@ -89,7 +113,7 @@ const PostsContent = (props: PostContentProps) => {
           rootUri={originPost?.uri}
           postInfo={originPost}
           floor={1}
-          refresh={reloadList}
+          refresh={mutateComment}
           key={`post-item-${originPost?.uri}-${freshV}`}
         />}
 
@@ -102,7 +126,7 @@ const PostsContent = (props: PostContentProps) => {
             isOriginPoster={p.author.did === originPost?.author?.did}
             rootUri={originPost?.uri}
             rootDisabled={originPost.is_disabled}
-            refresh={reloadList}
+            refresh={mutateComment}
             key={`post-item-${p?.uri}-${freshV}`}
           />
         })}
@@ -121,7 +145,7 @@ const PostsContent = (props: PostContentProps) => {
       <PostDiscuss
         sectionId={originPost?.section_id}
         postUri={postId}
-        refresh={reloadList}
+        refresh={mutateComment}
       />
     </div>
   </CardWindow>

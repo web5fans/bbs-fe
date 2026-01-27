@@ -6,7 +6,7 @@ import Button from "@/components/Button";
 import FaceIcon from '@/assets/login/multiDid/face.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import { useRef, useState } from "react";
-import { postsWritesPDSOperation } from "@/app/posts/utils";
+import { CommentOrReplyItemType, postsWritesPDSOperation } from "@/app/posts/utils";
 import { useToast } from "@/provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Link from "next/link";
@@ -17,7 +17,7 @@ import DiscussCancelButton from "./DiscussCancelButton";
 const PostDiscuss = (props: {
   postUri: string
   sectionId: string
-  refresh?: () => void
+  refresh?: (comment: CommentOrReplyItemType) => void
 }) => {
   const { userProfile, hasLoggedIn, isWhiteUser, updateProfile } = useCurrentUser()
   const [publishing, setPublishing] = useState(false)
@@ -42,7 +42,7 @@ const PostDiscuss = (props: {
     setPublishing(true)
     try {
       await updateProfile()
-      await postsWritesPDSOperation({
+      const {uri, cid, created} = await postsWritesPDSOperation({
         record: {
           $type: 'app.bbs.comment',
           text: richText,
@@ -53,7 +53,20 @@ const PostDiscuss = (props: {
       })
       setPublishing(false)
       editorRef.current?.clearContent()
-      props.refresh?.()
+
+      const comment: CommentOrReplyItemType = {
+        author: userProfile!,
+        cid,
+        created,
+        uri,
+        tip_count: '0',
+        reply_count: '0',
+        like_count: '0',
+        post: props.postUri,
+        text: richText,
+        is_disabled: false
+      }
+      props.refresh?.(comment)
       toast({ title: '发布成功', icon: 'success'})
     } catch (error) {
       setPublishing(false)

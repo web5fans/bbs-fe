@@ -10,20 +10,20 @@ import ShowCreateTime from "./ShowCreateTime";
 import HtmlContent from "./HTMLContent";
 import Avatar from "@/components/Avatar";
 import SwitchPostHideOrOpen from "@/app/posts/[postId]/_components/PostItem/_components/SwitchPostHideOrOpen";
-import { eventBus } from "@/lib/EventBus";
 import TipModal, { AuthorType } from "@/app/posts/[postId]/_components/PostItem/_components/Donate/TipModal";
 import DonateIcon from '@/assets/posts/donate.svg'
 import cx from "classnames";
 import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
+import { CommentOrReplyItemType } from "@/app/posts/utils";
 
-export type ReplyListRefProps = { reload: () => void }
+export type ReplyListRefProps = { reload: () => void; updateReplyList: (info: CommentOrReplyItemType) => void }
 
 const ReplyList = (props: {
   uri: string
   rootUri: string
   sectionId: string
   total: string
-  changeTotal: (total: string) => void
+  incrementalReplyTotal: () => void
   replyComment: () => void
   componentRef?: Ref<ReplyListRefProps>
 }) => {
@@ -55,30 +55,45 @@ const ReplyList = (props: {
 
   useImperativeHandle(props.componentRef, () => {
     return {
-      reload
+      reload,
+      updateReplyList
     }
   })
 
-  useEffect(() => {
-    const f = (uri: string) => {
-      if (uri !== props.uri) return
-      reload()
-    }
-    eventBus.subscribe('post-comment-reply-list-refresh', f)
+  const updateReplyList = (info: CommentOrReplyItemType) => {
+    if (!replyListInfo?.list) return;
+    const editIdx = replyListInfo.list.findIndex(e => e.uri === info.uri)
+    if (editIdx > -1) {
+      const list = [...replyListInfo.list]
+      list.splice(editIdx, 1, {...list[editIdx], text: info.text, edited: info.edited})
 
-    return () => {
-      eventBus.unsubscribe('post-comment-reply-list-refresh', f)
+      mutate(old => {
+        if (!old) return old
+        return {
+          ...old,
+          list,
+        }
+      })
+      return
     }
-  }, []);
+
+    mutate(old => {
+      if (!old) return old
+      return {
+        ...(old || {}),
+        list: [...(replyListInfo?.list || []), info]
+      }
+    })
+  }
 
   const reply = (info: any, isEdit?: boolean) => {
     const params = {
-      toUserName: info.author.displayName,
+      toAuthor: info.author,
       toDid: info.author.did
     }
-    if (isEdit && info.to) {
+    if (isEdit) {
       params.toDid = info.to?.did
-      params.toUserName = info.to?.displayName
+      params.toAuthor = info.to
     }
     openModal({
       type: 'reply',
@@ -86,11 +101,11 @@ const ReplyList = (props: {
       commentUri: props.uri,
       sectionId: props.sectionId,
       ...params,
-      refresh: () => {
-        reload()
+      refresh: (info) => {
+        updateReplyList(info)
         if (isEdit) return
-        const total = Number(props.total) + 1
-        props.changeTotal(`${total}`)
+
+        props.incrementalReplyTotal()
       },
       isEdit,
       content: info

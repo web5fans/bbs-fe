@@ -2,15 +2,14 @@ import S from './index.module.scss'
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import LikeList from "../LikeList";
-import { usePostCommentReply } from "@/provider/PostReplyProvider";
+import { ReplyModalInfoType, usePostCommentReply } from "@/provider/PostReplyProvider";
 import TabContentWrap from "../TabContentWrap";
-import ReplyList from "../ReplyList";
+import ReplyList, { ReplyListRefProps } from "../ReplyList";
 import utcToLocal from "@/lib/utcToLocal";
 import Donate from "../Donate";
 import { PostItemType } from "@/app/posts/[postId]/_components/PostItem/index";
 import TipDetailList from "../TipDetailList";
 import SwitchPostHideOrOpen from "../SwitchPostHideOrOpen";
-import { eventBus } from "@/lib/EventBus";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
@@ -25,7 +24,7 @@ const PostItemFooter = (props: {
   postInfo: PostItemType & { root_disabled?: boolean }
   floor: number
   rootUri: string
-  refresh?: () => void
+  refresh?: ReplyModalInfoType['refresh']
   switchPostVisibility: () => void
 }) => {
   const { postInfo, floor, rootUri } = props
@@ -35,6 +34,7 @@ const PostItemFooter = (props: {
   const [replyTotal, setReplyTotal] = useState('0')
 
   const parentRef = useRef<HTMLDivElement>(null)
+  const replyListRef = useRef<ReplyListRefProps | null>(null)
 
   const [arrowPos, setArrowPos] = useState<{ left: string } | undefined>(undefined)
 
@@ -61,7 +61,7 @@ const PostItemFooter = (props: {
     // const clientWidth = parentRef.current.clientWidth
     // const offsetLeft = parentRef.current.offsetLeft
 
-    if (!postInfo.reply_count || postInfo.reply_count === '0') {
+    if (!replyTotal || replyTotal === '0') {
 
       // const shouldRect = window.innerWidth >= 1023
       //
@@ -76,16 +76,25 @@ const PostItemFooter = (props: {
     changeShowType('reply')
   }
 
+  const incrementalReplyTotal = () => {
+    const total = Number(replyTotal) + 1
+    setReplyTotal(`${total}`)
+  }
+
   const openReplyModal = (obj?: CSSProperties) => {
     openModal({
       type: 'reply',
       postUri: rootUri,
       commentUri: postInfo.uri,
-      toUserName: postInfo.author.displayName,
+      toAuthor: postInfo.author,
       sectionId,
-      refresh: () => {
-        props.refresh?.()
-        eventBus.publish('post-comment-reply-list-refresh', postInfo.uri)
+      refresh: (info, isEdit) => {
+        if (!isEdit) incrementalReplyTotal()
+
+        if (showType === 'reply') {
+          replyListRef.current?.updateReplyList(info)
+        }
+
       },
       rect: obj
     })
@@ -155,11 +164,12 @@ const PostItemFooter = (props: {
     {showType === 'reply' && <TabContentWrap arrowPos={arrowPos}>
       <ReplyList
         total={replyTotal}
-        changeTotal={setReplyTotal}
+        incrementalReplyTotal={incrementalReplyTotal}
         rootUri={rootUri}
         uri={postInfo.uri}
         sectionId={sectionId}
         replyComment={openReplyModal}
+        componentRef={replyListRef}
       />
     </TabContentWrap>}
     {showType === 'donate' && <TabContentWrap arrowPos={arrowPos} arrowColor={'#E7E7E7'}>

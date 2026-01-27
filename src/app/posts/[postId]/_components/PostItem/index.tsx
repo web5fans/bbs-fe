@@ -7,9 +7,9 @@ import { useEffect, useRef, useState } from "react";
 import PostItemFooter from "./_components/PostItemFooter";
 import PostItemUser from "./_components/PostItemUser";
 import PostItemUserMobile from "./_components/PostItemUserMobile";
-import { useSearchParams } from "next/navigation";
 import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 import { UserProfileType } from "@/store/userInfo";
+import { ReplyModalInfoType } from "@/provider/PostReplyProvider";
 
 export type PostItemType = {
   cid: string
@@ -41,7 +41,7 @@ type PostItemProps = {
   postInfo: PostItemType
   floor: number
   rootUri: string
-  refresh?: () => void
+  refresh?: ReplyModalInfoType['refresh']
   rootDisabled?: boolean
 }
 

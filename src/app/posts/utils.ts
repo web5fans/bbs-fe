@@ -10,16 +10,20 @@ import { TID } from '@atproto/common-web'
 import dayjs from "dayjs";
 import { Secp256k1Keypair } from "@atproto/crypto";
 import sessionWrapApi from "@/lib/wrapApiAutoSession";
+import { UserProfileType } from "@/store/userInfo";
 
 export type PostFeedItemType = {
   uri: string,
   cid: string,
-  author: { displayName: string, [key: string]: string, did: string },
+  author: UserProfileType,
   title: string,
   text: string,
   visited_count: string,
   comment_count: string,
   like_count: string,
+  tip_count: string,
+  reply_count?: string,
+  post?: string,
   visited: string, // 时间
   updated: string, // 时间
   created: string, // 时间
@@ -31,6 +35,25 @@ export type PostFeedItemType = {
   is_draft: boolean
   reasons_for_disabled?: string
   edited?: string
+}
+
+export type CommentOrReplyItemType = {
+  uri: string,
+  cid: string,
+  author: UserProfileType,
+  to?: UserProfileType,
+  text: string,
+  like_count: string,
+  liked?: boolean
+  tip_count: string,
+  reply_count?: string,
+  post: string,
+  updated?: string, // 时间
+  created: string, // 时间
+  is_disabled: boolean
+  reasons_for_disabled?: string
+  edited?: string
+  comment?: string
 }
 
 export type CommentAllPostType = PostFeedItemType & {
