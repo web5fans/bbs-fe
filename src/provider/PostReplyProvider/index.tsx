@@ -1,9 +1,10 @@
 'use client'
 
-import React, { createContext, CSSProperties, useCallback, useState } from "react";
+import React, { createContext, CSSProperties, useCallback, useState, useMemo } from "react";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { CommentOrReplyItemType } from "@/app/posts/utils";
 import { UserProfileType } from "@/store/userInfo";
+import ReplyModal from "@/app/posts/[postId]/_components/ReplyModal";
 
 export type ReplyModalInfoType = {
   postUri: string // 主帖
@@ -31,16 +32,11 @@ export type ReplyModalInfoType = {
 })
 
 type PopUpProviderProps = {
-  visible: boolean
   openModal: (info?: ReplyModalInfoType) => void
-  closeModal: () => void
-  modalInfo?: ReplyModalInfoType
 }
 
 const PostCommentReplyContext = createContext<PopUpProviderProps>({
-  visible: false,
   openModal: () => {},
-  closeModal: () => {},
 })
 
 export const PostCommentReplyProvider = (props: {
@@ -58,19 +54,21 @@ export const PostCommentReplyProvider = (props: {
     setVisible(true)
   }, [])
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setModalInfo(undefined)
     setVisible(false)
-  }
+  }, [])
 
-  return <PostCommentReplyContext.Provider value={{
-    visible,
-    closeModal,
+  const contextValue = useMemo(() => ({
     openModal,
-    modalInfo,
-  }}>
-    {props.children}
-  </PostCommentReplyContext.Provider>
+  }), [openModal])
+
+  return <>
+    <PostCommentReplyContext.Provider value={contextValue}>
+      {props.children}
+    </PostCommentReplyContext.Provider>
+    <ReplyModal closeModal={closeModal} modalInfo={modalInfo} visible={visible} />
+  </>
 }
 
 export function usePostCommentReply() {

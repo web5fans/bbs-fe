@@ -1,10 +1,11 @@
-import { ReplyModalInfoType, usePostCommentReply } from "@/provider/PostReplyProvider";
+import { ReplyModalInfoType } from "@/provider/PostReplyProvider";
 import { useEffect, useRef, useState } from "react";
+import { ReplyModalPropsType } from "./index";
 
 export default function useDetectPostCommentReply(props: {
   whenOpenSecondModal: () => void
-}) {
-  const { visible: providerVis, closeModal, modalInfo: providerModalInfo} = usePostCommentReply()
+} & ReplyModalPropsType) {
+  const { visible: providerVis, closeModal, modalInfo: providerModalInfo} = props
   const [modalMainInfo, setModalMainInfo] = useState<{ visible: boolean; info?: ReplyModalInfoType }>({
     visible: false,
     info: undefined

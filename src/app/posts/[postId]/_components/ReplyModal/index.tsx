@@ -16,8 +16,11 @@ import ConfirmModal from "@/components/Modal/ConfirmModal";
 import { useToast } from "@/provider/toast";
 import useDetectPostCommentReply from "./useDetectPostCommentReply";
 import dayjs from "dayjs";
+import { ReplyModalInfoType } from "@/provider/PostReplyProvider";
 
-const ReplyModal = () => {
+export type ReplyModalPropsType = { visible: boolean; modalInfo?: ReplyModalInfoType; closeModal: () => void }
+
+const ReplyModal = (props: ReplyModalPropsType) => {
   const { updateProfile, userProfile } = useCurrentUser();
   const [publishing, setPublishing] = useState(false)
 
@@ -28,6 +31,7 @@ const ReplyModal = () => {
   const [confirmModalVis, { setTrue: setConfirmTrue, setFalse: setConfirmFalse }] = useBoolean(false)
 
   const { visible, modalInfo, closeModal, clearCloseTask } = useDetectPostCommentReply({
+    ...props,
     whenOpenSecondModal: () => {
       closeWindow(true)
     }
