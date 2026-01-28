@@ -4,10 +4,11 @@ import TipTapEditor, { EditorRefType, EditorUpdateData } from "@/components/TipT
 import S from './index.module.scss'
 import { useEffect, useRef, useState } from "react";
 import { checkEditorContent } from "@/lib/tiptap-utils";
-import { useBoolean } from "ahooks";
-import { postsWritesPDSOperation, WritePDSOptParamsType } from "@/app/posts/utils";
+import { useBoolean, useRequest } from "ahooks";
+import { PostFeedItemType, postsWritesPDSOperation, WritePDSOptParamsType } from "@/app/posts/utils";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import dayjs from "dayjs";
+import server from "@/server";
 
 const NoticeModal = (props: {
   noticeInfo?: any
@@ -28,6 +29,26 @@ const NoticeModal = (props: {
   const richTextRef = useRef<string | undefined>(undefined)
 
   const editorRef = useRef<EditorRefType>(null);
+
+  const {run: runLoop, cancel: cancelLoop} = useRequest(async (uri: string, cid: string) => {
+    let result: PostFeedItemType | undefined
+    try {
+      result = await server<PostFeedItemType>('/post/detail', 'GET', {
+        uri
+      })
+    } catch (e) {
+
+    }
+    if (result && result.cid === cid) {
+      cancelLoop()
+      setLoading.setFalse()
+      props.onClose()
+      props.refresh()
+    }
+  }, {
+    pollingInterval: 1000,
+    manual: true
+  })
 
   useEffect(() => {
     if(!noticeInfo) return
@@ -71,10 +92,8 @@ const NoticeModal = (props: {
       params.rkey = noticeInfo.uri.split('/app.bbs.post/')[1]
     }
 
-    await postsWritesPDSOperation(params)
-    setLoading.setFalse()
-    props.onClose()
-    props.refresh()
+    const { uri, cid } = await postsWritesPDSOperation(params)
+    runLoop(uri, cid)
   }
 
   return <ManageModal

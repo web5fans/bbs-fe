@@ -3,20 +3,29 @@ import Table, { TableProps } from "@/components/Table/index";
 import { usePagination } from "ahooks";
 import BBSPagination from "@/components/BBSPagination";
 import { CircleLoading } from "@/components/Loading";
-import { useEffect } from "react";
+import { useEffect, useImperativeHandle } from "react";
 import { PaginationOptions, Data, Params } from "ahooks/lib/usePagination/types";
+import { Result } from "ahooks/lib/useRequest/src/types";
+
+type RequestResult<P> = { total: number; list: P[] }
+export type RequestTableRef<P> = { mutate: Result<RequestResult<P>, any>['mutate'] }
 
 type RequestTableProps<T> = {
-  request: (params: { current: number; pageSize: number }) => Promise<{ total: number; list: T[] }>
+  request: (params: { current: number; pageSize: number }) => Promise<RequestResult<T>>
   requestOptions?: PaginationOptions<Data, Params>
   afterLoading?: () => void
+  ref?: React.Ref<RequestTableRef<T>>
 } & Omit<TableProps<T>, 'data'>
 
 export default function RequestTable<T>(props: RequestTableProps<T>){
-  const { request, requestOptions, afterLoading, ...rest } = props;
-  const { data, loading, pagination } = usePagination(request, {
+  const { request, requestOptions, afterLoading, ref, ...rest } = props;
+  const { data, loading, pagination, mutate } = usePagination(request, {
     ...(requestOptions || {})
   })
+
+  useImperativeHandle(ref, () => ({
+    mutate
+  }))
 
   useEffect(() => {
     if (loading) return

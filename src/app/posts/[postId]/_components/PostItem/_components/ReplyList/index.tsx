@@ -93,7 +93,7 @@ const ReplyList = (props: {
     }
     if (isEdit) {
       params.toDid = info.to?.did
-      params.toAuthor = info.to
+      if (info.to) params.toAuthor = info.to
     }
     openModal({
       type: 'reply',

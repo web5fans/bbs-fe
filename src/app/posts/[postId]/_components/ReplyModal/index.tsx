@@ -17,6 +17,7 @@ import { useToast } from "@/provider/toast";
 import useDetectPostCommentReply from "./useDetectPostCommentReply";
 import dayjs from "dayjs";
 import { ReplyModalInfoType } from "@/provider/PostReplyProvider";
+import sleep from "@/lib/sleep";
 
 export type ReplyModalPropsType = { visible: boolean; modalInfo?: ReplyModalInfoType; closeModal: () => void }
 
@@ -117,6 +118,9 @@ const ReplyModal = (props: ReplyModalPropsType) => {
       }
 
       refresh?.(info, isEdit);
+
+      await sleep(500) // 给数据同步预留时间
+
       setPublishing(false)
       closeWindow(false)
       toast({ title: message + '成功', icon: 'success' })
