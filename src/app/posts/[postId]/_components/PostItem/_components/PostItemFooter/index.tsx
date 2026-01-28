@@ -93,6 +93,11 @@ const PostItemFooter = (props: {
 
         if (showType === 'reply') {
           replyListRef.current?.updateReplyList(info)
+        } else {
+          // changeShowType('reply')
+          // setTimeout(() => {
+          //   replyListRef.current?.addFirstReply(info)
+          // }, 100)
         }
 
       },

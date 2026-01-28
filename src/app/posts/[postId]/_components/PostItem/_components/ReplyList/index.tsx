@@ -4,7 +4,7 @@ import server from "@/server";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
-import { Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import ArrowIcon from '@/assets/arrow-s.svg';
 import ShowCreateTime from "./ShowCreateTime";
 import HtmlContent from "./HTMLContent";
@@ -16,7 +16,11 @@ import cx from "classnames";
 import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
 import { CommentOrReplyItemType } from "@/app/posts/utils";
 
-export type ReplyListRefProps = { reload: () => void; updateReplyList: (info: CommentOrReplyItemType) => void }
+export type ReplyListRefProps = {
+  reload: () => void;
+  updateReplyList: (info: CommentOrReplyItemType) => void;
+  addFirstReply: (info: CommentOrReplyItemType) => void
+}
 
 const ReplyList = (props: {
   uri: string
@@ -33,7 +37,9 @@ const ReplyList = (props: {
 
   const { anchorInfo, clearAnchorInfo } = usePost()
 
-  const { data: replyListInfo, loading, loadingMore, loadMore, noMore, reload, mutate } = useInfiniteScroll(async (prevData) => {
+  const addedFirstReplies = useRef<CommentOrReplyItemType | undefined>(undefined)
+
+  const { data: replyListInfo, loading, loadingMore, loadMore, noMore, reload, mutate, cancel } = useInfiniteScroll(async (prevData) => {
     const limit = anchorInfo?.reply?.idx || 5
     const pagedData = await server('/reply/list', 'POST', {
       comment: props.uri,
@@ -50,22 +56,43 @@ const ReplyList = (props: {
     };
   }, {
     isNoMore: d => !d?.nextCursor,
-    reloadDeps: [userProfile?.did]
+    reloadDeps: [userProfile?.did],
+    onSuccess: (data) => {
+      if (addedFirstReplies.current) {
+        mutate({
+          ...data,
+          list: [...data.list, addedFirstReplies.current]
+        })
+        addedFirstReplies.current = undefined
+      }
+    }
   });
 
   useImperativeHandle(props.componentRef, () => {
     return {
       reload,
-      updateReplyList
+      updateReplyList,
+      addFirstReply: (info) => {
+        addedFirstReplies.current = info
+      }
     }
   })
+
+  const showLoadMore = useMemo(() => {
+    return Number(props.total) > 5 && (props.total !== `${replyListInfo?.list.length}`)
+  }, [props.total, replyListInfo])
 
   const updateReplyList = (info: CommentOrReplyItemType) => {
     if (!replyListInfo?.list) return;
     const editIdx = replyListInfo.list.findIndex(e => e.uri === info.uri)
     if (editIdx > -1) {
       const list = [...replyListInfo.list]
-      list.splice(editIdx, 1, {...list[editIdx], text: info.text, edited: info.edited})
+      list.splice(editIdx, 1, {
+        ...list[editIdx],
+        text: info.text,
+        edited: info.edited,
+        cid: info.cid,
+      })
 
       mutate(old => {
         if (!old) return old
@@ -76,6 +103,8 @@ const ReplyList = (props: {
       })
       return
     }
+
+    if (showLoadMore) return;
 
     mutate(old => {
       if (!old) return old
@@ -125,7 +154,7 @@ const ReplyList = (props: {
         showEdit={userProfile?.did === info.author.did}
       />
     })}
-    {props.total > 5 && (props.total !== `${replyListInfo.list.length}`) && <div
+    {showLoadMore && <div
       className={S.load}
       onClick={loadMore}
     ><ArrowIcon />加载更多</div>}
@@ -206,7 +235,7 @@ function ReplyItem(props: {
       </div>
     </div>
     <div className={S.contentWrap}>
-      <HtmlContent html={replyItem.text} scrollToTarget={scrollToTarget} />
+      <HtmlContent key={replyItem.cid} html={replyItem.text} scrollToTarget={scrollToTarget} />
       <div className={S.footer}>
         <div className={S.leftOpts}>
           <DonateIcon className={S.icon} />
