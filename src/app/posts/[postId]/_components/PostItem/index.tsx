@@ -3,7 +3,7 @@
 import S from './index.module.scss'
 import cx from "classnames";
 import PostItemContent from "./PostItemContent";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import PostItemFooter from "./_components/PostItemFooter";
 import PostItemUser from "./_components/PostItemUser";
 import PostItemUserMobile from "./_components/PostItemUserMobile";
@@ -56,7 +56,7 @@ const PostItem = (props: PostItemProps) => {
 
   useEffect(() => {
     setPostDisabled(postInfo.is_disabled)
-  }, [postInfo]);
+  }, [postInfo.is_disabled]);
 
   const switchPostVisibility = () => {
     setPostDisabled(!postDisabled)
@@ -64,14 +64,14 @@ const PostItem = (props: PostItemProps) => {
 
   const disabled = rootDisabled || postDisabled
 
-  const scrollToTarget = () => {
+  const scrollToTarget = useCallback(() => {
     if (!anchorInfo || anchorInfo?.reply) return;
     if (anchorInfo.comment.uri !== postInfo.uri) return
     wrapRef.current?.scrollIntoView({
       behavior: 'smooth'
     })
     clearAnchorInfo()
-  }
+  }, [anchorInfo, postInfo.uri])
 
   return <div className={S.wrap} ref={wrapRef}>
 
@@ -101,4 +101,4 @@ const PostItem = (props: PostItemProps) => {
   </div>
 }
 
-export default PostItem;
+export default PostItem
