@@ -76,9 +76,9 @@ const ReplyList = (props: {
       toUserName: info.author.displayName,
       toDid: info.author.did
     }
-    if (isEdit && info.to) {
+    if (isEdit) {
       params.toDid = info.to?.did
-      params.toUserName = info.to?.displayName
+      if (info.to) params.toUserName = info.to?.displayName
     }
     openModal({
       type: 'reply',
