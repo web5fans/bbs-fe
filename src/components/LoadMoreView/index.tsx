@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { DotLoading } from "@/components/Loading";
 
 export default function LoadMoreView({ onLoadMore }: { onLoadMore: () => void }) {
 
@@ -12,7 +13,9 @@ export default function LoadMoreView({ onLoadMore }: { onLoadMore: () => void })
         cbRef.current?.();
       }
     }
-    const target = new IntersectionObserver(listener);
+    const target = new IntersectionObserver(listener, {
+      rootMargin: '0px 0px 80px 0px',
+    });
     target.observe(ref.current)
     return () => {
       target.disconnect();
@@ -21,8 +24,8 @@ export default function LoadMoreView({ onLoadMore }: { onLoadMore: () => void })
   }, [])
 
   return (
-    <div ref={ref}>
-
+    <div ref={ref} className={'text-center'}>
+      <DotLoading className={'text-[20px] text-[green]'} />
     </div>
   )
 }
