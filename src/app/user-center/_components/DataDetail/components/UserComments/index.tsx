@@ -12,6 +12,8 @@ import { postUriToHref } from "@/lib/postUriHref";
 import S from './index.module.scss'
 import MouseToolTip from "@/components/MouseToolTip";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import remResponsive from "@/lib/rem-responsive";
+import { Loading } from "@/components/Loading";
 
 type UserCommentsPropsType = {
   did: string
@@ -53,6 +55,10 @@ const UserComments = (props: UserCommentsPropsType) => {
       props.scrollToTop?.()
     }
   }, [loading]);
+
+  if (loading) {
+    return <Loading style={{ minHeight: remResponsive(250) }} />
+  }
 
   if (dataSource?.list && dataSource?.list.length === 0) {
     return <EmptyText className={S.empty} message={'此人的帖子正在酝酿中...'} />

@@ -1,4 +1,3 @@
-import ReplyModal from "./_components/ReplyModal";
 import { PostCommentReplyProvider } from "@/provider/PostReplyProvider";
 
 export default function Layout({
@@ -8,6 +7,5 @@ export default function Layout({
 }) {
   return <PostCommentReplyProvider>
     {children}
-    <ReplyModal />
   </PostCommentReplyProvider>
 }

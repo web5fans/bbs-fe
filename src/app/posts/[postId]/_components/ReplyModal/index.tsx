@@ -7,7 +7,7 @@ import TipTapEditor, { EditorRefType, EditorUpdateData } from "@/components/TipT
 import Button from "@/components/Button";
 import { checkEditorContent } from "@/lib/tiptap-utils";
 import numeral from "numeral";
-import { postsWritesPDSOperation } from "@/app/posts/utils";
+import { CommentOrReplyItemType, postsWritesPDSOperation } from "@/app/posts/utils";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import PackUpIcon from '@/assets/posts/pack-up.svg'
 import { useBoolean } from "ahooks";
@@ -16,8 +16,11 @@ import ConfirmModal from "@/components/Modal/ConfirmModal";
 import { useToast } from "@/provider/toast";
 import useDetectPostCommentReply from "./useDetectPostCommentReply";
 import dayjs from "dayjs";
+import { ReplyModalInfoType } from "@/provider/PostReplyProvider";
 
-const ReplyModal = () => {
+export type ReplyModalPropsType = { visible: boolean; modalInfo?: ReplyModalInfoType; closeModal: () => void }
+
+const ReplyModal = (props: ReplyModalPropsType) => {
   const { updateProfile, userProfile } = useCurrentUser();
   const [publishing, setPublishing] = useState(false)
 
@@ -28,6 +31,7 @@ const ReplyModal = () => {
   const [confirmModalVis, { setTrue: setConfirmTrue, setFalse: setConfirmFalse }] = useBoolean(false)
 
   const { visible, modalInfo, closeModal, clearCloseTask } = useDetectPostCommentReply({
+    ...props,
     whenOpenSecondModal: () => {
       closeWindow(true)
     }
@@ -62,7 +66,7 @@ const ReplyModal = () => {
 
   const submit = async () => {
     if (!modalInfo) return
-    const { type, postUri, commentUri, toDid, sectionId, refresh, isEdit } = modalInfo;
+    const { type, postUri, commentUri, toDid, sectionId, refresh, isEdit, toAuthor } = modalInfo;
     const message = isEdit ? '编辑' : '发布'
 
     setPublishing(true)
@@ -89,13 +93,31 @@ const ReplyModal = () => {
       if (isEdit) {
         record = {...record, created: modalInfo.content.created, edited: dayjs.utc().format()}
       }
-      await postsWritesPDSOperation({
+      const { created, cid, uri } = await postsWritesPDSOperation({
         record,
         did: userProfile?.did!,
         type: isEdit ? 'update' : 'create',
         rkey: isEdit ? modalInfo.content.uri.split(`/${record.$type}/`)[1] : undefined
       })
-      refresh?.();
+
+      const info: CommentOrReplyItemType = {
+        author: userProfile!,
+        cid,
+        created,
+        uri,
+        tip_count: '0',
+        reply_count: '0',
+        like_count: '0',
+        post: postUri,
+        text: richTextRef.current,
+        is_disabled: false,
+        edited: isEdit ? record.edited : undefined,
+        comment: commentUri,
+        to: toDid ? toAuthor: undefined
+      }
+
+      refresh?.(info, isEdit);
+
       setPublishing(false)
       closeWindow(false)
       toast({ title: message + '成功', icon: 'success' })
@@ -135,7 +157,7 @@ const ReplyModal = () => {
 
   const title = useMemo(() => {
     if (!modalInfo) return "";
-    const { type, toUserName, isEdit } = modalInfo;
+    const { type, toAuthor, isEdit } = modalInfo;
 
     const titlePrefix = isEdit ? '编辑 ' : ''
 
@@ -146,7 +168,7 @@ const ReplyModal = () => {
         title = "回复帖子";
         break
       case "reply":
-        title = `回复 ${toUserName}`;
+        title = `回复 ${toAuthor?.displayName}`;
         break
       case "comment":
         title =  "跟帖讨论";

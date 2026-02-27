@@ -12,7 +12,7 @@ import { PostFeedItemType } from "@/app/posts/utils";
 import PostFeedItem from "@/components/PostFeedItem";
 import { postUriToHref } from "@/lib/postUriHref";
 
-const PAGE_SIZE = 5
+const PAGE_SIZE = 10
 
 type ISPageData = {
   list: PostFeedItemType[],

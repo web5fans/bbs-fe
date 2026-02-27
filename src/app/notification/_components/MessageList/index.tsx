@@ -2,11 +2,10 @@
 
 import S from './index.module.scss'
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { useRef } from "react";
 import { useInfiniteScroll } from "ahooks";
 import server from "@/server";
 import { NOTIFY_TYPE_ENUM, NotifyItemType } from "@types/notification";
-import { CircleLoading } from "@/components/Loading";
+import { Loading } from "@/components/Loading";
 import { EmptyText } from "@/components/Empty";
 import MessageItem from "@/app/notification/_components/MessageItem";
 import cx from "classnames";
@@ -36,9 +35,7 @@ const MessageList = ({ types, isReadAll }: { types: NOTIFY_TYPE_ENUM[] | null; i
   });
 
   if (loading) {
-    return <div className={cx(S.minHeight, 'h-full flex items-center justify-center')}>
-      <CircleLoading />
-    </div>
+    return <Loading className={cx(S.minHeight, 'h-full')} />
   }
 
   if (!notifyInfo || notifyInfo?.list?.length === 0) {

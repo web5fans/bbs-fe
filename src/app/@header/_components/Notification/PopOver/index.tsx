@@ -7,7 +7,7 @@ import MessageItem from "@/app/notification/_components/MessageItem";
 import { useBoolean, useInfiniteScroll } from "ahooks";
 import server from "@/server";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { CircleLoading } from "@/components/Loading";
+import { Loading } from "@/components/Loading";
 import { NotifyItemType } from "@types/notification";
 import useNotify from "@/store/notification";
 
@@ -67,9 +67,7 @@ const NotificationPopOver = (props: NotificationPopOverProps) => {
 
   const contentRender = useMemo(() => {
     if (loading) {
-      return <div className={'h-full flex items-center justify-center'}>
-        <CircleLoading />
-      </div>
+      return <Loading className={'h-full'} />
     }
     if (!notifyInfo || notifyInfo?.list?.length === 0) {
       return <EmptyText message={'暂无消息，快去浏览帖子互动吧！'} className={'!h-full'} />

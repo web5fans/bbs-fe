@@ -50,6 +50,26 @@ const EditPost = () => {
     refreshDeps: [postUri]
   })
 
+  const {run: runLoop, cancel: cancelLoop} = useRequest(async (uri: string, cid: string) => {
+    let result: PostFeedItemType | undefined
+    try {
+      result = await server<PostFeedItemType>('/post/detail', 'GET', {
+        uri
+      })
+    } catch (e) {
+
+    }
+    if (result && result.cid === cid) {
+      cancelLoop()
+      toast({ title: '发布成功', icon: 'success'})
+      setPublishing(false)
+      router.back()
+    }
+  }, {
+    pollingInterval: 1000,
+    manual: true
+  })
+
   useEffect(() => {
     if(!postInfo || !editorRef.current) return
     editorRef.current.setContent(postInfo.text)
@@ -76,7 +96,7 @@ const EditPost = () => {
     const rkey = posturi.split('/app.bbs.post/')[1]
 
     try {
-      const uri = await postsWritesPDSOperation({
+      const { uri, cid } = await postsWritesPDSOperation({
         record: {
           $type: 'app.bbs.post',
           section_id: postInfo.section_id,
@@ -92,9 +112,7 @@ const EditPost = () => {
         rkey,
         type: 'update'
       })
-      toast({ title: '发布成功', icon: 'success'})
-      setPublishing(false)
-      router.back()
+      runLoop(uri, cid)
     } catch (error) {
       toast({ title: '发布失败', icon: 'error'})
       setPublishing(false)

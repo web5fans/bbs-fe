@@ -6,13 +6,13 @@ import Input, { InputRefType } from "@/components/Input";
 import TipTapEditor, { EditorRefType, EditorUpdateData } from "@/components/TipTapEditor";
 import Button from "@/components/Button";
 import numeral from 'numeral'
-import { useImperativeHandle, useRef, useState } from "react";
+import { useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ReadIcon from '@/assets/posts/read.svg'
 import CommentIcon from '@/assets/posts/comment.svg'
 import SectionEarth from '@/assets/posts/section.svg'
 import { useRequest } from "ahooks";
-import { getSectionList, postsWritesPDSOperation } from "@/app/posts/utils";
+import { getSectionList, PostFeedItemType, postsWritesPDSOperation } from "@/app/posts/utils";
 import cx from "classnames";
 import { useToast } from "../../../provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -25,6 +25,8 @@ import CancelButton from "@/app/posts/publish/(components)/CancelButton";
 import DraftSearchParamsWrap, {
   SetPostContentParamsType
 } from "@/app/posts/publish/(components)/DraftSearchParamsWrap";
+import dayjs from "dayjs";
+import server from "@/server";
 
 const PublishPostPage = () => {
   const searchParams = useSearchParams()
@@ -50,13 +52,41 @@ const PublishPostPage = () => {
   const inputRef = useRef<InputRefType>(null);
   const textNumberRef = useRef<RichTextNumberRefType>(null);
 
+  const {run: runLoop, cancel: cancelLoop} = useRequest(async (uri: string, cid: string) => {
+    let result: PostFeedItemType | undefined
+    try {
+      result = await server<PostFeedItemType>('/post/detail', 'GET', {
+        uri
+      })
+    } catch (e) {
+
+    }
+    if (result && result.cid === cid) {
+      cancelLoop()
+      setPublishing(false)
+
+      const encodeUri = postUriToHref(uri)
+      let href = '/posts/'+ encodeUri
+      if (defaultSection) {
+        href = `/section/${sectionId}/` + encodeUri
+      }
+
+      router.prefetch(href)
+      toast({ title: '发布成功', icon: 'success'})
+      router.replace(href)
+    }
+  }, {
+    pollingInterval: 1000,
+    manual: true
+  })
+
   const { autoSaveDraft,
     deleteDraft,
     manualSaveDraft,
     loading: autoSaveLoading,
     updatedTime: autoSavedTime,
     setDraftInfo,
-    draftUri,
+    draftInfo
   } = useAutoSaveDraft({
     title: postTitleRef.current,
     editorText: richTextRef.current,
@@ -98,38 +128,29 @@ const PublishPostPage = () => {
     })
   }
 
-  const publishPost = async () => {
+  const submit = async () => {
     setPublishing(true)
     try {
       await updateProfile()
-      const { uri } = await postsWritesPDSOperation({
+      if (!draftInfo) return
+      const posturi = draftInfo.uri;
+      const rkey = posturi.split('/app.bbs.post/')[1]
+      const { uri, cid } = await postsWritesPDSOperation({
         record: {
           $type: 'app.bbs.post',
-          section_id: sectionId!,
+          section_id: sectionId,
           title: postTitleRef.current,
           text: richTextRef.current,
+          edited: dayjs.utc().format(),
+          created: draftInfo.created,
+          is_draft: false,
         },
-        did: userProfile?.did!
+        did: userProfile?.did!,
+        rkey,
+        type: 'update'
       })
 
-      deleteDraft({
-        title: postTitleRef.current,
-        text: richTextRef.current,
-        sectionId
-      })
-      setPublishing(false)
-
-      if (uri) {
-        const encodeUri = postUriToHref(uri)
-        let href = '/posts/'+ encodeUri
-        if (defaultSection) {
-          href = `/section/${sectionId}/` + encodeUri
-        }
-
-        router.replace(href)
-      }
-
-      toast({ title: '发布成功', icon: 'success'})
+      runLoop(uri, cid)
     } catch (error) {
       setPublishing(false)
       toast({ title: '发布失败', icon: 'error'})
@@ -164,7 +185,7 @@ const PublishPostPage = () => {
             loading={autoSaveLoading}
             updatedTime={autoSavedTime}
             setPostContent={draftToPostContent}
-            curDraftUri={draftUri}
+            curDraftUri={draftInfo?.uri}
           />
         </div>
 
@@ -221,7 +242,7 @@ const PublishPostPage = () => {
                   type="primary"
                   className={S.publish}
                   disabled={!allowPublish || noAuth}
-                  onClick={publishPost}
+                  onClick={submit}
                 >发布</Button>
             }
             <CancelButton

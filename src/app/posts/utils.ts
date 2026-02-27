@@ -10,16 +10,20 @@ import { TID } from '@atproto/common-web'
 import dayjs from "dayjs";
 import { Secp256k1Keypair } from "@atproto/crypto";
 import sessionWrapApi from "@/lib/wrapApiAutoSession";
+import { UserProfileType } from "@/store/userInfo";
 
 export type PostFeedItemType = {
   uri: string,
   cid: string,
-  author: { displayName: string, [key: string]: string, did: string },
+  author: UserProfileType,
   title: string,
   text: string,
   visited_count: string,
   comment_count: string,
   like_count: string,
+  tip_count: string,
+  reply_count?: string,
+  post?: string,
   visited: string, // 时间
   updated: string, // 时间
   created: string, // 时间
@@ -31,6 +35,25 @@ export type PostFeedItemType = {
   is_draft: boolean
   reasons_for_disabled?: string
   edited?: string
+}
+
+export type CommentOrReplyItemType = {
+  uri: string,
+  cid: string,
+  author: UserProfileType,
+  to?: UserProfileType,
+  text: string,
+  like_count: string,
+  liked?: boolean
+  tip_count: string,
+  reply_count?: string,
+  post: string,
+  updated?: string, // 时间
+  created: string, // 时间
+  is_disabled: boolean
+  reasons_for_disabled?: string
+  edited?: string
+  comment?: string
 }
 
 export type CommentAllPostType = PostFeedItemType & {
@@ -197,25 +220,31 @@ export async function postsWritesPDSOperation(params: WritePDSOptParamsType) {
     },
   }
 
-  let requestUrl = ''
+  const directWriteTypeMap = {
+    create: "fans.web5.ckb.directWrites#create",
+    update: "fans.web5.ckb.directWrites#update",
+    delete: "fans.web5.ckb.directWrites#delete",
+  } as const
 
-  switch (operateType) {
-    case "create":
-      requestUrl = '/record/create'
-      break;
-    case "update":
-      requestUrl = '/record/update'
-      break;
-    case "delete":
-      requestUrl = '/record/delete'
-      break
-  }
-  
-  const res = await server<CreatePostResponse>(requestUrl, 'POST', serverParams)
+  const result = await sessionWrapApi(() => pdsClient.fans.web5.ckb.directWrites({
+    repo: serverParams.repo,
+    writes: [{
+      $type: directWriteTypeMap[operateType],
+      collection: newRecord.$type,
+      rkey: serverParams.rkey,
+      value: serverParams.value
+    }],
+    validate: false,
+    signingKey: serverParams.signing_key,
+    root: serverParams.root,
+    ckbAddr: serverParams.ckb_addr
+  }))
 
+  const resultsNew = result.data.results?.[0]
   return {
-    uri: res?.results?.[0].uri,
-    created: newRecord.created
+    uri: resultsNew?.uri,
+    created: newRecord.created,
+    cid: resultsNew?.cid,
   }
 }
 

@@ -12,6 +12,8 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { postUriToHref } from "@/lib/postUriHref";
 import S from './index.module.scss'
 import MouseToolTip from "@/components/MouseToolTip";
+import { Loading } from "@/components/Loading";
+import remResponsive from "@/lib/rem-responsive";
 
 type UserPostsPropsType = {
   did: string
@@ -59,6 +61,10 @@ const UserPosts = (props: UserPostsPropsType) => {
       props.scrollToTop?.()
     }
   }, [loading]);
+
+  if (loading) {
+    return <Loading style={{ minHeight: remResponsive(250) }} />
+  }
 
   if (dataSource?.list && dataSource?.list.length === 0) {
     if (isMe) {

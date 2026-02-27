@@ -3,7 +3,7 @@ import PostEdit from "@/app/posts/[postId]/_components/PostEdit";
 import FeedStatistic from "@/components/FeedStatistic";
 import JSONToHtml from "@/components/TipTapEditor/components/json-to-html/JSONToHtml";
 import utcToLocal from "@/lib/utcToLocal";
-import { usePostCommentReply } from "@/provider/PostReplyProvider";
+import { ReplyModalInfoType, usePostCommentReply } from "@/provider/PostReplyProvider";
 import QuotePopUp from "./_components/QuotePopUp";
 import { PostItemType } from "@/app/posts/[postId]/_components/PostItem/index";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -15,7 +15,7 @@ function formatDate(date: string) {
 const PostItemContent = (props: {
   postInfo: PostItemType
   rootUri: string
-  refresh?: () => void
+  refresh?: ReplyModalInfoType['refresh']
   scrollToTarget?: () => void
 }) => {
   const { postInfo, rootUri, scrollToTarget } = props

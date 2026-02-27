@@ -1,7 +1,7 @@
 import S from './index.module.scss'
 import Modal from "@/components/Modal";
 import CardWindow from "@/components/CardWindow";
-import RequestTable from "@/components/Table/RequestTable";
+import RequestTable, { RequestTableRef } from "@/components/Table/RequestTable";
 import server from "@/server";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import utcToLocal from "@/lib/utcToLocal";
@@ -27,15 +27,20 @@ const DraftModal = (props: DraftModalProps) => {
   const { userProfile } = useCurrentUser()
 
   const [ confirmVis, setConfirmVis ] = useBoolean(false)
+  const [ loading, setLoading ] = useBoolean(false)
   const curOptRecord = useRef<any>(null)
 
   const [fresh, setFresh] = useState(0)
 
   const toast = useToast()
 
+  const tableRef = useRef<RequestTableRef<any> | null>(null)
+
   const deleteDraft = async () => {
     const { uri, created, section_id, title, text } = curOptRecord.current;
     const rkey = uri.split('/app.bbs.post/')[1]
+
+    setLoading.setTrue()
 
     await postsWritesPDSOperation({
       record: {
@@ -55,7 +60,18 @@ const DraftModal = (props: DraftModalProps) => {
       icon: 'success',
       title: '删除成功'
     })
-    setFresh(v => v + 1)
+    // setFresh(v => v + 1)
+
+    tableRef.current?.mutate((oldData) => {
+      if (!oldData) return oldData
+      return {
+        ...oldData,
+        list: oldData.list.filter(item => item.uri !== uri),
+        total: oldData.total - 1
+      }
+    })
+
+    setLoading.setFalse()
     setConfirmVis.setFalse()
   }
 
@@ -105,6 +121,7 @@ const DraftModal = (props: DraftModalProps) => {
       <CardWindow wrapClassName={S.wrap} header={'草稿箱'} showCloseButton onClose={props.onClose}>
         <div className={S.container}>
           <RequestTable
+            ref={tableRef}
             columns={columns}
             request={async ({ current, pageSize }) => {
               const result = await server<{ posts: any[], total: number }>('/post/list_draft', 'POST', {
@@ -133,11 +150,12 @@ const DraftModal = (props: DraftModalProps) => {
       message={'确认删除该草稿吗？'}
       footer={{
         confirm: {
-          text: '确认',
-          onClick: deleteDraft
+          text: loading ? '删除中...' : '确认',
+          onClick: deleteDraft,
+          disabled: loading
         },
         cancel: {
-          onClick: setConfirmVis.setFalse
+          onClick: setConfirmVis.setFalse,
         }
       }}
     />

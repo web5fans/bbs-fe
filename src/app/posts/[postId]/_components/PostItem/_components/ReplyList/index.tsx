@@ -4,26 +4,30 @@ import server from "@/server";
 import PostLike from "@/app/posts/[postId]/_components/PostLike";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { usePostCommentReply } from "@/provider/PostReplyProvider";
-import { Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import ArrowIcon from '@/assets/arrow-s.svg';
 import ShowCreateTime from "./ShowCreateTime";
 import HtmlContent from "./HTMLContent";
 import Avatar from "@/components/Avatar";
 import SwitchPostHideOrOpen from "@/app/posts/[postId]/_components/PostItem/_components/SwitchPostHideOrOpen";
-import { eventBus } from "@/lib/EventBus";
 import TipModal, { AuthorType } from "@/app/posts/[postId]/_components/PostItem/_components/Donate/TipModal";
 import DonateIcon from '@/assets/posts/donate.svg'
 import cx from "classnames";
 import { usePost } from "@/app/posts/[postId]/_components/Post404Auth";
+import { CommentOrReplyItemType } from "@/app/posts/utils";
 
-export type ReplyListRefProps = { reload: () => void }
+export type ReplyListRefProps = {
+  reload: () => void;
+  updateReplyList: (info: CommentOrReplyItemType) => void;
+  addFirstReply: (info: CommentOrReplyItemType) => void
+}
 
 const ReplyList = (props: {
   uri: string
   rootUri: string
   sectionId: string
   total: string
-  changeTotal: (total: string) => void
+  incrementalReplyTotal: () => void
   replyComment: () => void
   componentRef?: Ref<ReplyListRefProps>
 }) => {
@@ -33,7 +37,9 @@ const ReplyList = (props: {
 
   const { anchorInfo, clearAnchorInfo } = usePost()
 
-  const { data: replyListInfo, loading, loadingMore, loadMore, noMore, reload, mutate } = useInfiniteScroll(async (prevData) => {
+  const addedFirstReplies = useRef<CommentOrReplyItemType | undefined>(undefined)
+
+  const { data: replyListInfo, loading, loadingMore, loadMore, noMore, reload, mutate, cancel } = useInfiniteScroll(async (prevData) => {
     const limit = anchorInfo?.reply?.idx || 5
     const pagedData = await server('/reply/list', 'POST', {
       comment: props.uri,
@@ -50,35 +56,73 @@ const ReplyList = (props: {
     };
   }, {
     isNoMore: d => !d?.nextCursor,
-    reloadDeps: [userProfile?.did]
+    reloadDeps: [userProfile?.did],
+    onSuccess: (data) => {
+      if (addedFirstReplies.current) {
+        mutate({
+          ...data,
+          list: [...data.list, addedFirstReplies.current]
+        })
+        addedFirstReplies.current = undefined
+      }
+    }
   });
 
   useImperativeHandle(props.componentRef, () => {
     return {
-      reload
+      reload,
+      updateReplyList,
+      addFirstReply: (info) => {
+        addedFirstReplies.current = info
+      }
     }
   })
 
-  useEffect(() => {
-    const f = (uri: string) => {
-      if (uri !== props.uri) return
-      reload()
-    }
-    eventBus.subscribe('post-comment-reply-list-refresh', f)
+  const showLoadMore = useMemo(() => {
+    return Number(props.total) > 5 && (props.total !== `${replyListInfo?.list.length}`)
+  }, [props.total, replyListInfo])
 
-    return () => {
-      eventBus.unsubscribe('post-comment-reply-list-refresh', f)
+  const updateReplyList = (info: CommentOrReplyItemType) => {
+    if (!replyListInfo?.list) return;
+    const editIdx = replyListInfo.list.findIndex(e => e.uri === info.uri)
+    if (editIdx > -1) {
+      const list = [...replyListInfo.list]
+      list.splice(editIdx, 1, {
+        ...list[editIdx],
+        text: info.text,
+        edited: info.edited,
+        cid: info.cid,
+      })
+
+      mutate(old => {
+        if (!old) return old
+        return {
+          ...old,
+          list,
+        }
+      })
+      return
     }
-  }, []);
+
+    if (showLoadMore) return;
+
+    mutate(old => {
+      if (!old) return old
+      return {
+        ...(old || {}),
+        list: [...(replyListInfo?.list || []), info]
+      }
+    })
+  }
 
   const reply = (info: any, isEdit?: boolean) => {
     const params = {
-      toUserName: info.author.displayName,
+      toAuthor: info.author,
       toDid: info.author.did
     }
-    if (isEdit && info.to) {
+    if (isEdit) {
       params.toDid = info.to?.did
-      params.toUserName = info.to?.displayName
+      if (info.to) params.toAuthor = info.to
     }
     openModal({
       type: 'reply',
@@ -86,11 +130,11 @@ const ReplyList = (props: {
       commentUri: props.uri,
       sectionId: props.sectionId,
       ...params,
-      refresh: () => {
-        reload()
+      refresh: (info) => {
+        updateReplyList(info)
         if (isEdit) return
-        const total = Number(props.total) + 1
-        props.changeTotal(`${total}`)
+
+        props.incrementalReplyTotal()
       },
       isEdit,
       content: info
@@ -110,7 +154,7 @@ const ReplyList = (props: {
         showEdit={userProfile?.did === info.author.did}
       />
     })}
-    {props.total > 5 && (props.total !== `${replyListInfo.list.length}`) && <div
+    {showLoadMore && <div
       className={S.load}
       onClick={loadMore}
     ><ArrowIcon />加载更多</div>}
@@ -191,7 +235,7 @@ function ReplyItem(props: {
       </div>
     </div>
     <div className={S.contentWrap}>
-      <HtmlContent html={replyItem.text} scrollToTarget={scrollToTarget} />
+      <HtmlContent key={replyItem.cid} html={replyItem.text} scrollToTarget={scrollToTarget} />
       <div className={S.footer}>
         <div className={S.leftOpts}>
           <DonateIcon className={S.icon} />

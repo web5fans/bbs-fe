@@ -1,7 +1,7 @@
 import { createHighlights, svgLinesXY } from "./utils";
 import { useEffect, useRef, useState } from "react";
 
-export const Loading = ({ speed = 60, className }: { speed?: number; className?: string }) => {
+export const CircleLoading = ({ speed = 60, className }: { speed?: number; className?: string }) => {
   const { getIndexes, next } = createHighlights()
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const [ highlight, setHighlight ] = useState<number[]>([])
