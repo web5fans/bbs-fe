@@ -16,9 +16,11 @@ import { TableProps } from "@/components/Table";
 import utcToLocal from "@/lib/utcToLocal";
 import AppointAdminModal from "@/app/property-manage/_components/AppointAdmin";
 import AppointModeratorModal from "@/app/property-manage/_components/AppointModerator";
+import { useKeystore } from "@/contexts/KeystoreContext";
 
 const SectionAdmin = () => {
   const { userProfile } = useCurrentUser()
+  const { client, didKey } = useKeystore()
 
   const [v, setV] = useState(0)
 
@@ -92,7 +94,7 @@ const SectionAdmin = () => {
       name: null,
     }
 
-    const obj = await getSigningKeyInfo(params)
+    const obj = await getSigningKeyInfo(params, client, didKey)
 
     if (!obj) return
 

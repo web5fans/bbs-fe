@@ -10,6 +10,7 @@ import remResponsive from "@/lib/rem-responsive";
 import cx from "classnames";
 import dayjs from "dayjs";
 import { postsWritesPDSOperation } from "@/app/posts/utils";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import { useBoolean } from "ahooks";
 import { useRef, useState } from "react";
@@ -25,6 +26,7 @@ type DraftModalProps = {
 
 const DraftModal = (props: DraftModalProps) => {
   const { userProfile } = useCurrentUser()
+  const { client, didKey } = useKeystore()
 
   const [ confirmVis, setConfirmVis ] = useBoolean(false)
   const [ loading, setLoading ] = useBoolean(false)
@@ -37,6 +39,15 @@ const DraftModal = (props: DraftModalProps) => {
   const tableRef = useRef<RequestTableRef<any> | null>(null)
 
   const deleteDraft = async () => {
+    if (!client || !didKey) {
+      toast({
+        title: '错误',
+        message: 'Keystore未连接',
+        icon: 'error'
+      })
+      return
+    }
+
     const { uri, created, section_id, title, text } = curOptRecord.current;
     const rkey = uri.split('/app.bbs.post/')[1]
 
@@ -54,7 +65,9 @@ const DraftModal = (props: DraftModalProps) => {
       },
       did: userProfile?.did!,
       rkey,
-      type: 'delete'
+      type: 'delete',
+      client,
+      didKey
     })
     toast({
       icon: 'success',

@@ -1,16 +1,15 @@
 import server from "@/server";
 import getPDSClient from "@/lib/pdsClient";
 import storage from "@/lib/storage";
-import * as crypto from '@atproto/crypto'
 import { UnsignedCommit } from '@atproto/repo'
 import { uint8ArrayToHex } from "@/lib/dag-cbor";
 import { CID } from 'multiformats/cid'
 import * as cbor from '@ipld/dag-cbor'
 import { TID } from '@atproto/common-web'
 import dayjs from "dayjs";
-import { Secp256k1Keypair } from "@atproto/crypto";
 import sessionWrapApi from "@/lib/wrapApiAutoSession";
 import { UserProfileType } from "@/store/userInfo";
+import type { KeystoreClient } from "keystore/KeystoreClient";
 
 export type PostFeedItemType = {
   uri: string,
@@ -24,10 +23,10 @@ export type PostFeedItemType = {
   tip_count: string,
   reply_count?: string,
   post?: string,
-  visited: string, // 时间
-  updated: string, // 时间
-  created: string, // 时间
-  section: string,       // 版区名称
+  visited: string,
+  updated: string,
+  created: string,
+  section: string,
   section_id: string,
   is_top: boolean
   is_announcement: boolean
@@ -48,8 +47,8 @@ export type CommentOrReplyItemType = {
   tip_count: string,
   reply_count?: string,
   post: string,
-  updated?: string, // 时间
-  created: string, // 时间
+  updated?: string,
+  created: string,
   is_disabled: boolean
   reasons_for_disabled?: string
   edited?: string
@@ -73,15 +72,14 @@ export type SectionItem = {
   ckb_addr: string
   id: string;
   name: string
-  owner?: { did: string; displayName?: string } // 版主
-  description?: string // 描述
-  administrators: {did: string; [key: string]: any}[]  // 管理员列表
+  owner?: { did: string; displayName?: string }
+  description?: string
+  administrators: {did: string; [key: string]: any}[]
   is_disabled?: boolean
   owner_set_time: string | null
   image: string | null
 }
 
-/* 获取版区列表 */
 export async function getSectionList(did?: string) {
   return await server<SectionItem[]>('/section/list', 'GET', {
     repo: did,
@@ -96,11 +94,11 @@ type PostRecordType = {
   text: string;
   edited?: string
   created?: string
-  is_draft?: boolean // 是否是草稿
-  is_announcement?: boolean // 是否是草稿
+  is_draft?: boolean
+  is_announcement?: boolean
 } | {
   $type: 'app.bbs.comment'
-  post: string  // 原帖uri
+  post: string
   text: string;
   section_id: string;
   edited?: string
@@ -111,13 +109,13 @@ type PostRecordType = {
   [key: string]: any;
 } | {
   $type: 'app.bbs.like'
-  to: string; // 点赞的帖子uri或者评论\回复的uri
+  to: string;
   section_id: string;
 } | {
   $type: 'app.bbs.reply'
-  post: string    // 帖子的uri
-  comment?: string   // 跟帖的uri
-  to?: string   // 对方did, 有就填，没有就是直接回复评论的
+  post: string
+  comment?: string
+  to?: string
   text: string
   section_id: string
   edited?: string
@@ -140,10 +138,12 @@ export type WritePDSOptParamsType = {
   did: string
   rkey?: string
   type?: 'update' | 'create' | 'delete'
+  client: KeystoreClient;
+  didKey: string;
 }
 
-/* 发帖、回帖、点赞、编辑帖子PDS写入操作 */
 export async function postsWritesPDSOperation(params: WritePDSOptParamsType) {
+  const { client, didKey } = params
   const operateType = params.type || 'create'
   const pdsClient = getPDSClient()
 
@@ -175,11 +175,9 @@ export async function postsWritesPDSOperation(params: WritePDSOptParamsType) {
 
   const storageInfo = storage.getToken()
 
-  if (!storageInfo?.signKey) {
-    throw '没缓存'
+  if (!storageInfo?.signingKeyDid) {
+    throw new Error('No signing key available')
   }
-
-  let keyPair = await crypto.Secp256k1Keypair.import(storageInfo?.signKey?.slice(2))
 
   let uncommit: UnsignedCommit = {
     did: writerData.did,
@@ -191,16 +189,16 @@ export async function postsWritesPDSOperation(params: WritePDSOptParamsType) {
   const preEncoded = cbor.encode(uncommit)
 
   if (uint8ArrayToHex(preEncoded) !== writerData.unSignBytes) {
-    throw 'sign bytes not consistent'
+    throw new Error('sign bytes not consistent')
   }
 
   const encoded = cbor.encode(uncommit)
-  const sig = await keyPair.sign(encoded)
-  const commit =  {
+  const sig = await client.signMessage(encoded)
+  const commit = {
     ...uncommit,
     sig,
   }
-  let signingKey = keyPair.did()
+  let signingKey = didKey
 
   const localStorage = storage.getToken()
 
@@ -252,18 +250,21 @@ export type PostOptParamsType = {
   uri: string
   is_top?: boolean
   is_announcement?: boolean
+  client: KeystoreClient;
+  didKey: string;
 } & ({ is_disabled: true; reasons_for_disabled: string } | { is_disabled?: boolean; reasons_for_disabled?: string })
 
 export async function updatePostByAdmin(params: PostOptParamsType): Promise<void> {
+  const { client, didKey } = params
   const storageInfo = storage.getToken()
 
-  if (!storageInfo?.signKey) return
+  if (!storageInfo?.signingKeyDid) {
+    throw new Error('No signing key available')
+  }
 
-  const { signKey, did } = storageInfo
+  const { did } = storageInfo
 
-  const keyPair = await Secp256k1Keypair.import(signKey?.slice(2))
-
-  const signingKey = keyPair.did()
+  const signingKey = didKey
 
   const paramsObj = {
     ...params,
@@ -277,7 +278,7 @@ export async function updatePostByAdmin(params: PostOptParamsType): Promise<void
     ...paramsObj,
     reasons_for_disabled: params.reasons_for_disabled || null,
   })
-  const sig = await keyPair.sign(encoded)
+  const sig = await client.signMessage(encoded)
 
   await server('/admin/update_tag', 'POST', {
     did,

@@ -7,6 +7,7 @@ import { checkEditorContent } from "@/lib/tiptap-utils";
 import { useBoolean, useRequest } from "ahooks";
 import { PostFeedItemType, postsWritesPDSOperation, WritePDSOptParamsType } from "@/app/posts/utils";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import dayjs from "dayjs";
 import server from "@/server";
 
@@ -19,6 +20,7 @@ const NoticeModal = (props: {
   const { noticeInfo, sectionId } = props;
 
   const { userProfile } = useCurrentUser()
+  const { client, didKey } = useKeystore()
 
   const [loading, setLoading] = useBoolean(false)
 
@@ -72,6 +74,7 @@ const NoticeModal = (props: {
   const title = isEdit ? '编辑公告' : '发布新公告'
 
   const publish = async () => {
+    if (!client || !didKey) return
     setLoading.setTrue()
 
     const params: WritePDSOptParamsType = {
@@ -83,6 +86,8 @@ const NoticeModal = (props: {
         is_announcement: true
       },
       did: userProfile?.did!,
+      client,
+      didKey,
     }
 
     if (isEdit) {

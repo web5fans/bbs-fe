@@ -7,11 +7,12 @@ import { FansWeb5CkbCreateAccount, ComAtprotoServerCreateSession } from "web5-ap
 import { postsWritesPDSOperation } from "@/app/posts/utils";
 import { handleToNickName } from "@/lib/handleToNickName";
 import { fetchUserProfile, userLogin } from "@/lib/user-account";
+import type { KeystoreClient } from "keystore/KeystoreClient";
 
 export type UserProfileType = {
   did: string
   displayName?: string
-  highlight?: string  // 在白名单内才有这个字段
+  highlight?: string
   post_count?: string
   comment_count?: string
   created?: string
@@ -26,20 +27,22 @@ type UserInfoStoreValue = {
   userProfile?: UserProfileType
   isWhiteListUser?: boolean
   visitorId?: string
+  keystoreClient?: KeystoreClient | null
+  keystoreDidKey?: string | null
 }
 
 const STORAGE_VISITOR = '@bbs:visitor'
 
-
 export type UserInfoStore = UserInfoStoreValue & {
   setStoreData: (storeData: UserInfoStoreValue) => void
-  storageUserInfo: (params: { signKey: string; ckbAddr: string; userInfo: FansWeb5CkbCreateAccount.OutputSchema}) => void
-  web5Login: () => Promise<void>
+  setKeystoreContext: (client: KeystoreClient | null, didKey: string | null) => void
+  storageUserInfo: (params: { signingKeyDid: string; ckbAddr: string; userInfo: FansWeb5CkbCreateAccount.OutputSchema}) => void
+  web5Login: (client: KeystoreClient, didKey: string) => Promise<void>
   getUserProfile: () => Promise<UserProfileType | undefined>;
   logout: () => void
-  writeProfile: () => Promise<'NO_NEED' | 'SUCCESS' | 'FAIL'>
+  writeProfile: (client: KeystoreClient, didKey: string) => Promise<'NO_NEED' | 'SUCCESS' | 'FAIL'>
   resetUserStore: () => void
-  initialize: (signer?: ccc.Signer) => Promise<void>
+  initialize: (client?: KeystoreClient, didKey?: string) => Promise<void>
   importUserDid: (info: TokenStorageType) => Promise<void>
 }
 
@@ -50,22 +53,28 @@ const useUserInfoStore = createSelectors(
     userProfile: undefined,
     isWhiteListUser: undefined,
     visitorId: undefined,
+    keystoreClient: undefined,
+    keystoreDidKey: undefined,
 
     setStoreData: (params) => {
       set(() => ({ ...params }))
     },
 
-    storageUserInfo: async ({ signKey, ckbAddr, userInfo }) => {
+    setKeystoreContext: (client, didKey) => {
+      set(() => ({ keystoreClient: client, keystoreDidKey: didKey }))
+    },
+
+    storageUserInfo: async ({ signingKeyDid, ckbAddr, userInfo }) => {
       storage.setToken({
         did: userInfo.did,
-        signKey,
+        signingKeyDid,
         walletAddress: ckbAddr
       })
 
       set(() => ({ userInfo, userProfile: { did: userInfo.did, handle: userInfo.handle } }))
     },
 
-    writeProfile: async () => {
+    writeProfile: async (client: KeystoreClient, didKey: string) => {
       const { userInfo, userProfile } = get();
       if (!userInfo || (userProfile && userProfile.displayName)) return 'NO_NEED'
 
@@ -77,7 +86,9 @@ const useUserInfoStore = createSelectors(
             handle: userInfo.handle
           },
           did: userInfo.did,
-          rkey: "self"
+          rkey: "self",
+          client,
+          didKey
         })
         return 'SUCCESS'
       } catch (e) {
@@ -86,29 +97,33 @@ const useUserInfoStore = createSelectors(
       }
     },
 
-    web5Login: async () => {
+    web5Login: async (client: KeystoreClient, didKey: string) => {
       const localStorage = storage.getToken()
 
       if (!localStorage) return
 
-      const userInfoRes = await userLogin(localStorage)
+      const userInfoRes = await userLogin({ localStorage, client, didKey })
 
       if (!userInfoRes) return
 
-      set(() => ({ userInfo: userInfoRes }))
+      set(() => ({ userInfo: userInfoRes, keystoreClient: client, keystoreDidKey: didKey }))
       await get().getUserProfile()
     },
 
-    /* 清除用户信息+缓存 */
     logout: () => {
       storage.removeToken()
       get().resetUserStore()
     },
 
-    /* 只清除用户信息，保留缓存 */
     resetUserStore() {
       getPDSClient().logout()
-      set(() => ({ userInfo: undefined, userProfile: undefined, isWhiteListUser: false }))
+      set(() => ({ 
+        userInfo: undefined, 
+        userProfile: undefined, 
+        isWhiteListUser: false,
+        keystoreClient: undefined,
+        keystoreDidKey: undefined
+      }))
     },
 
     getUserProfile: async () => {
@@ -121,9 +136,9 @@ const useUserInfoStore = createSelectors(
         isWhiteListUser: !!result.highlight,
       }))
 
-      // 没有displayName说明需要补充写入profile
-      if (!result.displayName) {
-        const status = await get().writeProfile()
+      const { keystoreClient, keystoreDidKey } = get()
+      if (!result.displayName && keystoreClient && keystoreDidKey) {
+        const status = await get().writeProfile(keystoreClient, keystoreDidKey)
         if (status === 'SUCCESS') {
           const profile = await fetchUserProfile(userInfo.did)
           set(() => ({ userProfile: profile }))
@@ -134,8 +149,12 @@ const useUserInfoStore = createSelectors(
       return result
     },
 
-    initialize: async () => {
-      await get().web5Login()
+    initialize: async (client?: KeystoreClient, didKey?: string) => {
+      const hasToken = storage.getToken()
+      if (hasToken && client && didKey) {
+        await get().web5Login(client, didKey)
+      }
+      
       let visitor = localStorage.getItem(STORAGE_VISITOR)
       if (!visitor) {
         const random4Digit = Math.floor(Math.random() * 9000) + 1000;
@@ -147,7 +166,6 @@ const useUserInfoStore = createSelectors(
 
     importUserDid: async (info) => {
       storage.setToken(info)
-      await get().web5Login()
     }
 
   })),

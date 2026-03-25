@@ -2,6 +2,7 @@ import { useBoolean } from "ahooks";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import { updatePostByAdmin } from "@/app/posts/utils";
 import { useToast } from "@/provider/toast";
+import { useKeystore } from "@/contexts/KeystoreContext";
 
 const UnShelfConfirm = ({ uri, refresh }: {
   uri: string
@@ -10,11 +11,14 @@ const UnShelfConfirm = ({ uri, refresh }: {
   const [confirmModalVis, setConfirmModal] = useBoolean(false)
 
   const toast = useToast()
+  const { client, didKey } = useKeystore()
 
   const confirm = async () => {
     await updatePostByAdmin({
       uri,
-      is_announcement: false
+      is_announcement: false,
+      client,
+      didKey
     })
     toast({
       title: '下架成功',

@@ -7,6 +7,7 @@ import FaceIcon from '@/assets/login/multiDid/face.svg'
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
 import { useRef, useState } from "react";
 import { CommentOrReplyItemType, postsWritesPDSOperation } from "@/app/posts/utils";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import { useToast } from "@/provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Link from "next/link";
@@ -20,6 +21,7 @@ const PostDiscuss = (props: {
   refresh?: (comment: CommentOrReplyItemType) => void
 }) => {
   const { userProfile, hasLoggedIn, isWhiteUser, updateProfile } = useCurrentUser()
+  const { client, didKey } = useKeystore()
   const [publishing, setPublishing] = useState(false)
 
   const [richText, setRichText] = useState('')
@@ -39,6 +41,10 @@ const PostDiscuss = (props: {
   }
 
   const publishComment = async () => {
+    if (!client || !didKey) {
+      toast({ title: 'Keystore未连接', icon: 'error'})
+      return
+    }
     setPublishing(true)
     try {
       await updateProfile()
@@ -49,7 +55,9 @@ const PostDiscuss = (props: {
           post: props.postUri,
           section_id: props.sectionId,
         },
-        did: userProfile?.did!
+        did: userProfile?.did!,
+        client,
+        didKey
       })
       setPublishing(false)
       editorRef.current?.clearContent()

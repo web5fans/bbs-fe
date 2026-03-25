@@ -2,10 +2,6 @@ import S from './index.module.scss'
 import MouseToolTip from "@/components/MouseToolTip";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import cx from "classnames";
-import DidInfoImg from '@/assets/user-center/did-info.svg';
-import QrCodeImg from '@/assets/user-center/qrcode.svg';
-import ExportWeb5DidModal from "@/components/ExportWeb5DidModal";
-import KeyQRCodeModal from "@/app/user-center/_components/KeyQRCodeModal";
 import FlatBottomedCard from "@/components/FlatBottomedCard";
 import { USER_DOMAIN } from "@/constant/Network";
 
@@ -49,24 +45,6 @@ function DataStatistic(props: { postsCount: string; commentCount: string }) {
       <span>{commentCount}</span>
       <span>回帖</span>
     </p>
-
-    <KeyQRCodeModal>
-      <MouseToolTip message={'使用可它快捷登录其他设备，请注意安全保存'}>
-        <p className={S.dataItem}>
-          <QrCodeImg className={S.qrcode} />
-          <span>密钥二维码</span>
-        </p>
-      </MouseToolTip>
-    </KeyQRCodeModal>
-
-    <ExportWeb5DidModal>
-      <MouseToolTip message={'导出它可快捷登录其他设备，请注意安全保存'}>
-        <p className={S.dataItem}>
-          <DidInfoImg className={S.didInfo} />
-          <span>Web5 DID信息</span>
-        </p>
-      </MouseToolTip>
-    </ExportWeb5DidModal>
   </div>
 }
 

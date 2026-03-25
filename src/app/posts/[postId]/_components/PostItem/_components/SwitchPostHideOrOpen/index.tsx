@@ -6,6 +6,7 @@ import cx from "classnames";
 import { useBoolean } from "ahooks";
 import HidePostOrCommentModal from "@/app/posts/[postId]/_components/HidePostOrCommentModal";
 import { PostOptParamsType, updatePostByAdmin } from "@/app/posts/utils";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import { usePost } from "../../../Post404Auth";
 
 
@@ -19,14 +20,16 @@ const SwitchPostHideOrOpen = (props: {
   const { status, className, uri, onConfirm, nsid } = props;
   const [hideModalVis, { toggle: toggleHideModalVis, setFalse: closeHideModal }] = useBoolean(false)
   const { isSectionAdmin } = usePost()
+  const { client, didKey } = useKeystore()
 
   const handlePostsOpt = async (reason?: string) => {
+    if (!client || !didKey) return
     const obj: PostOptParamsType = {
       uri: uri,
       is_disabled: status === 'hide',
       reasons_for_disabled: reason
     }
-    await updatePostByAdmin(obj)
+    await updatePostByAdmin({ ...obj, client, didKey })
     onConfirm()
   }
 

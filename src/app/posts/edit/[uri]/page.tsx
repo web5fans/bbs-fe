@@ -14,6 +14,7 @@ import Button from "@/components/Button";
 import CancelButton from "@/app/posts/edit/[uri]/_components/CancelButton";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { PostFeedItemType, postsWritesPDSOperation } from "@/app/posts/utils";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import dayjs from "dayjs";
 import { useToast } from "@/provider/toast";
 import { checkEditorContent } from "@/lib/tiptap-utils";
@@ -27,6 +28,7 @@ const EditPost = () => {
   const toast = useToast()
 
   const { userProfile } = useCurrentUser()
+  const { client, didKey } = useKeystore()
 
   const editorRef = useRef<EditorRefType>(null);
   const [publishing, setPublishing] = useState(false)
@@ -90,7 +92,12 @@ const EditPost = () => {
   }
 
   const submitEdit = async () => {
-    if (!postInfo) return
+    if (!postInfo || !client || !didKey) {
+      if (!client || !didKey) {
+        toast({ title: 'Keystore未连接', icon: 'error'})
+      }
+      return
+    }
     setPublishing(true)
     const posturi = postInfo.uri;
     const rkey = posturi.split('/app.bbs.post/')[1]
@@ -110,7 +117,9 @@ const EditPost = () => {
         },
         did: userProfile?.did!,
         rkey,
-        type: 'update'
+        type: 'update',
+        client,
+        didKey
       })
       runLoop(uri, cid)
     } catch (error) {

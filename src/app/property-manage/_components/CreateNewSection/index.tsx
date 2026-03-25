@@ -12,6 +12,7 @@ import getSigningKeyInfo from "@/lib/signing-key";
 import { useToast } from "@/provider/toast";
 import { ccc } from "@ckb-ccc/core";
 import { useWallet } from "@/provider/WalletProvider";
+import { useKeystore } from "@/contexts/KeystoreContext";
 
 const CreateNewSectionModal = ({ onClose, refresh }: {
   onClose: () => void
@@ -19,6 +20,7 @@ const CreateNewSectionModal = ({ onClose, refresh }: {
 }) => {
   const toast = useToast()
   const { walletClient } = useWallet()
+  const { client, didKey } = useKeystore()
   const [disabled, setDisabled] = useState(false)
   const [loading, setLoading] = useBoolean(false)
   const [sectionParams, setSectionParams] = useSetState({
@@ -30,7 +32,7 @@ const CreateNewSectionModal = ({ onClose, refresh }: {
   })
 
   const confirm = async () => {
-    const info = await getSigningKeyInfo(sectionParams)
+    const info = await getSigningKeyInfo(sectionParams, client, didKey)
     if (!info) return
     setLoading.setTrue()
     try {

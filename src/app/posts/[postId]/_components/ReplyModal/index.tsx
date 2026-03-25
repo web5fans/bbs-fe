@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import { checkEditorContent } from "@/lib/tiptap-utils";
 import numeral from "numeral";
 import { CommentOrReplyItemType, postsWritesPDSOperation } from "@/app/posts/utils";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import PackUpIcon from '@/assets/posts/pack-up.svg'
 import { useBoolean } from "ahooks";
@@ -22,6 +23,7 @@ export type ReplyModalPropsType = { visible: boolean; modalInfo?: ReplyModalInfo
 
 const ReplyModal = (props: ReplyModalPropsType) => {
   const { updateProfile, userProfile } = useCurrentUser();
+  const { client, didKey } = useKeystore();
   const [publishing, setPublishing] = useState(false)
 
   const [textNumber, setTextNumber] = useState(0)
@@ -65,7 +67,7 @@ const ReplyModal = (props: ReplyModalPropsType) => {
   }
 
   const submit = async () => {
-    if (!modalInfo) return
+    if (!modalInfo || !client || !didKey) return
     const { type, postUri, commentUri, toDid, sectionId, refresh, isEdit, toAuthor } = modalInfo;
     const message = isEdit ? '编辑' : '发布'
 
@@ -97,7 +99,9 @@ const ReplyModal = (props: ReplyModalPropsType) => {
         record,
         did: userProfile?.did!,
         type: isEdit ? 'update' : 'create',
-        rkey: isEdit ? modalInfo.content.uri.split(`/${record.$type}/`)[1] : undefined
+        rkey: isEdit ? modalInfo.content.uri.split(`/${record.$type}/`)[1] : undefined,
+        client,
+        didKey
       })
 
       const info: CommentOrReplyItemType = {

@@ -1,6 +1,7 @@
 import RequestTable from "@/components/Table/RequestTable";
 import { TableProps } from "@/components/Table";
 import { PostFeedItemType, updatePostByAdmin } from "@/app/posts/utils";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import server from "@/server";
 import utcToLocal from "@/lib/utcToLocal";
 import remResponsive from "@/lib/rem-responsive";
@@ -22,6 +23,7 @@ const HiddenPosts = ({ sectionId }: {
   const [searchContent, setSearchContent] = useState<string | null>(null)
 
   const toast = useToast()
+  const { client, didKey } = useKeystore()
 
   const router = useRouter()
 
@@ -67,11 +69,13 @@ const HiddenPosts = ({ sectionId }: {
 
   const publicPost = async () => {
     const postInfo = currentPostRef.current
-    if (!postInfo) return
+    if (!postInfo || !client || !didKey) return
 
     await updatePostByAdmin({
       uri: postInfo.uri,
       is_disabled: false,
+      client,
+      didKey,
     })
 
     toast({

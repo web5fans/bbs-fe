@@ -12,6 +12,7 @@ import server from "@/server";
 import getSigningKeyInfo from "@/lib/signing-key";
 import { useToast } from "@/provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { useKeystore } from "@/contexts/KeystoreContext";
 
 const AppointModeratorModal = (props: {
   onClose: () => void
@@ -20,6 +21,7 @@ const AppointModeratorModal = (props: {
 }) => {
   const toast = useToast()
   const { userProfile } = useCurrentUser()
+  const { client, didKey } = useKeystore()
   const [params, setParams] = useSetState<{ section?: string, did: string, name: string }>({
     section: props.defaultSection,
     did: '',
@@ -45,7 +47,7 @@ const AppointModeratorModal = (props: {
   }, []);
 
   const onConfirm = async () => {
-    const obj = await getSigningKeyInfo(params)
+    const obj = await getSigningKeyInfo(params, client, didKey)
 
     if (!obj) return
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import getSigningKeyInfo from "@/lib/signing-key";
 import server from "@/server";
 import { useToast } from "@/provider/toast";
+import { useKeystore } from "@/contexts/KeystoreContext";
 
 const AddWhiteList = (props: {
   onClose: () => void
@@ -11,9 +12,10 @@ const AddWhiteList = (props: {
   const [did, setDid] = useState('')
 
   const toast = useToast()
+  const { client, didKey } = useKeystore()
 
   const addConfirm = async () => {
-    const obj = await getSigningKeyInfo({ whitelist: [did] })
+    const obj = await getSigningKeyInfo({ whitelist: [did] }, client, didKey)
 
     if (!obj) return
 

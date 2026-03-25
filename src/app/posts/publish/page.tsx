@@ -13,6 +13,7 @@ import CommentIcon from '@/assets/posts/comment.svg'
 import SectionEarth from '@/assets/posts/section.svg'
 import { useRequest } from "ahooks";
 import { getSectionList, PostFeedItemType, postsWritesPDSOperation } from "@/app/posts/utils";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import cx from "classnames";
 import { useToast } from "../../../provider/toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -30,6 +31,7 @@ import server from "@/server";
 
 const PublishPostPage = () => {
   const searchParams = useSearchParams()
+  const { client, didKey } = useKeystore()
 
   const defaultSection = searchParams.get('section') || ''
 
@@ -129,6 +131,10 @@ const PublishPostPage = () => {
   }
 
   const submit = async () => {
+    if (!client || !didKey) {
+      toast({ title: 'Keystore未连接', icon: 'error'})
+      return
+    }
     setPublishing(true)
     try {
       await updateProfile()
@@ -147,7 +153,9 @@ const PublishPostPage = () => {
         },
         did: userProfile?.did!,
         rkey,
-        type: 'update'
+        type: 'update',
+        client,
+        didKey
       })
 
       runLoop(uri, cid)

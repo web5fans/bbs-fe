@@ -3,7 +3,9 @@ const ACCESS_TOKEN_STORE_KEY = '@bbs:client';
 export type TokenStorageType = {
   did: string
   walletAddress: string
-  signKey: string
+  signingKeyDid: string
+  accessJwt?: string
+  refreshJwt?: string
 }
 
 const clientRun = <T extends (...args: any[]) => any>(f: T) => {

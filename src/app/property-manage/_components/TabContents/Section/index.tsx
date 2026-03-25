@@ -14,9 +14,11 @@ import { useToast } from "@/provider/toast";
 import { TableProps } from "@/components/Table";
 import AppointModeratorModal from "../../AppointModerator";
 import AddNewSection from "./AddNewSection";
+import { useKeystore } from "@/contexts/KeystoreContext";
 
 const Section = () => {
   const { userProfile } = useCurrentUser()
+  const { client, didKey } = useKeystore()
 
   const [v, setV] = useState(0)
 
@@ -85,7 +87,7 @@ const Section = () => {
       name: null,
     }
 
-    const obj = await getSigningKeyInfo({ ...params, ckb_addr: null })
+    const obj = await getSigningKeyInfo({ ...params, ckb_addr: null }, client, didKey)
 
     if (!obj) return
 

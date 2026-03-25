@@ -50,6 +50,69 @@
   .content {
     display: flex;
   }
+
+  .loginContent {
+    padding: rem.px2flexible(32);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: rem.px2flexible(24);
+    min-height: rem.px2flexible(300);
+  }
+
+  .status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: rem.px2flexible(16);
+    text-align: center;
+
+    p {
+      font-size: rem.px2flexible(14);
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .didKey {
+      font-family: monospace;
+      font-size: rem.px2flexible(12);
+      color: var(--text-primary);
+      background: var(--surface-elevated);
+      padding: rem.px2flexible(8) rem.px2flexible(12);
+      border-radius: rem.px2flexible(4);
+    }
+
+    .hint {
+      font-size: rem.px2flexible(12);
+      color: var(--text-tertiary);
+    }
+  }
+
+  .registerHint {
+    margin-top: rem.px2flexible(16);
+    padding-top: rem.px2flexible(16);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+
+    p {
+      font-size: rem.px2flexible(12);
+      color: var(--text-tertiary);
+      margin: 0 0 rem.px2flexible(8) 0;
+    }
+
+    .link {
+      font-size: rem.px2flexible(13);
+      color: var(--primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+
+      &:hover {
+        color: var(--primary-hover);
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 1023px) {

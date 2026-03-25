@@ -15,6 +15,7 @@ import HidePostOrCommentModal from "../HidePostOrCommentModal";
 import { useBoolean } from "ahooks";
 import { PostOptParamsType, SectionItem, updatePostByAdmin } from "@/app/posts/utils";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import cx from "classnames";
 import { usePathname, useRouter } from "next/navigation";
 import { useToast } from "@/provider/toast";
@@ -47,6 +48,7 @@ const PostPermission = (props: {
   const dropDownRef = useRef<DropDownRefType | null>(null);
 
   const { userProfile } = useCurrentUser()
+  const { client, didKey } = useKeystore()
 
   const router = useRouter()
   const pathname = usePathname()
@@ -65,6 +67,7 @@ const PostPermission = (props: {
   }, [closeDropDown]);
 
   const changePostStatus = async (type: PostPermissionType, hideReason?: string) => {
+    if (!client || !didKey) return
     const obj: PostOptParamsType = {
       uri: originPost.uri
     }
@@ -80,7 +83,7 @@ const PostPermission = (props: {
         obj['is_top'] = !originPost.is_top;
         break;
     }
-    await updatePostByAdmin(obj)
+    await updatePostByAdmin({ ...obj, client, didKey })
     props.refreshData?.(type)
   }
 

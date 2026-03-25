@@ -1,6 +1,5 @@
 import getPDSClient, { setPDSClient } from "@/lib/pdsClient";
 import storage, { TokenStorageType } from "@/lib/storage";
-import { Secp256k1Keypair } from "@atproto/crypto";
 import { bytesFrom, hexFrom } from "@ckb-ccc/core";
 import { FansWeb5CkbIndexAction, FansWeb5CkbPreIndexAction } from "web5-api";
 import { showGlobalToast } from "@/provider/toast";
@@ -8,6 +7,7 @@ import server from "@/server";
 import { UserProfileType } from "@/store/userInfo";
 import axios from "axios";
 import { DID_INDEXER } from "@/constant/Network";
+import type { KeystoreClient } from "keystore/KeystoreClient";
 
 export async function fetchUserProfile(did: string): Promise<UserProfileType> {
   const result = await server<UserProfileType>('/repo/profile', 'GET', {
@@ -32,8 +32,14 @@ async function setLoginUserPDSClient(did: string) {
   return res
 }
 
-export async function userLogin(localStorage: TokenStorageType): Promise<FansWeb5CkbIndexAction.CreateSessionResult | undefined> {
-  const { did, signKey, walletAddress } = localStorage
+interface UserLoginParams {
+  localStorage: TokenStorageType;
+  client: KeystoreClient;
+  didKey: string;
+}
+
+export async function userLogin({ localStorage, client, didKey }: UserLoginParams): Promise<FansWeb5CkbIndexAction.CreateSessionResult | undefined> {
+  const { did, walletAddress } = localStorage
 
   const clientService = await setLoginUserPDSClient(did)
   if (!clientService) return
@@ -52,10 +58,9 @@ export async function userLogin(localStorage: TokenStorageType): Promise<FansWeb
       ckbAddr: walletAddress,
       index: preLoginIndex,
     })
-  } catch (err) {
+  } catch (err: any) {
     if (err.error === 'CkbDidocCellNotFound') {
       console.log('CkbDidocCellNotFound')
-      // await deleteErrUser(did, walletAddress, signKey)
       showGlobalToast({ title: err.message, icon: 'error' })
       return
     }
@@ -63,16 +68,14 @@ export async function userLogin(localStorage: TokenStorageType): Promise<FansWeb
 
   if (!preLogin) return
 
-  const keyPair = await Secp256k1Keypair.import(signKey?.slice(2))
-  const loginSig = await keyPair.sign(
-    bytesFrom(preLogin.data.message, 'utf8'),
-  )
+  const messageBytes = bytesFrom(preLogin.data.message, 'utf8')
+  const loginSig = await client.signMessage(messageBytes)
 
   const loginIndex = {
     $type: 'fans.web5.ckb.indexAction#createSession',
   }
 
-  const signingKey = keyPair.did()
+  const signingKey = didKey
 
   try {
     const loginInfo = await pdsClient.web5Login({
@@ -94,8 +97,14 @@ export async function userLogin(localStorage: TokenStorageType): Promise<FansWeb
   }
 }
 
+interface DeleteErrUserParams {
+  did: string;
+  address: string;
+  client: KeystoreClient;
+  didKey: string;
+}
 
-export async function deleteErrUser(did: string, address: string, signKey: string) {
+export async function deleteErrUser({ did, address, client, didKey }: DeleteErrUserParams) {
   const preDelectIndex = {
     $type: 'fans.web5.ckb.preIndexAction#deleteAccount',
   }
@@ -106,11 +115,9 @@ export async function deleteErrUser(did: string, address: string, signKey: strin
     index: preDelectIndex,
   })
 
-  const keyPair = await Secp256k1Keypair.import(signKey?.slice(2))
-  const signingKey = keyPair.did()
-  const deleteSig = await keyPair.sign(
-    bytesFrom(preDelete.data.message, 'utf8'),
-  )
+  const signingKey = didKey
+  const messageBytes = bytesFrom(preDelete.data.message, 'utf8')
+  const deleteSig = await client.signMessage(messageBytes)
 
   const deleteIndex = {
     $type: 'fans.web5.ckb.indexAction#deleteAccount',

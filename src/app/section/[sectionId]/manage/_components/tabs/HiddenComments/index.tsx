@@ -1,6 +1,7 @@
 import RequestTable from "@/components/Table/RequestTable";
 import { TableProps } from "@/components/Table";
 import { CommentAllPostType, updatePostByAdmin } from "@/app/posts/utils";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import server from "@/server";
 import utcToLocal from "@/lib/utcToLocal";
 import remResponsive from "@/lib/rem-responsive";
@@ -23,6 +24,7 @@ const HiddenComments = ({ sectionId }: {
   const [searchContent, setSearchContent] = useState<string | null>(null)
 
   const toast = useToast()
+  const { client, didKey } = useKeystore()
 
   const router = useRouter()
 
@@ -69,11 +71,13 @@ const HiddenComments = ({ sectionId }: {
 
   const publicComment = async () => {
     const info = currentCommentRef.current
-    if (!info) return
+    if (!info || !client || !didKey) return
 
     await updatePostByAdmin({
       uri: info.comment_uri,
       is_disabled: false,
+      client,
+      didKey,
     })
 
     toast({

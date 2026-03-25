@@ -8,6 +8,7 @@ import { useSetState } from "ahooks";
 import getSigningKeyInfo from "@/lib/signing-key";
 import server from "@/server";
 import { useToast } from "@/provider/toast";
+import { useKeystore } from "@/contexts/KeystoreContext";
 
 const EditInfoModal = (props: {
   onClose: () => void
@@ -23,15 +24,20 @@ const EditInfoModal = (props: {
   })
 
   const toast = useToast()
+  const { client, didKey } = useKeystore();
 
   const onConfirm = async () => {
     const obj = await getSigningKeyInfo({
-      ...secInfo,
-      ckb_addr: null,
-      is_disabled: null,
-      image: sectionInfo?.image === secInfo.image ? null : secInfo.image,
-      name: sectionInfo?.name === secInfo.name ? null : secInfo.name,
-      description: sectionInfo?.description === secInfo.description ? null : secInfo.description,
+      client,
+      didKey,
+      params: {
+        ...secInfo,
+        ckb_addr: null,
+        is_disabled: null,
+        image: sectionInfo?.image === secInfo.image ? null : secInfo.image,
+        name: sectionInfo?.name === secInfo.name ? null : secInfo.name,
+        description: sectionInfo?.description === secInfo.description ? null : secInfo.description,
+      }
     })
     if (!obj) return
     await server('/admin/update_section', 'POST', {

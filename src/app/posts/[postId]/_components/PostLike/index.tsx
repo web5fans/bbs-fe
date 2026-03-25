@@ -2,6 +2,7 @@ import S from './index.module.scss'
 import LikeIcon from '@/assets/posts/like.svg';
 import { useEffect, useState } from "react";
 import { postsWritesPDSOperation } from "@/app/posts/utils";
+import { useKeystore } from "@/contexts/KeystoreContext";
 import cx from "classnames";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { eventBus } from "@/lib/EventBus";
@@ -14,6 +15,7 @@ const PostLike = (props: {
   showLikeList?: () => void
 }) => {
   const { userProfile } = useCurrentUser();
+  const { client, didKey } = useKeystore();
   const [count, setCount] = useState(Number(props.likeCount) || 0)
   const [hasLiked, setHasLiked] = useState(props.liked)
 
@@ -28,7 +30,7 @@ const PostLike = (props: {
   }, [props.liked]);
 
   const handleLike = async () => {
-    if (!userProfile || hasLiked || clickActive) return
+    if (!userProfile || hasLiked || clickActive || !client || !didKey) return
     setClickActive(true)
     await postsWritesPDSOperation({
       record: {
@@ -36,7 +38,9 @@ const PostLike = (props: {
         to: props.uri,
         section_id: props.sectionId,
       },
-      did: userProfile.did
+      did: userProfile.did,
+      client,
+      didKey
     })
     setCount(v => v + 1)
     eventBus.publish('post-like-list-refresh', props.uri)

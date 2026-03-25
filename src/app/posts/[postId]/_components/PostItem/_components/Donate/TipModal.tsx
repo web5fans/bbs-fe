@@ -9,7 +9,6 @@ import InfoSVG from '@/assets/info.svg'
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import CopyText from "@/components/CopyText";
 import storage from "@/lib/storage";
-import { Secp256k1Keypair } from "@atproto/crypto";
 import * as cbor from "@ipld/dag-cbor";
 import server from "@/server";
 import { uint8ArrayToHex } from "@/lib/dag-cbor";
@@ -18,6 +17,7 @@ import { useBoolean, useCountDown } from "ahooks";
 import CKBInput from "../CKBInput";
 import { useToast } from "@/provider/toast";
 import dayjs from "dayjs";
+import { useKeystore } from "@/contexts/KeystoreContext";
 
 export type AuthorType = {
   displayName: string;
@@ -84,6 +84,7 @@ type TipPrepareResponseType = {
 
 function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentProps) {
   const { signer, address } = useWallet()
+  const { client, didKey } = useKeystore()
 
   const [ckbValueErr, setCKBValueErr] = useState(false)
 
@@ -109,16 +110,31 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
   }
 
   const confirm = async () => {
+    if (!client || !didKey) {
+      toast({
+        title: '错误',
+        message: 'Keystore未连接',
+        icon: 'error'
+      })
+      return
+    }
+
     setLoading.setTrue()
     const storageInfo = storage.getToken()
 
-    if (!storageInfo?.signKey) return
+    if (!storageInfo?.signingKeyDid) {
+      toast({
+        title: '错误',
+        message: '未找到签名密钥',
+        icon: 'error'
+      })
+      setLoading.setFalse()
+      return
+    }
 
-    const { signKey, did } = storageInfo
+    const { did } = storageInfo
 
-    const keyPair = await Secp256k1Keypair.import(signKey?.slice(2))
-
-    const signingKey = keyPair.did()
+    const signingKey = didKey
 
     const ckbAmount = money * Math.pow(10, 8) + ''
 
@@ -131,7 +147,7 @@ function ModalContent({ onClose, author, uri, nsid, onConfirm }: ModalContentPro
     }
 
     const encoded = cbor.encode(params)
-    const sig = await keyPair.sign(encoded)
+    const sig = await client.signMessage(encoded)
 
     const response = await server<TipPrepareResponseType>('/tip/prepare', 'POST', {
       did,

@@ -1,7 +1,12 @@
 // @ts-nocheck
 import type { NextConfig } from "next";
+import { NextFederationPlugin } from "@module-federation/nextjs-mf";
 
 const IS_PROD = process.env.NODE_ENV === "production";
+
+const KEYSTORE_URL = IS_PROD 
+  ? 'https://keystore.web5.fans'
+  : 'http://localhost:3001';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -25,6 +30,25 @@ const nextConfig: NextConfig = {
     config,
     { nextRuntime, isServer }
   ) {
+    config.plugins.push(
+      new NextFederationPlugin({
+        name: 'bbs-fe',
+        filename: 'static/chunks/remoteEntry.js',
+        remotes: {
+          keystore: `keystore@${KEYSTORE_URL}/assets/remoteEntry.js`,
+        },
+        shared: {
+          react: {
+            singleton: true,
+            requiredVersion: false,
+          },
+          'react-dom': {
+            singleton: true,
+            requiredVersion: false,
+          },
+        },
+      })
+    );
 
     if (!isServer) {
       config.output.filename = (pathData: any) => {

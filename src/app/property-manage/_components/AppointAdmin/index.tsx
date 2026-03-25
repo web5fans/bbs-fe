@@ -5,6 +5,7 @@ import { useSetState } from "ahooks";
 import { useToast } from "@/provider/toast";
 import getSigningKeyInfo from "@/lib/signing-key";
 import server from "@/server";
+import { useKeystore } from "@/contexts/KeystoreContext";
 
 const AppointAdminModal = (props: {
   visible: boolean
@@ -14,6 +15,7 @@ const AppointAdminModal = (props: {
   const { visible, onClose, onFresh } = props;
 
   const toast = useToast()
+  const { client, didKey } = useKeystore()
 
   const [form, setForm] = useSetState({
     name: '',
@@ -21,7 +23,7 @@ const AppointAdminModal = (props: {
   })
 
   const onSubmit = async () => {
-    const params = await getSigningKeyInfo(form)
+    const params = await getSigningKeyInfo(form, client, didKey)
     if (!params) return
     try {
       await server('/admin/add', 'POST', {

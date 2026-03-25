@@ -10,8 +10,10 @@ import cx from "classnames";
 import { useRef, useState } from "react";
 import getSigningKeyInfo from "@/lib/signing-key";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
+import { useKeystore } from "@/contexts/KeystoreContext";
 
 const AdminTeam = () => {
+  const { client, didKey } = useKeystore()
   const [ modalVis, setModalVis ] = useBoolean(false)
   const [ fresh, setFresh ] = useState(0)
 
@@ -19,7 +21,7 @@ const AdminTeam = () => {
   const currentRecordRef = useRef<any>(null)
 
   const removeAdmin = async (obj) => {
-    const params = await getSigningKeyInfo({ did: obj.did.did, name: obj.did.displayName })
+    const params = await getSigningKeyInfo({ did: obj.did.did, name: obj.did.displayName }, client, didKey)
     if (!params) return
     await server('/admin/delete', 'POST', {
       did: params.did,

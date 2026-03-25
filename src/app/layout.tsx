@@ -9,6 +9,7 @@ import { RegisterPopUpProvider } from "@/provider/RegisterPopUpProvider";
 import RegisterLogin from "@/app/register-login";
 import { ToastProvider } from "../provider/toast";
 import { LayoutProvider } from "@/provider/LayoutProvider";
+import { KeystoreProvider } from "@/contexts/KeystoreContext";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -37,26 +38,28 @@ const RootLayout = async (props: any) => {
     <body
       className={fontVariables}
     >
-    <LayoutProvider>
-      <ToastProvider>
-        <MainContent deviceType={device.type}>
-          <RegisterPopUpProvider>
-          {header}
-                <main
-                  style={{
-                    flex: 1,
-                    display: 'grid',
-                  }}
-                >
-                  {props.children}
-                </main>
+    <KeystoreProvider>
+      <LayoutProvider>
+        <ToastProvider>
+          <MainContent deviceType={device.type}>
+            <RegisterPopUpProvider>
+            {header}
+                  <main
+                    style={{
+                      flex: 1,
+                      display: 'grid',
+                    }}
+                  >
+                    {props.children}
+                  </main>
 
-                <RegisterLogin />
-              </RegisterPopUpProvider>
-            </MainContent>
-          </ToastProvider>
+                  <RegisterLogin />
+                </RegisterPopUpProvider>
+              </MainContent>
+            </ToastProvider>
 
-        </LayoutProvider>
+          </LayoutProvider>
+      </KeystoreProvider>
       </body>
     </html>
   );
