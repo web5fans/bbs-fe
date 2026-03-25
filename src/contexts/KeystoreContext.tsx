@@ -38,14 +38,23 @@ export function KeystoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initKeystore = async () => {
       try {
-        // Load remote entry script
-        await loadRemoteScript(`${KEYSTORE_URL}/assets/remoteEntry.js`);
+        // Use dynamic import to load the ESM module
+        const remoteUrl = `${KEYSTORE_URL}/assets/remoteEntry.js`;
         
-        // Get the KeystoreClient from window
-        const KeystoreClient = (window as any).keystore?.KeystoreClient;
+        // Create a module script element to properly load ESM
+        const moduleScript = await loadModuleScript(remoteUrl);
+        
+        // The remote module should expose its API to window
+        // Give it a moment to initialize
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Try to get KeystoreClient from window.keystore or window
+        const KeystoreClient = 
+          (window as any).keystore?.KeystoreClient || 
+          (window as any).KeystoreClient;
         
         if (!KeystoreClient) {
-          throw new Error('KeystoreClient not found in remote module');
+          throw new Error('KeystoreClient not found. Make sure the keystore remote is properly loaded.');
         }
 
         const c = new KeystoreClient(KEY_STORE_BRIDGE_URL);
@@ -90,8 +99,8 @@ export function useKeystore() {
   return context;
 }
 
-// Helper function to load remote script
-function loadRemoteScript(src: string): Promise<void> {
+// Helper function to load module script (ESM)
+function loadModuleScript(src: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const existing = document.querySelector(`script[src="${src}"]`);
     if (existing) {
@@ -101,7 +110,7 @@ function loadRemoteScript(src: string): Promise<void> {
 
     const script = document.createElement('script');
     script.src = src;
-    script.type = 'text/javascript';
+    script.type = 'module'; // Important: load as ES module
     script.async = true;
     
     script.onload = () => resolve();
