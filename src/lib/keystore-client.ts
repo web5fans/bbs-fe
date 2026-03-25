@@ -44,9 +44,7 @@ export class KeystoreClient {
       }
 
       this.iframe = document.createElement("iframe");
-      // Use hash for cache-busting to avoid affecting localStorage
-      const cacheBuster = `#_${Date.now()}`;
-      this.iframe.src = this.bridgeUrl + cacheBuster;
+      this.iframe.src = this.bridgeUrl;
       this.iframe.style.position = "absolute";
       this.iframe.style.width = "0";
       this.iframe.style.height = "0";
