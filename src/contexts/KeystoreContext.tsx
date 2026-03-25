@@ -1,11 +1,19 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { KeystoreClient } from 'keystore/KeystoreClient';
-import { KEY_STORE_BRIDGE_URL } from 'keystore/constants';
+
+// KeystoreClient interface
+type KeystoreClientType = {
+  connect(): Promise<void>;
+  disconnect(): void;
+  ping(): Promise<number>;
+  getDIDKey(): Promise<string>;
+  signMessage(message: Uint8Array): Promise<Uint8Array>;
+  verifySignature(didKey: string, message: Uint8Array, signature: Uint8Array): Promise<boolean>;
+};
 
 interface KeystoreContextType {
-  client: KeystoreClient | null;
+  client: KeystoreClientType | null;
   connected: boolean;
   didKey: string | null;
   isLoading: boolean;
@@ -14,8 +22,14 @@ interface KeystoreContextType {
 
 const KeystoreContext = createContext<KeystoreContextType | null>(null);
 
+const IS_PROD = process.env.NODE_ENV === "production";
+const KEYSTORE_URL = IS_PROD 
+  ? 'https://keystore.web5.fans'
+  : 'http://localhost:3001';
+const KEY_STORE_BRIDGE_URL = `${KEYSTORE_URL}/bridge.html`;
+
 export function KeystoreProvider({ children }: { children: ReactNode }) {
-  const [client, setClient] = useState<KeystoreClient | null>(null);
+  const [client, setClient] = useState<KeystoreClientType | null>(null);
   const [connected, setConnected] = useState(false);
   const [didKey, setDidKey] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,6 +38,16 @@ export function KeystoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initKeystore = async () => {
       try {
+        // Load remote entry script
+        await loadRemoteScript(`${KEYSTORE_URL}/assets/remoteEntry.js`);
+        
+        // Get the KeystoreClient from window
+        const KeystoreClient = (window as any).keystore?.KeystoreClient;
+        
+        if (!KeystoreClient) {
+          throw new Error('KeystoreClient not found in remote module');
+        }
+
         const c = new KeystoreClient(KEY_STORE_BRIDGE_URL);
         setClient(c);
         
@@ -37,6 +61,7 @@ export function KeystoreProvider({ children }: { children: ReactNode }) {
           console.log('No active key in keystore');
         }
       } catch (err) {
+        console.error('Keystore initialization error:', err);
         setError(err instanceof Error ? err.message : 'Failed to connect keystore');
       } finally {
         setIsLoading(false);
@@ -63,4 +88,25 @@ export function useKeystore() {
     throw new Error('useKeystore must be used within KeystoreProvider');
   }
   return context;
+}
+
+// Helper function to load remote script
+function loadRemoteScript(src: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      resolve();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = src;
+    script.type = 'text/javascript';
+    script.async = true;
+    
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`Failed to load ${src}`));
+    
+    document.head.appendChild(script);
+  });
 }
