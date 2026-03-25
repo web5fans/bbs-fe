@@ -44,8 +44,8 @@ export class KeystoreClient {
       }
 
       this.iframe = document.createElement("iframe");
-      // Add cache-busting parameter to force reload
-      const cacheBuster = `?_=${Date.now()}`;
+      // Use hash for cache-busting to avoid affecting localStorage
+      const cacheBuster = `#_${Date.now()}`;
       this.iframe.src = this.bridgeUrl + cacheBuster;
       this.iframe.style.position = "absolute";
       this.iframe.style.width = "0";
