@@ -21,36 +21,43 @@ export function KeystoreProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const initKeystore = async () => {
-      try {
-        // Clean up any existing iframe first to ensure fresh connection
-        const existingIframes = document.querySelectorAll('iframe[src*="keystore"]');
-        existingIframes.forEach(iframe => iframe.remove());
-        
-        const c = new KeystoreClient(KEY_STORE_BRIDGE_URL);
-        setClient(c);
-        
-        await c.connect(true);
-        setConnected(true);
-        
-        try {
-          const key = await c.getDIDKey();
-          setDidKey(key);
-        } catch (err) {
-          console.log('No active key in keystore');
-        }
-      } catch (err) {
-        console.error('Keystore initialization error:', err);
-        setError(err instanceof Error ? err.message : 'Failed to connect keystore');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    const c = new KeystoreClient(KEY_STORE_BRIDGE_URL);
+    setClient(c);
 
-    initKeystore();
+    let isMounted = true;
+
+    c.connect()
+      .then(async () => {
+        if (isMounted) {
+          setConnected(true);
+          
+          try {
+            const key = await c.getDIDKey();
+            if (isMounted && key) {
+              setDidKey(key);
+            }
+          } catch (err) {
+            console.log('Failed to fetch DID on connect');
+          }
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          console.error('Connection failed:', err.message);
+          setError(err.message);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      });
 
     return () => {
-      client?.disconnect();
+      isMounted = false;
+      c.disconnect();
+      setConnected(false);
+      setDidKey(null);
     };
   }, []);
 

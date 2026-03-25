@@ -31,16 +31,11 @@ export class KeystoreClient {
     this.bridgeUrl = bridgeUrl;
   }
 
-  connect(force: boolean = false): Promise<void> {
+  connect(): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (this.iframe && !force) {
+      if (this.iframe) {
         resolve();
         return;
-      }
-
-      // If forcing reconnect, clean up existing iframe
-      if (this.iframe && force) {
-        this.disconnect();
       }
 
       this.iframe = document.createElement("iframe");
