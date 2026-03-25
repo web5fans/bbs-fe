@@ -31,15 +31,22 @@ export class KeystoreClient {
     this.bridgeUrl = bridgeUrl;
   }
 
-  connect(): Promise<void> {
+  connect(force: boolean = false): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (this.iframe) {
+      if (this.iframe && !force) {
         resolve();
         return;
       }
 
+      // If forcing reconnect, clean up existing iframe
+      if (this.iframe && force) {
+        this.disconnect();
+      }
+
       this.iframe = document.createElement("iframe");
-      this.iframe.src = this.bridgeUrl;
+      // Add cache-busting parameter to force reload
+      const cacheBuster = `?_=${Date.now()}`;
+      this.iframe.src = this.bridgeUrl + cacheBuster;
       this.iframe.style.position = "absolute";
       this.iframe.style.width = "0";
       this.iframe.style.height = "0";

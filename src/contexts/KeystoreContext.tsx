@@ -23,10 +23,14 @@ export function KeystoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initKeystore = async () => {
       try {
+        // Clean up any existing iframe first to ensure fresh connection
+        const existingIframes = document.querySelectorAll('iframe[src*="keystore"]');
+        existingIframes.forEach(iframe => iframe.remove());
+        
         const c = new KeystoreClient(KEY_STORE_BRIDGE_URL);
         setClient(c);
         
-        await c.connect();
+        await c.connect(true);
         setConnected(true);
         
         try {
