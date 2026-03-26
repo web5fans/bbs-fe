@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { KeystoreClient, KEY_STORE_BRIDGE_URL } from '@/lib/keystore-client';
+import { KeystoreClient, KEY_STORE_URL } from '@/lib/keystore-client';
 
 interface KeystoreContextType {
   client: KeystoreClient | null;
@@ -21,7 +21,7 @@ export function KeystoreProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const c = new KeystoreClient(KEY_STORE_BRIDGE_URL);
+    const c = new KeystoreClient(KEY_STORE_URL);
     setClient(c);
 
     let isMounted = true;
@@ -43,7 +43,7 @@ export function KeystoreProvider({ children }: { children: ReactNode }) {
       })
       .catch((err) => {
         if (isMounted) {
-          console.error('Connection failed:', err.message);
+          console.log('Connection failed:', err.message);
           setError(err.message);
         }
       })

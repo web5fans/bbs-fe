@@ -25,13 +25,11 @@ const nextConfig: NextConfig = {
   ) {
     if (!isServer) {
       config.output.filename = (pathData: any) => {
-        // 替换 chunk 文件名中的 @ 为 _
         const name = String(pathData.chunk.name || pathData.chunk.id);
         return `static/chunks/${ name.replace(/@/g, '_') }-[chunkhash].js`;
       };
     }
 
-    // 自动驼峰, .aa-bb => .aa-bb/.aaBb
     config.module
           .rules
           .find(({ oneOf }) => !!oneOf)
@@ -44,7 +42,6 @@ const nextConfig: NextConfig = {
             }
           });
 
-    // Add rule for SVG files
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
@@ -52,18 +49,18 @@ const nextConfig: NextConfig = {
         {
           loader: '@svgr/webpack',
           options: {
-            svgo: true, // 启用 SVG 优化
+            svgo: true,
             svgoConfig: {
               plugins: [
                 {
                   name: 'preset-default',
                   params: {
                     overrides: {
-                      removeViewBox: false, // 保留 viewBox
+                      removeViewBox: false,
                     },
                   },
                 },
-                'prefixIds', // 添加前缀防止 ID 冲突
+                'prefixIds',
               ],
             },
           },

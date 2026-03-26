@@ -1,6 +1,3 @@
-// Direct implementation of KeystoreClient without Module Federation
-// This is a copy of the KeystoreClient from keystore module
-
 export type BridgeRequest = {
   type: string;
   requestId: string;
@@ -17,177 +14,225 @@ export type BridgeResponse = {
   didKey?: string;
   verified?: boolean;
   signature?: Uint8Array;
+}
+
+type PendingRequest = {
+  requestId: string;
+  resolve: (val: BridgeResponse) => void;
+  reject: (err: Error) => void;
+  timeoutId: number;
 };
 
-export class KeystoreClient {
-  private iframe: HTMLIFrameElement | null = null;
-  private bridgeUrl: string;
-  private pendingRequests: Map<string, { resolve: (value: any) => void; reject: (reason?: any) => void }> = new Map();
+function bytesToHex(bytes: Uint8Array): string {
+  const hex: string[] = [];
+  for (let i = 0; i < bytes.length; i++) {
+    const current = bytes[i] < 16 ? '0' + bytes[i].toString(16) : bytes[i].toString(16);
+    hex.push(current);
+  }
+  return hex.join('');
+}
 
-  constructor(bridgeUrl: string) {
-    if (!bridgeUrl) {
-      throw new Error("Bridge URL is required");
+function hexToBytes(hex: string): Uint8Array {
+  if (hex.length % 2 !== 0) throw new Error('hex string length must be even');
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < bytes.length; i++) {
+    bytes[i] = parseInt(hex.substring(i * 2, i * 2 + 2), 16);
+  }
+  return bytes;
+}
+
+export class KeystoreClient {
+  private keystoreUrl: string;
+  private pendingRequest: PendingRequest | null = null;
+  private isConnected = false;
+  private messageHandler: (event: MessageEvent) => void;
+  private keystoreWindow: Window | null = null;
+
+  constructor(keystoreUrl: string) {
+    if (!keystoreUrl) {
+      throw new Error('Keystore URL is required');
     }
-    this.bridgeUrl = bridgeUrl;
+    this.keystoreUrl = keystoreUrl;
+
+    this.messageHandler = this.handleMessage.bind(this);
+    window.addEventListener('message', this.messageHandler);
   }
 
-  connect(): Promise<void> {
+  public connect(): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (this.iframe) {
+      if (this.isConnected) {
         resolve();
         return;
       }
 
-      this.iframe = document.createElement("iframe");
-      this.iframe.src = this.bridgeUrl;
-      this.iframe.style.position = "absolute";
-      this.iframe.style.width = "0";
-      this.iframe.style.height = "0";
-      this.iframe.style.border = "none";
-      this.iframe.style.visibility = "hidden";
-
-      window.addEventListener("message", this.handleMessage);
-
-      const timeout = setTimeout(() => {
-        reject(new Error("Iframe load timeout (5s)"));
-      }, 5000);
-
-      this.iframe.onload = async () => {
-        clearTimeout(timeout);
-        try {
-          await new Promise((r) => setTimeout(r, 500));
-          await this.ping();
+      this.sendRequest({ type: 'PING', requestId: crypto.randomUUID() })
+        .then(() => {
+          this.isConnected = true;
           resolve();
-        } catch (err) {
-          console.warn("[KeystoreClient] First ping failed, retrying...", err);
-          try {
-            await new Promise((r) => setTimeout(r, 1000));
-            await this.ping();
-            resolve();
-          } catch (err2) {
-            reject(err2);
-          }
-        }
-      };
-
-      this.iframe.onerror = (err) => {
-        clearTimeout(timeout);
-        console.error("[KeystoreClient] Iframe load error", err);
-        reject(new Error("Failed to load bridge iframe"));
-      };
-
-      document.body.appendChild(this.iframe);
+        })
+        .catch(reject);
     });
   }
 
-  disconnect(): void {
-    if (this.iframe) {
-      document.body.removeChild(this.iframe);
-      this.iframe = null;
-    }
-    window.removeEventListener("message", this.handleMessage);
-    this.pendingRequests.clear();
+  public disconnect() {
+    this.pendingRequest = null;
+    this.isConnected = false;
+    window.removeEventListener('message', this.messageHandler);
   }
 
-  private handleMessage = (event: MessageEvent) => {
+  private handleMessage(event: MessageEvent) {
     const { data } = event;
-    if (!data || !data.requestId) return;
+    if (!data || typeof data !== 'object') return;
+    if (data.source !== 'keystore-auth') return;
+    if (data.type === 'ready') return;
 
-    const pending = this.pendingRequests.get(data.requestId);
-    if (pending) {
-      this.pendingRequests.delete(data.requestId);
-      if (data.ok === false) {
-        pending.reject(new Error(data.error || "Unknown bridge error"));
-      } else {
-        pending.resolve(data);
-      }
+    if (!this.pendingRequest) return;
+    if (data.requestId !== this.pendingRequest.requestId) return;
+
+    const pending = this.pendingRequest;
+    this.pendingRequest = null;
+    clearTimeout(pending.timeoutId);
+
+    if (data.ok) {
+      pending.resolve({
+        type: data.type || 'response',
+        requestId: data.requestId,
+        ok: true,
+        didKey: data.didKey,
+        verified: data.verified,
+        signature: data.signature ? hexToBytes(data.signature) : undefined,
+      });
+    } else {
+      pending.reject(new Error(data.error || 'Unknown error'));
     }
-  };
+  }
 
-  private request(data: BridgeRequest): Promise<BridgeResponse> {
-    if (!this.iframe || !this.iframe.contentWindow) {
-      return Promise.reject(new Error("Bridge not connected"));
-    }
-
-    const requestId = data.requestId;
+  private sendRequest(request: BridgeRequest): Promise<BridgeResponse> {
     return new Promise((resolve, reject) => {
-      this.pendingRequests.set(requestId, { resolve, reject });
-      this.iframe!.contentWindow!.postMessage(data, "*");
-      
-      setTimeout(() => {
-        if (this.pendingRequests.has(requestId)) {
-          this.pendingRequests.delete(requestId);
-          reject(new Error(`Request ${data.type} timed out`));
+      if (this.pendingRequest) {
+        reject(new Error('Another request is already pending'));
+        return;
+      }
+
+      const requestId = request.requestId;
+
+      const timeoutId = window.setTimeout(() => {
+        if (this.pendingRequest?.requestId === requestId) {
+          this.pendingRequest = null;
+          reject(new Error(`Request ${request.type} timed out after 30s`));
         }
       }, 30000);
+
+      this.pendingRequest = {
+        requestId,
+        resolve,
+        reject,
+        timeoutId,
+      };
+
+      const origin = window.location.origin;
+
+      const messageData = {
+        source: 'keystore-client',
+        origin,
+        type: request.type,
+        requestId,
+        message: request.message ? bytesToHex(request.message) : undefined,
+        didKey: request.didKey,
+        signature: request.signature ? bytesToHex(request.signature) : undefined,
+      };
+
+      if (this.keystoreWindow && !this.keystoreWindow.closed) {
+        this.keystoreWindow.postMessage(messageData, this.keystoreUrl);
+      } else {
+        this.keystoreWindow = window.open(this.keystoreUrl, '_blank');
+
+        if (!this.keystoreWindow) {
+          this.pendingRequest = null;
+          reject(new Error('Failed to open keystore tab. Please allow popups for this site.'));
+          return;
+        }
+
+        setTimeout(() => {
+          window.focus();
+        }, 100);
+
+        const checkReady = setInterval(() => {
+          if (!this.keystoreWindow || this.keystoreWindow.closed) {
+            clearInterval(checkReady);
+            return;
+          }
+          this.keystoreWindow.postMessage(messageData, this.keystoreUrl);
+        }, 100);
+
+        setTimeout(() => {
+          clearInterval(checkReady);
+        }, 5000);
+      }
     });
   }
 
-  async ping(): Promise<number> {
+  public async ping(): Promise<number> {
     const start = performance.now();
-    const response = await this.request({
-      type: "PING",
+    const res = await this.sendRequest({
+      type: 'PING',
       requestId: crypto.randomUUID(),
     });
-    if (!response.ok) {
-      throw new Error("Ping failed");
-    }
-    if (response.type !== "PONG") {
-      throw new Error("Invalid response type");
+    if (!res.ok) {
+      throw new Error('Ping failed');
     }
     return performance.now() - start;
   }
 
-  async getDIDKey(): Promise<string> {
-    const response = await this.request({
-      type: "GET_DID_KEY",
+  public async getDIDKey(): Promise<string> {
+    const res = await this.sendRequest({
+      type: 'getDIDKey',
       requestId: crypto.randomUUID(),
     });
-    if (!response.ok) {
-      throw new Error(response.error || "Failed to get DID key");
+    if (!res.ok) {
+      throw new Error('Failed to get DID key');
     }
-    if (!response.didKey) {
-      throw new Error("No DID key returned");
+    if (typeof res.didKey !== 'string') {
+      throw new Error('Invalid DID key format');
     }
-    return response.didKey;
+    return res.didKey;
   }
 
-  async signMessage(message: Uint8Array): Promise<Uint8Array> {
-    const response = await this.request({
-      type: "SIGN_MESSAGE",
+  public async signMessage(message: Uint8Array): Promise<Uint8Array> {
+    const res = await this.sendRequest({
+      type: 'signMessage',
       requestId: crypto.randomUUID(),
       message,
     });
-    if (!response.ok) {
-      throw new Error(response.error || "Failed to sign message");
+    if (!res.ok) {
+      throw new Error('Failed to sign message');
     }
-    if (!response.signature) {
-      throw new Error("No signature returned");
+    if (!res.signature || !(res.signature instanceof Uint8Array)) {
+      throw new Error('Invalid signature format');
     }
-    return response.signature;
+    return res.signature;
   }
 
-  async verifySignature(
-    didKey: string,
-    message: Uint8Array,
-    signature: Uint8Array
-  ): Promise<boolean> {
-    const response = await this.request({
-      type: "VERIFY_SIGNATURE",
+  public async verifySignature(didKey: string, message: Uint8Array, signature: Uint8Array): Promise<boolean> {
+    const res = await this.sendRequest({
+      type: 'verifySignature',
       requestId: crypto.randomUUID(),
       didKey,
       message,
       signature,
     });
-    if (!response.ok) {
-      throw new Error(response.error || "Failed to verify signature");
+    if (!res.ok) {
+      throw new Error('Failed to verify signature');
     }
-    return response.verified === true;
+    if (typeof res.verified !== 'boolean') {
+      throw new Error('Invalid verification result format');
+    }
+    return res.verified;
   }
 }
 
-export const KEY_STORE_URL = process.env.NODE_ENV === "production"
-  ? "https://keystore.web5.fans"
-  : "http://localhost:3001";
+export const KEY_STORE_URL = process.env.NODE_ENV === 'production'
+  ? 'https://keystore.web5.fans'
+  : 'http://localhost:3001';
 
 export const KEY_STORE_BRIDGE_URL = `${KEY_STORE_URL}/bridge.html`;

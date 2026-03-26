@@ -2,6 +2,7 @@
 
 import S from './index.module.scss'
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import CardWindow from "@/components/CardWindow";
 import AppHeader from "@/app/@header/default";
 import { useRegisterPopUp } from "@/provider/RegisterPopUpProvider";
@@ -15,6 +16,7 @@ import preloadImage from "@/lib/preloadImage";
 const PORTAL_URL = 'https://me.web5.fans';
 
 export default function RegisterLogin() {
+  const router = useRouter()
   const { visible, closeRegisterPop } = useRegisterPopUp()
   const { client, connected, didKey, isLoading } = useKeystore()
   const [loggingIn, setLoggingIn] = useState(false)
@@ -26,19 +28,24 @@ export default function RegisterLogin() {
     preloadImage('/assets/login/byte-static-m.png')
   }, [visible]);
 
-  const handleLogin = async () => {
-    if (!client || !didKey) return
+  useEffect(() => {
+    if (!visible || !client || !didKey || loggingIn) return
     
-    setLoggingIn(true)
-    try {
-      await web5Login(client, didKey)
-      closeRegisterPop()
-    } catch (error) {
-      console.error('Login failed:', error)
-    } finally {
-      setLoggingIn(false)
+    const autoLogin = async () => {
+      setLoggingIn(true)
+      try {
+        await web5Login(client, didKey)
+        closeRegisterPop()
+        router.replace('/posts')
+      } catch (error) {
+        console.error('Login failed:', error)
+      } finally {
+        setLoggingIn(false)
+      }
     }
-  }
+    
+    autoLogin()
+  }, [visible, client, didKey, web5Login, closeRegisterPop, router, loggingIn])
 
   const openPortal = () => {
     window.open(PORTAL_URL, '_blank')
@@ -71,6 +78,7 @@ export default function RegisterLogin() {
               ) : !connected ? (
                 <div className={S.status}>
                   <p>无法连接到 Keystore</p>
+                  <p className={S.hint}>请确保已允许打开 Keystore 页面</p>
                   <Button onClick={openPortal}>前往 Portal 注册</Button>
                 </div>
               ) : !didKey ? (
@@ -81,15 +89,8 @@ export default function RegisterLogin() {
                 </div>
               ) : (
                 <div className={S.status}>
-                  <p>检测到签名密钥</p>
+                  <p>正在自动登录...</p>
                   <code className={S.didKey}>{didKey.slice(0, 20)}...{didKey.slice(-8)}</code>
-                  <Button 
-                    type="primary" 
-                    onClick={handleLogin}
-                    disabled={loggingIn}
-                  >
-                    {loggingIn ? '登录中...' : '登录'}
-                  </Button>
                 </div>
               )}
               

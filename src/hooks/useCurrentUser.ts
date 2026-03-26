@@ -12,18 +12,19 @@ export default function useCurrentUser(): {
   getUserProfile: UserInfoStore['getUserProfile']
   updateProfile: Function
 } {
-  const { writeProfile,
+  const store = useUserInfoStore()
+  
+  const { 
+    writeProfile,
     getUserProfile,
     userInfo,
     userProfile,
     visitorId,
     isWhiteListUser,
-  } = useUserInfoStore()
+  } = store
 
-  // const isWhiteListUser = true;
-
-  const updateProfile = async () => {
-    const status = await writeProfile()
+  const updateProfile = async (client: Parameters<typeof writeProfile>[0], didKey: Parameters<typeof writeProfile>[1]) => {
+    const status = await writeProfile(client, didKey)
     if (status === 'SUCCESS') {
       await getUserProfile()
     }

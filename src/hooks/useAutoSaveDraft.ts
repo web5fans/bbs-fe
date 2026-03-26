@@ -3,7 +3,7 @@ import { postsWritesPDSOperation } from "@/app/posts/utils";
 import dayjs from "dayjs";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useEffect, useMemo, useRef } from "react";
-import type { KeystoreClient } from "keystore/KeystoreClient";
+import type { KeystoreClient } from "@/lib/keystore-client";
 
 type DraftParamsType = {
   sectionId: string,

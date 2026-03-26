@@ -2,7 +2,7 @@ import storage from "@/lib/storage";
 import dayjs from "dayjs";
 import * as cbor from "@ipld/dag-cbor";
 import { uint8ArrayToHex } from "@/lib/dag-cbor";
-import type { KeystoreClient } from "keystore/KeystoreClient";
+import type { KeystoreClient } from "@/lib/keystore-client";
 
 export interface SigningKeyInfoParams {
   client: KeystoreClient;

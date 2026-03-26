@@ -1,13 +1,11 @@
 import { create } from 'zustand'
-import createSelectors from './helper/createSelector';
-import { ccc } from "@ckb-ccc/core";
 import getPDSClient from "@/lib/pdsClient";
 import storage, { TokenStorageType } from "@/lib/storage";
 import { FansWeb5CkbCreateAccount, ComAtprotoServerCreateSession } from "web5-api";
 import { postsWritesPDSOperation } from "@/app/posts/utils";
 import { handleToNickName } from "@/lib/handleToNickName";
 import { fetchUserProfile, userLogin } from "@/lib/user-account";
-import type { KeystoreClient } from "keystore/KeystoreClient";
+import type { KeystoreClient } from "@/lib/keystore-client";
 
 export type UserProfileType = {
   did: string
@@ -46,8 +44,7 @@ export type UserInfoStore = UserInfoStoreValue & {
   importUserDid: (info: TokenStorageType) => Promise<void>
 }
 
-const useUserInfoStore = createSelectors(
-  create<UserInfoStore>((set, get) => ({
+const useUserInfoStore = create<UserInfoStore>((set, get) => ({
     userInfo: undefined,
     initialized: undefined,
     userProfile: undefined,
@@ -71,7 +68,7 @@ const useUserInfoStore = createSelectors(
         walletAddress: ckbAddr
       })
 
-      set(() => ({ userInfo, userProfile: { did: userInfo.did, handle: userInfo.handle } }))
+      set(() => ({ userInfo, userProfile: { did: userInfo.did, handle: userInfo.handle, ckb_addr: ckbAddr } }))
     },
 
     writeProfile: async (client: KeystoreClient, didKey: string) => {
@@ -168,7 +165,6 @@ const useUserInfoStore = createSelectors(
       storage.setToken(info)
     }
 
-  })),
-)
+  }))
 
 export default useUserInfoStore

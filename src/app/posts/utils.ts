@@ -9,7 +9,7 @@ import { TID } from '@atproto/common-web'
 import dayjs from "dayjs";
 import sessionWrapApi from "@/lib/wrapApiAutoSession";
 import { UserProfileType } from "@/store/userInfo";
-import type { KeystoreClient } from "keystore/KeystoreClient";
+import type { KeystoreClient } from "@/lib/keystore-client";
 
 export type PostFeedItemType = {
   uri: string,

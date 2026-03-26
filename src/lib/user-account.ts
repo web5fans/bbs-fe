@@ -7,7 +7,7 @@ import server from "@/server";
 import { UserProfileType } from "@/store/userInfo";
 import axios from "axios";
 import { DID_INDEXER } from "@/constant/Network";
-import type { KeystoreClient } from "keystore/KeystoreClient";
+import type { KeystoreClient } from "@/lib/keystore-client";
 
 export async function fetchUserProfile(did: string): Promise<UserProfileType> {
   const result = await server<UserProfileType>('/repo/profile', 'GET', {
