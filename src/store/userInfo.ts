@@ -35,7 +35,7 @@ export type UserInfoStore = UserInfoStoreValue & {
   setStoreData: (storeData: UserInfoStoreValue) => void
   setKeystoreContext: (client: KeystoreClient | null, didKey: string | null) => void
   storageUserInfo: (params: { signingKeyDid: string; ckbAddr: string; userInfo: FansWeb5CkbCreateAccount.OutputSchema}) => void
-  web5Login: (client: KeystoreClient, didKey: string) => Promise<void>
+  web5Login: (client: KeystoreClient, didKey: string, did?: string, walletAddress?: string) => Promise<boolean>
   getUserProfile: () => Promise<UserProfileType | undefined>;
   logout: () => void
   writeProfile: (client: KeystoreClient, didKey: string) => Promise<'NO_NEED' | 'SUCCESS' | 'FAIL'>
@@ -94,17 +94,35 @@ const useUserInfoStore = create<UserInfoStore>((set, get) => ({
       }
     },
 
-    web5Login: async (client: KeystoreClient, didKey: string) => {
-      const localStorage = storage.getToken()
+    web5Login: async (client: KeystoreClient, didKey: string, did?: string, walletAddress?: string): Promise<boolean> => {
+      let localStorage = storage.getToken()
 
-      if (!localStorage) return
+      if (!localStorage) {
+        if (!did || !walletAddress) {
+          console.error('web5Login: Missing did and walletAddress')
+          return false
+        }
+        localStorage = {
+          did,
+          walletAddress,
+          signingKeyDid: didKey,
+        }
+        storage.setToken(localStorage)
+      }
 
       const userInfoRes = await userLogin({ localStorage, client, didKey })
 
-      if (!userInfoRes) return
+      if (!userInfoRes) return false
+
+      storage.setToken({
+        ...localStorage,
+        accessJwt: userInfoRes.accessJwt,
+        refreshJwt: userInfoRes.refreshJwt,
+      })
 
       set(() => ({ userInfo: userInfoRes, keystoreClient: client, keystoreDidKey: didKey }))
       await get().getUserProfile()
+      return true
     },
 
     logout: () => {

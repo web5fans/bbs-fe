@@ -58,6 +58,23 @@ export class KeystoreClient {
     window.addEventListener('message', this.messageHandler);
   }
 
+  public openTab(): Window | null {
+    if (this.keystoreWindow && !this.keystoreWindow.closed) {
+      this.keystoreWindow.focus();
+      return this.keystoreWindow;
+    }
+    
+    this.keystoreWindow = window.open(this.keystoreUrl, '_blank');
+    
+    if (this.keystoreWindow) {
+      setTimeout(() => {
+        window.focus();
+      }, 100);
+    }
+    
+    return this.keystoreWindow;
+  }
+
   public connect(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.isConnected) {
