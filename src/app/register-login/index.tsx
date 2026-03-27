@@ -1,7 +1,7 @@
 'use client'
 
 import S from './index.module.scss'
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ccc } from "@ckb-ccc/connector-react";
 import CardWindow from "@/components/CardWindow";
@@ -65,10 +65,13 @@ export default function RegisterLogin() {
     }
   }, [signerInfo, step])
 
+  const hasLoginAttempted = useRef(false)
+
   useEffect(() => {
     const autoLogin = async () => {
-      if (!keystoreConnected || !didKey || !client || !didInfo || loggingIn || !keystoreOpened) return
+      if (!keystoreConnected || !didKey || !client || !didInfo || loggingIn || !keystoreOpened || hasLoginAttempted.current) return
 
+      hasLoginAttempted.current = true
       setLoggingIn(true)
       setStep('login')
       try {
@@ -79,11 +82,13 @@ export default function RegisterLogin() {
         } else {
           setStep('error')
           setLoginError('登录失败')
+          hasLoginAttempted.current = false
         }
       } catch (error) {
         console.error('Login failed:', error)
         setStep('error')
         setLoginError('登录失败')
+        hasLoginAttempted.current = false
       } finally {
         setLoggingIn(false)
       }
