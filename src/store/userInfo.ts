@@ -40,7 +40,7 @@ export type UserInfoStore = UserInfoStoreValue & {
   logout: () => void
   writeProfile: (client: KeystoreClient, didKey: string) => Promise<'NO_NEED' | 'SUCCESS' | 'FAIL'>
   resetUserStore: () => void
-  initialize: (client?: KeystoreClient, didKey?: string) => Promise<void>
+  initialize: () => Promise<void>
   importUserDid: (info: TokenStorageType) => Promise<void>
 }
 
@@ -164,10 +164,21 @@ const useUserInfoStore = create<UserInfoStore>((set, get) => ({
       return result
     },
 
-    initialize: async (client?: KeystoreClient, didKey?: string) => {
+    initialize: async () => {
       const hasToken = storage.getToken()
-      if (hasToken && client && didKey) {
-        await get().web5Login(client, didKey)
+      
+      if (hasToken) {
+        set(() => ({
+          userInfo: {
+            did: hasToken.did,
+            handle: hasToken.did,
+          } as ComAtprotoServerCreateSession.OutputSchema,
+          userProfile: {
+            did: hasToken.did,
+            ckb_addr: hasToken.walletAddress,
+            handle: hasToken.did,
+          } as UserProfileType,
+        }))
       }
       
       let visitor = localStorage.getItem(STORAGE_VISITOR)

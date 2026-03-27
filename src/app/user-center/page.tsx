@@ -6,6 +6,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import UserInfo from "@/app/user-center/_components/UserInfo";
 import BBSDataSelf from "@/app/user-center/_components/BBSDataSelf";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useUserInfoStore from "@/store/userInfo";
 import { useRequest } from "ahooks";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -16,6 +17,7 @@ import SelfDataDetail from "@/app/user-center/_components/DataDetail/SelfDataDet
 
 const Page = () => {
   const { userProfile, hasLoggedIn, writeProfile, getUserProfile } = useCurrentUser()
+  const initialized = useUserInfoStore(state => state.initialized)
 
   const router = useRouter();
 
@@ -32,12 +34,12 @@ const Page = () => {
   })
 
   useEffect(() => {
-    if (!hasLoggedIn) {
-      router.replace('/')
+    if (initialized && !hasLoggedIn) {
+      router.replace('/posts')
     }
-  }, []);
+  }, [initialized, hasLoggedIn, router]);
 
-  if (!hasLoggedIn) {
+  if (!initialized || !hasLoggedIn) {
     return null
   }
 
