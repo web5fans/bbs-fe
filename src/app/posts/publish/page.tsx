@@ -123,11 +123,13 @@ const PublishPostPage = () => {
     const checkResult = checkEditorContent(json, text)
     setRichTextDis(!checkResult)
     richTextRef.current = filteredHtml
-    autoSaveDraft({
-      sectionId,
-      title: postTitleRef.current,
-      text: filteredHtml,
-    })
+    if (client && didKey) {
+      autoSaveDraft({
+        sectionId,
+        title: postTitleRef.current,
+        text: filteredHtml,
+      }, client, didKey)
+    }
   }
 
   const submit = async () => {
@@ -220,11 +222,13 @@ const PublishPostPage = () => {
             maxLength={100}
             onChange={v => {
               postTitleRef.current = v;
-              autoSaveDraft({
-                sectionId,
-                title: v,
-                text: richTextRef.current,
-              })
+              if (client && didKey) {
+                autoSaveDraft({
+                  sectionId,
+                  title: v,
+                  text: richTextRef.current,
+                }, client, didKey)
+              }
             }}
             onCountCheck={passed => setPostTitleDis(!passed)}
           />
@@ -257,18 +261,22 @@ const PublishPostPage = () => {
               disabled={!allowPublish || noAuth}
               className={S.cancel}
               deleteDraft={() => {
-                deleteDraft({
-                  title: postTitleRef.current,
-                  text: richTextRef.current,
-                  sectionId
-                })
+                if (client && didKey) {
+                  deleteDraft({
+                    title: postTitleRef.current,
+                    text: richTextRef.current,
+                    sectionId
+                  }, client, didKey)
+                }
               }}
               saveDraft={() => {
-                manualSaveDraft({
-                  title: postTitleRef.current,
-                  text: richTextRef.current,
-                  sectionId
-                })
+                if (client && didKey) {
+                  manualSaveDraft({
+                    title: postTitleRef.current,
+                    text: richTextRef.current,
+                    sectionId
+                  }, client, didKey)
+                }
               }}
             />
           </div>

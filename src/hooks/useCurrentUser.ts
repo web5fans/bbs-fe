@@ -8,23 +8,30 @@ export default function useCurrentUser(): {
   adminType?: 'super' | 'admin'
   userProfile?: UserProfileType
   visitorId?: string
-  writeProfile: UserInfoStore['writeProfile']
+  writeProfile: () => Promise<'NO_NEED' | 'SUCCESS' | 'FAIL'>
   getUserProfile: UserInfoStore['getUserProfile']
   updateProfile: Function
 } {
   const store = useUserInfoStore()
-  
-  const { 
-    writeProfile,
+
+  const {
+    writeProfile: storeWriteProfile,
     getUserProfile,
     userInfo,
     userProfile,
     visitorId,
     isWhiteListUser,
+    keystoreClient,
+    keystoreDidKey,
   } = store
 
-  const updateProfile = async (client: Parameters<typeof writeProfile>[0], didKey: Parameters<typeof writeProfile>[1]) => {
-    const status = await writeProfile(client, didKey)
+  const writeProfile = async () => {
+    if (!keystoreClient || !keystoreDidKey) return 'FAIL'
+    return await storeWriteProfile(keystoreClient, keystoreDidKey)
+  }
+
+  const updateProfile = async () => {
+    const status = await writeProfile()
     if (status === 'SUCCESS') {
       await getUserProfile()
     }

@@ -120,6 +120,14 @@ const useUserInfoStore = create<UserInfoStore>((set, get) => ({
         refreshJwt: userInfoRes.refreshJwt,
       })
 
+      await getPDSClient().resumeSession({
+        accessJwt: userInfoRes.accessJwt,
+        refreshJwt: userInfoRes.refreshJwt,
+        did: userInfoRes.did,
+        handle: userInfoRes.handle,
+        active: true,
+      })
+
       set(() => ({ userInfo: userInfoRes, keystoreClient: client, keystoreDidKey: didKey }))
       await get().getUserProfile()
       return true
@@ -166,7 +174,7 @@ const useUserInfoStore = create<UserInfoStore>((set, get) => ({
 
     initialize: async () => {
       const hasToken = storage.getToken()
-      
+
       if (hasToken) {
         set(() => ({
           userInfo: {
@@ -179,6 +187,20 @@ const useUserInfoStore = create<UserInfoStore>((set, get) => ({
             handle: hasToken.did,
           } as UserProfileType,
         }))
+
+        if (hasToken.accessJwt && hasToken.refreshJwt) {
+          try {
+            await getPDSClient().resumeSession({
+              accessJwt: hasToken.accessJwt,
+              refreshJwt: hasToken.refreshJwt,
+              did: hasToken.did,
+              handle: hasToken.did,
+              active: true,
+            })
+          } catch (err) {
+            console.log('Failed to resume PDS session:', err)
+          }
+        }
       }
       
       let visitor = localStorage.getItem(STORAGE_VISITOR)
