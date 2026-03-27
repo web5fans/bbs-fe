@@ -8,7 +8,7 @@ import S from './index.module.scss'
 import cx from 'classnames'
 
 export default function ConnectionStatusIcons() {
-  const { connected: keystoreConnected, openKeystore } = useKeystore()
+  const { connected: keystoreConnected, connect } = useKeystore()
   const { signerInfo, open: openWallet } = ccc.useCcc()
 
   const walletConnected = !!signerInfo
@@ -21,7 +21,7 @@ export default function ConnectionStatusIcons() {
 
   const handleKeystoreClick = () => {
     if (!keystoreConnected) {
-      openKeystore()
+      connect()
     }
   }
 

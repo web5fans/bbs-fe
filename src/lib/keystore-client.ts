@@ -184,7 +184,7 @@ export class KeystoreClient {
 
         setTimeout(() => {
           clearInterval(checkReady);
-        }, 5000);
+        }, 25000);
       }
     });
   }

@@ -22,7 +22,7 @@ type LoginStep = 'wallet' | 'keystore' | 'login' | 'error';
 export default function RegisterLogin() {
   const router = useRouter()
   const { visible, closeRegisterPop } = useRegisterPopUp()
-  const { client, connected: keystoreConnected, didKey, isLoading: keystoreLoading, openKeystore } = useKeystore()
+  const { client, connected: keystoreConnected, didKey, isConnecting: keystoreLoading, connect } = useKeystore()
   const { signerInfo, open: openWallet } = ccc.useCcc()
   const [step, setStep] = useState<LoginStep>('wallet')
   const [loggingIn, setLoggingIn] = useState(false)
@@ -93,9 +93,9 @@ export default function RegisterLogin() {
   }, [keystoreConnected, didKey, client, didInfo, web5Login, closeRegisterPop, router, loggingIn, keystoreOpened])
 
   const openKeystoreTab = useCallback(() => {
-    openKeystore()
+    connect()
     setKeystoreOpened(true)
-  }, [openKeystore])
+  }, [connect])
 
   const openPortal = () => {
     window.open(PORTAL_URL, '_blank')
