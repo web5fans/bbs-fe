@@ -1,0 +1,59 @@
+@use '@/styles/rem';
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: rem.px2flexible(8);
+}
+
+.icon {
+  width: rem.px2flexible(20);
+  height: rem.px2flexible(20);
+  cursor: pointer;
+  position: relative;
+  color: var(--primary-color);
+  transition: color 0.2s ease;
+
+  > svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &.disconnected {
+    color: #EF4444;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.indicator {
+  position: absolute;
+  top: rem.px2flexible(-2);
+  right: rem.px2flexible(-2);
+  width: rem.px2flexible(6);
+  height: rem.px2flexible(6);
+  background-color: #EF4444;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+.mouseTips {
+  width: auto !important;
+}

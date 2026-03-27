@@ -14,6 +14,7 @@ import { JSX } from "react";
 import cx from "classnames";
 import MouseToolTip from "@/components/MouseToolTip";
 import Notification from "./_components/Notification";
+import ConnectionStatusIcons from "@/components/ConnectionStatusIcons";
 
 export default function AppHeader(props: {
   isPopUp?: boolean
@@ -43,6 +44,7 @@ export default function AppHeader(props: {
         </div>
 
         <div className={`${S.navigator} ${(props.isPopUp || isIndex) && '!hidden'}`}>
+          <ConnectionStatusIcons />
           <NavigatorIcon icon={<HomeIcon />} href={'/posts'} tooltip={'论坛首页'} />
           {hasLoggedIn && <NavigatorIcon
             icon={<FundIcon />}

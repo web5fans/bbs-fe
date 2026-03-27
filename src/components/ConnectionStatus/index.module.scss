@@ -1,0 +1,33 @@
+@use '@/styles/rem';
+
+.container {
+  position: fixed;
+  top: rem.px2flexible(64);
+  left: 0;
+  right: 0;
+  background: #FEF3C7;
+  border-bottom: rem.px2flexible(1) solid #FCD34D;
+  padding: rem.px2flexible(12) rem.px2flexible(16);
+  z-index: 50;
+}
+
+.content {
+  max-width: rem.px2flexible(1280);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem.px2flexible(16);
+  flex-wrap: wrap;
+}
+
+.message {
+  color: #92400E;
+  font-size: rem.px2flexible(14);
+  font-family: var(--font-CLFN);
+}
+
+.buttons {
+  display: flex;
+  gap: rem.px2flexible(8);
+}

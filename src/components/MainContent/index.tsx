@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import useUserInfoStore from "@/store/userInfo";
 import useDeviceFlex from "@/hooks/useDeviceFlex";
+import ConnectionStatus from "@/components/ConnectionStatus";
 
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc'
@@ -43,6 +44,7 @@ const MainContent = (props: {
   if (!initialized) return null;
 
   return <div className={'flex flex-col'}>
+    <ConnectionStatus />
     {props.children}
   </div>
 }

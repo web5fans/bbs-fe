@@ -14,7 +14,6 @@ import storage from "@/lib/storage";
 import useUserInfoStore from "@/store/userInfo";
 import preloadImage from "@/lib/preloadImage";
 import { fetchDidCkbCellsInfo, getWalletAddress } from "@/lib/did";
-import { KEY_STORE_URL } from "@/lib/keystore-client";
 
 const PORTAL_URL = 'https://me.web5.fans';
 
@@ -23,7 +22,7 @@ type LoginStep = 'wallet' | 'keystore' | 'login' | 'error';
 export default function RegisterLogin() {
   const router = useRouter()
   const { visible, closeRegisterPop } = useRegisterPopUp()
-  const { client, connected: keystoreConnected, didKey, isLoading: keystoreLoading, reconnect } = useKeystore()
+  const { client, connected: keystoreConnected, didKey, isLoading: keystoreLoading, openKeystore } = useKeystore()
   const { signerInfo, open: openWallet } = ccc.useCcc()
   const [step, setStep] = useState<LoginStep>('wallet')
   const [loggingIn, setLoggingIn] = useState(false)
@@ -93,16 +92,10 @@ export default function RegisterLogin() {
     autoLogin()
   }, [keystoreConnected, didKey, client, didInfo, web5Login, closeRegisterPop, router, loggingIn, keystoreOpened])
 
-  const openKeystoreTab = useCallback(async () => {
-    if (client) {
-      client.openTab()
-      setKeystoreOpened(true)
-      await reconnect()
-    } else {
-      window.open(KEY_STORE_URL, '_blank')
-      setKeystoreOpened(true)
-    }
-  }, [client, reconnect])
+  const openKeystoreTab = useCallback(() => {
+    openKeystore()
+    setKeystoreOpened(true)
+  }, [openKeystore])
 
   const openPortal = () => {
     window.open(PORTAL_URL, '_blank')
