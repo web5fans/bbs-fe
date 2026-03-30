@@ -98,6 +98,10 @@ export class KeystoreClient {
   }
 
   private handleMessage(event: MessageEvent) {
+    // Security: Verify response came from the keystore origin
+    const expectedOrigin = new URL(this.keystoreUrl).origin;
+    if (event.origin !== expectedOrigin) return;
+
     const { data } = event;
     if (!data || typeof data !== 'object') return;
     if (data.source !== 'keystore-auth') return;
@@ -147,11 +151,8 @@ export class KeystoreClient {
         timeoutId,
       };
 
-      const origin = window.location.origin;
-
       const messageData = {
         source: 'keystore-client',
-        origin,
         type: request.type,
         requestId,
         message: request.message ? bytesToHex(request.message) : undefined,
@@ -162,7 +163,9 @@ export class KeystoreClient {
       if (this.keystoreWindow && !this.keystoreWindow.closed) {
         this.keystoreWindow.postMessage(messageData, this.keystoreUrl);
       } else {
-        this.keystoreWindow = window.open(this.keystoreUrl, '_blank');
+        const parentOrigin = window.location.origin;
+        const keystoreUrlWithOrigin = `${this.keystoreUrl}?origin=${encodeURIComponent(parentOrigin)}`;
+        this.keystoreWindow = window.open(keystoreUrlWithOrigin, '_blank');
 
         if (!this.keystoreWindow) {
           this.pendingRequest = null;
